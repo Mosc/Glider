@@ -1,0 +1,44 @@
+name: glider
+description: An opinionated Hacker News client.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">= 1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_hooks: ^0.13.2
+  hooks_riverpod: ^0.9.1
+  freezed_annotation: ^0.11.0+1
+  dio: ^3.0.10
+  uni_links: ^0.4.0
+  flutter_widget_from_html_core: ^0.4.3
+  url_launcher: ^5.5.2
+  cached_network_image: ^2.3.1
+  shimmer: ^1.1.1
+  timeago: ^2.0.27
+  intl: ^0.16.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^1.10.2
+  freezed: ^0.11.6
+  json_serializable: ^3.4.1
+  flutter_launcher_icons:
+    git:
+      url: https://github.com/personalizedrefrigerator/flutter_launcher_icons
+
+flutter:
+  uses-material-design: true
+
+flutter_icons:
+  android: true
+  ios: true
+  web: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#e57373"
+  adaptive_icon_foreground: "assets/icon/adaptive_icon.png"
