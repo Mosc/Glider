@@ -26,13 +26,13 @@ class _$ItemTearOff {
       bool dead,
       int parent,
       int poll,
-      List<int> kids,
+      Iterable<int> kids,
       String url,
       int score,
       String title,
-      List<int> parts,
+      Iterable<int> parts,
       int descendants,
-      List<int> ancestors}) {
+      Iterable<int> ancestors}) {
     return _Item(
       id: id,
       deleted: deleted,
@@ -67,13 +67,13 @@ mixin _$Item {
   bool get dead;
   int get parent;
   int get poll;
-  List<int> get kids;
+  Iterable<int> get kids;
   String get url;
   int get score;
   String get title;
-  List<int> get parts;
+  Iterable<int> get parts;
   int get descendants;
-  List<int> get ancestors;
+  Iterable<int> get ancestors;
 
   Map<String, dynamic> toJson();
   $ItemCopyWith<Item> get copyWith;
@@ -92,13 +92,13 @@ abstract class $ItemCopyWith<$Res> {
       bool dead,
       int parent,
       int poll,
-      List<int> kids,
+      Iterable<int> kids,
       String url,
       int score,
       String title,
-      List<int> parts,
+      Iterable<int> parts,
       int descendants,
-      List<int> ancestors});
+      Iterable<int> ancestors});
 }
 
 class _$ItemCopyWithImpl<$Res> implements $ItemCopyWith<$Res> {
@@ -137,15 +137,15 @@ class _$ItemCopyWithImpl<$Res> implements $ItemCopyWith<$Res> {
       dead: dead == freezed ? _value.dead : dead as bool,
       parent: parent == freezed ? _value.parent : parent as int,
       poll: poll == freezed ? _value.poll : poll as int,
-      kids: kids == freezed ? _value.kids : kids as List<int>,
+      kids: kids == freezed ? _value.kids : kids as Iterable<int>,
       url: url == freezed ? _value.url : url as String,
       score: score == freezed ? _value.score : score as int,
       title: title == freezed ? _value.title : title as String,
-      parts: parts == freezed ? _value.parts : parts as List<int>,
+      parts: parts == freezed ? _value.parts : parts as Iterable<int>,
       descendants:
           descendants == freezed ? _value.descendants : descendants as int,
       ancestors:
-          ancestors == freezed ? _value.ancestors : ancestors as List<int>,
+          ancestors == freezed ? _value.ancestors : ancestors as Iterable<int>,
     ));
   }
 }
@@ -164,13 +164,13 @@ abstract class _$ItemCopyWith<$Res> implements $ItemCopyWith<$Res> {
       bool dead,
       int parent,
       int poll,
-      List<int> kids,
+      Iterable<int> kids,
       String url,
       int score,
       String title,
-      List<int> parts,
+      Iterable<int> parts,
       int descendants,
-      List<int> ancestors});
+      Iterable<int> ancestors});
 }
 
 class __$ItemCopyWithImpl<$Res> extends _$ItemCopyWithImpl<$Res>
@@ -210,15 +210,15 @@ class __$ItemCopyWithImpl<$Res> extends _$ItemCopyWithImpl<$Res>
       dead: dead == freezed ? _value.dead : dead as bool,
       parent: parent == freezed ? _value.parent : parent as int,
       poll: poll == freezed ? _value.poll : poll as int,
-      kids: kids == freezed ? _value.kids : kids as List<int>,
+      kids: kids == freezed ? _value.kids : kids as Iterable<int>,
       url: url == freezed ? _value.url : url as String,
       score: score == freezed ? _value.score : score as int,
       title: title == freezed ? _value.title : title as String,
-      parts: parts == freezed ? _value.parts : parts as List<int>,
+      parts: parts == freezed ? _value.parts : parts as Iterable<int>,
       descendants:
           descendants == freezed ? _value.descendants : descendants as int,
       ancestors:
-          ancestors == freezed ? _value.ancestors : ancestors as List<int>,
+          ancestors == freezed ? _value.ancestors : ancestors as Iterable<int>,
     ));
   }
 }
@@ -265,7 +265,7 @@ class _$_Item with DiagnosticableTreeMixin implements _Item {
   @override
   final int poll;
   @override
-  final List<int> kids;
+  final Iterable<int> kids;
   @override
   final String url;
   @override
@@ -273,11 +273,11 @@ class _$_Item with DiagnosticableTreeMixin implements _Item {
   @override
   final String title;
   @override
-  final List<int> parts;
+  final Iterable<int> parts;
   @override
   final int descendants;
   @override
-  final List<int> ancestors;
+  final Iterable<int> ancestors;
 
   bool _didurlHost = false;
   String _urlHost;
@@ -429,13 +429,13 @@ abstract class _Item implements Item {
       bool dead,
       int parent,
       int poll,
-      List<int> kids,
+      Iterable<int> kids,
       String url,
       int score,
       String title,
-      List<int> parts,
+      Iterable<int> parts,
       int descendants,
-      List<int> ancestors}) = _$_Item;
+      Iterable<int> ancestors}) = _$_Item;
 
   factory _Item.fromJson(Map<String, dynamic> json) = _$_Item.fromJson;
 
@@ -458,7 +458,7 @@ abstract class _Item implements Item {
   @override
   int get poll;
   @override
-  List<int> get kids;
+  Iterable<int> get kids;
   @override
   String get url;
   @override
@@ -466,11 +466,11 @@ abstract class _Item implements Item {
   @override
   String get title;
   @override
-  List<int> get parts;
+  Iterable<int> get parts;
   @override
   int get descendants;
   @override
-  List<int> get ancestors;
+  Iterable<int> get ancestors;
   @override
   _$ItemCopyWith<_Item> get copyWith;
 }

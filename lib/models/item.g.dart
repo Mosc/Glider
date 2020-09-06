@@ -17,13 +17,13 @@ _$_Item _$_$_ItemFromJson(Map<String, dynamic> json) {
     dead: json['dead'] as bool,
     parent: json['parent'] as int,
     poll: json['poll'] as int,
-    kids: (json['kids'] as List)?.map((e) => e as int)?.toList(),
+    kids: (json['kids'] as List)?.map((e) => e as int),
     url: json['url'] as String,
     score: json['score'] as int,
     title: json['title'] as String,
-    parts: (json['parts'] as List)?.map((e) => e as int)?.toList(),
+    parts: (json['parts'] as List)?.map((e) => e as int),
     descendants: json['descendants'] as int,
-    ancestors: (json['ancestors'] as List)?.map((e) => e as int)?.toList(),
+    ancestors: (json['ancestors'] as List)?.map((e) => e as int),
   );
 }
 
@@ -37,13 +37,13 @@ Map<String, dynamic> _$_$_ItemToJson(_$_Item instance) => <String, dynamic>{
       'dead': instance.dead,
       'parent': instance.parent,
       'poll': instance.poll,
-      'kids': instance.kids,
+      'kids': instance.kids?.toList(),
       'url': instance.url,
       'score': instance.score,
       'title': instance.title,
-      'parts': instance.parts,
+      'parts': instance.parts?.toList(),
       'descendants': instance.descendants,
-      'ancestors': instance.ancestors,
+      'ancestors': instance.ancestors?.toList(),
     };
 
 T _$enumDecode<T>(

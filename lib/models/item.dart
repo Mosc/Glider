@@ -18,13 +18,13 @@ abstract class Item with _$Item {
     bool dead,
     int parent,
     int poll,
-    List<int> kids,
+    Iterable<int> kids,
     String url,
     int score,
     String title,
-    List<int> parts,
+    Iterable<int> parts,
     int descendants,
-    List<int> ancestors,
+    Iterable<int> ancestors,
   }) = _Item;
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);

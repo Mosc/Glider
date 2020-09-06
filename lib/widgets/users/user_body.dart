@@ -44,9 +44,9 @@ class UserBody extends HookWidget {
                 delegate: SeparatedSliverChildBuilderDelegate(
                   itemBuilder: (_, int index) {
                     if (index < user.submitted.length) {
-                      final int id = user.submitted[index];
+                      final int id = user.submitted.elementAt(index);
                       return ItemTile(
-                        id: user.submitted[index],
+                        id: user.submitted.elementAt(index),
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute<void>(
                               builder: (_) => ItemPage(id: id)),

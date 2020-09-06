@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
-import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/error.dart';
 import 'package:glider/widgets/common/separated_sliver_list.dart';
@@ -21,10 +20,7 @@ class StoriesBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () {
-        context.read(repositoryProvider).clearItemCache();
-        return context.refresh(storyIdsProvider(navigationItem));
-      },
+      onRefresh: () => context.refresh(storyIdsProvider(navigationItem)),
       child: CustomScrollView(
         slivers: <Widget>[
           useProvider(storyIdsProvider(navigationItem)).when(
@@ -35,13 +31,13 @@ class StoriesBody extends HookWidget {
               ),
             ),
             error: (_, __) => const SliverFillRemaining(child: Error()),
-            data: (List<int> ids) => SliverList(
+            data: (Iterable<int> ids) => SliverList(
               delegate: SeparatedSliverChildBuilderDelegate(
                 itemBuilder: (_, int index) {
                   if (index < ids.length) {
-                    final int id = ids[index];
+                    final int id = ids.elementAt(index);
                     return ItemTile(
-                      id: ids[index],
+                      id: ids.elementAt(index),
                       dense: true,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(

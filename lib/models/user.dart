@@ -13,7 +13,7 @@ abstract class User with _$User {
     int created,
     int karma,
     String about,
-    List<int> submitted,
+    Iterable<int> submitted,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

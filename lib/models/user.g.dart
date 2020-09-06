@@ -13,7 +13,7 @@ _$_User _$_$_UserFromJson(Map<String, dynamic> json) {
     created: json['created'] as int,
     karma: json['karma'] as int,
     about: json['about'] as String,
-    submitted: (json['submitted'] as List)?.map((e) => e as int)?.toList(),
+    submitted: (json['submitted'] as List)?.map((e) => e as int),
   );
 }
 
@@ -23,5 +23,5 @@ Map<String, dynamic> _$_$_UserToJson(_$_User instance) => <String, dynamic>{
       'created': instance.created,
       'karma': instance.karma,
       'about': instance.about,
-      'submitted': instance.submitted,
+      'submitted': instance.submitted?.toList(),
     };

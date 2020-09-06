@@ -22,7 +22,7 @@ class _$UserTearOff {
       int created,
       int karma,
       String about,
-      List<int> submitted}) {
+      Iterable<int> submitted}) {
     return _User(
       id: id,
       delay: delay,
@@ -43,7 +43,7 @@ mixin _$User {
   int get created;
   int get karma;
   String get about;
-  List<int> get submitted;
+  Iterable<int> get submitted;
 
   Map<String, dynamic> toJson();
   $UserCopyWith<User> get copyWith;
@@ -58,7 +58,7 @@ abstract class $UserCopyWith<$Res> {
       int created,
       int karma,
       String about,
-      List<int> submitted});
+      Iterable<int> submitted});
 }
 
 class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
@@ -84,7 +84,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
       karma: karma == freezed ? _value.karma : karma as int,
       about: about == freezed ? _value.about : about as String,
       submitted:
-          submitted == freezed ? _value.submitted : submitted as List<int>,
+          submitted == freezed ? _value.submitted : submitted as Iterable<int>,
     ));
   }
 }
@@ -99,7 +99,7 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       int created,
       int karma,
       String about,
-      List<int> submitted});
+      Iterable<int> submitted});
 }
 
 class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
@@ -126,7 +126,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
       karma: karma == freezed ? _value.karma : karma as int,
       about: about == freezed ? _value.about : about as String,
       submitted:
-          submitted == freezed ? _value.submitted : submitted as List<int>,
+          submitted == freezed ? _value.submitted : submitted as Iterable<int>,
     ));
   }
 }
@@ -155,7 +155,7 @@ class _$_User with DiagnosticableTreeMixin implements _User {
   @override
   final String about;
   @override
-  final List<int> submitted;
+  final Iterable<int> submitted;
 
   bool _didcreatedDate = false;
   String _createdDate;
@@ -236,7 +236,7 @@ abstract class _User implements User {
       int created,
       int karma,
       String about,
-      List<int> submitted}) = _$_User;
+      Iterable<int> submitted}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -251,7 +251,7 @@ abstract class _User implements User {
   @override
   String get about;
   @override
-  List<int> get submitted;
+  Iterable<int> get submitted;
   @override
   _$UserCopyWith<_User> get copyWith;
 }

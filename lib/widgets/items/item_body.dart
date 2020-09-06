@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
-import 'package:glider/models/item_family.dart';
+import 'package:glider/models/item_tree.dart';
+import 'package:glider/models/item_tree_parameter.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
-import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -28,18 +28,14 @@ class ItemBody extends HookWidget {
     // This non-stream version retrieves an item's kids concurrently, possibly
     // out of order, and returns them all at once. Its results are thefore not
     // used, but the caching it causes is useful for the stream provider.
-    useProvider(itemFamilyProvider(id));
+    useProvider(itemTreeProvider(ItemTreeParameter(id: id)));
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
 
     return RefreshIndicator(
-      onRefresh: () {
-        context.read(repositoryProvider).clearItemCache();
-        context.refresh(itemFamilyStreamProvider(id));
-        return context.refresh(itemFamilyProvider(id));
-      },
+      onRefresh: () => context.refresh(itemProvider(id)),
       child: CustomScrollView(
         slivers: <Widget>[
-          useProvider(itemFamilyStreamProvider(id)).when(
+          useProvider(itemTreeStreamProvider(ItemTreeParameter(id: id))).when(
             loading: () => SliverList(
               delegate: SeparatedSliverChildBuilderDelegate(
                 itemBuilder: (_, int index) => index == 0
@@ -50,11 +46,11 @@ class ItemBody extends HookWidget {
             ),
             error: (Object error, StackTrace stackTrace) =>
                 const SliverFillRemaining(child: Error()),
-            data: (ItemFamily itemFamily) => SliverList(
+            data: (ItemTree itemTree) => SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  if (index < itemFamily.items.length) {
-                    final Item item = itemFamily.items[index];
+                  if (index < itemTree.items.length) {
+                    final Item item = itemTree.items.elementAt(index);
                     return Column(
                       children: <Widget>[
                         if (index == 0 && item.parent != null) ...<Widget>[
@@ -66,7 +62,7 @@ class ItemBody extends HookWidget {
                               collapsedNotifier, item.ancestors),
                           falseChild: ItemTileData(
                             item,
-                            rootBy: itemFamily.items.first.by,
+                            rootBy: itemTree.items.first.by,
                             onTap: item.type == ItemType.comment
                                 ? () =>
                                     _toggleCollapsed(collapsedNotifier, item.id)
@@ -77,14 +73,13 @@ class ItemBody extends HookWidget {
                         ),
                       ],
                     );
-                  } else if (itemFamily.hasMore) {
+                  } else if (itemTree.hasMore) {
                     return const CommentTileLoading();
                   } else {
                     return const End();
                   }
                 },
-                childCount:
-                    itemFamily.hasMore ? null : itemFamily.items.length + 1,
+                childCount: itemTree.hasMore ? null : itemTree.items.length + 1,
               ),
             ),
           ),
@@ -138,6 +133,6 @@ class ItemBody extends HookWidget {
       collapsedNotifier.value.contains(id);
 
   bool _hasCollapsedAncestors(
-          ValueNotifier<Set<int>> collapsedNotifier, List<int> ids) =>
+          ValueNotifier<Set<int>> collapsedNotifier, Iterable<int> ids) =>
       ids.any((int ancestor) => _isCollapsed(collapsedNotifier, ancestor));
 }

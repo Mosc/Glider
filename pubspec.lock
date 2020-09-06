@@ -236,7 +236,7 @@ packages:
       name: flutter_hooks
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.2"
+    version: "0.14.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -269,7 +269,7 @@ packages:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.3"
+    version: "0.5.0+3"
   freezed:
     dependency: "direct dev"
     description:
@@ -694,7 +694,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.5.2"
+    version: "5.5.3"
   url_launcher_linux:
     dependency: transitive
     description:
