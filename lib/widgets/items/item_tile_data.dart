@@ -138,52 +138,57 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildStorySection(TextTheme textTheme) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-          child: Hero(
-            tag: 'item_title_${item.id}',
-            child: Text.rich(
-              TextSpan(
-                children: <InlineSpan>[
-                  TextSpan(
-                    text: item.title,
-                    style: textTheme.subtitle1,
-                  ),
-                  if (item.url != null) ...<InlineSpan>[
-                    TextSpan(text: ' ', style: textTheme.subtitle1),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: ItemTile.thumbnailSize),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Hero(
+              tag: 'item_title_${item.id}',
+              child: Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
                     TextSpan(
-                      text: '(${item.urlHost})',
-                      style: textTheme.caption.copyWith(height: 1.6),
+                      text: item.title,
+                      style: textTheme.subtitle1,
                     ),
-                  ]
-                ],
-              ),
-              maxLines: dense ? 2 : null,
-              overflow: dense ? TextOverflow.ellipsis : null,
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Hero(
-          tag: 'item_thumbnail_${item.id}',
-          child: CachedNetworkImage(
-            imageUrl: item.thumbnailUrl,
-            imageBuilder: (_, ImageProvider<dynamic> imageProvider) =>
-                Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: imageProvider),
-                borderRadius: BorderRadius.circular(4),
+                    if (item.url != null) ...<InlineSpan>[
+                      TextSpan(text: ' ', style: textTheme.subtitle1),
+                      TextSpan(
+                        text: '(${item.urlHost})',
+                        style: textTheme.caption.copyWith(height: 1.6),
+                      ),
+                    ]
+                  ],
+                ),
+                maxLines: dense ? 2 : null,
+                overflow: dense ? TextOverflow.ellipsis : null,
               ),
             ),
-            placeholder: (_, __) =>
-                const TileLoading(child: TileLoadingBlock()),
-            width: ItemTile.thumbnailSize,
-            height: ItemTile.thumbnailSize,
           ),
-        ),
-      ],
+          if (item.url != null) ...<Widget>[
+            const SizedBox(width: 12),
+            Hero(
+              tag: 'item_thumbnail_${item.id}',
+              child: CachedNetworkImage(
+                imageUrl: item.thumbnailUrl,
+                imageBuilder: (_, ImageProvider<dynamic> imageProvider) =>
+                    Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: imageProvider),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                placeholder: (_, __) =>
+                    const TileLoading(child: TileLoadingBlock()),
+                width: ItemTile.thumbnailSize,
+                height: ItemTile.thumbnailSize,
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
