@@ -224,13 +224,13 @@ class ItemTileData extends HookWidget {
                     padding:
                         const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       item.by,
-                      style: textTheme.caption
-                          .copyWith(color: textTheme.bodyText2.color),
+                      style: textTheme.caption.copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary),
                     ),
                   )
                 else

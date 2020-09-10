@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Color get _primaryColor => Colors.red[300];
-Color get _secondaryColor => _primaryColor;
+Color get _secondaryColor => Colors.indigo[500];
 Color get _surfaceColor => Colors.grey.withOpacity(0.1);
 
 ThemeData get lightTheme => ThemeData(
