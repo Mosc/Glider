@@ -42,7 +42,7 @@ class StoryTileLoading extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 15),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -57,6 +57,7 @@ class StoryTileLoading extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 1),
           ],
         ),
       ),

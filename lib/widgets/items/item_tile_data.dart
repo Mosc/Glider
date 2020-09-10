@@ -142,6 +142,45 @@ class ItemTileData extends HookWidget {
       tag: 'item_meta_data_${item.id}',
       child: Row(
         children: <Widget>[
+          if (item.deleted == true)
+            const TileMetaDataItem(
+              icon: Icons.close,
+              text: '[deleted]',
+            )
+          else
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => UserPage(id: item.by),
+                ),
+              ),
+              child: Row(children: <Widget>[
+                if (item.by == rootBy)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      item.by,
+                      style: textTheme.caption
+                          .copyWith(color: textTheme.bodyText2.color),
+                    ),
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 1),
+                    child: Text(
+                      item.by,
+                      style: textTheme.caption.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
+                  ),
+                const SizedBox(width: 8),
+              ]),
+            ),
           if (item.score != null)
             TileMetaDataItem(
               icon: Icons.favorite_outline,
@@ -156,25 +195,6 @@ class ItemTileData extends HookWidget {
             const TileMetaDataItem(icon: Icons.work_outline)
           else if (item.type == ItemType.poll)
             const TileMetaDataItem(icon: Icons.poll),
-          if (item.deleted == true)
-            const TileMetaDataItem(
-              icon: Icons.close,
-              text: '[deleted]',
-            )
-          else
-            GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => UserPage(id: item.by),
-                ),
-              ),
-              child: TileMetaDataItem(
-                icon: item.by == rootBy
-                    ? Icons.account_circle
-                    : Icons.person_outline,
-                text: item.by.toString(),
-              ),
-            ),
           if (item.type == ItemType.comment)
             SmoothAnimatedSwitcher(
               transitionBuilder: (Widget child, Animation<double> animation) =>

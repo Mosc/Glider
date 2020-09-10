@@ -15,7 +15,7 @@ class UserTileLoading extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 2),
+            const SizedBox(height: 3),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -30,7 +30,7 @@ class UserTileLoading extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 13),
             for (int _ in List<int>(2)) ...<Widget>[
               const SizedBox(height: 2),
               LoadingBlock(height: textTheme.bodyText2.fontSize),

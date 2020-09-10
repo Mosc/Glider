@@ -16,7 +16,7 @@ class CommentTileLoading extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
@@ -31,7 +31,7 @@ class CommentTileLoading extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 13),
               for (int i in List<int>.generate(2, (int i) => i)) ...<Widget>[
                 if (i > 0) SizedBox(height: textTheme.bodyText2.fontSize),
                 for (int _ in List<int>(2)) ...<Widget>[

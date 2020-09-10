@@ -8,10 +8,14 @@ ThemeData get lightTheme => ThemeData(
       brightness: Brightness.light,
       primaryColor: _primaryColor,
       accentColor: _primaryColor,
+      buttonColor: _primaryColor,
       colorScheme: ColorScheme.light(
         primary: _primaryColor,
         secondary: _primaryColor,
         surface: _surfaceColor,
+        // ignore: avoid_redundant_argument_values
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
       ),
     );
 
@@ -21,6 +25,7 @@ ThemeData get darkTheme => ThemeData(
       accentColor: _primaryColor,
       scaffoldBackgroundColor: Colors.grey[900],
       appBarTheme: AppBarTheme(color: Colors.grey[850]),
+      buttonColor: _primaryColor,
       colorScheme: ColorScheme.dark(
         primary: _primaryColor,
         secondary: _primaryColor,

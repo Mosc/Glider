@@ -19,9 +19,7 @@ class UserPage extends HookWidget {
             floating: true,
           ),
         ],
-        body: UserBody(
-          id: id,
-        ),
+        body: UserBody(id: id),
       ),
     );
   }

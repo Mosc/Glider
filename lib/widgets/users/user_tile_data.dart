@@ -19,6 +19,17 @@ class UserTileData extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
+              if (user.id != null) ...<Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 1),
+                  child: Text(
+                    user.id,
+                    style: textTheme.caption
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
+                const SizedBox(width: 8),
+              ],
               if (user.karma != null)
                 TileMetaDataItem(
                   icon: Icons.favorite_outline,
@@ -28,11 +39,6 @@ class UserTileData extends StatelessWidget {
                 TileMetaDataItem(
                   icon: Icons.chat_bubble_outline,
                   text: user.submitted.length.toString(),
-                ),
-              if (user.id != null)
-                TileMetaDataItem(
-                  icon: Icons.person_outline,
-                  text: user.id,
                 ),
               const Spacer(),
               Text(

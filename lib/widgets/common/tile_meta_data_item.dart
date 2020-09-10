@@ -11,18 +11,22 @@ class TileMetaDataItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Row(
-      children: <Widget>[
-        Icon(icon, size: textTheme.bodyText2.fontSize),
-        if (text != null) ...<Widget>[
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: textTheme.caption.copyWith(color: textTheme.bodyText2.color),
-          ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 1),
+      child: Row(
+        children: <Widget>[
+          Icon(icon, size: textTheme.bodyText2.fontSize),
+          if (text != null) ...<Widget>[
+            const SizedBox(width: 4),
+            Text(
+              text,
+              style:
+                  textTheme.caption.copyWith(color: textTheme.bodyText2.color),
+            ),
+          ],
+          const SizedBox(width: 8),
         ],
-        const SizedBox(width: 8),
-      ],
+      ),
     );
   }
 }
