@@ -3,15 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
+import 'package:glider/models/slidable_action.dart';
+import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/user_page.dart';
+import 'package:glider/providers/repository_provider.dart';
+import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
-import 'package:glider/widgets/common/loading.dart';
-import 'package:glider/widgets/common/loading_block.dart';
+import 'package:glider/widgets/common/tile_loading.dart';
+import 'package:glider/widgets/common/tile_loading_block.dart';
+import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/item_tile.dart';
-import 'package:glider/widgets/common/tile_meta_data_item.dart';
+import 'package:glider/widgets/common/meta_data_item.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemTileData extends HookWidget {
   const ItemTileData(
@@ -34,6 +40,8 @@ class ItemTileData extends HookWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final bool indented = item.ancestors != null && item.ancestors.isNotEmpty;
 
+    final AuthRepository authRepository = useProvider(authRepositoryProvider);
+
     return Container(
       margin: indented
           ? EdgeInsets.only(left: (8 * item.ancestors.length - 2).toDouble())
@@ -50,35 +58,76 @@ class ItemTileData extends HookWidget {
           : null,
       child: Column(
         children: <Widget>[
-          InkWell(
-            onTap: item.deleted != true && onTap != null ? onTap : null,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  if (item.parent == null) ...<Widget>[
-                    _buildStorySection(textTheme),
-                    const SizedBox(height: 12),
-                  ],
-                  _buildMetaDataSection(context, textTheme),
-                  SmoothAnimatedSwitcher(
-                    condition: dense,
-                    falseChild: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        if (item.text != null) ...<Widget>[
-                          const SizedBox(height: 12),
-                          _buildTextSection(),
-                        ],
-                        if (item.url != null) ...<Widget>[
-                          const SizedBox(height: 12),
-                          _buildUrlSection(textTheme),
-                        ],
-                      ],
+          Slidable(
+            startToEndAction: SlidableAction(
+              action: () async {
+                if (await authRepository.loggedIn) {
+                  final bool success = await authRepository.vote(id: item.id);
+
+                  if (success) {
+                    Scaffold.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Item has been upvoted'),
+                      ),
+                    );
+                  } else {
+                    Scaffold.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Something went wrong'),
+                      ),
+                    );
+                  }
+                } else {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Log in to vote'),
+                      action: SnackBarAction(
+                        label: 'Log in',
+                        onPressed: () => Navigator.of(context).push<void>(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const AccountPage(),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  );
+                }
+              },
+              icon: Icons.favorite,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            key: Key(item.id.toString()),
+            child: InkWell(
+              onTap: item.deleted != true && onTap != null ? onTap : null,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (item.parent == null &&
+                        item.deleted != true) ...<Widget>[
+                      _buildStorySection(textTheme),
+                      const SizedBox(height: 12),
+                    ],
+                    _buildMetaDataSection(context, textTheme),
+                    SmoothAnimatedSwitcher(
+                      condition: dense,
+                      falseChild: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          if (item.text != null) ...<Widget>[
+                            const SizedBox(height: 12),
+                            _buildTextSection(),
+                          ],
+                          if (item.url != null) ...<Widget>[
+                            const SizedBox(height: 12),
+                            _buildUrlSection(textTheme),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -128,7 +177,8 @@ class ItemTileData extends HookWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            placeholder: (_, __) => const Loading(child: LoadingBlock()),
+            placeholder: (_, __) =>
+                const TileLoading(child: TileLoadingBlock()),
             width: ItemTile.thumbnailSize,
             height: ItemTile.thumbnailSize,
           ),
@@ -142,8 +192,22 @@ class ItemTileData extends HookWidget {
       tag: 'item_meta_data_${item.id}',
       child: Row(
         children: <Widget>[
+          if (item.score != null)
+            MetaDataItem(
+              icon: Icons.favorite_outline,
+              text: item.score.toString(),
+            ),
+          if (item.descendants != null)
+            MetaDataItem(
+              icon: Icons.chat_bubble_outline,
+              text: item.descendants.toString(),
+            ),
+          if (item.type == ItemType.job)
+            const MetaDataItem(icon: Icons.work_outline)
+          else if (item.type == ItemType.poll)
+            const MetaDataItem(icon: Icons.poll),
           if (item.deleted == true)
-            const TileMetaDataItem(
+            const MetaDataItem(
               icon: Icons.close,
               text: '[deleted]',
             )
@@ -181,26 +245,12 @@ class ItemTileData extends HookWidget {
                 const SizedBox(width: 8),
               ]),
             ),
-          if (item.score != null)
-            TileMetaDataItem(
-              icon: Icons.favorite_outline,
-              text: item.score.toString(),
-            ),
-          if (item.descendants != null)
-            TileMetaDataItem(
-              icon: Icons.chat_bubble_outline,
-              text: item.descendants.toString(),
-            ),
-          if (item.type == ItemType.job)
-            const TileMetaDataItem(icon: Icons.work_outline)
-          else if (item.type == ItemType.poll)
-            const TileMetaDataItem(icon: Icons.poll),
           if (item.type == ItemType.comment)
             SmoothAnimatedSwitcher(
               transitionBuilder: (Widget child, Animation<double> animation) =>
                   FadeTransition(opacity: animation, child: child),
               condition: dense,
-              trueChild: TileMetaDataItem(
+              trueChild: MetaDataItem(
                 icon: Icons.add_circle_outline,
                 text: item.kids?.length?.toString(),
               ),

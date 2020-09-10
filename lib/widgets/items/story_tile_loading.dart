@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:glider/widgets/common/loading.dart';
-import 'package:glider/widgets/common/loading_block.dart';
+import 'package:glider/widgets/common/tile_loading.dart';
+import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 
 class StoryTileLoading extends StatelessWidget {
@@ -10,7 +10,7 @@ class StoryTileLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Loading(
+    return TileLoading(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -24,11 +24,11 @@ class StoryTileLoading extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const SizedBox(height: 3),
-                      LoadingBlock(
+                      TileLoadingBlock(
                         height: textTheme.subtitle1.fontSize,
                       ),
                       const SizedBox(height: 3),
-                      LoadingBlock(
+                      TileLoadingBlock(
                         width: 120,
                         height: textTheme.subtitle1.fontSize,
                       ),
@@ -36,7 +36,7 @@ class StoryTileLoading extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const LoadingBlock(
+                const TileLoadingBlock(
                   width: ItemTile.thumbnailSize,
                   height: ItemTile.thumbnailSize,
                 )
@@ -46,12 +46,12 @@ class StoryTileLoading extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                LoadingBlock(
+                TileLoadingBlock(
                   width: 160,
                   height: textTheme.caption.fontSize,
                 ),
                 const Spacer(),
-                LoadingBlock(
+                TileLoadingBlock(
                   width: 80,
                   height: textTheme.caption.fontSize,
                 ),

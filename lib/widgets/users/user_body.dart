@@ -31,39 +31,42 @@ class UserBody extends HookWidget {
             error: (_, __) => <Widget>[
               const SliverFillRemaining(child: Error()),
             ],
-            data: (User user) => <Widget>[
-              SliverList(
-                delegate: SliverChildListDelegate.fixed(
-                  <Widget>[
-                    UserTileData(user),
-                    const Separator(),
-                  ],
+            data: (User user) {
+              final int itemCount = user.submitted?.length ?? 0;
+              return <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate.fixed(
+                    <Widget>[
+                      UserTileData(user),
+                      const Separator(),
+                    ],
+                  ),
                 ),
-              ),
-              SliverList(
-                delegate: SeparatedSliverChildBuilderDelegate(
-                  itemBuilder: (_, int index) {
-                    if (index < user.submitted.length) {
-                      final int id = user.submitted.elementAt(index);
-                      return ItemTile(
-                        id: user.submitted.elementAt(index),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                              builder: (_) => ItemPage(id: id)),
-                        ),
-                        // It doesn't matter much, but each item is probably
-                        // more likely to be a comment than a story.
-                        loading: () => const CommentTileLoading(),
-                      );
-                    } else {
-                      return const End();
-                    }
-                  },
-                  separatorBuilder: (_, __) => const Separator(),
-                  childCount: user.submitted.length + 1,
+                SliverList(
+                  delegate: SeparatedSliverChildBuilderDelegate(
+                    itemBuilder: (_, int index) {
+                      if (index < itemCount) {
+                        final int id = user.submitted.elementAt(index);
+                        return ItemTile(
+                          id: user.submitted.elementAt(index),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                                builder: (_) => ItemPage(id: id)),
+                          ),
+                          // It doesn't matter much, but each item is probably
+                          // more likely to be a comment than a story.
+                          loading: () => const CommentTileLoading(),
+                        );
+                      } else {
+                        return const End();
+                      }
+                    },
+                    separatorBuilder: (_, __) => const Separator(),
+                    childCount: itemCount + 1,
+                  ),
                 ),
-              ),
-            ],
+              ];
+            },
           ),
         ],
       ),

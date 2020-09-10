@@ -5,7 +5,7 @@ import 'package:glider/models/navigation_item.dart';
 import 'package:glider/utils/service_exception.dart';
 
 class ApiRepository {
-  ApiRepository(this._dio);
+  const ApiRepository(this._dio);
 
   static const String baseUrl = 'https://hacker-news.firebaseio.com/v0';
 
@@ -31,7 +31,7 @@ class ApiRepository {
           await _dio.get<Map<String, Object>>(url);
 
       if (response.data == null) {
-        return null;
+        throw ServiceException();
       }
 
       return Item.fromJson(response.data);
@@ -46,6 +46,11 @@ class ApiRepository {
     try {
       final Response<Map<String, Object>> response =
           await _dio.get<Map<String, Object>>(url);
+
+      if (response.data == null) {
+        throw ServiceException();
+      }
+
       return User.fromJson(response.data);
     } on DioError catch (e) {
       throw ServiceException(e.message);

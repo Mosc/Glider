@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LoadingBlock extends StatelessWidget {
-  const LoadingBlock({Key key, this.width, this.height}) : super(key: key);
+class TileLoadingBlock extends StatelessWidget {
+  const TileLoadingBlock({Key key, this.width, this.height}) : super(key: key);
 
   final double width;
   final double height;

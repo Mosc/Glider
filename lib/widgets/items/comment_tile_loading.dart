@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:glider/widgets/common/loading.dart';
-import 'package:glider/widgets/common/loading_block.dart';
+import 'package:glider/widgets/common/tile_loading.dart';
+import 'package:glider/widgets/common/tile_loading_block.dart';
 
 class CommentTileLoading extends StatelessWidget {
   const CommentTileLoading({Key key}) : super(key: key);
@@ -9,7 +9,7 @@ class CommentTileLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Loading(
+    return TileLoading(
       child: SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -20,12 +20,12 @@ class CommentTileLoading extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  LoadingBlock(
+                  TileLoadingBlock(
                     width: 80,
                     height: textTheme.caption.fontSize,
                   ),
                   const Spacer(),
-                  LoadingBlock(
+                  TileLoadingBlock(
                     width: 80,
                     height: textTheme.caption.fontSize,
                   ),
@@ -36,10 +36,10 @@ class CommentTileLoading extends StatelessWidget {
                 if (i > 0) SizedBox(height: textTheme.bodyText2.fontSize),
                 for (int _ in List<int>(2)) ...<Widget>[
                   const SizedBox(height: 2),
-                  LoadingBlock(height: textTheme.bodyText2.fontSize),
+                  TileLoadingBlock(height: textTheme.bodyText2.fontSize),
                 ],
                 const SizedBox(height: 2),
-                LoadingBlock(
+                TileLoadingBlock(
                   width: 120,
                   height: textTheme.bodyText2.fontSize,
                 ),

@@ -20,7 +20,9 @@ class StoriesBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => context.refresh(storyIdsProvider(navigationItem)),
+      onRefresh: () {
+        return context.refresh(storyIdsProvider(navigationItem));
+      },
       child: CustomScrollView(
         slivers: <Widget>[
           useProvider(storyIdsProvider(navigationItem)).when(

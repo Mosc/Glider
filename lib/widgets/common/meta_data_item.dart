@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TileMetaDataItem extends StatelessWidget {
-  const TileMetaDataItem({Key key, @required this.icon, this.text})
+class MetaDataItem extends StatelessWidget {
+  const MetaDataItem({Key key, @required this.icon, this.text})
       : super(key: key);
 
   final IconData icon;

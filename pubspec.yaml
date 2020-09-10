@@ -21,6 +21,7 @@ dependencies:
   shimmer: ^1.1.1
   timeago: ^2.0.27
   intl: ^0.16.1
+  flutter_secure_storage: ^3.3.3
 
 dev_dependencies:
   flutter_test:
