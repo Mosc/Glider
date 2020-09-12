@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/auth_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedOut extends HookWidget {
-  const AccountLoggedOut(this.actionsNotifier, {Key key}) : super(key: key);
-
-  final ValueNotifier<List<Widget>> actionsNotifier;
+  const AccountLoggedOut({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    useMemoized(
-      () => Future<void>.microtask(() => actionsNotifier.value = <Widget>[]),
+    Future<void>.microtask(
+      () => context.read(actionsStateProvider).state = <Widget>[],
     );
 
     final GlobalKey<FormState> formKey =

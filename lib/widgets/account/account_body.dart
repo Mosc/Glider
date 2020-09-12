@@ -8,18 +8,15 @@ import 'package:glider/widgets/common/loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountBody extends HookWidget {
-  const AccountBody(this.actionsNotifier, {Key key}) : super(key: key);
-
-  final ValueNotifier<List<Widget>> actionsNotifier;
+  const AccountBody({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return useProvider(loggedInProvider).when(
       loading: () => const Loading(),
       error: (_, __) => const Error(),
-      data: (bool loggedIn) => loggedIn
-          ? AccountLoggedIn(actionsNotifier)
-          : AccountLoggedOut(actionsNotifier),
+      data: (bool loggedIn) =>
+          loggedIn ? const AccountLoggedIn() : const AccountLoggedOut(),
     );
   }
 }

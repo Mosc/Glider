@@ -4,6 +4,11 @@ import 'package:glider/models/navigation_item.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/utils/uni_links_handler.dart';
 import 'package:glider/widgets/items/stories_body.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final AutoDisposeStateProvider<NavigationItem> navitationItemStateProvider =
+    StateProvider.autoDispose<NavigationItem>(
+        (AutoDisposeProviderReference ref) => NavigationItem.topStories);
 
 class StoriesPage extends HookWidget {
   const StoriesPage({Key key}) : super(key: key);
@@ -16,8 +21,8 @@ class StoriesPage extends HookWidget {
       <Object>[UniLinksHandler.uriSubscription],
     );
 
-    final ValueNotifier<NavigationItem> navigationItemNotifier =
-        useState(NavigationItem.topStories);
+    final StateController<NavigationItem> navigationItemStateController =
+        useProvider(navitationItemStateProvider);
 
     return Scaffold(
       body: NestedScrollView(
@@ -43,15 +48,15 @@ class StoriesPage extends HookWidget {
                     ),
                 ],
                 onSelected: (NavigationItem navigationItem) =>
-                    navigationItemNotifier.value = navigationItem,
-                icon: Icon(navigationItemNotifier.value.icon),
+                    navigationItemStateController.state = navigationItem,
+                icon: Icon(navigationItemStateController.state.icon),
               ),
             ],
             forceElevated: innerBoxIsScrolled,
             floating: true,
           ),
         ],
-        body: StoriesBody(navigationItem: navigationItemNotifier.value),
+        body: StoriesBody(navigationItem: navigationItemStateController.state),
       ),
     );
   }
