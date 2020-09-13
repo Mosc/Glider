@@ -5,7 +5,7 @@ import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/user_provider.dart';
 import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/error.dart';
-import 'package:glider/widgets/common/separated_sliver_list.dart';
+import 'package:glider/widgets/common/separated_sliver_child_builder_delegate.dart';
 import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/items/item_tile.dart';

@@ -12,7 +12,7 @@ import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/common/error.dart';
-import 'package:glider/widgets/common/separated_sliver_list.dart';
+import 'package:glider/widgets/common/separated_sliver_child_builder_delegate.dart';
 import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
@@ -29,6 +29,7 @@ class ItemBody extends HookWidget {
     // out of order, and returns them all at once. Its results are thefore not
     // used, but the caching it causes is useful for the stream provider.
     useProvider(itemTreeProvider(ItemTreeParameter(id: id)));
+
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
 
     return RefreshIndicator(
@@ -47,6 +48,10 @@ class ItemBody extends HookWidget {
             error: (Object error, StackTrace stackTrace) =>
                 const SliverFillRemaining(child: Error()),
             data: (ItemTree itemTree) => SliverList(
+              // We're not using a SeparatedSliverChildBuilderDelegate here
+              // because we want the separator to be indented based on the item
+              // depth. This means letting ItemTileData render its own separator
+              // instead.
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   if (index < itemTree.items.length) {

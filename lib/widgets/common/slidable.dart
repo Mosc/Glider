@@ -19,37 +19,48 @@ class Slidable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: key,
-      background: startToEndAction != null
-          ? Container(
-              color: startToEndAction.color,
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 24),
-                child: Icon(startToEndAction.icon),
-              ),
-            )
-          : null,
-      secondaryBackground: endToStartAction != null
-          ? Container(
-              color: endToStartAction.color,
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 24),
-                child: Icon(endToStartAction.icon),
-              ),
-            )
-          : null,
+      background: _buildBackground(startToEndAction, Alignment.centerLeft),
+      secondaryBackground:
+          _buildBackground(endToStartAction, Alignment.centerRight),
       direction: startToEndAction != null
           ? endToStartAction != null
               ? DismissDirection.horizontal
               : DismissDirection.startToEnd
           : DismissDirection.endToStart,
-      confirmDismiss: (_) {
-        startToEndAction.action?.call();
-        return Future<bool>.value(false);
+      confirmDismiss: (DismissDirection direction) async {
+        switch (direction) {
+          case DismissDirection.startToEnd:
+            startToEndAction.action?.call();
+            break;
+          case DismissDirection.endToStart:
+            endToStartAction.action?.call();
+            break;
+          case DismissDirection.horizontal:
+          case DismissDirection.vertical:
+          case DismissDirection.up:
+          case DismissDirection.down:
+            assert(false, 'Direction $direction is not supported');
+        }
+
+        return null;
       },
       resizeDuration: null,
       child: child,
     );
+  }
+
+  Widget _buildBackground(SlidableAction action, Alignment alignment) {
+    if (action != null) {
+      return Container(
+        color: action.color,
+        alignment: alignment,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Icon(action.icon),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }

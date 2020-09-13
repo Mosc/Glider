@@ -11,6 +11,7 @@ class AccountLoggedOut extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // We can't set this during initial build, so delay execution by one frame.
     Future<void>.microtask(
       () => context.read(actionsStateProvider).state = <Widget>[],
     );

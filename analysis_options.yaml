@@ -3,7 +3,6 @@ analyzer:
     implicit-casts: false
     implicit-dynamic: false
   errors:
-    implicit_dynamic_parameter: warning
     missing_required_param: warning
     missing_return: warning
   exclude:

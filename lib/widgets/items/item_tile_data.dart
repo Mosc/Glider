@@ -42,20 +42,10 @@ class ItemTileData extends HookWidget {
 
     final AuthRepository authRepository = useProvider(authRepositoryProvider);
 
-    return Container(
-      margin: indented
+    return Padding(
+      padding: indented
           ? EdgeInsets.only(left: (8 * item.ancestors.length - 2).toDouble())
           : EdgeInsets.zero,
-      decoration: indented
-          ? BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2,
-                ),
-              ),
-            )
-          : null,
       child: Column(
         children: <Widget>[
           Slidable(
@@ -97,36 +87,48 @@ class ItemTileData extends HookWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             key: Key(item.id.toString()),
-            child: InkWell(
-              onTap: item.deleted != true && onTap != null ? onTap : null,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (item.parent == null &&
-                        item.deleted != true) ...<Widget>[
-                      _buildStorySection(textTheme),
-                      const SizedBox(height: 12),
-                    ],
-                    _buildMetaDataSection(context, textTheme),
-                    SmoothAnimatedSwitcher(
-                      condition: dense,
-                      falseChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          if (item.text != null) ...<Widget>[
-                            const SizedBox(height: 12),
-                            _buildTextSection(),
-                          ],
-                          if (item.url != null) ...<Widget>[
-                            const SizedBox(height: 12),
-                            _buildUrlSection(textTheme),
-                          ],
-                        ],
+            child: Container(
+              decoration: indented
+                  ? BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2,
+                        ),
                       ),
-                    ),
-                  ],
+                    )
+                  : null,
+              child: InkWell(
+                onTap: item.deleted != true && onTap != null ? onTap : null,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      if (item.parent == null &&
+                          item.deleted != true) ...<Widget>[
+                        _buildStorySection(textTheme),
+                        const SizedBox(height: 12),
+                      ],
+                      _buildMetaDataSection(context, textTheme),
+                      SmoothAnimatedSwitcher(
+                        condition: dense,
+                        falseChild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if (item.text != null) ...<Widget>[
+                              const SizedBox(height: 12),
+                              _buildTextSection(),
+                            ],
+                            if (item.url != null) ...<Widget>[
+                              const SizedBox(height: 12),
+                              _buildUrlSection(textTheme),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -26,11 +26,7 @@ class ItemTile extends HookWidget {
     return useProvider(itemProvider(id)).when(
       loading: loading,
       error: (_, __) => const SizedBox.shrink(),
-      data: (Item item) => ItemTileData(
-        item,
-        onTap: onTap,
-        dense: dense,
-      ),
+      data: (Item item) => ItemTileData(item, onTap: onTap, dense: dense),
     );
   }
 }
