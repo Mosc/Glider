@@ -36,7 +36,7 @@ extension NavigationItemExtension on NavigationItem {
       case NavigationItem.newStories:
         return Icons.new_releases;
       case NavigationItem.bestStories:
-        return Icons.favorite;
+        return Icons.trending_up;
       case NavigationItem.askStories:
         return Icons.question_answer;
       case NavigationItem.showStories:

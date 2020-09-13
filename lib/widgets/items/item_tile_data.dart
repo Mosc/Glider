@@ -8,6 +8,7 @@ import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
+import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
@@ -18,6 +19,7 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/common/meta_data_item.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share/share.dart';
 
 class ItemTileData extends HookWidget {
   const ItemTileData(
@@ -39,7 +41,6 @@ class ItemTileData extends HookWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final bool indented = item.ancestors != null && item.ancestors.isNotEmpty;
-
     final AuthRepository authRepository = useProvider(authRepositoryProvider);
 
     return Padding(
@@ -50,41 +51,53 @@ class ItemTileData extends HookWidget {
         children: <Widget>[
           Slidable(
             startToEndAction: SlidableAction(
-              action: () async {
-                if (await authRepository.loggedIn) {
-                  final bool success = await authRepository.vote(id: item.id);
-
-                  if (success) {
-                    Scaffold.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Item has been upvoted'),
-                      ),
-                    );
-                  } else {
-                    Scaffold.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Something went wrong'),
-                      ),
-                    );
-                  }
-                } else {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Log in to vote'),
-                      action: SnackBarAction(
-                        label: 'Log in',
-                        onPressed: () => Navigator.of(context).push<void>(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const AccountPage(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              },
-              icon: Icons.favorite,
+              action: () => _handleVote(context, authRepository, up: true),
+              icon: Icons.arrow_upward,
               color: Theme.of(context).colorScheme.primary,
+            ),
+            endToStartAction: SlidableAction(
+              action: () async {
+                await showModalBottomSheet<void>(
+                  context: context,
+                  builder: (_) => Wrap(
+                    children: <Widget>[
+                      if (item.url != null) ...<Widget>[
+                        ListTile(
+                          title: const Text('Open link'),
+                          onTap: () async {
+                            await UrlUtil.tryLaunch(item.url);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('Share link'),
+                          onTap: () async {
+                            await Share.share(item.url);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                      ListTile(
+                        title: const Text('Share comment tree'),
+                        onTap: () async {
+                          await Share.share(
+                              '${WebsiteRepository.baseUrl}/item?id=${item.id}');
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Unvote'),
+                        onTap: () async {
+                          await _handleVote(context, authRepository, up: false);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: Icons.more_horiz,
+              color: Theme.of(context).colorScheme.surface,
             ),
             key: Key(item.id.toString()),
             child: Container(
@@ -201,7 +214,7 @@ class ItemTileData extends HookWidget {
         children: <Widget>[
           if (item.score != null)
             MetaDataItem(
-              icon: Icons.favorite_outline,
+              icon: Icons.arrow_upward,
               text: item.score.toString(),
             ),
           if (item.descendants != null)
@@ -304,5 +317,40 @@ class ItemTileData extends HookWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _handleVote(BuildContext context, AuthRepository authRepository,
+      {bool up}) async {
+    if (await authRepository.loggedIn) {
+      final bool success = await authRepository.vote(id: item.id, up: up);
+
+      if (success) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Item has been ${up ? 'up' : 'un'}voted'),
+          ),
+        );
+      } else {
+        Scaffold.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Something went wrong'),
+          ),
+        );
+      }
+    } else {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Log in to vote'),
+          action: SnackBarAction(
+            label: 'Log in',
+            onPressed: () => Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(
+                builder: (_) => const AccountPage(),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

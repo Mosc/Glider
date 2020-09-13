@@ -42,7 +42,7 @@ class WebsiteRepository {
     @required String username,
     @required String password,
     @required int id,
-    bool up = true,
+    @required bool up,
   }) async {
     const String url = '$baseUrl/vote';
     final PostData postData = PostData(

@@ -50,12 +50,13 @@ class AuthRepository {
     await _secureStorage.delete(key: _passwordKey);
   }
 
-  Future<bool> vote({@required int id}) async {
+  Future<bool> vote({@required int id, @required bool up}) async {
     if (await loggedIn) {
       return _websiteRepository.vote(
         username: await username,
         password: await password,
         id: id,
+        up: up,
       );
     }
 

@@ -21,7 +21,7 @@ class UserTileData extends StatelessWidget {
             children: <Widget>[
               if (user.karma != null)
                 MetaDataItem(
-                  icon: Icons.favorite_outline,
+                  icon: Icons.arrow_upward,
                   text: user.karma.toString(),
                 ),
               if (user.submitted != null)
