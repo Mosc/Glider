@@ -13,17 +13,17 @@ extension NavigationItemExtension on NavigationItem {
   String get title {
     switch (this) {
       case NavigationItem.topStories:
-        return 'Top';
+        return 'Top stories';
       case NavigationItem.newStories:
-        return 'New';
+        return 'New stories';
       case NavigationItem.bestStories:
-        return 'Best';
+        return 'Best stories';
       case NavigationItem.askStories:
         return 'Ask HN';
       case NavigationItem.showStories:
         return 'Show HN';
       case NavigationItem.jobStories:
-        return 'Job';
+        return 'Jobs';
     }
 
     throw UnsupportedError('$this does not have a title');
@@ -36,7 +36,7 @@ extension NavigationItemExtension on NavigationItem {
       case NavigationItem.newStories:
         return Icons.new_releases;
       case NavigationItem.bestStories:
-        return Icons.trending_up;
+        return Icons.favorite;
       case NavigationItem.askStories:
         return Icons.question_answer;
       case NavigationItem.showStories:

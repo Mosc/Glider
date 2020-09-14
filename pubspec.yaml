@@ -23,6 +23,9 @@ dependencies:
   intl: ^0.16.1
   flutter_secure_storage: ^3.3.3
   share: ^0.6.5
+  flutter_speed_dial:
+    git:
+      url: https://github.com/esieben1310/flutter_speed_dial
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/utils/uni_links_handler.dart';
 import 'package:glider/widgets/items/stories_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final AutoDisposeStateProvider<NavigationItem> navitationItemStateProvider =
+final AutoDisposeStateProvider<NavigationItem> navigationItemStateProvider =
     StateProvider.autoDispose<NavigationItem>(
         (AutoDisposeProviderReference ref) => NavigationItem.topStories);
 
@@ -21,8 +23,21 @@ class StoriesPage extends HookWidget {
       <Object>[UniLinksHandler.uriSubscription],
     );
 
+    final ValueNotifier<bool> speedDialVisibleState = useState(true);
+    final ScrollController scrollController = useScrollController();
+    useEffect(
+      () {
+        void onScrollForwardListener() => speedDialVisibleState.value =
+            scrollController.position.userScrollDirection ==
+                ScrollDirection.forward;
+        scrollController.addListener(onScrollForwardListener);
+        return () => scrollController.removeListener(onScrollForwardListener);
+      },
+      <Object>[scrollController],
+    );
+
     final StateController<NavigationItem> navigationItemStateController =
-        useProvider(navitationItemStateProvider);
+        useProvider(navigationItemStateProvider);
 
     return Scaffold(
       body: NestedScrollView(
@@ -39,24 +54,28 @@ class StoriesPage extends HookWidget {
                   ),
                 ),
               ),
-              PopupMenuButton<NavigationItem>(
-                itemBuilder: (_) => <PopupMenuEntry<NavigationItem>>[
-                  for (NavigationItem navigationItem in NavigationItem.values)
-                    PopupMenuItem<NavigationItem>(
-                      value: navigationItem,
-                      child: Text(navigationItem.title),
-                    ),
-                ],
-                onSelected: (NavigationItem navigationItem) =>
-                    navigationItemStateController.state = navigationItem,
-                icon: Icon(navigationItemStateController.state.icon),
-              ),
             ],
             forceElevated: innerBoxIsScrolled,
             floating: true,
           ),
         ],
-        body: StoriesBody(navigationItem: navigationItemStateController.state),
+        body: StoriesBody(scrollController: scrollController),
+      ),
+      floatingActionButton: SpeedDial(
+        children: <SpeedDialChild>[
+          for (NavigationItem navigationItem in NavigationItem.values)
+            SpeedDialChild(
+              label: navigationItem.title,
+              foregroundColor: Theme.of(context).textTheme.caption.color,
+              child: Icon(navigationItem.icon),
+              onTap: () => navigationItemStateController.state = navigationItem,
+            ),
+        ],
+        visible: speedDialVisibleState.value,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        animationSpeed: 100,
+        child: Icon(navigationItemStateController.state.icon),
       ),
     );
   }
