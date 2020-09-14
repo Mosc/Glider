@@ -12,5 +12,6 @@ abstract class SlidableAction with _$SlidableAction {
     @required Function action,
     @required IconData icon,
     Color color,
+    Color iconColor,
   }) = _SlidableAction;
 }

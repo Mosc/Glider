@@ -56,7 +56,7 @@ class Slidable extends StatelessWidget {
         alignment: alignment,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Icon(action.icon),
+          child: Icon(action.icon, color: action.iconColor),
         ),
       );
     }

@@ -53,6 +53,7 @@ class ItemTileData extends HookWidget {
               action: () => _handleVote(context, authRepository, up: true),
               icon: Icons.arrow_upward,
               color: Theme.of(context).colorScheme.primary,
+              iconColor: Theme.of(context).colorScheme.onPrimary,
             ),
             endToStartAction: SlidableAction(
               action: () async {
@@ -97,6 +98,7 @@ class ItemTileData extends HookWidget {
               },
               icon: Icons.more_horiz,
               color: Theme.of(context).colorScheme.surface,
+              iconColor: Theme.of(context).colorScheme.onSurface,
             ),
             key: Key(item.id.toString()),
             child: Container(

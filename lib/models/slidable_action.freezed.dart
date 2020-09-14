@@ -14,11 +14,15 @@ class _$SlidableActionTearOff {
 
 // ignore: unused_element
   _SlidableAction call(
-      {@required Function action, @required IconData icon, Color color}) {
+      {@required Function action,
+      @required IconData icon,
+      Color color,
+      Color iconColor}) {
     return _SlidableAction(
       action: action,
       icon: icon,
       color: color,
+      iconColor: iconColor,
     );
   }
 }
@@ -30,6 +34,7 @@ mixin _$SlidableAction {
   Function get action;
   IconData get icon;
   Color get color;
+  Color get iconColor;
 
   $SlidableActionCopyWith<SlidableAction> get copyWith;
 }
@@ -38,7 +43,7 @@ abstract class $SlidableActionCopyWith<$Res> {
   factory $SlidableActionCopyWith(
           SlidableAction value, $Res Function(SlidableAction) then) =
       _$SlidableActionCopyWithImpl<$Res>;
-  $Res call({Function action, IconData icon, Color color});
+  $Res call({Function action, IconData icon, Color color, Color iconColor});
 }
 
 class _$SlidableActionCopyWithImpl<$Res>
@@ -54,11 +59,13 @@ class _$SlidableActionCopyWithImpl<$Res>
     Object action = freezed,
     Object icon = freezed,
     Object color = freezed,
+    Object iconColor = freezed,
   }) {
     return _then(_value.copyWith(
       action: action == freezed ? _value.action : action as Function,
       icon: icon == freezed ? _value.icon : icon as IconData,
       color: color == freezed ? _value.color : color as Color,
+      iconColor: iconColor == freezed ? _value.iconColor : iconColor as Color,
     ));
   }
 }
@@ -69,7 +76,7 @@ abstract class _$SlidableActionCopyWith<$Res>
           _SlidableAction value, $Res Function(_SlidableAction) then) =
       __$SlidableActionCopyWithImpl<$Res>;
   @override
-  $Res call({Function action, IconData icon, Color color});
+  $Res call({Function action, IconData icon, Color color, Color iconColor});
 }
 
 class __$SlidableActionCopyWithImpl<$Res>
@@ -87,11 +94,13 @@ class __$SlidableActionCopyWithImpl<$Res>
     Object action = freezed,
     Object icon = freezed,
     Object color = freezed,
+    Object iconColor = freezed,
   }) {
     return _then(_SlidableAction(
       action: action == freezed ? _value.action : action as Function,
       icon: icon == freezed ? _value.icon : icon as IconData,
       color: color == freezed ? _value.color : color as Color,
+      iconColor: iconColor == freezed ? _value.iconColor : iconColor as Color,
     ));
   }
 }
@@ -99,7 +108,8 @@ class __$SlidableActionCopyWithImpl<$Res>
 class _$_SlidableAction
     with DiagnosticableTreeMixin
     implements _SlidableAction {
-  _$_SlidableAction({@required this.action, @required this.icon, this.color})
+  _$_SlidableAction(
+      {@required this.action, @required this.icon, this.color, this.iconColor})
       : assert(action != null),
         assert(icon != null);
 
@@ -109,10 +119,12 @@ class _$_SlidableAction
   final IconData icon;
   @override
   final Color color;
+  @override
+  final Color iconColor;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SlidableAction(action: $action, icon: $icon, color: $color)';
+    return 'SlidableAction(action: $action, icon: $icon, color: $color, iconColor: $iconColor)';
   }
 
   @override
@@ -122,7 +134,8 @@ class _$_SlidableAction
       ..add(DiagnosticsProperty('type', 'SlidableAction'))
       ..add(DiagnosticsProperty('action', action))
       ..add(DiagnosticsProperty('icon', icon))
-      ..add(DiagnosticsProperty('color', color));
+      ..add(DiagnosticsProperty('color', color))
+      ..add(DiagnosticsProperty('iconColor', iconColor));
   }
 
   @override
@@ -134,7 +147,10 @@ class _$_SlidableAction
             (identical(other.icon, icon) ||
                 const DeepCollectionEquality().equals(other.icon, icon)) &&
             (identical(other.color, color) ||
-                const DeepCollectionEquality().equals(other.color, color)));
+                const DeepCollectionEquality().equals(other.color, color)) &&
+            (identical(other.iconColor, iconColor) ||
+                const DeepCollectionEquality()
+                    .equals(other.iconColor, iconColor)));
   }
 
   @override
@@ -142,7 +158,8 @@ class _$_SlidableAction
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(action) ^
       const DeepCollectionEquality().hash(icon) ^
-      const DeepCollectionEquality().hash(color);
+      const DeepCollectionEquality().hash(color) ^
+      const DeepCollectionEquality().hash(iconColor);
 
   @override
   _$SlidableActionCopyWith<_SlidableAction> get copyWith =>
@@ -153,7 +170,8 @@ abstract class _SlidableAction implements SlidableAction {
   factory _SlidableAction(
       {@required Function action,
       @required IconData icon,
-      Color color}) = _$_SlidableAction;
+      Color color,
+      Color iconColor}) = _$_SlidableAction;
 
   @override
   Function get action;
@@ -161,6 +179,8 @@ abstract class _SlidableAction implements SlidableAction {
   IconData get icon;
   @override
   Color get color;
+  @override
+  Color get iconColor;
   @override
   _$SlidableActionCopyWith<_SlidableAction> get copyWith;
 }
