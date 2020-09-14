@@ -18,6 +18,9 @@ ThemeData get lightTheme => ThemeData(
         onPrimary: Colors.white,
         onSecondary: Colors.white,
       ),
+      buttonTheme: const ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+      ),
     );
 
 ThemeData get darkTheme => ThemeData(
@@ -33,5 +36,8 @@ ThemeData get darkTheme => ThemeData(
         surface: _surfaceColor,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
+      ),
+      buttonTheme: const ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
       ),
     );
