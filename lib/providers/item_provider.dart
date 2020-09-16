@@ -4,7 +4,9 @@ import 'package:glider/models/item_tree_parameter.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/api_repository.dart';
+import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod/src/framework.dart';
 
 final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
     storyIdsProvider = FutureProvider.autoDispose.family(
@@ -14,8 +16,9 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
   return repository.getStoryIds(navigationItem);
 });
 
-final AutoDisposeFutureProviderFamily<Item, int> itemProvider =
-    FutureProvider.autoDispose.family((ProviderReference ref, int id) async {
+final AutoDisposeFutureProviderFamily<Item, int> itemProvider = FutureProvider
+    .autoDispose
+    .family((AutoDisposeProviderReference ref, int id) async {
   final ApiRepository repository = ref.read(apiRepositoryProvider);
   return repository.getItem(id);
 });
