@@ -13,6 +13,7 @@ import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
+import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -203,7 +204,8 @@ class ItemTileData extends HookWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                placeholder: (_, __) => const TileLoadingBlock(),
+                placeholder: (_, __) =>
+                    const TileLoading(child: TileLoadingBlock()),
                 width: ItemTile.thumbnailSize,
                 height: ItemTile.thumbnailSize,
               ),
