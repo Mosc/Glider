@@ -4,6 +4,7 @@ import 'package:glider/models/item_tree_parameter.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/api_repository.dart';
+import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod/src/framework.dart';
@@ -37,19 +38,23 @@ final AutoDisposeFutureProviderFamily<ItemTree, ItemTreeParameter>
   ];
 
   if (item.kids != null) {
-    final Iterable<ItemTree> tree = await Future.wait(
-      item.kids.map(
-        (int kidId) => ref.watch(
-          itemTreeProvider(
-            ItemTreeParameter(id: kidId, ancestors: <int>[
-              parameter.id,
-              if (parameter.ancestors != null) ...parameter.ancestors,
-            ]),
-          ).future,
+    try {
+      final Iterable<ItemTree> tree = await Future.wait(
+        item.kids.map(
+          (int kidId) => ref.watch(
+            itemTreeProvider(
+              ItemTreeParameter(id: kidId, ancestors: <int>[
+                parameter.id,
+                if (parameter.ancestors != null) ...parameter.ancestors,
+              ]),
+            ).future,
+          ),
         ),
-      ),
-    );
-    items.addAll(tree.expand((ItemTree kid) => kid.items));
+      );
+      items.addAll(tree.expand((ItemTree kid) => kid.items));
+    } on ServiceException {
+      // Fail silently.
+    }
   }
 
   return ItemTree(items: items, hasMore: false);
@@ -84,17 +89,21 @@ final AutoDisposeStreamProviderFamily<Item, ItemTreeParameter>
 
   if (item.kids != null) {
     for (final int kidId in item.kids) {
-      final Stream<Item> itemStream = ref.read(
-        _itemStreamProvider(
-          ItemTreeParameter(id: kidId, ancestors: <int>[
-            parameter.id,
-            if (parameter.ancestors != null) ...parameter.ancestors,
-          ]),
-        ).stream,
-      );
+      try {
+        final Stream<Item> itemStream = ref.read(
+          _itemStreamProvider(
+            ItemTreeParameter(id: kidId, ancestors: <int>[
+              parameter.id,
+              if (parameter.ancestors != null) ...parameter.ancestors,
+            ]),
+          ).stream,
+        );
 
-      await for (final Item item in itemStream) {
-        yield item;
+        await for (final Item item in itemStream) {
+          yield item;
+        }
+      } on ServiceException {
+        // Fail silently.
       }
     }
   }
