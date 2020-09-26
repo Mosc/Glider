@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
-import 'package:glider/widgets/common/meta_data_item.dart';
+import 'package:glider/widgets/common/metadata_item.dart';
 
 class UserTileData extends StatelessWidget {
   const UserTileData(this.user, {Key key}) : super(key: key);
@@ -20,12 +20,12 @@ class UserTileData extends StatelessWidget {
           Row(
             children: <Widget>[
               if (user.karma != null)
-                MetaDataItem(
+                MetadataItem(
                   icon: Icons.arrow_upward,
                   text: user.karma.toString(),
                 ),
               if (user.submitted != null)
-                MetaDataItem(
+                MetadataItem(
                   icon: Icons.chat_bubble_outline,
                   text: user.submitted.length.toString(),
                 ),

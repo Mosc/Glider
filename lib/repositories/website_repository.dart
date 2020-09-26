@@ -55,6 +55,23 @@ class WebsiteRepository {
     return _performPost(url, postData);
   }
 
+  Future<bool> comment({
+    @required String username,
+    @required String password,
+    @required int parentId,
+    @required String text,
+  }) async {
+    const String url = '$baseUrl/comment';
+    final PostData postData = PostData(
+      acct: username,
+      pw: password,
+      parent: parentId,
+      text: text,
+    );
+
+    return _performPost(url, postData);
+  }
+
   Future<bool> _performPost(String url, PostData data) async {
     try {
       final Response<String> response = await _dio.post<String>(

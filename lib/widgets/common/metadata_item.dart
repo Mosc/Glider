@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MetaDataItem extends StatelessWidget {
-  const MetaDataItem({Key key, @required this.icon, this.text})
+class MetadataItem extends StatelessWidget {
+  const MetadataItem({Key key, @required this.icon, this.text})
       : super(key: key);
 
   final IconData icon;

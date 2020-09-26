@@ -11,6 +11,8 @@ abstract class PostData with _$PostData {
     @required String pw,
     @JsonKey(includeIfNull: false) int id,
     @JsonKey(includeIfNull: false) String how,
+    @JsonKey(includeIfNull: false) int parent,
+    @JsonKey(includeIfNull: false) String text,
     @JsonKey(includeIfNull: false) String creating,
     @JsonKey(includeIfNull: false) String goto,
   }) = _PostData;

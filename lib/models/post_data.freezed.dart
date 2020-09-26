@@ -21,6 +21,8 @@ class _$PostDataTearOff {
       @required String pw,
       @JsonKey(includeIfNull: false) int id,
       @JsonKey(includeIfNull: false) String how,
+      @JsonKey(includeIfNull: false) int parent,
+      @JsonKey(includeIfNull: false) String text,
       @JsonKey(includeIfNull: false) String creating,
       @JsonKey(includeIfNull: false) String goto}) {
     return _PostData(
@@ -28,6 +30,8 @@ class _$PostDataTearOff {
       pw: pw,
       id: id,
       how: how,
+      parent: parent,
+      text: text,
       creating: creating,
       goto: goto,
     );
@@ -45,6 +49,10 @@ mixin _$PostData {
   @JsonKey(includeIfNull: false)
   String get how;
   @JsonKey(includeIfNull: false)
+  int get parent;
+  @JsonKey(includeIfNull: false)
+  String get text;
+  @JsonKey(includeIfNull: false)
   String get creating;
   @JsonKey(includeIfNull: false)
   String get goto;
@@ -61,6 +69,8 @@ abstract class $PostDataCopyWith<$Res> {
       String pw,
       @JsonKey(includeIfNull: false) int id,
       @JsonKey(includeIfNull: false) String how,
+      @JsonKey(includeIfNull: false) int parent,
+      @JsonKey(includeIfNull: false) String text,
       @JsonKey(includeIfNull: false) String creating,
       @JsonKey(includeIfNull: false) String goto});
 }
@@ -78,6 +88,8 @@ class _$PostDataCopyWithImpl<$Res> implements $PostDataCopyWith<$Res> {
     Object pw = freezed,
     Object id = freezed,
     Object how = freezed,
+    Object parent = freezed,
+    Object text = freezed,
     Object creating = freezed,
     Object goto = freezed,
   }) {
@@ -86,6 +98,8 @@ class _$PostDataCopyWithImpl<$Res> implements $PostDataCopyWith<$Res> {
       pw: pw == freezed ? _value.pw : pw as String,
       id: id == freezed ? _value.id : id as int,
       how: how == freezed ? _value.how : how as String,
+      parent: parent == freezed ? _value.parent : parent as int,
+      text: text == freezed ? _value.text : text as String,
       creating: creating == freezed ? _value.creating : creating as String,
       goto: goto == freezed ? _value.goto : goto as String,
     ));
@@ -101,6 +115,8 @@ abstract class _$PostDataCopyWith<$Res> implements $PostDataCopyWith<$Res> {
       String pw,
       @JsonKey(includeIfNull: false) int id,
       @JsonKey(includeIfNull: false) String how,
+      @JsonKey(includeIfNull: false) int parent,
+      @JsonKey(includeIfNull: false) String text,
       @JsonKey(includeIfNull: false) String creating,
       @JsonKey(includeIfNull: false) String goto});
 }
@@ -119,6 +135,8 @@ class __$PostDataCopyWithImpl<$Res> extends _$PostDataCopyWithImpl<$Res>
     Object pw = freezed,
     Object id = freezed,
     Object how = freezed,
+    Object parent = freezed,
+    Object text = freezed,
     Object creating = freezed,
     Object goto = freezed,
   }) {
@@ -127,6 +145,8 @@ class __$PostDataCopyWithImpl<$Res> extends _$PostDataCopyWithImpl<$Res>
       pw: pw == freezed ? _value.pw : pw as String,
       id: id == freezed ? _value.id : id as int,
       how: how == freezed ? _value.how : how as String,
+      parent: parent == freezed ? _value.parent : parent as int,
+      text: text == freezed ? _value.text : text as String,
       creating: creating == freezed ? _value.creating : creating as String,
       goto: goto == freezed ? _value.goto : goto as String,
     ));
@@ -140,6 +160,8 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
       @required this.pw,
       @JsonKey(includeIfNull: false) this.id,
       @JsonKey(includeIfNull: false) this.how,
+      @JsonKey(includeIfNull: false) this.parent,
+      @JsonKey(includeIfNull: false) this.text,
       @JsonKey(includeIfNull: false) this.creating,
       @JsonKey(includeIfNull: false) this.goto})
       : assert(acct != null),
@@ -160,6 +182,12 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
   final String how;
   @override
   @JsonKey(includeIfNull: false)
+  final int parent;
+  @override
+  @JsonKey(includeIfNull: false)
+  final String text;
+  @override
+  @JsonKey(includeIfNull: false)
   final String creating;
   @override
   @JsonKey(includeIfNull: false)
@@ -167,7 +195,7 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PostData(acct: $acct, pw: $pw, id: $id, how: $how, creating: $creating, goto: $goto)';
+    return 'PostData(acct: $acct, pw: $pw, id: $id, how: $how, parent: $parent, text: $text, creating: $creating, goto: $goto)';
   }
 
   @override
@@ -179,6 +207,8 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
       ..add(DiagnosticsProperty('pw', pw))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('how', how))
+      ..add(DiagnosticsProperty('parent', parent))
+      ..add(DiagnosticsProperty('text', text))
       ..add(DiagnosticsProperty('creating', creating))
       ..add(DiagnosticsProperty('goto', goto));
   }
@@ -195,6 +225,10 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.how, how) ||
                 const DeepCollectionEquality().equals(other.how, how)) &&
+            (identical(other.parent, parent) ||
+                const DeepCollectionEquality().equals(other.parent, parent)) &&
+            (identical(other.text, text) ||
+                const DeepCollectionEquality().equals(other.text, text)) &&
             (identical(other.creating, creating) ||
                 const DeepCollectionEquality()
                     .equals(other.creating, creating)) &&
@@ -209,6 +243,8 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
       const DeepCollectionEquality().hash(pw) ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(how) ^
+      const DeepCollectionEquality().hash(parent) ^
+      const DeepCollectionEquality().hash(text) ^
       const DeepCollectionEquality().hash(creating) ^
       const DeepCollectionEquality().hash(goto);
 
@@ -228,6 +264,8 @@ abstract class _PostData implements PostData {
       @required String pw,
       @JsonKey(includeIfNull: false) int id,
       @JsonKey(includeIfNull: false) String how,
+      @JsonKey(includeIfNull: false) int parent,
+      @JsonKey(includeIfNull: false) String text,
       @JsonKey(includeIfNull: false) String creating,
       @JsonKey(includeIfNull: false) String goto}) = _$_PostData;
 
@@ -243,6 +281,12 @@ abstract class _PostData implements PostData {
   @override
   @JsonKey(includeIfNull: false)
   String get how;
+  @override
+  @JsonKey(includeIfNull: false)
+  int get parent;
+  @override
+  @JsonKey(includeIfNull: false)
+  String get text;
   @override
   @JsonKey(includeIfNull: false)
   String get creating;

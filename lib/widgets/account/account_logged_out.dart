@@ -19,10 +19,10 @@ class AccountLoggedOut extends HookWidget {
     final GlobalKey<FormState> formKey =
         useMemoized(() => GlobalKey<FormState>());
 
-    final AuthRepository authRepository = useProvider(authRepositoryProvider);
-
     final TextEditingController usernameController = useTextEditingController();
     final TextEditingController passwordController = useTextEditingController();
+
+    final AuthRepository authRepository = useProvider(authRepositoryProvider);
 
     return SingleChildScrollView(
       child: Padding(

@@ -21,6 +21,14 @@ class DecoratedHtml extends StatelessWidget {
       _html,
       buildAsync: false,
       hyperlinkColor: Theme.of(context).primaryColor,
+      customStylesBuilder: (dom.Element element) {
+        switch (element.localName) {
+          case 'pre':
+            return <String, String>{'margin-bottom': '1em'};
+        }
+
+        return null;
+      },
       customWidgetBuilder: (dom.Element element) {
         if (isQuote(element)) {
           final String unquotedInnerHtml =

@@ -63,6 +63,19 @@ class AuthRepository {
     return false;
   }
 
+  Future<bool> reply({@required int parentId, @required String text}) async {
+    if (await loggedIn) {
+      return _websiteRepository.comment(
+        username: await username,
+        password: await password,
+        parentId: parentId,
+        text: text,
+      );
+    }
+
+    return false;
+  }
+
   Future<void> _saveAuth(
       {@required String username, @required String password}) async {
     await _secureStorage.write(key: _usernameKey, value: username);

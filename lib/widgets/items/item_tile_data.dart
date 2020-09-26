@@ -5,6 +5,7 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
 import 'package:glider/pages/account_page.dart';
+import 'package:glider/pages/reply_page.dart';
 import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
@@ -16,7 +17,7 @@ import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/item_tile.dart';
-import 'package:glider/widgets/common/meta_data_item.dart';
+import 'package:glider/widgets/common/metadata_item.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share/share.dart';
 
@@ -40,7 +41,6 @@ class ItemTileData extends HookWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final bool indented = item.ancestors != null && item.ancestors.isNotEmpty;
-    final AuthRepository authRepository = useProvider(authRepositoryProvider);
 
     return Padding(
       padding: indented
@@ -50,7 +50,7 @@ class ItemTileData extends HookWidget {
         children: <Widget>[
           Slidable(
             startToEndAction: SlidableAction(
-              action: () => _handleVote(context, authRepository, up: true),
+              action: () => _handleVote(context, up: true),
               icon: Icons.arrow_upward,
               color: Theme.of(context).colorScheme.primary,
               iconColor: Theme.of(context).colorScheme.onPrimary,
@@ -88,7 +88,14 @@ class ItemTileData extends HookWidget {
                       ListTile(
                         title: const Text('Unvote'),
                         onTap: () async {
-                          await _handleVote(context, authRepository, up: false);
+                          await _handleVote(context, up: false);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Reply'),
+                        onTap: () async {
+                          await _handleReply(context);
                           Navigator.of(context).pop();
                         },
                       ),
@@ -119,12 +126,12 @@ class ItemTileData extends HookWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      if (item.parent == null &&
+                      if (item.type != ItemType.comment &&
                           item.deleted != true) ...<Widget>[
                         _buildStorySection(textTheme),
                         const SizedBox(height: 12),
                       ],
-                      _buildMetaDataSection(context, textTheme),
+                      _buildMetadataSection(context, textTheme),
                       SmoothAnimatedSwitcher(
                         condition: dense,
                         falseChild: Column(
@@ -207,31 +214,31 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Widget _buildMetaDataSection(BuildContext context, TextTheme textTheme) {
+  Widget _buildMetadataSection(BuildContext context, TextTheme textTheme) {
     return Hero(
-      tag: 'item_meta_data_${item.id}',
+      tag: 'item_metadata_${item.id}',
       child: Row(
         children: <Widget>[
           if (item.score != null)
-            MetaDataItem(
+            MetadataItem(
               icon: Icons.arrow_upward,
               text: item.score.toString(),
             ),
           if (item.descendants != null)
-            MetaDataItem(
+            MetadataItem(
               icon: Icons.chat_bubble_outline,
               text: item.descendants.toString(),
             ),
           if (item.type == ItemType.job)
-            const MetaDataItem(icon: Icons.work_outline)
+            const MetadataItem(icon: Icons.work_outline)
           else if (item.type == ItemType.poll)
-            const MetaDataItem(icon: Icons.poll),
+            const MetadataItem(icon: Icons.poll),
           if (item.deleted == true)
-            const MetaDataItem(
+            const MetadataItem(
               icon: Icons.close,
               text: '[deleted]',
             )
-          else
+          else if (item.by != null)
             GestureDetector(
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
@@ -270,7 +277,7 @@ class ItemTileData extends HookWidget {
               transitionBuilder: (Widget child, Animation<double> animation) =>
                   FadeTransition(opacity: animation, child: child),
               condition: dense,
-              trueChild: MetaDataItem(
+              trueChild: MetadataItem(
                 icon: Icons.add_circle_outline,
                 text: item.kids?.length?.toString(),
               ),
@@ -319,8 +326,9 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Future<void> _handleVote(BuildContext context, AuthRepository authRepository,
-      {bool up}) async {
+  Future<void> _handleVote(BuildContext context, {bool up}) async {
+    final AuthRepository authRepository = context.read(authRepositoryProvider);
+
     if (await authRepository.loggedIn) {
       final bool success = await authRepository.vote(id: item.id, up: up);
 
@@ -341,6 +349,33 @@ class ItemTileData extends HookWidget {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: const Text('Log in to vote'),
+          action: SnackBarAction(
+            label: 'Log in',
+            onPressed: () => Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(
+                builder: (_) => const AccountPage(),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleReply(BuildContext context) async {
+    final AuthRepository authRepository = context.read(authRepositoryProvider);
+
+    if (await authRepository.loggedIn) {
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => ReplyPage(replyToItem: item),
+          fullscreenDialog: true,
+        ),
+      );
+    } else {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Log in to reply'),
           action: SnackBarAction(
             label: 'Log in',
             onPressed: () => Navigator.of(context).push<void>(
