@@ -45,8 +45,7 @@ class ItemBody extends HookWidget {
                 separatorBuilder: (_, __) => const Separator(),
               ),
             ),
-            error: (Object error, StackTrace stackTrace) =>
-                const SliverFillRemaining(child: Error()),
+            error: (_, __) => const SliverFillRemaining(child: Error()),
             data: (ItemTree itemTree) => SliverList(
               // We're not using a SeparatedSliverChildBuilderDelegate here
               // because we want the separator to be indented based on the item

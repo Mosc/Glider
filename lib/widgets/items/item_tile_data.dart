@@ -50,6 +50,7 @@ class ItemTileData extends HookWidget {
       child: Column(
         children: <Widget>[
           Slidable(
+            enabled: item.id != null && item.deleted != true,
             startToEndAction: SlidableAction(
               action: () => _handleVote(context, up: true),
               icon: Icons.arrow_upward,

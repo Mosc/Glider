@@ -4,6 +4,7 @@ import 'package:glider/models/slidable_action.dart';
 class Slidable extends StatelessWidget {
   const Slidable({
     @required Key key,
+    this.enabled = true,
     this.startToEndAction,
     this.endToStartAction,
     this.child,
@@ -12,11 +13,16 @@ class Slidable extends StatelessWidget {
         super(key: key);
 
   final Widget child;
+  final bool enabled;
   final SlidableAction startToEndAction;
   final SlidableAction endToStartAction;
 
   @override
   Widget build(BuildContext context) {
+    if (!enabled) {
+      return child;
+    }
+
     return Dismissible(
       key: key,
       background: _buildBackground(startToEndAction, Alignment.centerLeft),
