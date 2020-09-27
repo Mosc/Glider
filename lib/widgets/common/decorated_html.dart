@@ -22,9 +22,12 @@ class DecoratedHtml extends StatelessWidget {
       buildAsync: false,
       hyperlinkColor: Theme.of(context).primaryColor,
       customStylesBuilder: (dom.Element element) {
-        switch (element.localName) {
-          case 'pre':
-            return <String, String>{'margin-bottom': '1em'};
+        if (element.localName == 'pre') {
+          return <String, String>{'margin-top': '1em', 'margin-bottom': '1em'};
+        }
+
+        if (isQuote(element)) {
+          return <String, String>{'margin': '0'};
         }
 
         return null;
