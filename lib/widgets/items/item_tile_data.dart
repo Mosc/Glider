@@ -59,67 +59,7 @@ class ItemTileData extends HookWidget {
               iconColor: Theme.of(context).colorScheme.onPrimary,
             ),
             endToStartAction: SlidableAction(
-              action: () async {
-                await showModalBottomSheet<void>(
-                  context: context,
-                  builder: (_) => Wrap(
-                    children: <Widget>[
-                      if (item.url != null) ...<Widget>[
-                        ListTile(
-                          title: const Text('Open link'),
-                          onTap: () async {
-                            await UrlUtil.tryLaunch(item.url);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        ListTile(
-                          title: const Text('Share link'),
-                          onTap: () async {
-                            await Share.share(item.url);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                      if (item.text != null)
-                        ListTile(
-                          title: const Text('Copy text'),
-                          onTap: () async {
-                            await Clipboard.setData(
-                                ClipboardData(text: item.text));
-                            Scaffold.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Text has been copied'),
-                              ),
-                            );
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ListTile(
-                        title: const Text('Share comment tree'),
-                        onTap: () async {
-                          await Share.share(
-                              '${WebsiteRepository.baseUrl}/item?id=${item.id}');
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('Unvote'),
-                        onTap: () async {
-                          await _handleVote(context, up: false);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('Reply'),
-                        onTap: () async {
-                          await _handleReply(context);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
+              action: () => _buildModalBottomSheet(context),
               icon: Icons.more_horiz,
               color: Theme.of(context).colorScheme.surface,
               iconColor: Theme.of(context).colorScheme.onSurface,
@@ -352,15 +292,11 @@ class ItemTileData extends HookWidget {
 
       if (success) {
         Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Item has been ${up ? 'up' : 'un'}voted'),
-          ),
+          SnackBar(content: Text('Item has been ${up ? 'up' : 'un'}voted')),
         );
       } else {
         Scaffold.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Something went wrong'),
-          ),
+          const SnackBar(content: Text('Something went wrong')),
         );
       }
     } else {
@@ -405,5 +341,64 @@ class ItemTileData extends HookWidget {
         ),
       );
     }
+  }
+
+  Future<void> _buildModalBottomSheet(BuildContext context) async {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => Wrap(
+        children: <Widget>[
+          if (item.url != null) ...<Widget>[
+            ListTile(
+              title: const Text('Open link'),
+              onTap: () async {
+                await UrlUtil.tryLaunch(item.url);
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Share link'),
+              onTap: () async {
+                await Share.share(item.url);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          if (item.text != null)
+            ListTile(
+              title: const Text('Copy text'),
+              onTap: () async {
+                await Clipboard.setData(ClipboardData(text: item.text));
+                Scaffold.of(context).showSnackBar(
+                  const SnackBar(content: Text('Text has been copied')),
+                );
+                Navigator.of(context).pop();
+              },
+            ),
+          ListTile(
+            title: const Text('Share comment link'),
+            onTap: () async {
+              await Share.share(
+                  '${WebsiteRepository.baseUrl}/item?id=${item.id}');
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            title: const Text('Unvote'),
+            onTap: () async {
+              await _handleVote(context, up: false);
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            title: const Text('Reply'),
+            onTap: () async {
+              await _handleReply(context);
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
