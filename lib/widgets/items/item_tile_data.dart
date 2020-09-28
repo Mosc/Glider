@@ -43,6 +43,7 @@ class ItemTileData extends HookWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final bool indented = item.ancestors != null && item.ancestors.isNotEmpty;
+    final bool interactable = item.id != null && item.deleted != true;
 
     return Padding(
       padding: indented
@@ -51,7 +52,7 @@ class ItemTileData extends HookWidget {
       child: Column(
         children: <Widget>[
           Slidable(
-            enabled: item.id != null && item.deleted != true,
+            enabled: interactable,
             startToEndAction: SlidableAction(
               action: () => _handleVote(context, up: true),
               icon: Icons.arrow_upward,
@@ -59,8 +60,8 @@ class ItemTileData extends HookWidget {
               iconColor: Theme.of(context).colorScheme.onPrimary,
             ),
             endToStartAction: SlidableAction(
-              action: () => _buildModalBottomSheet(context),
-              icon: Icons.more_horiz,
+              action: () => _handleReply(context),
+              icon: Icons.reply,
               color: Theme.of(context).colorScheme.surface,
               iconColor: Theme.of(context).colorScheme.onSurface,
             ),
@@ -77,7 +78,9 @@ class ItemTileData extends HookWidget {
                     )
                   : null,
               child: InkWell(
-                onTap: item.deleted != true && onTap != null ? onTap : null,
+                onTap: interactable && onTap != null ? onTap : null,
+                onLongPress:
+                    interactable ? () => _buildModalBottomSheet(context) : null,
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -387,13 +390,6 @@ class ItemTileData extends HookWidget {
             title: const Text('Unvote'),
             onTap: () async {
               await _handleVote(context, up: false);
-              Navigator.of(context).pop();
-            },
-          ),
-          ListTile(
-            title: const Text('Reply'),
-            onTap: () async {
-              await _handleReply(context);
               Navigator.of(context).pop();
             },
           ),
