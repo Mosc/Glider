@@ -4,6 +4,7 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/auth_provider.dart';
+import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/formatting_util.dart';
@@ -107,10 +108,9 @@ class ReplyBody extends HookWidget {
       ),
       ItemTileData(
         Item(
-          by: useProvider(usernameProvider).when(
-            loading: () => null,
-            error: (_, __) => null,
+          by: useProvider(usernameProvider).maybeWhen(
             data: (String username) => username,
+            orElse: () => null,
           ),
           time: DateTime.now().millisecondsSinceEpoch,
           text: commentTextState.value.isNotEmpty
@@ -134,6 +134,7 @@ class ReplyBody extends HookWidget {
 
       if (success) {
         Navigator.of(context).pop();
+        await context.refresh(itemProvider(replyToItem.id));
       } else {
         Scaffold.of(context).showSnackBar(
           const SnackBar(

@@ -62,16 +62,15 @@ class ItemBody extends HookWidget {
                           const Separator(),
                         ],
                         SmoothAnimatedSwitcher(
-                          condition: _hasCollapsedAncestors(
+                          condition: _collapsedAncestors(
                               collapsedNotifier, item.ancestors),
                           falseChild: ItemTileData(
                             item,
                             rootBy: itemTree.items.first.by,
                             onTap: item.type == ItemType.comment
-                                ? () =>
-                                    _toggleCollapsed(collapsedNotifier, item.id)
+                                ? () => _collapse(collapsedNotifier, item.id)
                                 : null,
-                            dense: _isCollapsed(collapsedNotifier, item.id),
+                            dense: _collapsed(collapsedNotifier, item.id),
                             separator: const Separator(),
                           ),
                         ),
@@ -123,7 +122,7 @@ class ItemBody extends HookWidget {
     );
   }
 
-  void _toggleCollapsed(ValueNotifier<Set<int>> collapsedNotifier, int id) {
+  void _collapse(ValueNotifier<Set<int>> collapsedNotifier, int id) {
     if (collapsedNotifier.value.contains(id)) {
       collapsedNotifier.value.remove(id);
     } else {
@@ -133,10 +132,10 @@ class ItemBody extends HookWidget {
     collapsedNotifier.value = <int>{...collapsedNotifier.value};
   }
 
-  bool _isCollapsed(ValueNotifier<Set<int>> collapsedNotifier, int id) =>
+  bool _collapsed(ValueNotifier<Set<int>> collapsedNotifier, int id) =>
       collapsedNotifier.value.contains(id);
 
-  bool _hasCollapsedAncestors(
+  bool _collapsedAncestors(
           ValueNotifier<Set<int>> collapsedNotifier, Iterable<int> ids) =>
-      ids.any((int ancestor) => _isCollapsed(collapsedNotifier, ancestor));
+      ids.any((int ancestor) => _collapsed(collapsedNotifier, ancestor));
 }
