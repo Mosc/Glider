@@ -7,16 +7,18 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     this.trueChild = const SizedBox.shrink(),
     this.falseChild = const SizedBox.shrink(),
     this.transitionBuilder,
+    this.axis = Axis.vertical,
   }) : super(key: key);
 
   final Widget trueChild;
   final Widget falseChild;
   final bool condition;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
+  final Axis axis;
 
-  static Widget _defaultTransitionBuilder(
-      Widget child, Animation<double> animation) {
+  Widget _defaultTransitionBuilder(Widget child, Animation<double> animation) {
     return SizeTransition(
+      axis: axis,
       axisAlignment: -1,
       sizeFactor: animation,
       child: FadeTransition(

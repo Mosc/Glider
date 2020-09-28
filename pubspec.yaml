@@ -21,6 +21,7 @@ dependencies:
   shimmer: ^1.1.1
   timeago: ^2.0.27
   intl: ^0.16.1
+  shared_preferences: ^0.5.12
   flutter_secure_storage: ^3.3.4
   share: ^0.6.5+2
   flutter_speed_dial:

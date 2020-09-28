@@ -4,13 +4,10 @@ import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod/src/future_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final Provider<Dio> _dioProvider = Provider<Dio>((_) => Dio());
-
-final Provider<FlutterSecureStorage> _secureStorageProvider =
-    Provider<FlutterSecureStorage>(
-  (_) => const FlutterSecureStorage(),
-);
 
 final Provider<WebsiteRepository> _websiteRepositoryProvider =
     Provider<WebsiteRepository>(
@@ -19,11 +16,22 @@ final Provider<WebsiteRepository> _websiteRepositoryProvider =
   ),
 );
 
+final AutoDisposeFutureProvider<SharedPreferences> _sharedPreferences =
+    FutureProvider.autoDispose<SharedPreferences>(
+  (_) => SharedPreferences.getInstance(),
+);
+
+final Provider<FlutterSecureStorage> _secureStorageProvider =
+    Provider<FlutterSecureStorage>(
+  (_) => const FlutterSecureStorage(),
+);
+
 final Provider<AuthRepository> authRepositoryProvider =
     Provider<AuthRepository>(
   (ProviderReference ref) => AuthRepository(
-    ref.read(_secureStorageProvider),
     ref.read(_websiteRepositoryProvider),
+    ref.read(_secureStorageProvider),
+    ref.read(_sharedPreferences.future),
   ),
 );
 

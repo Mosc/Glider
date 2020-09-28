@@ -1,13 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:glider/repositories/website_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  const AuthRepository(this._secureStorage, this._websiteRepository);
+  const AuthRepository(
+      this._websiteRepository, this._secureStorage, this._sharedPreferences);
 
-  final FlutterSecureStorage _secureStorage;
   final WebsiteRepository _websiteRepository;
+  final FlutterSecureStorage _secureStorage;
+  final Future<SharedPreferences> _sharedPreferences;
 
+  static const String _upvotedKey = 'upvoted';
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
 
@@ -16,6 +20,12 @@ class AuthRepository {
   Future<String> get username async => _secureStorage.read(key: _usernameKey);
 
   Future<String> get password async => _secureStorage.read(key: _passwordKey);
+
+  Future<bool> upvoted({@required int id}) async =>
+      (await _sharedPreferences)
+          .getStringList(_upvotedKey)
+          ?.contains(id.toString()) ??
+      false;
 
   Future<bool> register(
       {@required String username, @required String password}) async {
@@ -52,12 +62,28 @@ class AuthRepository {
 
   Future<bool> vote({@required int id, @required bool up}) async {
     if (await loggedIn) {
-      return _websiteRepository.vote(
+      final bool success = await _websiteRepository.vote(
         username: await username,
         password: await password,
         id: id,
         up: up,
       );
+
+      if (success) {
+        final SharedPreferences sharedPreferences = await _sharedPreferences;
+        final List<String> upvoted =
+            sharedPreferences.getStringList(_upvotedKey) ?? <String>[];
+
+        if (up) {
+          upvoted.add(id.toString());
+        } else {
+          upvoted.remove(id.toString());
+        }
+
+        await sharedPreferences.setStringList(_upvotedKey, upvoted);
+      }
+
+      return success;
     }
 
     return false;

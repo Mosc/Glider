@@ -15,3 +15,10 @@ final AutoDisposeFutureProvider<String> usernameProvider =
   final AuthRepository repository = ref.read(authRepositoryProvider);
   return repository.username;
 });
+
+final AutoDisposeFutureProviderFamily<bool, int> upvotedProvider =
+    FutureProvider.autoDispose
+        .family((AutoDisposeProviderReference ref, int id) async {
+  final AuthRepository repository = ref.read(authRepositoryProvider);
+  return repository.upvoted(id: id);
+});

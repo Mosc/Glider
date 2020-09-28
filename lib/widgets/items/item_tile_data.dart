@@ -8,6 +8,7 @@ import 'package:glider/models/slidable_action.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/reply_page.dart';
 import 'package:glider/pages/user_page.dart';
+import 'package:glider/providers/auth_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
@@ -53,11 +54,21 @@ class ItemTileData extends HookWidget {
         children: <Widget>[
           Slidable(
             enabled: interactable,
-            startToEndAction: SlidableAction(
-              action: () => _handleVote(context, up: true),
-              icon: Icons.arrow_upward,
-              color: Theme.of(context).colorScheme.primary,
-              iconColor: Theme.of(context).colorScheme.onPrimary,
+            startToEndAction: useProvider(upvotedProvider(item.id)).maybeWhen(
+              data: (bool upvoted) => !upvoted
+                  ? SlidableAction(
+                      action: () => _handleVote(context, up: true),
+                      icon: Icons.arrow_upward,
+                      color: Theme.of(context).colorScheme.primary,
+                      iconColor: Theme.of(context).colorScheme.onPrimary,
+                    )
+                  : SlidableAction(
+                      action: () => _handleVote(context, up: false),
+                      icon: Icons.undo,
+                      color: Theme.of(context).colorScheme.surface,
+                      iconColor: Theme.of(context).colorScheme.onSurface,
+                    ),
+              orElse: () => null,
             ),
             endToStartAction: SlidableAction(
               action: () => _handleReply(context),
@@ -184,6 +195,22 @@ class ItemTileData extends HookWidget {
             MetadataItem(
               icon: Icons.arrow_upward,
               text: item.score.toString(),
+              highlight: useProvider(upvotedProvider(item.id)).maybeWhen(
+                data: (bool upvoted) => upvoted,
+                orElse: () => false,
+              ),
+            )
+          else
+            useProvider(upvotedProvider(item.id)).maybeWhen(
+              data: (bool upvoted) => SmoothAnimatedSwitcher(
+                condition: upvoted,
+                trueChild: const MetadataItem(
+                  icon: Icons.arrow_upward,
+                  highlight: true,
+                ),
+                axis: Axis.horizontal,
+              ),
+              orElse: () => const SizedBox.shrink(),
             ),
           if (item.descendants != null)
             MetadataItem(
@@ -287,7 +314,7 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Future<void> _handleVote(BuildContext context, {bool up}) async {
+  Future<void> _handleVote(BuildContext context, {@required bool up}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -297,6 +324,7 @@ class ItemTileData extends HookWidget {
         Scaffold.of(context).showSnackBar(
           SnackBar(content: Text('Item has been ${up ? 'up' : 'un'}voted')),
         );
+        await context.refresh(upvotedProvider(item.id));
       } else {
         Scaffold.of(context).showSnackBar(
           const SnackBar(content: Text('Something went wrong')),
@@ -383,13 +411,6 @@ class ItemTileData extends HookWidget {
             onTap: () async {
               await Share.share(
                   '${WebsiteRepository.baseUrl}/item?id=${item.id}');
-              Navigator.of(context).pop();
-            },
-          ),
-          ListTile(
-            title: const Text('Unvote'),
-            onTap: () async {
-              await _handleVote(context, up: false);
               Navigator.of(context).pop();
             },
           ),
