@@ -62,13 +62,7 @@ class ReplyBody extends HookWidget {
                 children: <Widget>[
                   if (replyToItem.text != null) ...<Widget>[
                     OutlineButton(
-                      onPressed: () {
-                        final String text =
-                            FormattingUtil.convertHtmlToHackerNews(
-                                replyToItem.text);
-                        commentController.text =
-                            '$text\n\n${commentController.text}';
-                      },
+                      onPressed: () => _handleQuoteParent(commentController),
                       child: const Text('Insert parent quote'),
                     ),
                     const SizedBox(width: 16),
@@ -120,6 +114,16 @@ class ReplyBody extends HookWidget {
         ),
       )
     ]);
+  }
+
+  void _handleQuoteParent(TextEditingController commentController) {
+    final String quotedParent =
+        FormattingUtil.convertHtmlToHackerNews(replyToItem.text)
+            .replaceAllMapped(
+      RegExp('^.*', multiLine: true),
+      (Match match) => '> ${match[0]}',
+    );
+    commentController.text = '$quotedParent\n\n${commentController.text}';
   }
 
   Future<void> _handleReply(BuildContext context,

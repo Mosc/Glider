@@ -13,6 +13,8 @@ class FormattingUtil {
         RegExp(r'\<i\>(.*?)\<\/i\>'),
         (Match match) => '*${match[1]}*',
       )
+      // "Text after a blank line that is indented by two or more spaces is
+      // reproduced verbatim. (This is intended for code.)"
       .replaceAllMapped(
         RegExp(r'\<pre\>\<code\>(.*?)\<\/code\>\<\/pre\>', dotAll: true),
         (Match match) => match[1].trimRight(),
@@ -21,10 +23,6 @@ class FormattingUtil {
       .replaceAllMapped(
         RegExp(r'\<a href=\"(.*?)\".*?\>.*?\<\/a\>'),
         (Match match) => match[1],
-      )
-      .replaceAllMapped(
-        RegExp('^.*', multiLine: true),
-        (Match match) => '> ${match[0]}',
       )
       .replaceAll('\n', '\n\n');
 
