@@ -14,13 +14,13 @@ class AppBarUtil {
     if (canPop) {
       if (useCloseButton) {
         return IconButton(
-          icon: const Icon(FluentIcons.dismiss_24_regular),
+          icon: const Icon(FluentIcons.dismiss_24_filled),
           tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
           onPressed: () => Navigator.of(context).maybePop(),
         );
       } else {
         return IconButton(
-          icon: const Icon(FluentIcons.arrow_left_24_regular),
+          icon: const Icon(FluentIcons.arrow_left_24_filled),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () => Navigator.of(context).maybePop(),
         );
