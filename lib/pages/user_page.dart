@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/users/user_body.dart';
 
 class UserPage extends HookWidget {
@@ -14,6 +15,7 @@ class UserPage extends HookWidget {
         floatHeaderSlivers: true,
         headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
+            leading: AppBarUtil.buildFluentIconsLeading(context),
             title: Text(id),
             forceElevated: innerBoxIsScrolled,
             floating: true,

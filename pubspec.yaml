@@ -10,12 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.14.0
-  hooks_riverpod: ^0.11.0
+  flutter_hooks: ^0.14.1
+  hooks_riverpod: ^0.11.1
   freezed_annotation: ^0.12.0
   dio: ^3.0.10
   uni_links: ^0.4.0
-  flutter_widget_from_html_core: ^0.5.0+5
+  flutter_widget_from_html_core: ^0.5.0+6
   url_launcher: ^5.7.2
   cached_network_image: ^2.3.2+1
   shimmer: ^1.1.1
@@ -28,6 +28,7 @@ dependencies:
     git:
       url: https://github.com/esieben1310/flutter_speed_dial
   html_unescape: ^1.0.2
+  fluentui_system_icons: ^1.1.54
 
 dev_dependencies:
   flutter_test:
@@ -38,9 +39,6 @@ dev_dependencies:
   flutter_launcher_icons:
     git:
       url: https://github.com/personalizedrefrigerator/flutter_launcher_icons
-
-flutter:
-  uses-material-design: true
 
 flutter_icons:
   android: true

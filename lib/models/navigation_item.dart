@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:flutter/widgets.dart';
 
 enum NavigationItem {
   topStories,
@@ -32,17 +33,17 @@ extension NavigationItemExtension on NavigationItem {
   IconData get icon {
     switch (this) {
       case NavigationItem.topStories:
-        return Icons.whatshot;
+        return FluentIcons.arrow_trending_24_filled;
       case NavigationItem.newStories:
-        return Icons.new_releases;
+        return FluentIcons.new_24_filled;
       case NavigationItem.bestStories:
-        return Icons.favorite;
+        return FluentIcons.recommended_24_filled;
       case NavigationItem.askStories:
-        return Icons.question_answer;
+        return FluentIcons.chat_help_24_filled;
       case NavigationItem.showStories:
-        return Icons.announcement;
+        return FluentIcons.chat_warning_24_filled;
       case NavigationItem.jobStories:
-        return Icons.work;
+        return FluentIcons.briefcase_24_filled;
     }
 
     throw UnsupportedError('$this does not have an icon');

@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
@@ -21,12 +22,12 @@ class UserTileData extends StatelessWidget {
             children: <Widget>[
               if (user.karma != null)
                 MetadataItem(
-                  icon: Icons.arrow_upward,
+                  icon: FluentIcons.arrow_up_20_regular,
                   text: user.karma.toString(),
                 ),
               if (user.submitted != null)
                 MetadataItem(
-                  icon: Icons.chat_bubble_outline,
+                  icon: FluentIcons.comment_16_regular,
                   text: user.submitted.length.toString(),
                 ),
               if (user.id != null) ...<Widget>[

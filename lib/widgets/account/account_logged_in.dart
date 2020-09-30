@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/pages/account_page.dart';
@@ -17,7 +18,8 @@ class AccountLoggedIn extends HookWidget {
     Future<void>.microtask(
       () => context.read(actionsStateProvider).state = <Widget>[
         IconButton(
-          icon: const Icon(Icons.logout),
+          icon: const Icon(FluentIcons.sign_out_24_filled),
+          tooltip: 'Log out',
           onPressed: () async {
             await context.read(authRepositoryProvider).logout();
             await context.refresh(loggedInProvider);

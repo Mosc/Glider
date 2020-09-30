@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 class End extends StatelessWidget {
@@ -13,12 +14,12 @@ class End extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Icon(
-                Icons.bedtime,
+                FluentIcons.reading_list_24_regular,
                 size: Theme.of(context).textTheme.bodyText2.fontSize * 2,
               ),
               const SizedBox(height: 12),
               Text(
-                "You've reached the end",
+                'Hic sunt dracones',
                 style: Theme.of(context).textTheme.bodyText2,
               ),
             ],

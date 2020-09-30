@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -58,13 +59,13 @@ class ItemTileData extends HookWidget {
               data: (bool upvoted) => !upvoted
                   ? SlidableAction(
                       action: () => _handleVote(context, up: true),
-                      icon: Icons.arrow_upward,
+                      icon: FluentIcons.arrow_up_24_filled,
                       color: Theme.of(context).colorScheme.primary,
                       iconColor: Theme.of(context).colorScheme.onPrimary,
                     )
                   : SlidableAction(
                       action: () => _handleVote(context, up: false),
-                      icon: Icons.undo,
+                      icon: FluentIcons.arrow_undo_24_filled,
                       color: Theme.of(context).colorScheme.surface,
                       iconColor: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -72,7 +73,7 @@ class ItemTileData extends HookWidget {
             ),
             endToStartAction: SlidableAction(
               action: () => _handleReply(context),
-              icon: Icons.reply,
+              icon: FluentIcons.arrow_reply_24_filled,
               color: Theme.of(context).colorScheme.surface,
               iconColor: Theme.of(context).colorScheme.onSurface,
             ),
@@ -193,7 +194,7 @@ class ItemTileData extends HookWidget {
         children: <Widget>[
           if (item.score != null)
             MetadataItem(
-              icon: Icons.arrow_upward,
+              icon: FluentIcons.arrow_up_24_regular,
               text: item.score.toString(),
               highlight: useProvider(upvotedProvider(item.id)).maybeWhen(
                 data: (bool upvoted) => upvoted,
@@ -205,7 +206,7 @@ class ItemTileData extends HookWidget {
               data: (bool upvoted) => SmoothAnimatedSwitcher(
                 condition: upvoted,
                 trueChild: const MetadataItem(
-                  icon: Icons.arrow_upward,
+                  icon: FluentIcons.arrow_up_24_regular,
                   highlight: true,
                 ),
                 axis: Axis.horizontal,
@@ -214,16 +215,16 @@ class ItemTileData extends HookWidget {
             ),
           if (item.descendants != null)
             MetadataItem(
-              icon: Icons.chat_bubble_outline,
+              icon: FluentIcons.comment_24_regular,
               text: item.descendants.toString(),
             ),
           if (item.type == ItemType.job)
-            const MetadataItem(icon: Icons.work_outline)
+            const MetadataItem(icon: FluentIcons.briefcase_24_regular)
           else if (item.type == ItemType.poll)
-            const MetadataItem(icon: Icons.poll),
+            const MetadataItem(icon: FluentIcons.poll_24_regular),
           if (item.deleted == true)
             const MetadataItem(
-              icon: Icons.close,
+              icon: FluentIcons.comment_delete_24_regular,
               text: '[deleted]',
             )
           else if (item.by != null)
@@ -266,7 +267,7 @@ class ItemTileData extends HookWidget {
                   FadeTransition(opacity: animation, child: child),
               condition: dense,
               trueChild: MetadataItem(
-                icon: Icons.add_circle_outline,
+                icon: FluentIcons.add_circle_24_regular,
                 text: item.kids?.length?.toString(),
               ),
             ),
@@ -296,7 +297,7 @@ class ItemTileData extends HookWidget {
           child: Row(
             children: <Widget>[
               Icon(
-                Icons.open_in_browser,
+                FluentIcons.open_in_browser_24_regular,
                 size: textTheme.bodyText2.fontSize,
               ),
               const SizedBox(width: 12),

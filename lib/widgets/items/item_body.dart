@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -104,7 +105,7 @@ class ItemBody extends HookWidget {
             child: Row(
               children: <Widget>[
                 Icon(
-                  Icons.arrow_circle_up,
+                  FluentIcons.arrow_up_circle_24_regular,
                   size: Theme.of(context).textTheme.bodyText2.fontSize,
                 ),
                 const SizedBox(width: 12),
