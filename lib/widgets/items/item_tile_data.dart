@@ -66,8 +66,6 @@ class ItemTileData extends HookWidget {
                   : SlidableAction(
                       action: () => _handleVote(context, up: false),
                       icon: FluentIcons.arrow_undo_24_filled,
-                      color: Theme.of(context).colorScheme.surface,
-                      iconColor: Theme.of(context).colorScheme.onSurface,
                     ),
               orElse: () => null,
             ),
@@ -188,31 +186,27 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildMetadataSection(BuildContext context, TextTheme textTheme) {
+    MetadataItem upvotedMetadataItem({bool highlight = false}) => MetadataItem(
+          icon: FluentIcons.arrow_up_24_regular,
+          text: item.score?.toString(),
+          highlight: highlight,
+        );
+
     return Hero(
       tag: 'item_metadata_${item.id}',
       child: Row(
         children: <Widget>[
-          if (item.score != null)
-            MetadataItem(
-              icon: FluentIcons.arrow_up_24_regular,
-              text: item.score.toString(),
-              highlight: useProvider(upvotedProvider(item.id)).maybeWhen(
-                data: (bool upvoted) => upvoted,
-                orElse: () => false,
-              ),
-            )
-          else
-            useProvider(upvotedProvider(item.id)).maybeWhen(
-              data: (bool upvoted) => SmoothAnimatedSwitcher(
-                condition: upvoted,
-                trueChild: const MetadataItem(
-                  icon: FluentIcons.arrow_up_24_regular,
-                  highlight: true,
-                ),
-                axis: Axis.horizontal,
-              ),
-              orElse: () => const SizedBox.shrink(),
+          useProvider(upvotedProvider(item.id)).maybeWhen(
+            data: (bool upvoted) => SmoothAnimatedSwitcher(
+              condition: upvoted,
+              trueChild: upvotedMetadataItem(highlight: true),
+              falseChild: item.score != null
+                  ? upvotedMetadataItem()
+                  : const SizedBox.shrink(),
+              axis: Axis.horizontal,
             ),
+            orElse: upvotedMetadataItem,
+          ),
           if (item.descendants != null)
             MetadataItem(
               icon: FluentIcons.comment_24_regular,
@@ -240,13 +234,13 @@ class ItemTileData extends HookWidget {
                     padding:
                         const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       item.by,
                       style: textTheme.caption.copyWith(
-                          color: Theme.of(context).colorScheme.onSecondary),
+                          color: Theme.of(context).colorScheme.onPrimary),
                     ),
                   )
                 else

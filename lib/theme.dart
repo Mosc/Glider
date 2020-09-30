@@ -9,17 +9,14 @@ ThemeData get lightTheme => ThemeData(
       brightness: Brightness.light,
       primaryColor: _primaryColor,
       accentColor: _secondaryColor,
-      buttonColor: _primaryColor,
+      buttonTheme: const ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+      ),
       colorScheme: ColorScheme.light(
         primary: _primaryColor,
         secondary: _secondaryColor,
         surface: _surfaceColor,
-        // ignore: avoid_redundant_argument_values
-        onPrimary: Colors.white,
         onSecondary: Colors.white,
-      ),
-      buttonTheme: const ButtonThemeData(
-        textTheme: ButtonTextTheme.primary,
       ),
     );
 
@@ -28,16 +25,15 @@ ThemeData get darkTheme => ThemeData(
       primaryColor: _primaryColor,
       accentColor: _secondaryColor,
       scaffoldBackgroundColor: Colors.grey[900],
+      buttonTheme: const ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+      ),
       appBarTheme: AppBarTheme(color: Colors.grey[850]),
-      buttonColor: _primaryColor,
       colorScheme: ColorScheme.dark(
         primary: _primaryColor,
         secondary: _secondaryColor,
         surface: _surfaceColor,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-      ),
-      buttonTheme: const ButtonThemeData(
-        textTheme: ButtonTextTheme.primary,
       ),
     );
