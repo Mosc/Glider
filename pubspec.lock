@@ -254,11 +254,9 @@ packages:
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "6286e26ed2037f9ae6d52b962e517b2747d96ce4"
-      url: "https://github.com/personalizedrefrigerator/flutter_launcher_icons"
-    source: git
+      name: flutter_launcher_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.8.0"
   flutter_riverpod:
     dependency: transitive
@@ -537,7 +535,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   pool:
     dependency: transitive
     description:
