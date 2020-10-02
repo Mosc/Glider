@@ -61,13 +61,13 @@ class ReplyBody extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   if (replyToItem.text != null) ...<Widget>[
-                    OutlineButton(
+                    OutlinedButton(
                       onPressed: () => _handleQuoteParent(commentController),
                       child: const Text('Insert parent quote'),
                     ),
                     const SizedBox(width: 16),
                   ],
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         await _handleReply(context,

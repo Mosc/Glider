@@ -58,7 +58,7 @@ class AccountLoggedOut extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  OutlineButton(
+                  OutlinedButton(
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         final String username = usernameController.text;
@@ -83,7 +83,7 @@ class AccountLoggedOut extends HookWidget {
                     child: const Text('Register'),
                   ),
                   const SizedBox(width: 16),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         final String username = usernameController.text;
