@@ -120,7 +120,7 @@ class ReplyBody extends HookWidget {
     final String quotedParent =
         FormattingUtil.convertHtmlToHackerNews(replyToItem.text)
             .replaceAllMapped(
-      RegExp('^.*', multiLine: true),
+      RegExp('^.+', multiLine: true),
       (Match match) => '> ${match[0]}',
     );
     commentController.text = '$quotedParent\n\n${commentController.text}';

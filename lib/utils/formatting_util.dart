@@ -45,5 +45,5 @@ class FormattingUtil {
         (Match match) => '${match[1]}<a href="${match[2]}">${match[2]}</a>',
       )
       // "Blank lines separate paragraphs."
-      .replaceAll(RegExp('\n{2,}'), '<p>');
+      .replaceAll(RegExp('\n+'), '<p>');
 }
