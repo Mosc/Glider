@@ -297,7 +297,7 @@ packages:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0+6"
+    version: "0.5.0+7"
   freezed:
     dependency: "direct dev"
     description:

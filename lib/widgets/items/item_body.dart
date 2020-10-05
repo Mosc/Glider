@@ -55,28 +55,8 @@ class ItemBody extends HookWidget {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   if (index < itemTree.items.length) {
-                    final Item item = itemTree.items.elementAt(index);
-                    return Column(
-                      children: <Widget>[
-                        if (index == 0 && item.parent != null) ...<Widget>[
-                          _buildOpenParent(context, item),
-                          const Separator(),
-                        ],
-                        SmoothAnimatedSwitcher(
-                          condition: _collapsedAncestors(
-                              collapsedNotifier, item.ancestors),
-                          falseChild: ItemTileData(
-                            item,
-                            rootBy: itemTree.items.first.by,
-                            onTap: item.type == ItemType.comment
-                                ? () => _collapse(collapsedNotifier, item.id)
-                                : null,
-                            dense: _collapsed(collapsedNotifier, item.id),
-                            separator: const Separator(),
-                          ),
-                        ),
-                      ],
-                    );
+                    return _buildItem(
+                        context, itemTree, index, collapsedNotifier);
                   } else if (itemTree.hasMore) {
                     return const CommentTileLoading();
                   } else {
@@ -89,6 +69,40 @@ class ItemBody extends HookWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Column _buildItem(BuildContext context, ItemTree itemTree, int index,
+      ValueNotifier<Set<int>> collapsedNotifier) {
+    final Item item = itemTree.items.elementAt(index);
+    final bool collapsed = _collapsed(collapsedNotifier, item.id);
+
+    // Indent the separator if the item has children and these are visible
+    // because the item is not collapsed.
+    final bool indentSeparator =
+        item.kids != null && item.kids.isNotEmpty && !collapsed;
+
+    return Column(
+      children: <Widget>[
+        if (index == 0 && item.parent != null) ...<Widget>[
+          _buildOpenParent(context, item),
+          const Separator(),
+        ],
+        SmoothAnimatedSwitcher(
+          condition: _collapsedAncestors(collapsedNotifier, item.ancestors),
+          falseChild: ItemTileData(
+            item,
+            rootBy: itemTree.items.first.by,
+            onTap: item.type == ItemType.comment
+                ? () => _collapse(collapsedNotifier, item.id)
+                : null,
+            dense: collapsed,
+            separator: indentSeparator
+                ? const Separator()
+                : const Separator(startIndent: 0),
+          ),
+        ),
+      ],
     );
   }
 

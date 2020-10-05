@@ -16,6 +16,7 @@ import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
+import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/common/slidable.dart';
@@ -43,89 +44,106 @@ class ItemTileData extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     final bool indented = item.ancestors != null && item.ancestors.isNotEmpty;
-    final bool interactable = item.id != null && item.deleted != true;
 
-    return Padding(
-      padding: indented
-          ? EdgeInsets.only(left: (8 * item.ancestors.length - 2).toDouble())
-          : EdgeInsets.zero,
-      child: Column(
-        children: <Widget>[
-          Slidable(
-            enabled: interactable,
-            startToEndAction: useProvider(upvotedProvider(item.id)).maybeWhen(
-              data: (bool upvoted) => !upvoted
-                  ? SlidableAction(
-                      action: () => _handleVote(context, up: true),
-                      icon: FluentIcons.arrow_up_24_filled,
-                      color: Theme.of(context).colorScheme.primary,
-                      iconColor: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : SlidableAction(
-                      action: () => _handleVote(context, up: false),
-                      icon: FluentIcons.arrow_undo_24_filled,
+    return Stack(
+      children: <Widget>[
+        if (indented)
+          Positioned.fill(
+            child: Row(
+              children: <Widget>[
+                for (int _ in item.ancestors ?? <int>[])
+                  const Padding(
+                    padding: EdgeInsets.only(left: 7),
+                    child: Separator(
+                      vertical: true,
+                      startIndent: 0,
+                      endIndent: 0,
                     ),
-              orElse: () => null,
-            ),
-            endToStartAction: SlidableAction(
-              action: () => _handleReply(context),
-              icon: FluentIcons.arrow_reply_24_filled,
-              color: Theme.of(context).colorScheme.surface,
-              iconColor: Theme.of(context).colorScheme.onSurface,
-            ),
-            key: Key(item.id.toString()),
-            child: Container(
-              decoration: indented
-                  ? BoxDecoration(
-                      border: Border(
-                        left: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 2,
-                        ),
-                      ),
-                    )
-                  : null,
-              child: InkWell(
-                onTap: interactable && onTap != null ? onTap : null,
-                onLongPress:
-                    interactable ? () => _buildModalBottomSheet(context) : null,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      if (item.type != ItemType.comment &&
-                          item.deleted != true) ...<Widget>[
-                        _buildStorySection(textTheme),
-                        const SizedBox(height: 12),
-                      ],
-                      _buildMetadataSection(context, textTheme),
-                      SmoothAnimatedSwitcher(
-                        condition: dense,
-                        falseChild: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            if (item.text != null) ...<Widget>[
-                              const SizedBox(height: 12),
-                              _buildTextSection(),
-                            ],
-                            if (item.url != null) ...<Widget>[
-                              const SizedBox(height: 12),
-                              _buildUrlSection(textTheme),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-              ),
+              ],
             ),
           ),
-          if (separator != null) separator,
-        ],
+        Padding(
+          padding: indented
+              ? EdgeInsets.only(left: item.ancestors.length * 8.0)
+              : EdgeInsets.zero,
+          child: Column(
+            children: <Widget>[
+              _buildSlidable(context),
+              if (separator != null) separator,
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSlidable(BuildContext context) {
+    final bool interactable = item.id != null && item.deleted != true;
+
+    return Slidable(
+      key: Key(item.id.toString()),
+      enabled: interactable,
+      startToEndAction: useProvider(upvotedProvider(item.id)).maybeWhen(
+        data: (bool upvoted) => !upvoted
+            ? SlidableAction(
+                action: () => _handleVote(context, up: true),
+                icon: FluentIcons.arrow_up_24_filled,
+                color: Theme.of(context).colorScheme.primary,
+                iconColor: Theme.of(context).colorScheme.onPrimary,
+              )
+            : SlidableAction(
+                action: () => _handleVote(context, up: false),
+                icon: FluentIcons.arrow_undo_24_filled,
+              ),
+        orElse: () => null,
+      ),
+      endToStartAction: SlidableAction(
+        action: () => _handleReply(context),
+        icon: FluentIcons.arrow_reply_24_filled,
+        color: Theme.of(context).colorScheme.surface,
+        iconColor: Theme.of(context).colorScheme.onSurface,
+      ),
+      child: _buildClickable(context, interactable),
+    );
+  }
+
+  Widget _buildClickable(BuildContext context, bool interactable) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    return InkWell(
+      onTap: interactable && onTap != null ? onTap : null,
+      onLongPress: interactable ? () => _buildModalBottomSheet(context) : null,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (item.type != ItemType.comment &&
+                item.deleted != true) ...<Widget>[
+              _buildStorySection(textTheme),
+              const SizedBox(height: 12),
+            ],
+            _buildMetadataSection(context, textTheme),
+            SmoothAnimatedSwitcher(
+              condition: dense,
+              falseChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  if (item.text != null) ...<Widget>[
+                    const SizedBox(height: 12),
+                    _buildTextSection(),
+                  ],
+                  if (item.url != null) ...<Widget>[
+                    const SizedBox(height: 12),
+                    _buildUrlSection(textTheme),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
