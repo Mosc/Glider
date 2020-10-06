@@ -204,11 +204,14 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildMetadataSection(BuildContext context, TextTheme textTheme) {
-    MetadataItem upvotedMetadataItem({bool highlight = false}) => MetadataItem(
+    Widget upvotedMetadata({bool highlight = false}) => MetadataItem(
           icon: FluentIcons.arrow_up_24_regular,
           text: item.score?.toString(),
           highlight: highlight,
         );
+    final Widget upvotedMetadataTrue = upvotedMetadata(highlight: true);
+    final Widget upvotedMetadataFalse =
+        item.score != null ? upvotedMetadata() : const SizedBox.shrink();
 
     return Hero(
       tag: 'item_metadata_${item.id}',
@@ -217,13 +220,11 @@ class ItemTileData extends HookWidget {
           useProvider(upvotedProvider(item.id)).maybeWhen(
             data: (bool upvoted) => SmoothAnimatedSwitcher(
               condition: upvoted,
-              trueChild: upvotedMetadataItem(highlight: true),
-              falseChild: item.score != null
-                  ? upvotedMetadataItem()
-                  : const SizedBox.shrink(),
+              trueChild: upvotedMetadataTrue,
+              falseChild: upvotedMetadataFalse,
               axis: Axis.horizontal,
             ),
-            orElse: upvotedMetadataItem,
+            orElse: () => upvotedMetadataFalse,
           ),
           if (item.descendants != null)
             MetadataItem(
