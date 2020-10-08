@@ -72,7 +72,6 @@ class StoriesPage extends HookWidget {
           for (NavigationItem navigationItem in NavigationItem.values)
             SpeedDialChild(
               label: navigationItem.title,
-              foregroundColor: Theme.of(context).textTheme.caption.color,
               child: Icon(navigationItem.icon),
               onTap: () => navigationItemStateController.state = navigationItem,
             ),

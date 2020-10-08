@@ -44,16 +44,7 @@ class StoriesBody extends HookWidget {
               delegate: SeparatedSliverChildBuilderDelegate(
                 itemBuilder: (_, int index) {
                   if (index < ids.length) {
-                    final int id = ids.elementAt(index);
-                    return ItemTile(
-                      id: ids.elementAt(index),
-                      dense: true,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                            builder: (_) => ItemPage(id: id)),
-                      ),
-                      loading: () => const StoryTileLoading(),
-                    );
+                    return _buildItem(context, ids.elementAt(index));
                   } else {
                     return const End();
                   }
@@ -65,6 +56,17 @@ class StoriesBody extends HookWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildItem(BuildContext context, int id) {
+    return ItemTile(
+      id: id,
+      dense: true,
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
+      ),
+      loading: () => const StoryTileLoading(),
     );
   }
 }
