@@ -55,6 +55,7 @@ class ReplyBody extends HookWidget {
                 },
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
+                textCapitalization: TextCapitalization.sentences,
               ),
               const SizedBox(height: 16),
               Row(
