@@ -6,6 +6,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// ignore: implementation_imports
 import 'package:riverpod/src/framework.dart';
 
 final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
