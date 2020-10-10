@@ -80,11 +80,12 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildSlidable(BuildContext context) {
-    final bool interactable = item.id != null && item.deleted != true;
+    final bool tappable = item.id != null && item.deleted != true;
+    final bool slidable = tappable && item.type != ItemType.job;
 
     return Slidable(
       key: Key(item.id.toString()),
-      enabled: interactable,
+      enabled: slidable,
       startToEndAction: useProvider(upvotedProvider(item.id)).maybeWhen(
         data: (bool upvoted) => !upvoted
             ? SlidableAction(
@@ -105,16 +106,16 @@ class ItemTileData extends HookWidget {
         color: Theme.of(context).colorScheme.surface,
         iconColor: Theme.of(context).colorScheme.onSurface,
       ),
-      child: _buildClickable(context, interactable),
+      child: _buildTappable(context, tappable),
     );
   }
 
-  Widget _buildClickable(BuildContext context, bool interactable) {
+  Widget _buildTappable(BuildContext context, bool tappable) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: interactable && onTap != null ? onTap : null,
-      onLongPress: interactable ? () => _buildModalBottomSheet(context) : null,
+      onTap: tappable && onTap != null ? onTap : null,
+      onLongPress: tappable ? () => _buildModalBottomSheet(context) : null,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
