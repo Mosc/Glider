@@ -12,7 +12,7 @@ class StoryTileLoading extends StatelessWidget {
 
     return TileLoading(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
