@@ -19,11 +19,16 @@ class DecoratedHtml extends StatelessWidget {
   Widget build(BuildContext context) {
     return HtmlWidget(
       _html,
+      enableCaching: false,
       buildAsync: false,
       hyperlinkColor: Theme.of(context).primaryColor,
       customStylesBuilder: (dom.Element element) {
         if (element.localName == 'pre') {
-          return <String, String>{'margin-top': '1em', 'margin-bottom': '1em'};
+          return <String, String>{
+            'margin-top': '1em',
+            'margin-bottom': '1em',
+            'font-family': 'monospace',
+          };
         }
 
         if (isQuote(element)) {
