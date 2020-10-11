@@ -19,7 +19,6 @@ class DecoratedHtml extends StatelessWidget {
   Widget build(BuildContext context) {
     return HtmlWidget(
       _html,
-      enableCaching: false,
       buildAsync: false,
       hyperlinkColor: Theme.of(context).primaryColor,
       customStylesBuilder: (dom.Element element) {
