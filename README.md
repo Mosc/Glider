@@ -1,3 +1,3 @@
 # Glider
 
-Glider is an opnionated Hacker News client written in Flutter.
+Glider is an opinionated Hacker News client written in Flutter.
