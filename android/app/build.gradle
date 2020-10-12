@@ -59,9 +59,15 @@ android {
         }
     }
 
+    ndkVersion '21.3.6528147'
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
+
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
         }
     }
 }
