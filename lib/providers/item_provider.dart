@@ -32,28 +32,38 @@ final AutoDisposeFutureProviderFamily<ItemTree, ItemTreeParameter>
     item.copyWith(ancestors: parameter.ancestors ?? <int>[]),
   ];
 
+  if (item.parts != null) {
+    items.addAll(await _getIds(item.parts, ref, parameter));
+  }
+
   if (item.kids != null) {
-    try {
-      final Iterable<ItemTree> tree = await Future.wait(
-        item.kids.map(
-          (int kidId) => ref.watch(
-            itemTreeProvider(
-              ItemTreeParameter(id: kidId, ancestors: <int>[
-                parameter.id,
-                if (parameter.ancestors != null) ...parameter.ancestors,
-              ]),
-            ).future,
-          ),
-        ),
-      );
-      items.addAll(tree.expand((ItemTree kid) => kid.items));
-    } on ServiceException {
-      // Fail silently.
-    }
+    items.addAll(await _getIds(item.kids, ref, parameter));
   }
 
   return ItemTree(items: items, hasMore: false);
 });
+
+Future<Iterable<Item>> _getIds(Iterable<int> ids,
+    AutoDisposeProviderReference ref, ItemTreeParameter parameter) async {
+  try {
+    final Iterable<ItemTree> tree = await Future.wait(
+      ids.map(
+        (int id) => ref.watch(
+          itemTreeProvider(
+            ItemTreeParameter(id: id, ancestors: <int>[
+              parameter.id,
+              if (parameter.ancestors != null) ...parameter.ancestors,
+            ]),
+          ).future,
+        ),
+      ),
+    );
+    return tree.expand((ItemTree part) => part.items);
+  } on ServiceException {
+    // Fail silently.
+    return <Item>[];
+  }
+}
 
 final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
     itemTreeStreamProvider = StreamProvider.autoDispose.family(
@@ -82,24 +92,33 @@ final AutoDisposeStreamProviderFamily<Item, ItemTreeParameter>
 
   yield item.copyWith(ancestors: parameter.ancestors ?? <int>[]);
 
-  if (item.kids != null) {
-    for (final int kidId in item.kids) {
-      try {
-        final Stream<Item> itemStream = ref.read(
-          _itemStreamProvider(
-            ItemTreeParameter(id: kidId, ancestors: <int>[
-              parameter.id,
-              if (parameter.ancestors != null) ...parameter.ancestors,
-            ]),
-          ).stream,
-        );
+  if (item.parts != null) {
+    yield* _getIdsStream(item.parts, ref, parameter);
+  }
 
-        await for (final Item item in itemStream) {
-          yield item;
-        }
-      } on ServiceException {
-        // Fail silently.
-      }
-    }
+  if (item.kids != null) {
+    yield* _getIdsStream(item.kids, ref, parameter);
   }
 });
+
+Stream<Item> _getIdsStream(Iterable<int> ids, AutoDisposeProviderReference ref,
+    ItemTreeParameter parameter) async* {
+  for (final int id in ids) {
+    try {
+      final Stream<Item> itemStream = ref.read(
+        _itemStreamProvider(
+          ItemTreeParameter(id: id, ancestors: <int>[
+            parameter.id,
+            if (parameter.ancestors != null) ...parameter.ancestors,
+          ]),
+        ).stream,
+      );
+
+      await for (final Item item in itemStream) {
+        yield item;
+      }
+    } on ServiceException {
+      // Fail silently.
+    }
+  }
+}

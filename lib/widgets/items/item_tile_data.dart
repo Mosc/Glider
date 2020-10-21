@@ -80,49 +80,53 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildSlidable(BuildContext context) {
-    final bool tappable = item.id != null && item.deleted != true;
-    final bool slidable = tappable && item.type != ItemType.job;
+    final bool active = item.id != null && item.deleted != true;
+    final bool canVote = active && item.type != ItemType.job;
+    final bool canReply =
+        active && item.type != ItemType.job && item.type != ItemType.pollopt;
 
     return Slidable(
       key: Key(item.id.toString()),
-      enabled: slidable,
-      startToEndAction: useProvider(upvotedProvider(item.id)).maybeWhen(
-        data: (bool upvoted) => !upvoted
-            ? SlidableAction(
-                action: () => _handleVote(context, up: true),
-                icon: FluentIcons.arrow_up_24_filled,
-                color: Theme.of(context).colorScheme.primary,
-                iconColor: Theme.of(context).colorScheme.onPrimary,
-              )
-            : SlidableAction(
-                action: () => _handleVote(context, up: false),
-                icon: FluentIcons.arrow_undo_24_filled,
-              ),
-        orElse: () => null,
-      ),
-      endToStartAction: SlidableAction(
-        action: () => _handleReply(context),
-        icon: FluentIcons.arrow_reply_24_filled,
-        color: Theme.of(context).colorScheme.surface,
-        iconColor: Theme.of(context).colorScheme.onSurface,
-      ),
-      child: _buildTappable(context, tappable),
+      startToEndAction: canVote
+          ? useProvider(upvotedProvider(item.id)).maybeWhen(
+              data: (bool upvoted) => !upvoted
+                  ? SlidableAction(
+                      action: () => _handleVote(context, up: true),
+                      icon: FluentIcons.arrow_up_24_filled,
+                      color: Theme.of(context).colorScheme.primary,
+                      iconColor: Theme.of(context).colorScheme.onPrimary,
+                    )
+                  : SlidableAction(
+                      action: () => _handleVote(context, up: false),
+                      icon: FluentIcons.arrow_undo_24_filled,
+                    ),
+              orElse: () => null,
+            )
+          : null,
+      endToStartAction: canReply
+          ? SlidableAction(
+              action: () => _handleReply(context),
+              icon: FluentIcons.arrow_reply_24_filled,
+              color: Theme.of(context).colorScheme.surface,
+              iconColor: Theme.of(context).colorScheme.onSurface,
+            )
+          : null,
+      child: _buildTappable(context, active),
     );
   }
 
-  Widget _buildTappable(BuildContext context, bool tappable) {
+  Widget _buildTappable(BuildContext context, bool active) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: tappable && onTap != null ? onTap : null,
-      onLongPress: tappable ? () => _buildModalBottomSheet(context) : null,
+      onTap: active && onTap != null ? onTap : null,
+      onLongPress: active ? () => _buildModalBottomSheet(context) : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (item.type != ItemType.comment &&
-                item.deleted != true) ...<Widget>[
+            if (active && item.title != null) ...<Widget>[
               _buildStorySection(textTheme),
               const SizedBox(height: 12),
             ],
@@ -241,7 +245,7 @@ class ItemTileData extends HookWidget {
               icon: FluentIcons.comment_delete_24_regular,
               text: '[deleted]',
             )
-          else if (item.by != null)
+          else if (item.by != null && item.type != ItemType.pollopt)
             GestureDetector(
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
@@ -286,10 +290,11 @@ class ItemTileData extends HookWidget {
               ),
             ),
           const Spacer(),
-          Text(
-            item.timeAgo,
-            style: textTheme.caption,
-          ),
+          if (item.type != ItemType.pollopt)
+            Text(
+              item.timeAgo,
+              style: textTheme.caption,
+            ),
         ],
       ),
     );
@@ -422,7 +427,7 @@ class ItemTileData extends HookWidget {
               },
             ),
           ListTile(
-            title: const Text('Share comment link'),
+            title: const Text('Share item link'),
             onTap: () async {
               await Share.share(
                   '${WebsiteRepository.baseUrl}/item?id=${item.id}');

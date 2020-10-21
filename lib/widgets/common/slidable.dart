@@ -4,22 +4,18 @@ import 'package:glider/models/slidable_action.dart';
 class Slidable extends StatelessWidget {
   const Slidable({
     @required Key key,
-    this.enabled = true,
     this.startToEndAction,
     this.endToStartAction,
     this.child,
-  })  : assert(startToEndAction != null || endToStartAction != null,
-            'Must provide either a startToEndAction or an endToStartAction'),
-        super(key: key);
+  }) : super(key: key);
 
   final Widget child;
-  final bool enabled;
   final SlidableAction startToEndAction;
   final SlidableAction endToStartAction;
 
   @override
   Widget build(BuildContext context) {
-    if (!enabled) {
+    if (startToEndAction == null && endToStartAction == null) {
       return child;
     }
 
