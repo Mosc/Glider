@@ -65,9 +65,9 @@ Future<Iterable<Item>> _getIds(Iterable<int> ids,
   }
 }
 
-final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
-    itemTreeStreamProvider = StreamProvider.autoDispose.family(
-        (AutoDisposeProviderReference ref, ItemTreeParameter parameter) async* {
+final StreamProviderFamily<ItemTree, ItemTreeParameter> itemTreeStreamProvider =
+    StreamProvider.family(
+        (ProviderReference ref, ItemTreeParameter parameter) async* {
   final Stream<Item> itemStream =
       ref.watch(_itemStreamProvider(parameter).stream);
 
@@ -81,10 +81,10 @@ final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
   yield ItemTree(items: items, hasMore: false);
 });
 
-final AutoDisposeStreamProviderFamily<Item, ItemTreeParameter>
-    _itemStreamProvider = StreamProvider.autoDispose.family(
-        (AutoDisposeProviderReference ref, ItemTreeParameter parameter) async* {
-  final Item item = await ref.watch(itemProvider(parameter.id).future);
+final StreamProviderFamily<Item, ItemTreeParameter> _itemStreamProvider =
+    StreamProvider.family(
+        (ProviderReference ref, ItemTreeParameter parameter) async* {
+  final Item item = await ref.read(itemProvider(parameter.id).future);
 
   if (item == null) {
     return;
@@ -101,7 +101,7 @@ final AutoDisposeStreamProviderFamily<Item, ItemTreeParameter>
   }
 });
 
-Stream<Item> _getIdsStream(Iterable<int> ids, AutoDisposeProviderReference ref,
+Stream<Item> _getIdsStream(Iterable<int> ids, ProviderReference ref,
     ItemTreeParameter parameter) async* {
   for (final int id in ids) {
     try {
