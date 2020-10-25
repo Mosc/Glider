@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/item_tree_parameter.dart';
@@ -6,6 +7,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 // ignore: implementation_imports
 import 'package:riverpod/src/framework.dart';
 
@@ -14,62 +16,17 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
         (AutoDisposeProviderReference ref, NavigationItem navigationItem) =>
             ref.read(apiRepositoryProvider).getStoryIds(navigationItem));
 
-final AutoDisposeFutureProviderFamily<Item, int> itemProvider = FutureProvider
-    .autoDispose
-    .family((AutoDisposeProviderReference ref, int id) =>
-        ref.read(apiRepositoryProvider).getItem(id));
-
-final AutoDisposeFutureProviderFamily<ItemTree, ItemTreeParameter>
-    itemTreeProvider = FutureProvider.autoDispose.family(
-        (AutoDisposeProviderReference ref, ItemTreeParameter parameter) async {
-  final Item item = await ref.watch(itemProvider(parameter.id).future);
-
-  if (item == null) {
-    return ItemTree(items: <Item>[], hasMore: false);
-  }
-
-  final List<Item> items = <Item>[
-    item.copyWith(ancestors: parameter.ancestors ?? <int>[]),
-  ];
-
-  if (item.parts != null) {
-    items.addAll(await _itemChildren(item.parts, ref, parameter));
-  }
-
-  if (item.kids != null) {
-    items.addAll(await _itemChildren(item.kids, ref, parameter));
-  }
-
-  return ItemTree(items: items, hasMore: false);
-});
-
-Future<Iterable<Item>> _itemChildren(Iterable<int> ids,
-    AutoDisposeProviderReference ref, ItemTreeParameter parameter) async {
-  try {
-    final Iterable<ItemTree> tree = await Future.wait(
-      ids.map(
-        (int id) => ref.watch(
-          itemTreeProvider(
-            ItemTreeParameter(id: id, ancestors: <int>[
-              parameter.id,
-              if (parameter.ancestors != null) ...parameter.ancestors,
-            ]),
-          ).future,
-        ),
-      ),
-    );
-    return tree.expand((ItemTree part) => part.items);
-  } on ServiceException {
-    // Fail silently.
-    return <Item>[];
-  }
-}
+final AutoDisposeFutureProviderFamily<Item, int> itemProvider =
+    AutoDisposeFutureProvider.family(
+        (AutoDisposeProviderReference ref, int id) =>
+            ref.read(apiRepositoryProvider).getItem(id));
 
 final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
     itemTreeStreamProvider = StreamProvider.autoDispose.family(
         (AutoDisposeProviderReference ref, ItemTreeParameter parameter) async* {
-  final Stream<Item> itemStream = _itemStream(ref, parameter);
+  unawaited(_preloadItemTree(ref, id: parameter.id));
 
+  final Stream<Item> itemStream = _itemStream(ref, id: parameter.id);
   final List<Item> items = <Item>[];
 
   await for (final Item item in itemStream) {
@@ -80,42 +37,52 @@ final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
   yield ItemTree(items: items, hasMore: false);
 });
 
-Stream<Item> _itemStream(
-    AutoDisposeProviderReference ref, ItemTreeParameter parameter) async* {
-  final Item item = await ref.read(itemProvider(parameter.id).future);
+Stream<Item> _itemStream(AutoDisposeProviderReference ref,
+    {@required int id, Iterable<int> ancestors = const <int>[]}) async* {
+  try {
+    final Item item = await ref.read(itemProvider(id).future);
 
-  if (item == null) {
-    return;
-  }
+    if (item == null) {
+      return;
+    }
 
-  yield item.copyWith(ancestors: parameter.ancestors ?? <int>[]);
+    yield item.copyWith(ancestors: ancestors);
 
-  if (item.parts != null) {
-    yield* _itemChildrenStream(item.parts, ref, parameter);
-  }
+    final Iterable<int> childAncestors = <int>[id, ...ancestors];
 
-  if (item.kids != null) {
-    yield* _itemChildrenStream(item.kids, ref, parameter);
+    if (item.parts != null) {
+      for (final int partId in item.parts) {
+        yield* _itemStream(ref, id: partId, ancestors: childAncestors);
+      }
+    }
+
+    if (item.kids != null) {
+      for (final int kidId in item.kids) {
+        yield* _itemStream(ref, id: kidId, ancestors: childAncestors);
+      }
+    }
+  } on ServiceException {
+    // Fail silently.
   }
 }
 
-Stream<Item> _itemChildrenStream(Iterable<int> ids,
-    AutoDisposeProviderReference ref, ItemTreeParameter parameter) async* {
-  for (final int id in ids) {
-    try {
-      final Stream<Item> itemStream = _itemStream(
-        ref,
-        ItemTreeParameter(id: id, ancestors: <int>[
-          parameter.id,
-          if (parameter.ancestors != null) ...parameter.ancestors,
-        ]),
-      );
+Future<void> _preloadItemTree(AutoDisposeProviderReference ref,
+    {@required int id}) async {
+  try {
+    final Item item = await ref.watch(itemProvider(id).future);
 
-      await for (final Item item in itemStream) {
-        yield item;
-      }
-    } on ServiceException {
-      // Fail silently.
+    if (item.parts != null) {
+      await Future.wait(
+        item.parts.map((int partId) => _preloadItemTree(ref, id: partId)),
+      );
     }
+
+    if (item.kids != null) {
+      await Future.wait(
+        item.kids.map((int kidId) => _preloadItemTree(ref, id: kidId)),
+      );
+    }
+  } on ServiceException {
+    // Fail silently.
   }
 }

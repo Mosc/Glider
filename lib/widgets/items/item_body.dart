@@ -26,11 +26,6 @@ class ItemBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This non-stream version retrieves an item's kids concurrently, possibly
-    // out of order, and returns them all at once. Its results are thefore not
-    // used, but the caching it causes is useful for the stream provider.
-    useProvider(itemTreeProvider(ItemTreeParameter(id: id)));
-
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
 
     return RefreshIndicator(
