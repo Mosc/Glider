@@ -12,6 +12,7 @@ PostData _$PostDataFromJson(Map<String, dynamic> json) {
   return _PostData.fromJson(json);
 }
 
+/// @nodoc
 class _$PostDataTearOff {
   const _$PostDataTearOff();
 
@@ -36,11 +37,18 @@ class _$PostDataTearOff {
       goto: goto,
     );
   }
+
+// ignore: unused_element
+  PostData fromJson(Map<String, Object> json) {
+    return PostData.fromJson(json);
+  }
 }
 
+/// @nodoc
 // ignore: unused_element
 const $PostData = _$PostDataTearOff();
 
+/// @nodoc
 mixin _$PostData {
   String get acct;
   String get pw;
@@ -61,6 +69,7 @@ mixin _$PostData {
   $PostDataCopyWith<PostData> get copyWith;
 }
 
+/// @nodoc
 abstract class $PostDataCopyWith<$Res> {
   factory $PostDataCopyWith(PostData value, $Res Function(PostData) then) =
       _$PostDataCopyWithImpl<$Res>;
@@ -75,6 +84,7 @@ abstract class $PostDataCopyWith<$Res> {
       @JsonKey(includeIfNull: false) String goto});
 }
 
+/// @nodoc
 class _$PostDataCopyWithImpl<$Res> implements $PostDataCopyWith<$Res> {
   _$PostDataCopyWithImpl(this._value, this._then);
 
@@ -106,6 +116,7 @@ class _$PostDataCopyWithImpl<$Res> implements $PostDataCopyWith<$Res> {
   }
 }
 
+/// @nodoc
 abstract class _$PostDataCopyWith<$Res> implements $PostDataCopyWith<$Res> {
   factory _$PostDataCopyWith(_PostData value, $Res Function(_PostData) then) =
       __$PostDataCopyWithImpl<$Res>;
@@ -121,6 +132,7 @@ abstract class _$PostDataCopyWith<$Res> implements $PostDataCopyWith<$Res> {
       @JsonKey(includeIfNull: false) String goto});
 }
 
+/// @nodoc
 class __$PostDataCopyWithImpl<$Res> extends _$PostDataCopyWithImpl<$Res>
     implements _$PostDataCopyWith<$Res> {
   __$PostDataCopyWithImpl(_PostData _value, $Res Function(_PostData) _then)
@@ -154,6 +166,8 @@ class __$PostDataCopyWithImpl<$Res> extends _$PostDataCopyWithImpl<$Res>
 }
 
 @JsonSerializable()
+
+/// @nodoc
 class _$_PostData with DiagnosticableTreeMixin implements _PostData {
   _$_PostData(
       {@required this.acct,

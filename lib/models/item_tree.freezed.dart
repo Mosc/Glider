@@ -9,6 +9,7 @@ part of 'item_tree.dart';
 
 T _$identity<T>(T value) => value;
 
+/// @nodoc
 class _$ItemTreeTearOff {
   const _$ItemTreeTearOff();
 
@@ -21,9 +22,11 @@ class _$ItemTreeTearOff {
   }
 }
 
+/// @nodoc
 // ignore: unused_element
 const $ItemTree = _$ItemTreeTearOff();
 
+/// @nodoc
 mixin _$ItemTree {
   Iterable<Item> get items;
   bool get hasMore;
@@ -31,12 +34,14 @@ mixin _$ItemTree {
   $ItemTreeCopyWith<ItemTree> get copyWith;
 }
 
+/// @nodoc
 abstract class $ItemTreeCopyWith<$Res> {
   factory $ItemTreeCopyWith(ItemTree value, $Res Function(ItemTree) then) =
       _$ItemTreeCopyWithImpl<$Res>;
   $Res call({Iterable<Item> items, bool hasMore});
 }
 
+/// @nodoc
 class _$ItemTreeCopyWithImpl<$Res> implements $ItemTreeCopyWith<$Res> {
   _$ItemTreeCopyWithImpl(this._value, this._then);
 
@@ -56,6 +61,7 @@ class _$ItemTreeCopyWithImpl<$Res> implements $ItemTreeCopyWith<$Res> {
   }
 }
 
+/// @nodoc
 abstract class _$ItemTreeCopyWith<$Res> implements $ItemTreeCopyWith<$Res> {
   factory _$ItemTreeCopyWith(_ItemTree value, $Res Function(_ItemTree) then) =
       __$ItemTreeCopyWithImpl<$Res>;
@@ -63,6 +69,7 @@ abstract class _$ItemTreeCopyWith<$Res> implements $ItemTreeCopyWith<$Res> {
   $Res call({Iterable<Item> items, bool hasMore});
 }
 
+/// @nodoc
 class __$ItemTreeCopyWithImpl<$Res> extends _$ItemTreeCopyWithImpl<$Res>
     implements _$ItemTreeCopyWith<$Res> {
   __$ItemTreeCopyWithImpl(_ItemTree _value, $Res Function(_ItemTree) _then)
@@ -83,6 +90,7 @@ class __$ItemTreeCopyWithImpl<$Res> extends _$ItemTreeCopyWithImpl<$Res>
   }
 }
 
+/// @nodoc
 class _$_ItemTree with DiagnosticableTreeMixin implements _ItemTree {
   _$_ItemTree({this.items, this.hasMore});
 

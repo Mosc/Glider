@@ -9,6 +9,7 @@ part of 'slidable_action.dart';
 
 T _$identity<T>(T value) => value;
 
+/// @nodoc
 class _$SlidableActionTearOff {
   const _$SlidableActionTearOff();
 
@@ -27,9 +28,11 @@ class _$SlidableActionTearOff {
   }
 }
 
+/// @nodoc
 // ignore: unused_element
 const $SlidableAction = _$SlidableActionTearOff();
 
+/// @nodoc
 mixin _$SlidableAction {
   Function get action;
   IconData get icon;
@@ -39,6 +42,7 @@ mixin _$SlidableAction {
   $SlidableActionCopyWith<SlidableAction> get copyWith;
 }
 
+/// @nodoc
 abstract class $SlidableActionCopyWith<$Res> {
   factory $SlidableActionCopyWith(
           SlidableAction value, $Res Function(SlidableAction) then) =
@@ -46,6 +50,7 @@ abstract class $SlidableActionCopyWith<$Res> {
   $Res call({Function action, IconData icon, Color color, Color iconColor});
 }
 
+/// @nodoc
 class _$SlidableActionCopyWithImpl<$Res>
     implements $SlidableActionCopyWith<$Res> {
   _$SlidableActionCopyWithImpl(this._value, this._then);
@@ -70,6 +75,7 @@ class _$SlidableActionCopyWithImpl<$Res>
   }
 }
 
+/// @nodoc
 abstract class _$SlidableActionCopyWith<$Res>
     implements $SlidableActionCopyWith<$Res> {
   factory _$SlidableActionCopyWith(
@@ -79,6 +85,7 @@ abstract class _$SlidableActionCopyWith<$Res>
   $Res call({Function action, IconData icon, Color color, Color iconColor});
 }
 
+/// @nodoc
 class __$SlidableActionCopyWithImpl<$Res>
     extends _$SlidableActionCopyWithImpl<$Res>
     implements _$SlidableActionCopyWith<$Res> {
@@ -105,6 +112,7 @@ class __$SlidableActionCopyWithImpl<$Res>
   }
 }
 
+/// @nodoc
 class _$_SlidableAction
     with DiagnosticableTreeMixin
     implements _SlidableAction {

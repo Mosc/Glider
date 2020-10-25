@@ -9,6 +9,7 @@ part of 'item_tree_parameter.dart';
 
 T _$identity<T>(T value) => value;
 
+/// @nodoc
 class _$ItemTreeParameterTearOff {
   const _$ItemTreeParameterTearOff();
 
@@ -21,9 +22,11 @@ class _$ItemTreeParameterTearOff {
   }
 }
 
+/// @nodoc
 // ignore: unused_element
 const $ItemTreeParameter = _$ItemTreeParameterTearOff();
 
+/// @nodoc
 mixin _$ItemTreeParameter {
   int get id;
   Iterable<int> get ancestors;
@@ -31,6 +34,7 @@ mixin _$ItemTreeParameter {
   $ItemTreeParameterCopyWith<ItemTreeParameter> get copyWith;
 }
 
+/// @nodoc
 abstract class $ItemTreeParameterCopyWith<$Res> {
   factory $ItemTreeParameterCopyWith(
           ItemTreeParameter value, $Res Function(ItemTreeParameter) then) =
@@ -38,6 +42,7 @@ abstract class $ItemTreeParameterCopyWith<$Res> {
   $Res call({int id, Iterable<int> ancestors});
 }
 
+/// @nodoc
 class _$ItemTreeParameterCopyWithImpl<$Res>
     implements $ItemTreeParameterCopyWith<$Res> {
   _$ItemTreeParameterCopyWithImpl(this._value, this._then);
@@ -59,6 +64,7 @@ class _$ItemTreeParameterCopyWithImpl<$Res>
   }
 }
 
+/// @nodoc
 abstract class _$ItemTreeParameterCopyWith<$Res>
     implements $ItemTreeParameterCopyWith<$Res> {
   factory _$ItemTreeParameterCopyWith(
@@ -68,6 +74,7 @@ abstract class _$ItemTreeParameterCopyWith<$Res>
   $Res call({int id, Iterable<int> ancestors});
 }
 
+/// @nodoc
 class __$ItemTreeParameterCopyWithImpl<$Res>
     extends _$ItemTreeParameterCopyWithImpl<$Res>
     implements _$ItemTreeParameterCopyWith<$Res> {
@@ -91,6 +98,7 @@ class __$ItemTreeParameterCopyWithImpl<$Res>
   }
 }
 
+/// @nodoc
 class _$_ItemTreeParameter
     with DiagnosticableTreeMixin
     implements _ItemTreeParameter {
