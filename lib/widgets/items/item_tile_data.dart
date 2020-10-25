@@ -10,6 +10,7 @@ import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/reply_page.dart';
 import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/auth_provider.dart';
+import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
@@ -30,14 +31,14 @@ class ItemTileData extends HookWidget {
   const ItemTileData(
     this.item, {
     Key key,
-    this.rootBy,
+    this.root,
     this.onTap,
     this.dense = false,
     this.separator,
   }) : super(key: key);
 
   final Item item;
-  final String rootBy;
+  final Item root;
   final void Function() onTap;
   final bool dense;
   final Widget separator;
@@ -253,7 +254,7 @@ class ItemTileData extends HookWidget {
                 ),
               ),
               child: Row(children: <Widget>[
-                if (item.by == rootBy)
+                if (item.by == root?.by)
                   Container(
                     padding:
                         const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
@@ -345,6 +346,7 @@ class ItemTileData extends HookWidget {
           SnackBar(content: Text('Item has been ${up ? 'up' : 'un'}voted')),
         );
         await context.refresh(upvotedProvider(item.id));
+        await context.refresh(itemProvider(item.id));
       } else {
         Scaffold.of(context).showSnackBar(
           const SnackBar(content: Text('Something went wrong')),
@@ -373,7 +375,7 @@ class ItemTileData extends HookWidget {
     if (await authRepository.loggedIn) {
       await Navigator.of(context).push<void>(
         MaterialPageRoute<void>(
-          builder: (_) => ReplyPage(replyToItem: item),
+          builder: (_) => ReplyPage(replyToItem: item, rootId: root?.id),
           fullscreenDialog: true,
         ),
       );

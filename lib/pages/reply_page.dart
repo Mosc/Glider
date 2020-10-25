@@ -5,9 +5,11 @@ import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/reply/reply_body.dart';
 
 class ReplyPage extends HookWidget {
-  const ReplyPage({Key key, this.replyToItem}) : super(key: key);
+  const ReplyPage({Key key, @required this.replyToItem, this.rootId})
+      : super(key: key);
 
   final Item replyToItem;
+  final int rootId;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class ReplyPage extends HookWidget {
         leading: AppBarUtil.buildFluentIconsLeading(context),
         title: const Text('Reply'),
       ),
-      body: ReplyBody(replyToItem: replyToItem),
+      body: ReplyBody(replyToItem: replyToItem, rootId: rootId),
     );
   }
 }

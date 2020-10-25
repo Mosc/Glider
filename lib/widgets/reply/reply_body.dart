@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
+import 'package:glider/models/item_tree_parameter.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/auth_provider.dart';
@@ -12,9 +13,11 @@ import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReplyBody extends HookWidget {
-  const ReplyBody({Key key, this.replyToItem}) : super(key: key);
+  const ReplyBody({Key key, @required this.replyToItem, this.rootId})
+      : super(key: key);
 
   final Item replyToItem;
+  final int rootId;
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +143,11 @@ class ReplyBody extends HookWidget {
       if (success) {
         Navigator.of(context).pop();
         await context.refresh(itemProvider(replyToItem.id));
+
+        if (rootId != null) {
+          context
+              .refresh(itemTreeStreamProvider(ItemTreeParameter(id: rootId)));
+        }
       } else {
         Scaffold.of(context).showSnackBar(
           const SnackBar(

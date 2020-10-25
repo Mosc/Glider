@@ -34,7 +34,10 @@ class ItemBody extends HookWidget {
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
 
     return RefreshIndicator(
-      onRefresh: () => context.refresh(itemProvider(id)),
+      onRefresh: () {
+        context.refresh(itemTreeStreamProvider(ItemTreeParameter(id: id)));
+        return context.refresh(itemProvider(id));
+      },
       child: CustomScrollView(
         slivers: <Widget>[
           useProvider(itemTreeStreamProvider(ItemTreeParameter(id: id))).when(
@@ -92,7 +95,7 @@ class ItemBody extends HookWidget {
           condition: _collapsedAncestors(collapsedNotifier, item.ancestors),
           falseChild: ItemTileData(
             item,
-            rootBy: itemTree.items.first.by,
+            root: itemTree.items.first,
             onTap: item.type == ItemType.comment
                 ? () => _collapse(collapsedNotifier, item.id)
                 : null,
