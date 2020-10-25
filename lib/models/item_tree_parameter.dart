@@ -6,7 +6,7 @@ part 'item_tree_parameter.freezed.dart';
 @freezed
 abstract class ItemTreeParameter with _$ItemTreeParameter {
   factory ItemTreeParameter({
-    int id,
+    @required int id,
     Iterable<int> ancestors,
   }) = _ItemTreeParameter;
 }

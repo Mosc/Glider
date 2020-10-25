@@ -14,7 +14,7 @@ class _$ItemTreeTearOff {
   const _$ItemTreeTearOff();
 
 // ignore: unused_element
-  _ItemTree call({Iterable<Item> items, bool hasMore}) {
+  _ItemTree call({@required Iterable<Item> items, bool hasMore}) {
     return _ItemTree(
       items: items,
       hasMore: hasMore,
@@ -92,7 +92,7 @@ class __$ItemTreeCopyWithImpl<$Res> extends _$ItemTreeCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_ItemTree with DiagnosticableTreeMixin implements _ItemTree {
-  _$_ItemTree({this.items, this.hasMore});
+  _$_ItemTree({@required this.items, this.hasMore}) : assert(items != null);
 
   @override
   final Iterable<Item> items;
@@ -135,7 +135,8 @@ class _$_ItemTree with DiagnosticableTreeMixin implements _ItemTree {
 }
 
 abstract class _ItemTree implements ItemTree {
-  factory _ItemTree({Iterable<Item> items, bool hasMore}) = _$_ItemTree;
+  factory _ItemTree({@required Iterable<Item> items, bool hasMore}) =
+      _$_ItemTree;
 
   @override
   Iterable<Item> get items;

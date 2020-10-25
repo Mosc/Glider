@@ -14,7 +14,7 @@ class _$ItemTreeParameterTearOff {
   const _$ItemTreeParameterTearOff();
 
 // ignore: unused_element
-  _ItemTreeParameter call({int id, Iterable<int> ancestors}) {
+  _ItemTreeParameter call({@required int id, Iterable<int> ancestors}) {
     return _ItemTreeParameter(
       id: id,
       ancestors: ancestors,
@@ -102,7 +102,8 @@ class __$ItemTreeParameterCopyWithImpl<$Res>
 class _$_ItemTreeParameter
     with DiagnosticableTreeMixin
     implements _ItemTreeParameter {
-  _$_ItemTreeParameter({this.id, this.ancestors});
+  _$_ItemTreeParameter({@required this.id, this.ancestors})
+      : assert(id != null);
 
   @override
   final int id;
@@ -146,7 +147,7 @@ class _$_ItemTreeParameter
 }
 
 abstract class _ItemTreeParameter implements ItemTreeParameter {
-  factory _ItemTreeParameter({int id, Iterable<int> ancestors}) =
+  factory _ItemTreeParameter({@required int id, Iterable<int> ancestors}) =
       _$_ItemTreeParameter;
 
   @override
