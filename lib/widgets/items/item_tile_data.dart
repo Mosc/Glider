@@ -342,11 +342,26 @@ class ItemTileData extends HookWidget {
       final bool success = await authRepository.vote(id: item.id, up: up);
 
       if (success) {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('Item has been ${up ? 'up' : 'un'}voted')),
-        );
+        final String votedText = 'Item has been ${up ? 'up' : 'un'}voted';
+        SnackBar snackbar;
+
+        if (item.score != null) {
+          snackbar = SnackBar(
+            content: Text(
+              '$votedText, '
+              'but the score may not update immediately',
+            ),
+            action: SnackBarAction(
+              label: 'Refresh',
+              onPressed: () => context.refresh(itemProvider(item.id)),
+            ),
+          );
+        } else {
+          snackbar = SnackBar(content: Text(votedText));
+        }
+
+        Scaffold.of(context).showSnackBar(snackbar);
         await context.refresh(upvotedProvider(item.id));
-        await context.refresh(itemProvider(item.id));
       } else {
         Scaffold.of(context).showSnackBar(
           const SnackBar(content: Text('Something went wrong')),
@@ -373,12 +388,27 @@ class ItemTileData extends HookWidget {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      await Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(
+      final bool success = await Navigator.of(context).push<bool>(
+        MaterialPageRoute<bool>(
           builder: (_) => ReplyPage(replyToItem: item, rootId: root?.id),
           fullscreenDialog: true,
         ),
       );
+
+      if (success != null && success) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Reply has been submitted, '
+              'but it may not show up immediately',
+            ),
+            action: SnackBarAction(
+              label: 'Refresh',
+              onPressed: () => context.refresh(itemProvider(item.id)),
+            ),
+          ),
+        );
+      }
     } else {
       Scaffold.of(context).showSnackBar(
         SnackBar(

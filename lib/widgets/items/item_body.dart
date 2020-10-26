@@ -29,10 +29,7 @@ class ItemBody extends HookWidget {
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
 
     return RefreshIndicator(
-      onRefresh: () {
-        context.refresh(itemTreeStreamProvider(ItemTreeParameter(id: id)));
-        return context.refresh(itemProvider(id));
-      },
+      onRefresh: () => context.refresh(itemProvider(id)),
       child: CustomScrollView(
         slivers: <Widget>[
           useProvider(itemTreeStreamProvider(ItemTreeParameter(id: id))).when(
@@ -70,7 +67,7 @@ class ItemBody extends HookWidget {
     );
   }
 
-  Column _buildItem(BuildContext context, ItemTree itemTree, int index,
+  Widget _buildItem(BuildContext context, ItemTree itemTree, int index,
       ValueNotifier<Set<int>> collapsedNotifier) {
     final Item item = itemTree.items.elementAt(index);
     final bool collapsed = _collapsed(collapsedNotifier, item.id);

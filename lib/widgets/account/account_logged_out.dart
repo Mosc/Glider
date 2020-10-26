@@ -73,9 +73,7 @@ class AccountLoggedOut extends HookWidget {
                           await context.refresh(loggedInProvider);
                         } else {
                           Scaffold.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Registering failed'),
-                            ),
+                            const SnackBar(content: Text('Registering failed')),
                           );
                         }
                       }
@@ -98,9 +96,7 @@ class AccountLoggedOut extends HookWidget {
                           await context.refresh(loggedInProvider);
                         } else {
                           Scaffold.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Logging in failed'),
-                            ),
+                            const SnackBar(content: Text('Logging in failed')),
                           );
                         }
                       }
