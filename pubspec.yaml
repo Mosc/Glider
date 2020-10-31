@@ -22,7 +22,7 @@ dependencies:
   freezed_annotation: ^0.12.0
   hooks_riverpod: ^0.12.1
   html_unescape: ^1.0.2
-  share: ^0.6.5+3
+  share: ^0.6.5+4
   shared_preferences: ^0.5.12+2
   shimmer: ^1.1.2
   timeago: ^2.0.27
@@ -32,7 +32,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.10.3
+  build_runner: ^1.10.4
   flutter_launcher_icons: ^0.8.1
   freezed: ^0.12.2
   json_serializable: ^3.5.0
