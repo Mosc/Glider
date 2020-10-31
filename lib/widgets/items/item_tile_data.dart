@@ -104,14 +104,23 @@ class ItemTileData extends HookWidget {
               orElse: () => null,
             )
           : null,
-      endToStartAction: canReply
-          ? SlidableAction(
-              action: () => _handleReply(context),
-              icon: FluentIcons.arrow_reply_24_filled,
-              color: Theme.of(context).colorScheme.surface,
-              iconColor: Theme.of(context).colorScheme.onSurface,
-            )
-          : null,
+      endToStartAction: dense
+          ? item.url != null
+              ? SlidableAction(
+                  action: () => UrlUtil.tryLaunch(item.url),
+                  icon: FluentIcons.open_in_browser_24_filled,
+                  color: Theme.of(context).colorScheme.surface,
+                  iconColor: Theme.of(context).colorScheme.onSurface,
+                )
+              : null
+          : canReply
+              ? SlidableAction(
+                  action: () => _handleReply(context),
+                  icon: FluentIcons.arrow_reply_24_filled,
+                  color: Theme.of(context).colorScheme.surface,
+                  iconColor: Theme.of(context).colorScheme.onSurface,
+                )
+              : null,
       child: _buildTappable(context, active),
     );
   }
