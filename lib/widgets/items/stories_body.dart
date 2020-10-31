@@ -30,6 +30,7 @@ class StoriesBody extends HookWidget {
       },
       child: CustomScrollView(
         controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
           useProvider(storyIdsProvider(navigationItemStateController.state))
               .when(
