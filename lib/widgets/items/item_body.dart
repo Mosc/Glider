@@ -32,37 +32,54 @@ class ItemBody extends HookWidget {
       onRefresh: () => context.refresh(itemProvider(id)),
       child: CustomScrollView(
         slivers: <Widget>[
-          useProvider(itemTreeStreamProvider(ItemTreeParameter(id: id))).when(
-            loading: () => SliverList(
-              delegate: SeparatedSliverChildBuilderDelegate(
-                itemBuilder: (_, int index) => index == 0
-                    ? const StoryTileLoading()
-                    : const CommentTileLoading(),
-                separatorBuilder: (_, __) => const Separator(),
+          ...useProvider(itemTreeStreamProvider(ItemTreeParameter(id: id)))
+              .when(
+            loading: () => <Widget>[
+              SliverList(
+                delegate: SeparatedSliverChildBuilderDelegate(
+                  itemBuilder: (_, int index) => index == 0
+                      ? const StoryTileLoading()
+                      : const CommentTileLoading(),
+                  separatorBuilder: (_, __) => const Separator(),
+                ),
               ),
-            ),
-            error: (_, __) => const SliverFillRemaining(child: Error()),
-            data: (ItemTree itemTree) => SliverList(
-              delegate: SeparatedSliverChildBuilderDelegate(
-                itemBuilder: (BuildContext context, int index) {
-                  if (_loaded(itemTree, index)) {
-                    return _buildItem(
-                        context, itemTree, index, collapsedNotifier);
-                  } else if (itemTree.hasMore) {
-                    return const CommentTileLoading();
-                  } else {
-                    return const End();
-                  }
-                },
-                // For loaded items, we want the separator to be indented based
-                // on the item depth. This means letting ItemTileData render its
-                // own separator instead.
-                separatorBuilder: (_, int index) => _loaded(itemTree, index)
-                    ? const SizedBox.shrink()
-                    : const Separator(),
-                childCount: itemTree.hasMore ? null : itemTree.items.length + 1,
+            ],
+            error: (_, __) => <Widget>[
+              const SliverFillRemaining(child: Error()),
+            ],
+            data: (ItemTree itemTree) => <Widget>[
+              if (itemTree.items.first?.parent != null)
+                SliverList(
+                  delegate: SliverChildListDelegate.fixed(
+                    <Widget>[
+                      _buildOpenParent(context, itemTree.items.first.id),
+                      const Separator(),
+                    ],
+                  ),
+                ),
+              SliverList(
+                delegate: SeparatedSliverChildBuilderDelegate(
+                  itemBuilder: (BuildContext context, int index) {
+                    if (_loaded(itemTree, index)) {
+                      return _buildItem(
+                          context, itemTree, index, collapsedNotifier);
+                    } else if (itemTree.hasMore) {
+                      return const CommentTileLoading();
+                    } else {
+                      return const End();
+                    }
+                  },
+                  // For loaded items, we want the separator to be indented
+                  // based on the item depth. This means letting ItemTileData
+                  // render its own separator instead.
+                  separatorBuilder: (_, int index) => _loaded(itemTree, index)
+                      ? const SizedBox.shrink()
+                      : const Separator(),
+                  childCount:
+                      itemTree.hasMore ? null : itemTree.items.length + 1,
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -81,38 +98,30 @@ class ItemBody extends HookWidget {
     final bool indentSeparator =
         item.kids != null && item.kids.isNotEmpty && !collapsed;
 
-    return Column(
-      children: <Widget>[
-        if (index == 0 && item.parent != null) ...<Widget>[
-          _buildOpenParent(context, item),
-          const Separator(),
-        ],
-        SmoothAnimatedSwitcher(
-          condition: _collapsedAncestors(collapsedNotifier, item.ancestors),
-          falseChild: ItemTileData(
-            item,
-            root: itemTree.items.first,
-            onTap: item.type == ItemType.comment
-                ? () => _collapse(collapsedNotifier, item.id)
-                : null,
-            dense: collapsed,
-            separator: indentSeparator
-                ? const Separator()
-                : const Separator(startIndent: 0),
-          ),
-        ),
-      ],
+    return SmoothAnimatedSwitcher(
+      condition: _collapsedAncestors(collapsedNotifier, item.ancestors),
+      falseChild: ItemTileData(
+        item,
+        root: itemTree.items.first,
+        onTap: item.type == ItemType.comment
+            ? () => _collapse(collapsedNotifier, item.id)
+            : null,
+        dense: collapsed,
+        separator: indentSeparator
+            ? const Separator()
+            : const Separator(startIndent: 0),
+      ),
     );
   }
 
-  Widget _buildOpenParent(BuildContext context, Item item) {
+  Widget _buildOpenParent(BuildContext context, int parentId) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Hero(
         tag: 'open_parent',
         child: GestureDetector(
           onTap: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (_) => ItemPage(id: item.parent)),
+            MaterialPageRoute<void>(builder: (_) => ItemPage(id: parentId)),
           ),
           child: Block(
             child: Row(
