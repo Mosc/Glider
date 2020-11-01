@@ -59,10 +59,9 @@ class ItemBody extends HookWidget {
                 ),
               SliverList(
                 delegate: SeparatedSliverChildBuilderDelegate(
-                  itemBuilder: (BuildContext context, int index) {
+                  itemBuilder: (_, int index) {
                     if (_loaded(itemTree, index)) {
-                      return _buildItem(
-                          context, itemTree, index, collapsedNotifier);
+                      return _buildItem(itemTree, index, collapsedNotifier);
                     } else if (itemTree.hasMore) {
                       return const CommentTileLoading();
                     } else {
@@ -88,8 +87,8 @@ class ItemBody extends HookWidget {
 
   bool _loaded(ItemTree itemTree, int index) => index < itemTree.items.length;
 
-  Widget _buildItem(BuildContext context, ItemTree itemTree, int index,
-      ValueNotifier<Set<int>> collapsedNotifier) {
+  Widget _buildItem(
+      ItemTree itemTree, int index, ValueNotifier<Set<int>> collapsedNotifier) {
     final Item item = itemTree.items.elementAt(index);
     final bool collapsed = _collapsed(collapsedNotifier, item.id);
 

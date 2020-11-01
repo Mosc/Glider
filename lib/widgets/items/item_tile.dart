@@ -25,7 +25,8 @@ class ItemTile extends HookWidget {
   Widget build(BuildContext context) {
     return useProvider(itemProvider(id)).when(
       loading: loading,
-      error: (_, __) => const SizedBox.shrink(),
+      // Show the loading state as an error state for now because it looks okay.
+      error: (_, __) => loading(),
       data: (Item item) => ItemTileData(item, onTap: onTap, dense: dense),
     );
   }

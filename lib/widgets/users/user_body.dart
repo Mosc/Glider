@@ -48,7 +48,7 @@ class UserBody extends HookWidget {
                       if (index < itemCount) {
                         final int id = user.submitted.elementAt(index);
                         return ItemTile(
-                          id: user.submitted.elementAt(index),
+                          id: id,
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute<void>(
                                 builder: (_) => ItemPage(id: id)),
