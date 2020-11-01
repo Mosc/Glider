@@ -43,13 +43,9 @@ class ItemBody extends HookWidget {
             ),
             error: (_, __) => const SliverFillRemaining(child: Error()),
             data: (ItemTree itemTree) => SliverList(
-              // We're not using a SeparatedSliverChildBuilderDelegate here
-              // because we want the separator to be indented based on the item
-              // depth. This means letting ItemTileData render its own separator
-              // instead.
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  if (index < itemTree.items.length) {
+              delegate: SeparatedSliverChildBuilderDelegate(
+                itemBuilder: (BuildContext context, int index) {
+                  if (_loaded(itemTree, index)) {
                     return _buildItem(
                         context, itemTree, index, collapsedNotifier);
                   } else if (itemTree.hasMore) {
@@ -58,6 +54,12 @@ class ItemBody extends HookWidget {
                     return const End();
                   }
                 },
+                // For loaded items, we want the separator to be indented based
+                // on the item depth. This means letting ItemTileData render its
+                // own separator instead.
+                separatorBuilder: (_, int index) => _loaded(itemTree, index)
+                    ? const SizedBox.shrink()
+                    : const Separator(),
                 childCount: itemTree.hasMore ? null : itemTree.items.length + 1,
               ),
             ),
@@ -66,6 +68,8 @@ class ItemBody extends HookWidget {
       ),
     );
   }
+
+  bool _loaded(ItemTree itemTree, int index) => index < itemTree.items.length;
 
   Widget _buildItem(BuildContext context, ItemTree itemTree, int index,
       ValueNotifier<Set<int>> collapsedNotifier) {
