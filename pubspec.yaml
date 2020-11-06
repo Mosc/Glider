@@ -18,16 +18,16 @@ dependencies:
   flutter_speed_dial:
     git:
       url: https://github.com/esieben1310/flutter_speed_dial
-  flutter_widget_from_html_core: ^0.5.1+3
+  flutter_widget_from_html_core: ^0.5.1+4
   freezed_annotation: ^0.12.0
   hooks_riverpod: ^0.12.1
   html_unescape: ^1.0.2
   share: ^0.6.5+4
-  shared_preferences: ^0.5.12+2
+  shared_preferences: ^0.5.12+4
   shimmer: ^1.1.2
   timeago: ^2.0.27
   uni_links: ^0.4.0
-  url_launcher: ^5.7.8
+  url_launcher: ^5.7.10
 
 dev_dependencies:
   flutter_test:
