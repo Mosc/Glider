@@ -52,7 +52,7 @@ class ItemBody extends HookWidget {
                 SliverList(
                   delegate: SliverChildListDelegate.fixed(
                     <Widget>[
-                      _buildOpenParent(context, itemTree.items.first.id),
+                      _buildOpenParent(context, itemTree.items.first.parent),
                       const Separator(),
                     ],
                   ),
