@@ -27,12 +27,12 @@ class UserTileData extends StatelessWidget {
               children: <Widget>[
                 if (user.karma != null)
                   MetadataItem(
-                    icon: FluentIcons.arrow_up_20_regular,
+                    icon: FluentIcons.arrow_up_24_regular,
                     text: user.karma.toString(),
                   ),
                 if (user.submitted != null)
                   MetadataItem(
-                    icon: FluentIcons.comment_16_regular,
+                    icon: FluentIcons.comment_24_regular,
                     text: user.submitted.length.toString(),
                   ),
                 if (user.id != null) ...<Widget>[

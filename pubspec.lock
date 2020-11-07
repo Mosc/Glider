@@ -224,7 +224,7 @@ packages:
       name: fluentui_system_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.54"
+    version: "1.1.83"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -570,7 +570,7 @@ packages:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4+1"
+    version: "2.1.5"
   riverpod:
     dependency: transitive
     description:
