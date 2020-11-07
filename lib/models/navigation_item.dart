@@ -37,7 +37,7 @@ extension NavigationItemExtension on NavigationItem {
       case NavigationItem.newStories:
         return FluentIcons.new_24_filled;
       case NavigationItem.bestStories:
-        return FluentIcons.recommended_24_filled;
+        return FluentIcons.ribbon_star_24_filled;
       case NavigationItem.askStories:
         return FluentIcons.chat_help_24_filled;
       case NavigationItem.showStories:
