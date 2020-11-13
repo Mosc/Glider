@@ -46,6 +46,7 @@ class StoriesPage extends HookWidget {
 
     return Scaffold(
       body: NestedScrollView(
+        controller: scrollController,
         floatHeaderSlivers: true,
         headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
@@ -66,7 +67,7 @@ class StoriesPage extends HookWidget {
             floating: true,
           ),
         ],
-        body: StoriesBody(scrollController: scrollController),
+        body: const StoriesBody(),
       ),
       floatingActionButton: SpeedDial(
         children: <SpeedDialChild>[

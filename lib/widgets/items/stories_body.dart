@@ -14,9 +14,7 @@ import 'package:glider/widgets/items/item_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class StoriesBody extends HookWidget {
-  const StoriesBody({Key key, this.scrollController}) : super(key: key);
-
-  final ScrollController scrollController;
+  const StoriesBody({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +27,6 @@ class StoriesBody extends HookWidget {
             .refresh(storyIdsProvider(navigationItemStateController.state));
       },
       child: CustomScrollView(
-        controller: scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
           useProvider(storyIdsProvider(navigationItemStateController.state))
               .when(
