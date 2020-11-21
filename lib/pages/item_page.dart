@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/providers/persistence_provider.dart';
+import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/items/item_body.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemPage extends HookWidget {
   const ItemPage({Key key, @required this.id}) : super(key: key);
@@ -10,6 +13,8 @@ class ItemPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useMemoized(() => _setVisited(context));
+
     return Scaffold(
       body: NestedScrollView(
         floatHeaderSlivers: true,
@@ -23,5 +28,10 @@ class ItemPage extends HookWidget {
         body: ItemBody(id: id),
       ),
     );
+  }
+
+  Future<void> _setVisited(BuildContext context) async {
+    await context.read(storageRepositoryProvider).setVisited(id: id);
+    await context.refresh(visitedProvider(id));
   }
 }

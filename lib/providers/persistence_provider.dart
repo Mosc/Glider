@@ -21,3 +21,9 @@ final AutoDisposeFutureProviderFamily<bool, int> upvotedProvider =
   (AutoDisposeProviderReference ref, int id) =>
       ref.read(storageRepositoryProvider).upvoted(id: id),
 );
+
+final AutoDisposeFutureProviderFamily<bool, int> visitedProvider =
+    FutureProvider.autoDispose.family(
+  (AutoDisposeProviderReference ref, int id) =>
+      ref.read(storageRepositoryProvider).visited(id: id),
+);

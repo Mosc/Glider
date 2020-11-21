@@ -9,7 +9,7 @@ import 'package:glider/models/slidable_action.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/reply_page.dart';
 import 'package:glider/pages/user_page.dart';
-import 'package:glider/providers/auth_provider.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
@@ -34,6 +34,7 @@ class ItemTileData extends HookWidget {
     this.root,
     this.onTap,
     this.dense = false,
+    this.visited = false,
     this.separator,
   }) : super(key: key);
 
@@ -41,6 +42,7 @@ class ItemTileData extends HookWidget {
   final Item root;
   final void Function() onTap;
   final bool dense;
+  final bool visited;
   final Widget separator;
 
   @override

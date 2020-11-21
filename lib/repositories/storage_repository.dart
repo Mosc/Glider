@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:glider/utils/shared_preferences_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageRepository {
@@ -8,6 +9,7 @@ class StorageRepository {
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
   static const String _upvotedKey = 'upvoted';
+  static const String _visitedKey = 'visited';
 
   final FlutterSecureStorage _secureStorage;
   final Future<SharedPreferences> _sharedPreferences;
@@ -30,22 +32,21 @@ class StorageRepository {
   }
 
   Future<bool> upvoted({@required int id}) async =>
-      (await _sharedPreferences)
-          .getStringList(_upvotedKey)
-          ?.contains(id.toString()) ??
-      false;
+      (await _sharedPreferences).containsElement(_upvotedKey, id.toString());
 
   Future<void> setUpvoted({@required int id, @required bool up}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
-    final List<String> upvoted =
-        sharedPreferences.getStringList(_upvotedKey) ?? <String>[];
 
     if (up) {
-      upvoted.add(id.toString());
+      await sharedPreferences.addElement(_upvotedKey, id.toString());
     } else {
-      upvoted.remove(id.toString());
+      await sharedPreferences.removeElement(_upvotedKey, id.toString());
     }
-
-    await sharedPreferences.setStringList(_upvotedKey, upvoted);
   }
+
+  Future<bool> visited({@required int id}) async =>
+      (await _sharedPreferences).containsElement(_visitedKey, id.toString());
+
+  Future<void> setVisited({@required int id}) async =>
+      (await _sharedPreferences).addElement(_visitedKey, id.toString());
 }

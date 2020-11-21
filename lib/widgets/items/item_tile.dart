@@ -9,14 +9,16 @@ class ItemTile extends HookWidget {
   const ItemTile({
     Key key,
     @required this.id,
-    this.dense = false,
     this.onTap,
+    this.dense = false,
+    this.visited = false,
     @required this.loading,
   }) : super(key: key);
 
   final int id;
-  final bool dense;
   final void Function() onTap;
+  final bool dense;
+  final bool visited;
   final Widget Function() loading;
 
   static const double thumbnailSize = 38;
@@ -27,7 +29,12 @@ class ItemTile extends HookWidget {
       loading: loading,
       // Show the loading state as an error state for now because it looks okay.
       error: (_, __) => loading(),
-      data: (Item item) => ItemTileData(item, onTap: onTap, dense: dense),
+      data: (Item item) => ItemTileData(
+        item,
+        onTap: onTap,
+        dense: dense,
+        visited: visited,
+      ),
     );
   }
 }
