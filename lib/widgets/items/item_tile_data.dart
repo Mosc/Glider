@@ -14,6 +14,7 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
+import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
@@ -371,15 +372,15 @@ class ItemTileData extends HookWidget {
           snackbar = SnackBar(content: Text(votedText));
         }
 
-        Scaffold.of(context).showSnackBar(snackbar);
+        ScaffoldMessenger.of(context).showSnackBarQuickly(snackbar);
         await context.refresh(upvotedProvider(item.id));
       } else {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBarQuickly(
           const SnackBar(content: Text('Something went wrong')),
         );
       }
     } else {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBarQuickly(
         SnackBar(
           content: const Text('Log in to vote'),
           action: SnackBarAction(
@@ -407,7 +408,7 @@ class ItemTileData extends HookWidget {
       );
 
       if (success != null && success) {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(
             content: const Text(
               'Reply has been submitted, '
@@ -421,7 +422,7 @@ class ItemTileData extends HookWidget {
         );
       }
     } else {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBarQuickly(
         SnackBar(
           content: const Text('Log in to reply'),
           action: SnackBarAction(
@@ -463,7 +464,7 @@ class ItemTileData extends HookWidget {
               title: const Text('Copy text'),
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: item.text));
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBarQuickly(
                   const SnackBar(content: Text('Text has been copied')),
                 );
                 Navigator.of(context).pop();

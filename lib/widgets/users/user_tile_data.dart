@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/repositories/website_repository.dart';
+import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
 import 'package:share/share.dart';
@@ -73,7 +74,7 @@ class UserTileData extends StatelessWidget {
               title: const Text('Copy text'),
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: user.about));
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBarQuickly(
                   const SnackBar(content: Text('Text has been copied')),
                 );
                 Navigator.of(context).pop();

@@ -7,6 +7,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/formatting_util.dart';
+import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -141,12 +142,12 @@ class ReplyBody extends HookWidget {
       if (success) {
         Navigator.of(context).pop(true);
       } else {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBarQuickly(
           const SnackBar(content: Text('Something went wrong')),
         );
       }
     } else {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBarQuickly(
         SnackBar(
           content: const Text('Log in to reply'),
           action: SnackBarAction(
