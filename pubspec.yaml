@@ -8,16 +8,16 @@ environment:
   flutter: ">= 1.17.0"
 
 dependencies:
+  cached_network_image: ^2.4.1
+  dio: ^3.0.10
+  fluentui_system_icons: ^1.1.88
   flutter:
     sdk: flutter
+  flutter_hooks: ^0.15.0
+  flutter_secure_storage: ^3.3.5
   flutter_speed_dial:
     git:
       url: https://github.com/esieben1310/flutter_speed_dial
-  cached_network_image: ^2.3.3
-  dio: ^3.0.10
-  fluentui_system_icons: ^1.1.83
-  flutter_hooks: ^0.15.0
-  flutter_secure_storage: ^3.3.5
   flutter_widget_from_html_core: ^0.5.1+4
   freezed_annotation: ^0.12.0
   hooks_riverpod: ^0.12.1
@@ -25,17 +25,15 @@ dependencies:
   share: ^0.6.5+4
   shared_preferences: ^0.5.12+4
   shimmer: ^1.1.2
-  timeago: ^2.0.27
+  timeago: ^2.0.29
   uni_links: ^0.4.0
   url_launcher: ^5.7.10
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  build_runner: ^1.10.6
+  build_runner: ^1.10.7
   flutter_launcher_icons: ^0.8.1
   freezed: ^0.12.3
-  json_serializable: ^3.5.0
+  json_serializable: ^3.5.1
 
 flutter_icons:
   android: true
