@@ -35,7 +35,7 @@ class ItemTileData extends HookWidget {
     this.root,
     this.onTap,
     this.dense = false,
-    this.visited = false,
+    this.fadeable = false,
     this.separator,
   }) : super(key: key);
 
@@ -43,7 +43,7 @@ class ItemTileData extends HookWidget {
   final Item root;
   final void Function() onTap;
   final bool dense;
-  final bool visited;
+  final bool fadeable;
   final Widget separator;
 
   @override
@@ -130,37 +130,46 @@ class ItemTileData extends HookWidget {
 
   Widget _buildTappable(BuildContext context, bool active) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final bool visited = fadeable &&
+        useProvider(visitedProvider(item.id)).maybeWhen(
+          data: (bool value) => value,
+          orElse: () => false,
+        );
 
     return InkWell(
       onTap: active && onTap != null ? onTap : null,
       onLongPress: active ? () => _buildModalBottomSheet(context) : null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (active && item.title != null) ...<Widget>[
-              _buildStorySection(textTheme),
-              const SizedBox(height: 12),
-            ],
-            _buildMetadataSection(context, textTheme),
-            SmoothAnimatedSwitcher(
-              condition: dense,
-              falseChild: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  if (item.text != null) ...<Widget>[
-                    const SizedBox(height: 12),
-                    _buildTextSection(),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 400),
+        opacity: visited ? 2 / 3 : 1,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (active && item.title != null) ...<Widget>[
+                _buildStorySection(textTheme),
+                const SizedBox(height: 12),
+              ],
+              _buildMetadataSection(context, textTheme),
+              SmoothAnimatedSwitcher(
+                condition: dense,
+                falseChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (item.text != null) ...<Widget>[
+                      const SizedBox(height: 12),
+                      _buildTextSection(),
+                    ],
+                    if (item.url != null) ...<Widget>[
+                      const SizedBox(height: 12),
+                      _buildUrlSection(textTheme),
+                    ],
                   ],
-                  if (item.url != null) ...<Widget>[
-                    const SizedBox(height: 12),
-                    _buildUrlSection(textTheme),
-                  ],
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

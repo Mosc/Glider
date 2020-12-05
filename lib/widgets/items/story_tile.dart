@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/pages/item_page.dart';
-import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class StoryTile extends HookWidget {
   const StoryTile({Key key, this.id}) : super(key: key);
@@ -19,10 +17,7 @@ class StoryTile extends HookWidget {
         MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
       ),
       dense: true,
-      visited: useProvider(visitedProvider(id)).maybeWhen(
-        data: (bool value) => value,
-        orElse: () => false,
-      ),
+      fadeable: true,
       loading: () => const StoryTileLoading(),
     );
   }

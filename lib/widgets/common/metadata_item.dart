@@ -12,7 +12,8 @@ class MetadataItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color color =
+        highlight ? Theme.of(context).colorScheme.primary : null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 1),
@@ -21,15 +22,15 @@ class MetadataItem extends StatelessWidget {
           Icon(
             icon,
             size: textTheme.bodyText2.fontSize,
-            color: highlight ? colorScheme.primary : null,
+            color: color,
           ),
           if (text != null) ...<Widget>[
             const SizedBox(width: 4),
             Text(
               text,
-              style: textTheme.caption.copyWith(
-                color:
-                    highlight ? colorScheme.primary : textTheme.bodyText2.color,
+              style: textTheme.bodyText2.copyWith(
+                fontSize: textTheme.caption.fontSize,
+                color: color,
               ),
             ),
           ],

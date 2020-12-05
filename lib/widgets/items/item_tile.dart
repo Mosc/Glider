@@ -11,14 +11,14 @@ class ItemTile extends HookWidget {
     @required this.id,
     this.onTap,
     this.dense = false,
-    this.visited = false,
+    this.fadeable = false,
     @required this.loading,
   }) : super(key: key);
 
   final int id;
   final void Function() onTap;
   final bool dense;
-  final bool visited;
+  final bool fadeable;
   final Widget Function() loading;
 
   static const double thumbnailSize = 38;
@@ -33,7 +33,7 @@ class ItemTile extends HookWidget {
         item,
         onTap: onTap,
         dense: dense,
-        visited: visited,
+        fadeable: fadeable,
       ),
     );
   }
