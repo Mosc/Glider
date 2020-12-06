@@ -8,7 +8,6 @@ enum NavigationItem {
   bestStories,
   askStories,
   showStories,
-  jobStories,
 }
 
 extension NavigationItemExtension on NavigationItem {
@@ -26,8 +25,6 @@ extension NavigationItemExtension on NavigationItem {
         return 'Ask HN';
       case NavigationItem.showStories:
         return 'Show HN';
-      case NavigationItem.jobStories:
-        return 'Jobs';
     }
 
     throw UnsupportedError('$this does not have a title');
@@ -47,8 +44,6 @@ extension NavigationItemExtension on NavigationItem {
         return FluentIcons.chat_help_24_filled;
       case NavigationItem.showStories:
         return FluentIcons.chat_warning_24_filled;
-      case NavigationItem.jobStories:
-        return FluentIcons.briefcase_24_filled;
     }
 
     throw UnsupportedError('$this does not have an icon');
@@ -68,8 +63,6 @@ extension NavigationItemExtension on NavigationItem {
         return 'askstories';
       case NavigationItem.showStories:
         return 'showstories';
-      case NavigationItem.jobStories:
-        return 'jobstories';
     }
 
     throw UnsupportedError('$this does not have a JSON name');
