@@ -314,8 +314,7 @@ class ItemTileData extends HookWidget {
             ),
           if (item.type == ItemType.comment)
             SmoothAnimatedSwitcher(
-              transitionBuilder: (Widget child, Animation<double> animation) =>
-                  FadeTransition(opacity: animation, child: child),
+              transitionBuilder: SmoothAnimatedSwitcher.fadeTransitionBuilder,
               condition: dense,
               trueChild: MetadataItem(
                 icon: FluentIcons.add_circle_24_regular,
@@ -373,6 +372,7 @@ class ItemTileData extends HookWidget {
         .read(authRepositoryProvider)
         .favorite(id: item.id, favorite: favorite);
     await context.refresh(favoritedProvider(item.id));
+    await context.refresh(favoritesProvider);
   }
 
   Future<void> _handleVote(BuildContext context, {@required bool up}) async {

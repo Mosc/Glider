@@ -21,11 +21,13 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
       axis: axis,
       axisAlignment: -1,
       sizeFactor: animation,
-      child: FadeTransition(
-        opacity: animation,
-        child: child,
-      ),
+      child: fadeTransitionBuilder(child, animation),
     );
+  }
+
+  static Widget fadeTransitionBuilder(
+      Widget child, Animation<double> animation) {
+    return FadeTransition(opacity: animation, child: child);
   }
 
   @override

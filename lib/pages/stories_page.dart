@@ -6,8 +6,10 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/favorites_page.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/uni_links_handler.dart';
+import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/stories_body.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,6 +47,31 @@ class StoriesPage extends HookWidget {
     final StateController<NavigationItem> navigationItemStateController =
         useProvider(navigationItemStateProvider);
 
+    final AsyncValue<Iterable<int>> favoritesValue =
+        useProvider(favoritesProvider);
+    Widget favoritesIcon() => IconButton(
+          icon: const Icon(FluentIcons.star_line_horizontal_3_24_filled),
+          tooltip: 'Favorites',
+          onPressed: () => Navigator.of(context).push<void>(
+            MaterialPageRoute<void>(
+              builder: (_) => const FavoritesPage(),
+            ),
+          ),
+        );
+
+    final AsyncValue<bool> loggedInValue = useProvider(loggedInProvider);
+    Widget accountIcon({bool loggedIn = false}) => IconButton(
+          icon: Icon(loggedIn
+              ? FluentIcons.person_available_24_filled
+              : FluentIcons.person_24_filled),
+          tooltip: 'Account',
+          onPressed: () => Navigator.of(context).push<void>(
+            MaterialPageRoute<void>(
+              builder: (_) => const AccountPage(),
+            ),
+          ),
+        );
+
     return Scaffold(
       body: NestedScrollView(
         controller: scrollController,
@@ -54,23 +81,24 @@ class StoriesPage extends HookWidget {
             leading: AppBarUtil.buildFluentIconsLeading(context),
             title: const Text('Glider'),
             actions: <Widget>[
-              IconButton(
-                icon: const Icon(FluentIcons.star_24_filled),
-                tooltip: 'Favorites',
-                onPressed: () => Navigator.of(context).push<void>(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const FavoritesPage(),
-                  ),
+              favoritesValue.maybeWhen(
+                data: (Iterable<int> favorites) => SmoothAnimatedSwitcher(
+                  transitionBuilder:
+                      SmoothAnimatedSwitcher.fadeTransitionBuilder,
+                  condition: favorites.isNotEmpty,
+                  trueChild: favoritesIcon(),
                 ),
+                orElse: () => const SizedBox.shrink(),
               ),
-              IconButton(
-                icon: const Icon(FluentIcons.person_24_filled),
-                tooltip: 'Account',
-                onPressed: () => Navigator.of(context).push<void>(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const AccountPage(),
-                  ),
+              loggedInValue.maybeWhen(
+                data: (bool loggedIn) => SmoothAnimatedSwitcher(
+                  transitionBuilder:
+                      SmoothAnimatedSwitcher.fadeTransitionBuilder,
+                  condition: loggedIn,
+                  trueChild: accountIcon(loggedIn: true),
+                  falseChild: accountIcon(),
                 ),
+                orElse: accountIcon,
               ),
             ],
             forceElevated: innerBoxIsScrolled,
