@@ -372,7 +372,7 @@ class ItemTileData extends HookWidget {
         .read(authRepositoryProvider)
         .favorite(id: item.id, favorite: favorite);
     await context.refresh(favoritedProvider(item.id));
-    await context.refresh(favoritesProvider);
+    await context.refresh(favoriteIdsProvider);
   }
 
   Future<void> _handleVote(BuildContext context, {@required bool up}) async {

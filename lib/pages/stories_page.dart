@@ -6,6 +6,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/favorites_page.dart';
+import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/uni_links_handler.dart';
@@ -48,7 +49,7 @@ class StoriesPage extends HookWidget {
         useProvider(navigationItemStateProvider);
 
     final AsyncValue<Iterable<int>> favoritesValue =
-        useProvider(favoritesProvider);
+        useProvider(favoriteIdsProvider);
     Widget favoritesIcon() => IconButton(
           icon: const Icon(FluentIcons.star_line_horizontal_3_24_filled),
           tooltip: 'Favorites',

@@ -11,6 +11,12 @@ import 'package:pedantic/pedantic.dart';
 // ignore: implementation_imports
 import 'package:riverpod/src/framework.dart';
 
+final AutoDisposeFutureProvider<Iterable<int>> favoriteIdsProvider =
+    FutureProvider.autoDispose(
+  (AutoDisposeProviderReference ref) =>
+      ref.read(storageRepositoryProvider).favoriteIds,
+);
+
 final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
     storyIdsProvider = FutureProvider.autoDispose.family(
         (AutoDisposeProviderReference ref,

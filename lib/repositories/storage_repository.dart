@@ -32,7 +32,7 @@ class StorageRepository {
     await _secureStorage.delete(key: _passwordKey);
   }
 
-  Future<Iterable<int>> favorites() async =>
+  Future<Iterable<int>> get favoriteIds async =>
       (await _sharedPreferences).getStringList(_favoritedKey).map(int.parse);
 
   Future<bool> favorited({@required int id}) async =>

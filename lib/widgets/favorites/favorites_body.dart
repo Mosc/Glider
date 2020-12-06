@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/pages/item_page.dart';
-import 'package:glider/providers/persistence_provider.dart';
+import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/error.dart';
 import 'package:glider/widgets/common/separated_sliver_child_builder_delegate.dart';
@@ -16,10 +16,10 @@ class FavoritesBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => context.refresh(favoritesProvider),
+      onRefresh: () => context.refresh(favoriteIdsProvider),
       child: CustomScrollView(
         slivers: <Widget>[
-          useProvider(favoritesProvider).when(
+          useProvider(favoriteIdsProvider).when(
             loading: () => SliverList(
               delegate: SeparatedSliverChildBuilderDelegate(
                 itemBuilder: (_, __) => const StoryTileLoading(),
