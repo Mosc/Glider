@@ -13,8 +13,20 @@ import 'package:riverpod/src/framework.dart';
 
 final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
     storyIdsProvider = FutureProvider.autoDispose.family(
-        (AutoDisposeProviderReference ref, NavigationItem navigationItem) =>
-            ref.read(apiRepositoryProvider).getStoryIds(navigationItem));
+        (AutoDisposeProviderReference ref,
+            NavigationItem navigationItem) async {
+  if (navigationItem == NavigationItem.newTopStories) {
+    final Iterable<int> newStoryIds = await ref
+        .read(apiRepositoryProvider)
+        .getStoryIds(NavigationItem.newStories);
+    final Iterable<int> topStoryIds = await ref
+        .read(apiRepositoryProvider)
+        .getStoryIds(NavigationItem.topStories);
+    return newStoryIds.toSet().intersection(topStoryIds.toSet());
+  }
+
+  return ref.read(apiRepositoryProvider).getStoryIds(navigationItem);
+});
 
 final AutoDisposeFutureProviderFamily<Item, int> itemProvider =
     AutoDisposeFutureProvider.family(

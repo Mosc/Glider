@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 enum NavigationItem {
   topStories,
+  newTopStories,
   newStories,
   bestStories,
   askStories,
@@ -15,6 +16,8 @@ extension NavigationItemExtension on NavigationItem {
     switch (this) {
       case NavigationItem.topStories:
         return 'Top stories';
+      case NavigationItem.newTopStories:
+        return 'New top stories';
       case NavigationItem.newStories:
         return 'New stories';
       case NavigationItem.bestStories:
@@ -34,6 +37,8 @@ extension NavigationItemExtension on NavigationItem {
     switch (this) {
       case NavigationItem.topStories:
         return FluentIcons.arrow_trending_24_filled;
+      case NavigationItem.newTopStories:
+        return FluentIcons.rocket_24_filled;
       case NavigationItem.newStories:
         return FluentIcons.new_24_filled;
       case NavigationItem.bestStories:
@@ -53,6 +58,8 @@ extension NavigationItemExtension on NavigationItem {
     switch (this) {
       case NavigationItem.topStories:
         return 'topstories';
+      case NavigationItem.newTopStories:
+        break;
       case NavigationItem.newStories:
         return 'newstories';
       case NavigationItem.bestStories:
