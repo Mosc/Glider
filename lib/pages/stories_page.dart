@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/pages/account_page.dart';
+import 'package:glider/pages/favorites_page.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/uni_links_handler.dart';
 import 'package:glider/widgets/items/stories_body.dart';
@@ -53,6 +54,15 @@ class StoriesPage extends HookWidget {
             leading: AppBarUtil.buildFluentIconsLeading(context),
             title: const Text('Glider'),
             actions: <Widget>[
+              IconButton(
+                icon: const Icon(FluentIcons.star_24_filled),
+                tooltip: 'Favorites',
+                onPressed: () => Navigator.of(context).push<void>(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const FavoritesPage(),
+                  ),
+                ),
+              ),
               IconButton(
                 icon: const Icon(FluentIcons.person_24_filled),
                 tooltip: 'Account',
