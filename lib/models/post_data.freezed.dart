@@ -21,6 +21,7 @@ class _$PostDataTearOff {
       {@required String acct,
       @required String pw,
       @JsonKey(includeIfNull: false) int id,
+      @JsonKey(includeIfNull: false) String un,
       @JsonKey(includeIfNull: false) String how,
       @JsonKey(includeIfNull: false) int parent,
       @JsonKey(includeIfNull: false) String text,
@@ -30,6 +31,7 @@ class _$PostDataTearOff {
       acct: acct,
       pw: pw,
       id: id,
+      un: un,
       how: how,
       parent: parent,
       text: text,
@@ -55,6 +57,8 @@ mixin _$PostData {
   @JsonKey(includeIfNull: false)
   int get id;
   @JsonKey(includeIfNull: false)
+  String get un;
+  @JsonKey(includeIfNull: false)
   String get how;
   @JsonKey(includeIfNull: false)
   int get parent;
@@ -77,6 +81,7 @@ abstract class $PostDataCopyWith<$Res> {
       {String acct,
       String pw,
       @JsonKey(includeIfNull: false) int id,
+      @JsonKey(includeIfNull: false) String un,
       @JsonKey(includeIfNull: false) String how,
       @JsonKey(includeIfNull: false) int parent,
       @JsonKey(includeIfNull: false) String text,
@@ -97,6 +102,7 @@ class _$PostDataCopyWithImpl<$Res> implements $PostDataCopyWith<$Res> {
     Object acct = freezed,
     Object pw = freezed,
     Object id = freezed,
+    Object un = freezed,
     Object how = freezed,
     Object parent = freezed,
     Object text = freezed,
@@ -107,6 +113,7 @@ class _$PostDataCopyWithImpl<$Res> implements $PostDataCopyWith<$Res> {
       acct: acct == freezed ? _value.acct : acct as String,
       pw: pw == freezed ? _value.pw : pw as String,
       id: id == freezed ? _value.id : id as int,
+      un: un == freezed ? _value.un : un as String,
       how: how == freezed ? _value.how : how as String,
       parent: parent == freezed ? _value.parent : parent as int,
       text: text == freezed ? _value.text : text as String,
@@ -125,6 +132,7 @@ abstract class _$PostDataCopyWith<$Res> implements $PostDataCopyWith<$Res> {
       {String acct,
       String pw,
       @JsonKey(includeIfNull: false) int id,
+      @JsonKey(includeIfNull: false) String un,
       @JsonKey(includeIfNull: false) String how,
       @JsonKey(includeIfNull: false) int parent,
       @JsonKey(includeIfNull: false) String text,
@@ -146,6 +154,7 @@ class __$PostDataCopyWithImpl<$Res> extends _$PostDataCopyWithImpl<$Res>
     Object acct = freezed,
     Object pw = freezed,
     Object id = freezed,
+    Object un = freezed,
     Object how = freezed,
     Object parent = freezed,
     Object text = freezed,
@@ -156,6 +165,7 @@ class __$PostDataCopyWithImpl<$Res> extends _$PostDataCopyWithImpl<$Res>
       acct: acct == freezed ? _value.acct : acct as String,
       pw: pw == freezed ? _value.pw : pw as String,
       id: id == freezed ? _value.id : id as int,
+      un: un == freezed ? _value.un : un as String,
       how: how == freezed ? _value.how : how as String,
       parent: parent == freezed ? _value.parent : parent as int,
       text: text == freezed ? _value.text : text as String,
@@ -173,6 +183,7 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
       {@required this.acct,
       @required this.pw,
       @JsonKey(includeIfNull: false) this.id,
+      @JsonKey(includeIfNull: false) this.un,
       @JsonKey(includeIfNull: false) this.how,
       @JsonKey(includeIfNull: false) this.parent,
       @JsonKey(includeIfNull: false) this.text,
@@ -193,6 +204,9 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
   final int id;
   @override
   @JsonKey(includeIfNull: false)
+  final String un;
+  @override
+  @JsonKey(includeIfNull: false)
   final String how;
   @override
   @JsonKey(includeIfNull: false)
@@ -209,7 +223,7 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PostData(acct: $acct, pw: $pw, id: $id, how: $how, parent: $parent, text: $text, creating: $creating, goto: $goto)';
+    return 'PostData(acct: $acct, pw: $pw, id: $id, un: $un, how: $how, parent: $parent, text: $text, creating: $creating, goto: $goto)';
   }
 
   @override
@@ -220,6 +234,7 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
       ..add(DiagnosticsProperty('acct', acct))
       ..add(DiagnosticsProperty('pw', pw))
       ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('un', un))
       ..add(DiagnosticsProperty('how', how))
       ..add(DiagnosticsProperty('parent', parent))
       ..add(DiagnosticsProperty('text', text))
@@ -237,6 +252,8 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
                 const DeepCollectionEquality().equals(other.pw, pw)) &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.un, un) ||
+                const DeepCollectionEquality().equals(other.un, un)) &&
             (identical(other.how, how) ||
                 const DeepCollectionEquality().equals(other.how, how)) &&
             (identical(other.parent, parent) ||
@@ -256,6 +273,7 @@ class _$_PostData with DiagnosticableTreeMixin implements _PostData {
       const DeepCollectionEquality().hash(acct) ^
       const DeepCollectionEquality().hash(pw) ^
       const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(un) ^
       const DeepCollectionEquality().hash(how) ^
       const DeepCollectionEquality().hash(parent) ^
       const DeepCollectionEquality().hash(text) ^
@@ -277,6 +295,7 @@ abstract class _PostData implements PostData {
       {@required String acct,
       @required String pw,
       @JsonKey(includeIfNull: false) int id,
+      @JsonKey(includeIfNull: false) String un,
       @JsonKey(includeIfNull: false) String how,
       @JsonKey(includeIfNull: false) int parent,
       @JsonKey(includeIfNull: false) String text,
@@ -292,6 +311,9 @@ abstract class _PostData implements PostData {
   @override
   @JsonKey(includeIfNull: false)
   int get id;
+  @override
+  @JsonKey(includeIfNull: false)
+  String get un;
   @override
   @JsonKey(includeIfNull: false)
   String get how;

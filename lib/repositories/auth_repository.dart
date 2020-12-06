@@ -44,6 +44,21 @@ class AuthRepository {
 
   Future<void> logout() async => _storageRepository.removeAuth();
 
+  Future<bool> favorite({@required int id, @required bool favorite}) async {
+    await _storageRepository.setFavorited(id: id, favorite: favorite);
+
+    if (await _storageRepository.loggedIn) {
+      return _websiteRepository.favorite(
+        username: await _storageRepository.username,
+        password: await _storageRepository.password,
+        id: id,
+        favorite: favorite,
+      );
+    }
+
+    return false;
+  }
+
   Future<bool> vote({@required int id, @required bool up}) async {
     if (await _storageRepository.loggedIn) {
       final bool success = await _websiteRepository.vote(

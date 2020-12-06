@@ -38,6 +38,23 @@ class WebsiteRepository {
     return _performPost(url, postData);
   }
 
+  Future<bool> favorite({
+    @required String username,
+    @required String password,
+    @required int id,
+    @required bool favorite,
+  }) async {
+    const String url = '$baseUrl/fave';
+    final PostData postData = PostData(
+      acct: username,
+      pw: password,
+      id: id,
+      un: favorite ? null : 't',
+    );
+
+    return _performPost(url, postData);
+  }
+
   Future<bool> vote({
     @required String username,
     @required String password,

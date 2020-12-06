@@ -16,6 +16,18 @@ final AutoDisposeFutureProvider<String> usernameProvider =
       ref.read(authRepositoryProvider).username,
 );
 
+final AutoDisposeFutureProvider<Iterable<int>> favoritesProvider =
+    FutureProvider.autoDispose(
+  (AutoDisposeProviderReference ref) =>
+      ref.read(storageRepositoryProvider).favorites(),
+);
+
+final AutoDisposeFutureProviderFamily<bool, int> favoritedProvider =
+    FutureProvider.autoDispose.family(
+  (AutoDisposeProviderReference ref, int id) =>
+      ref.read(storageRepositoryProvider).favorited(id: id),
+);
+
 final AutoDisposeFutureProviderFamily<bool, int> upvotedProvider =
     FutureProvider.autoDispose.family(
   (AutoDisposeProviderReference ref, int id) =>

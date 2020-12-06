@@ -10,6 +10,7 @@ abstract class PostData with _$PostData {
     @required String acct,
     @required String pw,
     @JsonKey(includeIfNull: false) int id,
+    @JsonKey(includeIfNull: false) String un,
     @JsonKey(includeIfNull: false) String how,
     @JsonKey(includeIfNull: false) int parent,
     @JsonKey(includeIfNull: false) String text,

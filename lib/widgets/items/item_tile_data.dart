@@ -244,6 +244,17 @@ class ItemTileData extends HookWidget {
       tag: 'item_metadata_${item.id}',
       child: Row(
         children: <Widget>[
+          useProvider(favoritedProvider(item.id)).maybeWhen(
+            data: (bool favorited) => SmoothAnimatedSwitcher(
+              condition: favorited,
+              trueChild: const MetadataItem(
+                icon: FluentIcons.star_24_regular,
+                highlight: true,
+              ),
+              axis: Axis.horizontal,
+            ),
+            orElse: () => const SizedBox.shrink(),
+          ),
           useProvider(upvotedProvider(item.id)).maybeWhen(
             data: (bool upvoted) => SmoothAnimatedSwitcher(
               condition: upvoted,
@@ -356,6 +367,14 @@ class ItemTileData extends HookWidget {
     );
   }
 
+  Future<void> _handleFavorite(BuildContext context,
+      {@required bool favorite}) async {
+    await context
+        .read(authRepositoryProvider)
+        .favorite(id: item.id, favorite: favorite);
+    await context.refresh(favoritedProvider(item.id));
+  }
+
   Future<void> _handleVote(BuildContext context, {@required bool up}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
@@ -452,6 +471,24 @@ class ItemTileData extends HookWidget {
       context: context,
       builder: (_) => Wrap(
         children: <Widget>[
+          context.read(favoritedProvider(item.id)).maybeWhen(
+                data: (bool favorited) => !favorited
+                    ? ListTile(
+                        title: const Text('Favorite'),
+                        onTap: () async {
+                          await _handleFavorite(context, favorite: true);
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    : ListTile(
+                        title: const Text('Unfavorite'),
+                        onTap: () async {
+                          await _handleFavorite(context, favorite: false);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                orElse: () => null,
+              ),
           if (item.url != null) ...<Widget>[
             ListTile(
               title: const Text('Open link'),

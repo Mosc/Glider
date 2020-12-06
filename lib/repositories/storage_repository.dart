@@ -8,6 +8,7 @@ class StorageRepository {
 
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
+  static const String _favoritedKey = 'favorited';
   static const String _upvotedKey = 'upvoted';
   static const String _visitedKey = 'visited';
 
@@ -29,6 +30,22 @@ class StorageRepository {
   Future<void> removeAuth() async {
     await _secureStorage.delete(key: _usernameKey);
     await _secureStorage.delete(key: _passwordKey);
+  }
+
+  Future<Iterable<int>> favorites() async =>
+      (await _sharedPreferences).getStringList(_favoritedKey).map(int.parse);
+
+  Future<bool> favorited({@required int id}) async =>
+      (await _sharedPreferences).containsElement(_favoritedKey, id.toString());
+
+  Future<void> setFavorited({@required int id, @required bool favorite}) async {
+    final SharedPreferences sharedPreferences = await _sharedPreferences;
+
+    if (favorite) {
+      await sharedPreferences.addElement(_favoritedKey, id.toString());
+    } else {
+      await sharedPreferences.removeElement(_favoritedKey, id.toString());
+    }
   }
 
   Future<bool> upvoted({@required int id}) async =>
