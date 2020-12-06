@@ -1,4 +1,6 @@
-# Glider
+# Glider for Hacker News
+
+[![Get it on Google Play][Play Store Badge]][Play Store]
 
 Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
 
@@ -15,3 +17,6 @@ Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
   <img width="206px" src="./promotional/mockup-3.png">
   <img width="206px" src="./promotional/mockup-4.png">
 </p>
+
+[Play Store]: https://play.google.com/store/apps/details?id=nl.viter.glider
+[Play Store Badge]: https://play.google.com/intl/en_us/badges/images/badge_new.png
