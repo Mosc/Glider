@@ -11,6 +11,7 @@ _$_PostData _$_$_PostDataFromJson(Map<String, dynamic> json) {
     acct: json['acct'] as String,
     pw: json['pw'] as String,
     id: json['id'] as int,
+    un: json['un'] as String,
     how: json['how'] as String,
     parent: json['parent'] as int,
     text: json['text'] as String,
@@ -32,6 +33,7 @@ Map<String, dynamic> _$_$_PostDataToJson(_$_PostData instance) {
   }
 
   writeNotNull('id', instance.id);
+  writeNotNull('un', instance.un);
   writeNotNull('how', instance.how);
   writeNotNull('parent', instance.parent);
   writeNotNull('text', instance.text);
