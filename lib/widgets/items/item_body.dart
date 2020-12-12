@@ -13,7 +13,6 @@ import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/common/error.dart';
-import 'package:glider/widgets/common/separated_sliver_child_builder_delegate.dart';
 import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
@@ -36,11 +35,8 @@ class ItemBody extends HookWidget {
               .when(
             loading: () => <Widget>[
               SliverList(
-                delegate: SeparatedSliverChildBuilderDelegate(
-                  itemBuilder: (_, int index) => index == 0
-                      ? const StoryTileLoading()
-                      : const CommentTileLoading(),
-                  separatorBuilder: (_, __) => const Separator(),
+                delegate: SliverChildBuilderDelegate(
+                  (_, int index) => _buildItemLoading(index),
                 ),
               ),
             ],
@@ -58,22 +54,16 @@ class ItemBody extends HookWidget {
                   ),
                 ),
               SliverList(
-                delegate: SeparatedSliverChildBuilderDelegate(
-                  itemBuilder: (_, int index) {
+                delegate: SliverChildBuilderDelegate(
+                  (_, int index) {
                     if (_loaded(itemTree, index)) {
                       return _buildItem(itemTree, index, collapsedNotifier);
                     } else if (itemTree.hasMore) {
-                      return const CommentTileLoading();
+                      return _buildItemLoading(index);
                     } else {
                       return const End();
                     }
                   },
-                  // For loaded items, we want the separator to be indented
-                  // based on the item depth. This means letting ItemTileData
-                  // render its own separator instead.
-                  separatorBuilder: (_, int index) => _loaded(itemTree, index)
-                      ? const SizedBox.shrink()
-                      : const Separator(),
                   childCount:
                       itemTree.hasMore ? null : itemTree.items.length + 1,
                 ),
@@ -86,6 +76,10 @@ class ItemBody extends HookWidget {
   }
 
   bool _loaded(ItemTree itemTree, int index) => index < itemTree.items.length;
+
+  Widget _buildItemLoading(int index) {
+    return index == 0 ? const StoryTileLoading() : const CommentTileLoading();
+  }
 
   Widget _buildItem(
       ItemTree itemTree, int index, ValueNotifier<Set<int>> collapsedNotifier) {

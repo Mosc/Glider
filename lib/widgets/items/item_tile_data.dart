@@ -36,7 +36,7 @@ class ItemTileData extends HookWidget {
     this.onTap,
     this.dense = false,
     this.fadeable = false,
-    this.separator,
+    this.separator = const Separator(),
   }) : super(key: key);
 
   final Item item;

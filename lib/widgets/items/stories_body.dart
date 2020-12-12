@@ -6,8 +6,6 @@ import 'package:glider/pages/stories_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/error.dart';
-import 'package:glider/widgets/common/separated_sliver_child_builder_delegate.dart';
-import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/items/story_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -27,25 +25,25 @@ class StoriesBody extends HookWidget {
         slivers: <Widget>[
           useProvider(storyIdsProvider(navigationItemStateController.state))
               .when(
-            loading: () => SliverList(
-              delegate: SeparatedSliverChildBuilderDelegate(
-                itemBuilder: (_, __) => const StoryTileLoading(),
-                separatorBuilder: (_, __) => const Separator(),
+            loading: () => SliverPrototypeExtentList(
+              delegate: SliverChildBuilderDelegate(
+                (_, __) => const StoryTileLoading(),
               ),
+              prototypeItem: const StoryTileLoading(),
             ),
             error: (_, __) => const SliverFillRemaining(child: Error()),
-            data: (Iterable<int> ids) => SliverList(
-              delegate: SeparatedSliverChildBuilderDelegate(
-                itemBuilder: (_, int index) {
+            data: (Iterable<int> ids) => SliverPrototypeExtentList(
+              delegate: SliverChildBuilderDelegate(
+                (_, int index) {
                   if (index < ids.length) {
                     return StoryTile(id: ids.elementAt(index));
                   } else {
                     return const End();
                   }
                 },
-                separatorBuilder: (_, __) => const Separator(),
                 childCount: ids.length + 1,
               ),
+              prototypeItem: const StoryTileLoading(),
             ),
           ),
         ],
