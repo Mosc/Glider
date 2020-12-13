@@ -8,7 +8,7 @@ class Error extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 16),
         child: Column(
           children: <Widget>[
             Icon(
