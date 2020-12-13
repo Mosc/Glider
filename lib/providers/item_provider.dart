@@ -34,9 +34,8 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
   return ref.read(apiRepositoryProvider).getStoryIds(navigationItem);
 });
 
-final AutoDisposeFutureProviderFamily<Item, int> itemProvider =
-    AutoDisposeFutureProvider.family(
-        (AutoDisposeProviderReference ref, int id) =>
+final FutureProviderFamily<Item, int> itemProvider = FutureProvider.family(
+    (ProviderReference ref, int id) =>
             ref.read(apiRepositoryProvider).getItem(id));
 
 final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
