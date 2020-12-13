@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
-import 'package:glider/models/item_tree_parameter.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/api_repository.dart';
@@ -45,12 +44,11 @@ final FutureProviderFamily<Item, int> itemProvider =
   return ref.read(apiRepositoryProvider).getItem(id);
 });
 
-final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
-    itemTreeStreamProvider = StreamProvider.autoDispose
-        .family((ProviderReference ref, ItemTreeParameter parameter) async* {
-  unawaited(_preloadItemTree(ref, id: parameter.id));
+final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
+    StreamProvider.autoDispose.family((ProviderReference ref, int id) async* {
+  unawaited(_preloadItemTree(ref, id: id));
 
-  final Stream<Item> itemStream = _itemStream(ref, id: parameter.id);
+  final Stream<Item> itemStream = _itemStream(ref, id: id);
   final List<Item> items = <Item>[];
 
   await for (final Item item in itemStream) {

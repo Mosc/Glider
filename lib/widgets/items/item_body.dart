@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
-import 'package:glider/models/item_tree_parameter.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -17,7 +16,6 @@ import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod/all.dart';
 
 class ItemBody extends HookWidget {
   const ItemBody({Key key, @required this.id}) : super(key: key);
@@ -27,14 +25,12 @@ class ItemBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
-    final AutoDisposeStreamProvider<ItemTree> singleItemTreeStreamProvider =
-        itemTreeStreamProvider(ItemTreeParameter(id: id));
 
     return RefreshIndicator(
-      onRefresh: () async => context.refresh(singleItemTreeStreamProvider),
+      onRefresh: () async => context.refresh(itemTreeStreamProvider(id)),
       child: CustomScrollView(
         slivers: <Widget>[
-          ...useProvider(singleItemTreeStreamProvider).when(
+          ...useProvider(itemTreeStreamProvider(id)).when(
             loading: () => <Widget>[
               SliverList(
                 delegate: SliverChildBuilderDelegate(
