@@ -86,7 +86,7 @@ Stream<Item> _itemStream(AutoDisposeProviderReference ref,
 Future<void> _preloadItemTree(AutoDisposeProviderReference ref,
     {@required int id}) async {
   try {
-    final Item item = await ref.watch(itemProvider(id).future);
+    final Item item = await ref.container.refresh(itemProvider(id));
 
     if (item.parts != null) {
       await Future.wait(

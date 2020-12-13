@@ -14,9 +14,10 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/common/error.dart';
 import 'package:glider/widgets/common/separator.dart';
-import 'package:glider/widgets/items/item_tile_data.dart';
+import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod/all.dart';
 
 class ItemBody extends HookWidget {
   const ItemBody({Key key, @required this.id}) : super(key: key);
@@ -26,13 +27,14 @@ class ItemBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
+    final AutoDisposeStreamProvider<ItemTree> singleItemTreeStreamProvider =
+        itemTreeStreamProvider(ItemTreeParameter(id: id));
 
     return RefreshIndicator(
-      onRefresh: () => context.refresh(itemProvider(id)),
+      onRefresh: () async => context.refresh(singleItemTreeStreamProvider),
       child: CustomScrollView(
         slivers: <Widget>[
-          ...useProvider(itemTreeStreamProvider(ItemTreeParameter(id: id)))
-              .when(
+          ...useProvider(singleItemTreeStreamProvider).when(
             loading: () => <Widget>[
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -93,8 +95,9 @@ class ItemBody extends HookWidget {
 
     return SmoothAnimatedSwitcher(
       condition: _collapsedAncestors(collapsedNotifier, item.ancestors),
-      falseChild: ItemTileData(
-        item,
+      falseChild: ItemTile(
+        id: item.id,
+        ancestors: item.ancestors,
         root: itemTree.items.first,
         onTap: item.type == ItemType.comment
             ? () => _collapse(collapsedNotifier, item.id)
@@ -103,6 +106,7 @@ class ItemBody extends HookWidget {
         separator: indentSeparator
             ? const Separator()
             : const Separator(startIndent: 0),
+        loading: () => _buildItemLoading(index),
       ),
     );
   }
