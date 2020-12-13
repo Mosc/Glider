@@ -1,6 +1,6 @@
 # Glider for Hacker News
 
-[![Get it on Google Play][Play Store Badge]][Play Store]
+[![Get it on Google Play][play store badge]][play store]
 
 Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
 
@@ -18,5 +18,13 @@ Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
   <img width="206px" src="./promotional/mockup-4.png">
 </p>
 
-[Play Store]: https://play.google.com/store/apps/details?id=nl.viter.glider
-[Play Store Badge]: https://play.google.com/intl/en_us/badges/images/badge_new.png
+[play store]: https://play.google.com/store/apps/details?id=nl.viter.glider
+[play store badge]: https://play.google.com/intl/en_us/badges/images/badge_new.png
+
+## Development
+
+Glider is built with the latest beta version of Flutter. Code that can be generated is not included in the repository. Generate it by running `build_runner`:
+
+```sh
+flutter pub run --no-sound-null-safety build_runner build --delete-conflicting-outputs
+```
