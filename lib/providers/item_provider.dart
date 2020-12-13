@@ -8,19 +8,15 @@ import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
-// ignore: implementation_imports
-import 'package:riverpod/src/framework.dart';
 
 final AutoDisposeFutureProvider<Iterable<int>> favoriteIdsProvider =
     FutureProvider.autoDispose(
-  (AutoDisposeProviderReference ref) =>
-      ref.read(storageRepositoryProvider).favoriteIds,
+  (ProviderReference ref) => ref.read(storageRepositoryProvider).favoriteIds,
 );
 
 final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
-    storyIdsProvider = FutureProvider.autoDispose.family(
-        (AutoDisposeProviderReference ref,
-            NavigationItem navigationItem) async {
+    storyIdsProvider = FutureProvider.autoDispose
+        .family((ProviderReference ref, NavigationItem navigationItem) async {
   if (navigationItem == NavigationItem.newTopStories) {
     final Iterable<int> newStoryIds = await ref
         .read(apiRepositoryProvider)
@@ -35,8 +31,7 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
 });
 
 final AutoDisposeStateProviderFamily<Item, int> itemOverrideProvider =
-    StateProvider.autoDispose
-        .family((AutoDisposeProviderReference ref, int id) => null);
+    StateProvider.autoDispose.family((ProviderReference ref, int id) => null);
 
 final FutureProviderFamily<Item, int> itemProvider =
     FutureProvider.family((ProviderReference ref, int id) async {
@@ -50,8 +45,8 @@ final FutureProviderFamily<Item, int> itemProvider =
 });
 
 final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
-    itemTreeStreamProvider = StreamProvider.autoDispose.family(
-        (AutoDisposeProviderReference ref, ItemTreeParameter parameter) async* {
+    itemTreeStreamProvider = StreamProvider.autoDispose
+        .family((ProviderReference ref, ItemTreeParameter parameter) async* {
   unawaited(_preloadItemTree(ref, id: parameter.id));
 
   final Stream<Item> itemStream = _itemStream(ref, id: parameter.id);
@@ -65,7 +60,7 @@ final AutoDisposeStreamProviderFamily<ItemTree, ItemTreeParameter>
   yield ItemTree(items: items, hasMore: false);
 });
 
-Stream<Item> _itemStream(AutoDisposeProviderReference ref,
+Stream<Item> _itemStream(ProviderReference ref,
     {@required int id, Iterable<int> ancestors = const <int>[]}) async* {
   try {
     final Item item = await ref.read(itemProvider(id).future);
@@ -94,8 +89,7 @@ Stream<Item> _itemStream(AutoDisposeProviderReference ref,
   }
 }
 
-Future<void> _preloadItemTree(AutoDisposeProviderReference ref,
-    {@required int id}) async {
+Future<void> _preloadItemTree(ProviderReference ref, {@required int id}) async {
   try {
     final Item item = await ref.container.refresh(itemProvider(id));
 
