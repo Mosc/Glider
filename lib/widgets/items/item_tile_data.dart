@@ -386,26 +386,13 @@ class ItemTileData extends HookWidget {
       final bool success = await authRepository.vote(id: item.id, up: up);
 
       if (success) {
-        final String votedText = 'Item has been ${up ? 'up' : 'un'}voted';
-        SnackBar snackbar;
+        await context.refresh(upvotedProvider(item.id));
 
         if (item.score != null) {
-          snackbar = SnackBar(
-            content: Text(
-              '$votedText, '
-              'but the score may not update immediately',
-            ),
-            action: SnackBarAction(
-              label: 'Refresh',
-              onPressed: () => context.refresh(itemProvider(item.id)),
-            ),
-          );
-        } else {
-          snackbar = SnackBar(content: Text(votedText));
+          context.read(itemOverrideProvider(item.id)).state =
+              item.copyWith(score: item.score + (up ? 1 : -1));
+          await context.refresh(itemProvider(item.id));
         }
-
-        ScaffoldMessenger.of(context).showSnackBarQuickly(snackbar);
-        await context.refresh(upvotedProvider(item.id));
       } else {
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           const SnackBar(content: Text('Something went wrong')),
