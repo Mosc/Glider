@@ -4,6 +4,7 @@ import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/item_tree_parameter.dart';
 import 'package:glider/models/navigation_item.dart';
 import 'package:glider/providers/repository_provider.dart';
+import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,17 +18,17 @@ final AutoDisposeFutureProvider<Iterable<int>> favoriteIdsProvider =
 final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
     storyIdsProvider = FutureProvider.autoDispose
         .family((ProviderReference ref, NavigationItem navigationItem) async {
+  final ApiRepository apiRepository = ref.read(apiRepositoryProvider);
+
   if (navigationItem == NavigationItem.newTopStories) {
-    final Iterable<int> newStoryIds = await ref
-        .read(apiRepositoryProvider)
-        .getStoryIds(NavigationItem.newStories);
-    final Iterable<int> topStoryIds = await ref
-        .read(apiRepositoryProvider)
-        .getStoryIds(NavigationItem.topStories);
+    final Iterable<int> newStoryIds =
+        await apiRepository.getStoryIds(NavigationItem.newStories);
+    final Iterable<int> topStoryIds =
+        await apiRepository.getStoryIds(NavigationItem.topStories);
     return newStoryIds.toSet().intersection(topStoryIds.toSet());
   }
 
-  return ref.read(apiRepositoryProvider).getStoryIds(navigationItem);
+  return apiRepository.getStoryIds(navigationItem);
 });
 
 final AutoDisposeStateProviderFamily<Item, int> itemOverrideProvider =

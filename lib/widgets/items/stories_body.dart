@@ -36,7 +36,9 @@ class StoriesBody extends HookWidget {
               delegate: SliverChildBuilderDelegate(
                 (_, int index) {
                   if (index < ids.length) {
-                    return StoryTile(id: ids.elementAt(index));
+                    final int id = ids.elementAt(index);
+                    context.refresh(itemProvider(id));
+                    return StoryTile(id: id);
                   } else {
                     return const End();
                   }
