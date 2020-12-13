@@ -90,7 +90,7 @@ class ItemTileData extends HookWidget {
         active && item.type != ItemType.job && item.type != ItemType.pollopt;
 
     return Slidable(
-      key: Key(item.id.toString()),
+      key: ValueKey<int>(item.id),
       startToEndAction: canVote
           ? useProvider(upvotedProvider(item.id)).maybeWhen(
               data: (bool upvoted) => !upvoted
@@ -231,12 +231,13 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildMetadataSection(BuildContext context, TextTheme textTheme) {
-    Widget upvotedMetadata({bool highlight = false}) => MetadataItem(
+    Widget upvotedMetadata({bool upvoted = false}) => MetadataItem(
+          key: ValueKey<bool>(upvoted),
           icon: FluentIcons.arrow_up_24_regular,
           text: item.score?.toString(),
-          highlight: highlight,
+          highlight: upvoted,
         );
-    final Widget upvotedMetadataTrue = upvotedMetadata(highlight: true);
+    final Widget upvotedMetadataTrue = upvotedMetadata(upvoted: true);
     final Widget upvotedMetadataFalse =
         item.score != null ? upvotedMetadata() : const SizedBox.shrink();
 
@@ -257,6 +258,9 @@ class ItemTileData extends HookWidget {
           ),
           useProvider(upvotedProvider(item.id)).maybeWhen(
             data: (bool upvoted) => SmoothAnimatedSwitcher(
+              transitionBuilder: item.score != null
+                  ? SmoothAnimatedSwitcher.fadeTransitionBuilder
+                  : null,
               condition: upvoted,
               trueChild: upvotedMetadataTrue,
               falseChild: upvotedMetadataFalse,

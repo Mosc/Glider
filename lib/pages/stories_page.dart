@@ -62,6 +62,7 @@ class StoriesPage extends HookWidget {
 
     final AsyncValue<bool> loggedInValue = useProvider(loggedInProvider);
     Widget accountIcon({bool loggedIn = false}) => IconButton(
+          key: ValueKey<bool>(loggedIn),
           icon: Icon(loggedIn
               ? FluentIcons.person_available_24_filled
               : FluentIcons.person_24_filled),
