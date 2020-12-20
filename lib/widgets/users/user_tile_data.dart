@@ -6,7 +6,6 @@ import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
-import 'package:glider/widgets/common/separator.dart';
 import 'package:share/share.dart';
 
 class UserTileData extends StatelessWidget {
@@ -18,55 +17,50 @@ class UserTileData extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Column(
-      children: <Widget>[
-        InkWell(
-          onLongPress: () => _buildModalBottomSheet(context),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      onLongPress: () => _buildModalBottomSheet(context),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    if (user.karma != null)
-                      MetadataItem(
-                        icon: FluentIcons.arrow_up_24_regular,
-                        text: user.karma.toString(),
-                      ),
-                    if (user.submitted != null)
-                      MetadataItem(
-                        icon: FluentIcons.comment_24_regular,
-                        text: user.submitted.length.toString(),
-                      ),
-                    if (user.id != null) ...<Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 1),
-                        child: Text(
-                          user.id,
-                          style: textTheme.caption.copyWith(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                    const Spacer(),
-                    Text(
-                      'since ${user.createdDate}',
-                      style: textTheme.caption,
+                if (user.karma != null)
+                  MetadataItem(
+                    icon: FluentIcons.arrow_up_24_regular,
+                    text: user.karma.toString(),
+                  ),
+                if (user.submitted != null)
+                  MetadataItem(
+                    icon: FluentIcons.comment_24_regular,
+                    text: user.submitted.length.toString(),
+                  ),
+                if (user.id != null) ...<Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 1),
+                    child: Text(
+                      user.id,
+                      style: textTheme.caption.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                     ),
-                  ],
-                ),
-                if (user.about != null) ...<Widget>[
-                  const SizedBox(height: 12),
-                  DecoratedHtml(user.about),
+                  ),
+                  const SizedBox(width: 8),
                 ],
+                const Spacer(),
+                Text(
+                  'since ${user.createdDate}',
+                  style: textTheme.caption,
+                ),
               ],
             ),
-          ),
+            if (user.about != null) ...<Widget>[
+              const SizedBox(height: 12),
+              DecoratedHtml(user.about),
+            ],
+          ],
         ),
-        const Separator(),
-      ],
+      ),
     );
   }
 

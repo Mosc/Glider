@@ -18,7 +18,6 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
-import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/common/slidable.dart';
@@ -36,7 +35,6 @@ class ItemTileData extends HookWidget {
     this.onTap,
     this.dense = false,
     this.fadeable = false,
-    this.separator = const Separator(),
   }) : super(key: key);
 
   final Item item;
@@ -44,7 +42,6 @@ class ItemTileData extends HookWidget {
   final void Function() onTap;
   final bool dense;
   final bool fadeable;
-  final Widget separator;
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +56,7 @@ class ItemTileData extends HookWidget {
                 for (int _ in item.ancestors ?? <int>[])
                   const Padding(
                     padding: EdgeInsets.only(left: 7),
-                    child: Separator(
-                      vertical: true,
-                      startIndent: 0,
-                      endIndent: 0,
-                    ),
+                    child: VerticalDivider(width: 1),
                   ),
               ],
             ),
@@ -72,12 +65,7 @@ class ItemTileData extends HookWidget {
           padding: indented
               ? EdgeInsets.only(left: item.ancestors.length * 8.0)
               : EdgeInsets.zero,
-          child: Column(
-            children: <Widget>[
-              _buildSlidable(context),
-              if (separator != null) separator,
-            ],
-          ),
+          child: _buildSlidable(context),
         ),
       ],
     );

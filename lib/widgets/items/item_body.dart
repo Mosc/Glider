@@ -12,7 +12,6 @@ import 'package:glider/widgets/common/end.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/common/error.dart';
-import 'package:glider/widgets/common/separator.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -43,13 +42,8 @@ class ItemBody extends HookWidget {
             ],
             data: (ItemTree itemTree) => <Widget>[
               if (itemTree.items.first?.parent != null)
-                SliverList(
-                  delegate: SliverChildListDelegate.fixed(
-                    <Widget>[
-                      _buildOpenParent(context, itemTree.items.first.parent),
-                      const Separator(),
-                    ],
-                  ),
+                SliverToBoxAdapter(
+                  child: _buildOpenParent(context, itemTree.items.first.parent),
                 ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -84,11 +78,6 @@ class ItemBody extends HookWidget {
     final Item item = itemTree.items.elementAt(index);
     final bool collapsed = _collapsed(collapsedNotifier, item.id);
 
-    // Indent the separator if the item has children and these are visible
-    // because the item is not collapsed.
-    final bool indentSeparator =
-        item.kids != null && item.kids.isNotEmpty && !collapsed;
-
     return SmoothAnimatedSwitcher(
       condition: _collapsedAncestors(collapsedNotifier, item.ancestors),
       falseChild: ItemTile(
@@ -99,9 +88,6 @@ class ItemBody extends HookWidget {
             ? () => _collapse(collapsedNotifier, item.id)
             : null,
         dense: collapsed,
-        separator: indentSeparator
-            ? const Separator()
-            : const Separator(startIndent: 0),
         loading: () => _buildItemLoading(index),
       ),
     );
