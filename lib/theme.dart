@@ -27,7 +27,7 @@ ThemeData get darkTheme => ThemeData(
       buttonTheme: const ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
       ),
-      appBarTheme: AppBarTheme(color: Colors.grey[850]),
+      appBarTheme: AppBarTheme(color: Colors.grey[900]),
       colorScheme: ColorScheme.dark(
         primary: _primaryColor,
         secondary: _secondaryColor,
