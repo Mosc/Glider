@@ -8,11 +8,9 @@ class TileLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
     return Shimmer.fromColors(
-      baseColor: colorScheme.surface,
-      highlightColor: colorScheme.surface.withOpacity(0.2),
+      baseColor: Colors.grey.withOpacity(0.1),
+      highlightColor: Colors.grey.withOpacity(0.2),
       child: child,
     );
   }

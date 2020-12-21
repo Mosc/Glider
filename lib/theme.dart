@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Color get _primaryColor => Colors.red[300];
 Color get _secondaryColor => _primaryColor;
-Color get _surfaceColor => Colors.grey.withOpacity(0.1);
+Color get _surfaceColor => Colors.grey.withOpacity(0.15);
 
 ThemeData get lightTheme => ThemeData(
       brightness: Brightness.light,
