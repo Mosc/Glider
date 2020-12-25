@@ -8,13 +8,11 @@ import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/common/block.dart';
-import 'package:glider/widgets/common/end.dart';
+import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
-import 'package:glider/widgets/common/error.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemBody extends HookWidget {
   const ItemBody({Key key, @required this.id}) : super(key: key);
@@ -25,39 +23,27 @@ class ItemBody extends HookWidget {
   Widget build(BuildContext context) {
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
 
-    return RefreshIndicator(
-      onRefresh: () async => context.refresh(itemTreeStreamProvider(id)),
-      child: CustomScrollView(
-        slivers: <Widget>[
-          ...useProvider(itemTreeStreamProvider(id)).when(
-            loading: () => <Widget>[
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, int index) => _buildItemLoading(index),
-                ),
-              ),
-            ],
-            error: (_, __) => <Widget>[
-              const SliverFillRemaining(child: Error()),
-            ],
-            data: (ItemTree itemTree) => <Widget>[
-              if (itemTree.items.first?.parent != null)
-                SliverToBoxAdapter(
-                  child: _buildOpenParent(context, itemTree.items.first.parent),
-                ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, int index) => _loaded(itemTree, index)
-                      ? _buildItem(itemTree, index, collapsedNotifier)
-                      : _buildItemLoading(index),
-                  childCount: itemTree.hasMore ? null : itemTree.items.length,
-                ),
-              ),
-              const SliverToBoxAdapter(child: End()),
-            ],
-          ),
-        ],
+    return RefreshableBody<ItemTree>(
+      provider: itemTreeStreamProvider(id),
+      loadingBuilder: () => SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (_, int index) => _buildItemLoading(index),
+        ),
       ),
+      dataBuilder: (ItemTree itemTree) => <Widget>[
+        if (itemTree.items.first?.parent != null)
+          SliverToBoxAdapter(
+            child: _buildOpenParent(context, itemTree.items.first.parent),
+          ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, int index) => _loaded(itemTree, index)
+                ? _buildItem(itemTree, index, collapsedNotifier)
+                : _buildItemLoading(index),
+            childCount: itemTree.hasMore ? null : itemTree.items.length,
+          ),
+        ),
+      ],
     );
   }
 
