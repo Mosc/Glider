@@ -23,30 +23,33 @@ class StoriesBody extends HookWidget {
           .refresh(storyIdsProvider(navigationItemStateController.state)),
       child: CustomScrollView(
         slivers: <Widget>[
-          useProvider(storyIdsProvider(navigationItemStateController.state))
+          ...useProvider(storyIdsProvider(navigationItemStateController.state))
               .when(
-            loading: () => SliverPrototypeExtentList(
-              delegate: SliverChildBuilderDelegate(
-                (_, __) => const StoryTileLoading(),
+            loading: () => <Widget>[
+              SliverPrototypeExtentList(
+                delegate: SliverChildBuilderDelegate(
+                  (_, __) => const StoryTileLoading(),
+                ),
+                prototypeItem: const StoryTileLoading(),
               ),
-              prototypeItem: const StoryTileLoading(),
-            ),
-            error: (_, __) => const SliverFillRemaining(child: Error()),
-            data: (Iterable<int> ids) => SliverPrototypeExtentList(
-              delegate: SliverChildBuilderDelegate(
-                (_, int index) {
-                  if (index < ids.length) {
+            ],
+            error: (_, __) => <Widget>[
+              const SliverFillRemaining(child: Error()),
+            ],
+            data: (Iterable<int> ids) => <Widget>[
+              SliverPrototypeExtentList(
+                delegate: SliverChildBuilderDelegate(
+                  (_, int index) {
                     final int id = ids.elementAt(index);
                     context.refresh(itemProvider(id));
                     return StoryTile(id: id);
-                  } else {
-                    return const End();
-                  }
-                },
-                childCount: ids.length + 1,
+                  },
+                  childCount: ids.length,
+                ),
+                prototypeItem: const StoryTileLoading(),
               ),
-              prototypeItem: const StoryTileLoading(),
-            ),
+              const SliverToBoxAdapter(child: End()),
+            ],
           ),
         ],
       ),

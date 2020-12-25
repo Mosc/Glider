@@ -37,23 +37,20 @@ class UserBody extends HookWidget {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (_, int index) {
-                      if (index < itemCount) {
-                        final int id = user.submitted.elementAt(index);
-                        return ItemTile(
-                          id: id,
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                                builder: (_) => ItemPage(id: id)),
-                          ),
-                          loading: () => _buildItemLoading(index),
-                        );
-                      } else {
-                        return const End();
-                      }
+                      final int id = user.submitted.elementAt(index);
+                      return ItemTile(
+                        id: id,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                              builder: (_) => ItemPage(id: id)),
+                        ),
+                        loading: () => _buildItemLoading(index),
+                      );
                     },
-                    childCount: itemCount + 1,
+                    childCount: itemCount,
                   ),
                 ),
+                const SliverToBoxAdapter(child: End()),
               ];
             },
           ),

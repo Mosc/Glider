@@ -18,17 +18,21 @@ class FavoritesBody extends HookWidget {
       onRefresh: () => context.refresh(favoriteIdsProvider),
       child: CustomScrollView(
         slivers: <Widget>[
-          useProvider(favoriteIdsProvider).when(
-            loading: () => SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (_, int index) => _buildItemLoading(index),
+          ...useProvider(favoriteIdsProvider).when(
+            loading: () => <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (_, int index) => _buildItemLoading(index),
+                ),
               ),
-            ),
-            error: (_, __) => const SliverFillRemaining(child: Error()),
-            data: (Iterable<int> ids) => SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (_, int index) {
-                  if (index < ids.length) {
+            ],
+            error: (_, __) => <Widget>[
+              const SliverFillRemaining(child: Error()),
+            ],
+            data: (Iterable<int> ids) => <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (_, int index) {
                     final int id = ids.elementAt(index);
                     return ItemTile(
                       id: id,
@@ -38,13 +42,12 @@ class FavoritesBody extends HookWidget {
                       ),
                       loading: () => _buildItemLoading(index),
                     );
-                  } else {
-                    return const End();
-                  }
-                },
-                childCount: ids.length + 1,
+                  },
+                  childCount: ids.length,
+                ),
               ),
-            ),
+              const SliverToBoxAdapter(child: End()),
+            ],
           ),
         ],
       ),

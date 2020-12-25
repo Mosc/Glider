@@ -47,19 +47,13 @@ class ItemBody extends HookWidget {
                 ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (_, int index) {
-                    if (_loaded(itemTree, index)) {
-                      return _buildItem(itemTree, index, collapsedNotifier);
-                    } else if (itemTree.hasMore) {
-                      return _buildItemLoading(index);
-                    } else {
-                      return const End();
-                    }
-                  },
-                  childCount:
-                      itemTree.hasMore ? null : itemTree.items.length + 1,
+                  (_, int index) => _loaded(itemTree, index)
+                      ? _buildItem(itemTree, index, collapsedNotifier)
+                      : _buildItemLoading(index),
+                  childCount: itemTree.hasMore ? null : itemTree.items.length,
                 ),
               ),
+              const SliverToBoxAdapter(child: End()),
             ],
           ),
         ],
