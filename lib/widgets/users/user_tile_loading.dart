@@ -31,7 +31,7 @@ class UserTileLoading extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 13),
-            for (int _ in List<int>(2)) ...<Widget>[
+            for (int i = 0; i < 2; i++) ...<Widget>[
               const SizedBox(height: 2),
               TileLoadingBlock(height: textTheme.bodyText2.fontSize),
             ],

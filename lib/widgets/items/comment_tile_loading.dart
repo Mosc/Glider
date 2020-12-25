@@ -31,9 +31,9 @@ class CommentTileLoading extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 13),
-            for (int i in List<int>.generate(2, (int i) => i)) ...<Widget>[
+            for (int i = 0; i < 2; i++) ...<Widget>[
               if (i > 0) SizedBox(height: textTheme.bodyText2.fontSize),
-              for (int _ in List<int>(2)) ...<Widget>[
+              for (int j = 0; j < 2; j++) ...<Widget>[
                 const SizedBox(height: 2),
                 TileLoadingBlock(height: textTheme.bodyText2.fontSize),
               ],

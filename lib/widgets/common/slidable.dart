@@ -41,6 +41,7 @@ class Slidable extends StatelessWidget {
           case DismissDirection.vertical:
           case DismissDirection.up:
           case DismissDirection.down:
+          case DismissDirection.none:
             assert(false, 'Direction $direction is not supported');
         }
 
