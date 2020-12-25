@@ -5,10 +5,9 @@ version: 1.0.10+11
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
-  flutter: ">= 1.17.0"
 
 dependencies:
-  cached_network_image: ^2.4.1
+  cached_network_image: ^2.5.0
   dio: ^3.0.10
   fluentui_system_icons: ^1.1.89
   flutter:
@@ -30,9 +29,9 @@ dependencies:
   url_launcher: ^5.7.10
 
 dev_dependencies:
-  build_runner: ^1.10.9
+  build_runner: ^1.10.11
   flutter_launcher_icons: ^0.8.1
-  freezed: ^0.12.5
+  freezed: ^0.12.6
   json_serializable: ^3.5.1
 
 flutter_icons:
