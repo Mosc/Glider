@@ -14,7 +14,7 @@ class WebsiteRepository {
     @required String password,
   }) async {
     const String url = '$baseUrl/login';
-    final PostData postData = PostData(
+    final PostData postData = RegisterPostData(
       acct: username,
       pw: password,
       creating: 't',
@@ -29,7 +29,7 @@ class WebsiteRepository {
     @required String password,
   }) async {
     const String url = '$baseUrl/login';
-    final PostData postData = PostData(
+    final PostData postData = LoginPostData(
       acct: username,
       pw: password,
       goto: 'news',
@@ -45,7 +45,7 @@ class WebsiteRepository {
     @required bool favorite,
   }) async {
     const String url = '$baseUrl/fave';
-    final PostData postData = PostData(
+    final PostData postData = FavoritePostData(
       acct: username,
       pw: password,
       id: id,
@@ -62,7 +62,7 @@ class WebsiteRepository {
     @required bool up,
   }) async {
     const String url = '$baseUrl/vote';
-    final PostData postData = PostData(
+    final PostData postData = VotePostData(
       acct: username,
       pw: password,
       id: id,
@@ -79,7 +79,7 @@ class WebsiteRepository {
     @required String text,
   }) async {
     const String url = '$baseUrl/comment';
-    final PostData postData = PostData(
+    final PostData postData = CommentPostData(
       acct: username,
       pw: password,
       parent: parentId,
