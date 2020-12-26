@@ -21,9 +21,9 @@ class StoriesBody extends HookWidget {
       provider: storyIdsProvider(navigationItemStateController.state),
       loadingBuilder: () => SliverPrototypeExtentList(
         delegate: SliverChildBuilderDelegate(
-          (_, __) => const StoryTileLoading(),
+          (_, __) => _buildStoryLoading(),
         ),
-        prototypeItem: const StoryTileLoading(),
+        prototypeItem: _buildStoryLoading(),
       ),
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverPrototypeExtentList(
@@ -35,9 +35,11 @@ class StoriesBody extends HookWidget {
             },
             childCount: ids.length,
           ),
-          prototypeItem: const StoryTileLoading(),
+          prototypeItem: _buildStoryLoading(),
         ),
       ],
     );
   }
+
+  Widget _buildStoryLoading() => const StoryTileLoading(animate: false);
 }

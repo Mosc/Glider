@@ -206,8 +206,10 @@ class ItemTileData extends HookWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                placeholder: (_, __) =>
-                    const TileLoading(child: TileLoadingBlock()),
+                placeholder: (_, __) => const TileLoading(
+                  animate: false,
+                  child: TileLoadingBlock(),
+                ),
                 width: ItemTile.thumbnailSize,
                 height: ItemTile.thumbnailSize,
               ),
