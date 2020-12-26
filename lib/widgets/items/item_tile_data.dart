@@ -420,12 +420,12 @@ class ItemTileData extends HookWidget {
     if (await authRepository.loggedIn) {
       final bool success = await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
-          builder: (_) => ReplyPage(replyToItem: item, rootId: root?.id),
+          builder: (_) => ReplyPage(replyToItem: item),
           fullscreenDialog: true,
         ),
       );
 
-      if (success != null && success) {
+      if (success != null && success && root?.id != null) {
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(
             content: const Text(
@@ -434,7 +434,7 @@ class ItemTileData extends HookWidget {
             ),
             action: SnackBarAction(
               label: 'Refresh',
-              onPressed: () => context.refresh(itemProvider(item.id)),
+              onPressed: () => context.refresh(itemTreeStreamProvider(root.id)),
             ),
           ),
         );

@@ -13,11 +13,9 @@ import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReplyBody extends HookWidget {
-  const ReplyBody({Key key, @required this.replyToItem, this.rootId})
-      : super(key: key);
+  const ReplyBody({Key key, @required this.replyToItem}) : super(key: key);
 
   final Item replyToItem;
-  final int rootId;
 
   @override
   Widget build(BuildContext context) {
