@@ -65,7 +65,7 @@ class ItemTileData extends HookWidget {
                               )
                           ? Theme.of(context).colorScheme.primary
                           : null,
-                  ),
+                    ),
                   ),
               ],
             ),
@@ -81,7 +81,8 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildSlidable(BuildContext context) {
-    final bool active = item.id != null && item.deleted != true;
+    final bool active =
+        item.id != null && item.deleted != true && item.localOnly != true;
     final bool canVote = active && item.type != ItemType.job;
     final bool canReply =
         active && item.type != ItemType.job && item.type != ItemType.pollopt;
@@ -144,6 +145,10 @@ class ItemTileData extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              if (item.localOnly) ...<Widget>[
+                _buildPreviewSection(context),
+                const SizedBox(height: 12),
+              ],
               if (active && item.title != null) ...<Widget>[
                 _buildStorySection(textTheme),
                 const SizedBox(height: 12),
@@ -169,6 +174,14 @@ class ItemTileData extends HookWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Text _buildPreviewSection(BuildContext context) {
+    return Text(
+      'Note: The following is a preview. It may not accurately depict what '
+      'the result will look like once it has been processed.',
+      style: Theme.of(context).textTheme.caption,
     );
   }
 
@@ -425,11 +438,12 @@ class ItemTileData extends HookWidget {
       );
 
       if (success != null && success && root?.id != null) {
+        context.refresh(itemTreeStreamProvider(root.id));
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(
             content: const Text(
-              'Reply has been submitted, '
-              'but it may not show up immediately',
+              'Processing may take a moment, '
+              'consider refreshing for an updated view',
             ),
             action: SnackBarAction(
               label: 'Refresh',

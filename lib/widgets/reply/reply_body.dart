@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/account_page.dart';
+import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
@@ -11,6 +12,9 @@ import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final StateProvider<int> _previewIdStateProvider =
+    StateProvider<int>((ProviderReference ref) => -1);
 
 class ReplyBody extends HookWidget {
   const ReplyBody({Key key, @required this.replyToItem}) : super(key: key);
@@ -93,26 +97,17 @@ class ReplyBody extends HookWidget {
               'Comment preview',
               style: Theme.of(context).textTheme.subtitle1,
             ),
-            const SizedBox(height: 12),
-            Text(
-              'Note: this preview may not accurately depict what the comment '
-              'will look like once it has been submitted.',
-              style: Theme.of(context).textTheme.caption,
-            ),
           ],
         ),
       ),
       ItemTileData(
-        Item(
-          type: ItemType.comment,
-          by: useProvider(usernameProvider).maybeWhen(
+        _buildItem(
+          id: context.read(_previewIdStateProvider).state,
+          username: useProvider(usernameProvider).maybeWhen(
             data: (String username) => username,
             orElse: () => null,
           ),
-          time: DateTime.now().secondsSinceEpoch,
-          text: commentTextState.value.isNotEmpty
-              ? FormattingUtil.convertHackerNewsToHtml(commentTextState.value)
-              : null,
+          text: commentTextState.value,
         ),
       )
     ]);
@@ -139,6 +134,29 @@ class ReplyBody extends HookWidget {
       );
 
       if (success) {
+        final StateController<int> previewIdstateController =
+            context.read(_previewIdStateProvider);
+        final int previewId = previewIdstateController.state;
+
+        // Make comment preview available.
+        context.read(itemStateProvider(previewId)).state = _buildItem(
+          id: previewId,
+          username: await authRepository.username,
+          text: text,
+        );
+
+        // Add comment preview to parent's list of children.
+        context.read(itemStateProvider(replyToItem.id)).state =
+            replyToItem.copyWith(
+          kids: <int>[
+            previewId,
+            if (replyToItem.kids != null) ...replyToItem.kids,
+          ],
+        );
+
+        // Decrement preview ID to prevent duplicates.
+        previewIdstateController.state--;
+
         Navigator.of(context).pop(true);
       } else {
         ScaffoldMessenger.of(context).showSnackBarQuickly(
@@ -161,4 +179,14 @@ class ReplyBody extends HookWidget {
       );
     }
   }
+
+  Item _buildItem({int id, String username, String text}) => Item(
+        id: id,
+        type: ItemType.comment,
+        by: username,
+        time: DateTime.now().secondsSinceEpoch,
+        text: text.isNotEmpty
+            ? FormattingUtil.convertHackerNewsToHtml(text)
+            : null,
+      );
 }
