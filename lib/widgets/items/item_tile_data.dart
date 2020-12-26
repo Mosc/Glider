@@ -49,14 +49,23 @@ class ItemTileData extends HookWidget {
 
     return Stack(
       children: <Widget>[
-        if (indented)
+        if (indented && item.ancestors != null)
           Positioned.fill(
             child: Row(
               children: <Widget>[
-                for (int _ in item.ancestors ?? <int>[])
-                  const Padding(
-                    padding: EdgeInsets.only(left: 7),
-                    child: VerticalDivider(width: 1),
+                for (int i = 0; i < item.ancestors.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: VerticalDivider(
+                      width: 0,
+                      color: i == item.ancestors.length - 1 &&
+                              useProvider(usernameProvider).maybeWhen(
+                                data: (String by) => by == item.by,
+                                orElse: () => false,
+                              )
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                  ),
                   ),
               ],
             ),
