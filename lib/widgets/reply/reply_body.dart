@@ -6,6 +6,7 @@ import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
+import 'package:glider/utils/date_time_extension.dart';
 import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
@@ -105,15 +106,15 @@ class ReplyBody extends HookWidget {
       ),
       ItemTileData(
         Item(
+          type: ItemType.comment,
           by: useProvider(usernameProvider).maybeWhen(
             data: (String username) => username,
             orElse: () => null,
           ),
-          time: DateTime.now().millisecondsSinceEpoch,
+          time: DateTime.now().secondsSinceEpoch,
           text: commentTextState.value.isNotEmpty
               ? FormattingUtil.convertHackerNewsToHtml(commentTextState.value)
               : null,
-          type: ItemType.comment,
         ),
       )
     ]);
