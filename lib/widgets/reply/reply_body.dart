@@ -38,79 +38,85 @@ class ReplyBody extends HookWidget {
       <Object>[commentController],
     );
 
-    return ListView(children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                controller: commentController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Comment',
-                ),
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Comment must not be empty';
-                  }
-                  return null;
-                },
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  if (replyToItem.text != null) ...<Widget>[
-                    OutlinedButton(
-                      onPressed: () => _handleQuoteParent(commentController),
-                      child: const Text('Insert parent quote'),
+                  TextFormField(
+                    controller: commentController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Comment',
                     ),
-                    const SizedBox(width: 16),
-                  ],
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (formKey.currentState.validate()) {
-                        await _handleReply(context,
-                            text: commentController.text);
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Comment must not be empty';
                       }
+                      return null;
                     },
-                    child: const Text('Reply'),
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      if (replyToItem.text != null) ...<Widget>[
+                        OutlinedButton(
+                          onPressed: () =>
+                              _handleQuoteParent(commentController),
+                          child: const Text('Insert parent quote'),
+                        ),
+                        const SizedBox(width: 16),
+                      ],
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (formKey.currentState.validate()) {
+                            await _handleReply(context,
+                                text: commentController.text);
+                          }
+                        },
+                        child: const Text('Reply'),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Comment preview',
-              style: Theme.of(context).textTheme.subtitle1,
             ),
-          ],
-        ),
-      ),
-      ItemTileData(
-        _buildItem(
-          id: context.read(_previewIdStateProvider).state,
-          username: useProvider(usernameProvider).maybeWhen(
-            data: (String username) => username,
-            orElse: () => null,
           ),
-          text: commentTextState.value,
-        ),
-      )
-    ]);
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Comment preview',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ],
+            ),
+          ),
+          ItemTileData(
+            _buildItem(
+              id: context.read(_previewIdStateProvider).state,
+              username: useProvider(usernameProvider).maybeWhen(
+                data: (String username) => username,
+                orElse: () => null,
+              ),
+              text: commentTextState.value,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   void _handleQuoteParent(TextEditingController commentController) {

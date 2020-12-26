@@ -12,11 +12,18 @@ class ReplyPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: AppBarUtil.buildFluentIconsLeading(context),
-        title: const Text('Reply'),
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
+          SliverAppBar(
+            leading: AppBarUtil.buildFluentIconsLeading(context),
+            title: const Text('Reply'),
+            forceElevated: innerBoxIsScrolled,
+            floating: true,
+          ),
+        ],
+        body: ReplyBody(replyToItem: replyToItem),
       ),
-      body: ReplyBody(replyToItem: replyToItem),
     );
   }
 }
