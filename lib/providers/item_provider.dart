@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
@@ -30,18 +31,14 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
   return apiRepository.getStoryIds(navigationItem);
 });
 
-final AutoDisposeStateProviderFamily<Item, int> itemOverrideProvider =
-    StateProvider.autoDispose.family((ProviderReference ref, int id) => null);
+final StateProviderFamily<Item, int> itemStateProvider =
+    StateProvider.family((ProviderReference ref, int id) => null);
 
 final FutureProviderFamily<Item, int> itemProvider =
     FutureProvider.family((ProviderReference ref, int id) async {
-  final Item itemOverride = ref.read(itemOverrideProvider(id)).state;
-
-  if (itemOverride != null) {
-    return itemOverride;
-  }
-
-  return ref.read(apiRepositoryProvider).getItem(id);
+  final Item item = await ref.read(apiRepositoryProvider).getItem(id);
+  ref.read(itemStateProvider(id)).state = item;
+  return item;
 });
 
 final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
@@ -62,7 +59,7 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
 Stream<Item> _itemStream(ProviderReference ref,
     {@required int id, Iterable<int> ancestors = const <int>[]}) async* {
   try {
-    final Item item = await ref.read(itemProvider(id).future);
+    final Item item = await _readItem(ref, id: id);
 
     if (item == null) {
       return;
@@ -88,22 +85,35 @@ Stream<Item> _itemStream(ProviderReference ref,
   }
 }
 
-Future<void> _preloadItemTree(ProviderReference ref, {@required int id}) async {
+Future<void> _preloadItemTree(ProviderReference ref, {@required int id}) =>
+    _loadItemTree((int id) => _readItem(ref, id: id), id: id);
+
+Future<void> reloadItemTree(
+        Item Function<Item>(RootProvider<Item, Object>) refresh,
+        {@required int id}) =>
+    _loadItemTree((int id) => refresh(itemProvider(id)), id: id);
+
+Future<void> _loadItemTree(Future<Item> Function(int) getItem,
+    {@required int id}) async {
   try {
-    final Item item = await ref.container.refresh(itemProvider(id));
+    final Item item = await getItem(id);
 
     if (item.parts != null) {
       await Future.wait(
-        item.parts.map((int partId) => _preloadItemTree(ref, id: partId)),
+        item.parts.map((int partId) => _loadItemTree(getItem, id: partId)),
       );
     }
 
     if (item.kids != null) {
       await Future.wait(
-        item.kids.map((int kidId) => _preloadItemTree(ref, id: kidId)),
+        item.kids.map((int kidId) => _loadItemTree(getItem, id: kidId)),
       );
     }
   } on ServiceException {
     // Fail silently.
   }
 }
+
+Future<Item> _readItem(ProviderReference ref, {@required int id}) async =>
+    ref.read(itemStateProvider(id)).state ??
+    await ref.read(itemProvider(id).future);

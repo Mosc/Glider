@@ -388,9 +388,8 @@ class ItemTileData extends HookWidget {
         await context.refresh(upvotedProvider(item.id));
 
         if (item.score != null) {
-          context.read(itemOverrideProvider(item.id)).state =
+          context.read(itemStateProvider(item.id)).state =
               item.copyWith(score: item.score + (up ? 1 : -1));
-          await context.refresh(itemProvider(item.id));
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBarQuickly(
@@ -434,7 +433,10 @@ class ItemTileData extends HookWidget {
             ),
             action: SnackBarAction(
               label: 'Refresh',
-              onPressed: () => context.refresh(itemTreeStreamProvider(root.id)),
+              onPressed: () async {
+                await reloadItemTree(context.refresh, id: root.id);
+                return context.refresh(itemTreeStreamProvider(root.id));
+              },
             ),
           ),
         );

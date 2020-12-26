@@ -8,18 +8,20 @@ class RefreshableBody<T> extends HookWidget {
   const RefreshableBody({
     Key key,
     @required this.provider,
+    this.onRefresh,
     @required this.loadingBuilder,
     @required this.dataBuilder,
   }) : super(key: key);
 
   final RootProvider<Object, AsyncValue<T>> provider;
+  final Future<void> Function() onRefresh;
   final Widget Function() loadingBuilder;
   final Iterable<Widget> Function(T) dataBuilder;
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async => context.refresh(provider),
+      onRefresh: onRefresh ?? () async => context.refresh(provider),
       child: CustomScrollView(
         slivers: <Widget>[
           ...useProvider(provider).when(

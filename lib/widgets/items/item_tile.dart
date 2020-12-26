@@ -29,16 +29,19 @@ class ItemTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return useProvider(itemProvider(id)).maybeWhen(
-      data: (Item item) => ItemTileData(
-        item.copyWith(ancestors: ancestors),
-        root: root,
-        onTap: onTap,
-        dense: dense,
-        fadeable: fadeable,
-      ),
-      // Show the loading state as an error state for now because it looks okay.
-      orElse: loading,
-    );
+    final Item item = useProvider(itemStateProvider(id)).state ??
+        useProvider(itemProvider(id)).maybeWhen(
+          data: (Item item) => item,
+          orElse: () => null,
+        );
+    return item != null
+        ? ItemTileData(
+            item.copyWith(ancestors: ancestors),
+            root: root,
+            onTap: onTap,
+            dense: dense,
+            fadeable: fadeable,
+          )
+        : loading();
   }
 }

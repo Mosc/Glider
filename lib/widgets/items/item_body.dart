@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +14,7 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemBody extends HookWidget {
   const ItemBody({Key key, @required this.id}) : super(key: key);
@@ -21,10 +23,13 @@ class ItemBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useMemoized(() => _refresh(context));
+
     final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
 
     return RefreshableBody<ItemTree>(
       provider: itemTreeStreamProvider(id),
+      onRefresh: () => _refresh(context),
       loadingBuilder: () => SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, int index) => _buildItemLoading(index, animate: false),
@@ -45,6 +50,11 @@ class ItemBody extends HookWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _refresh(BuildContext context) async {
+    await reloadItemTree(context.refresh, id: id);
+    return context.refresh(itemTreeStreamProvider(id));
   }
 
   bool _loaded(ItemTree itemTree, int index) => index < itemTree.items.length;
