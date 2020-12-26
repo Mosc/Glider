@@ -14,13 +14,23 @@ class AccountPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final StateController<List<Widget>> actionsStateController =
+        useProvider(actionsStateProvider);
+
     return Scaffold(
-      appBar: AppBar(
-        leading: AppBarUtil.buildFluentIconsLeading(context),
-        title: const Text('Account'),
-        actions: useProvider(actionsStateProvider).state,
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
+          SliverAppBar(
+            leading: AppBarUtil.buildFluentIconsLeading(context),
+            title: const Text('Account'),
+            actions: actionsStateController.state,
+            forceElevated: innerBoxIsScrolled,
+            floating: true,
+          ),
+        ],
+        body: const AccountBody(),
       ),
-      body: const AccountBody(),
     );
   }
 }
