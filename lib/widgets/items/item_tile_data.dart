@@ -149,7 +149,7 @@ class ItemTileData extends HookWidget {
                 _buildPreviewSection(context),
                 const SizedBox(height: 12),
               ],
-              if (active && item.title != null) ...<Widget>[
+              if (item.title != null) ...<Widget>[
                 _buildStorySection(textTheme),
                 const SizedBox(height: 12),
               ],

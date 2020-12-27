@@ -40,5 +40,5 @@ abstract class Item with _$Item {
   String get thumbnailUrl => 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
 
   @late
-  bool get localOnly => id < 0;
+  bool get localOnly => id != null && id < 0;
 }
