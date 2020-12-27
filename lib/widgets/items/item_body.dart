@@ -35,20 +35,22 @@ class ItemBody extends HookWidget {
           (_, int index) => _buildItemLoading(index),
         ),
       ),
-      dataBuilder: (ItemTree itemTree) => <Widget>[
-        if (itemTree.items.first?.parent != null)
-          SliverToBoxAdapter(
-            child: _buildOpenParent(context, itemTree.items.first.parent),
+      dataBuilder: (ItemTree itemTree) {
+        final Item firstItem = itemTree.items.first;
+        final int parent = firstItem?.parent ?? firstItem?.poll;
+        return <Widget>[
+          if (parent != null)
+            SliverToBoxAdapter(child: _buildOpenParent(context, parent)),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (_, int index) => _loaded(itemTree, index)
+                  ? _buildItem(itemTree, index, collapsedNotifier)
+                  : _buildItemLoading(index),
+              childCount: itemTree.hasMore ? null : itemTree.items.length,
+            ),
           ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (_, int index) => _loaded(itemTree, index)
-                ? _buildItem(itemTree, index, collapsedNotifier)
-                : _buildItemLoading(index),
-            childCount: itemTree.hasMore ? null : itemTree.items.length,
-          ),
-        ),
-      ],
+        ];
+      },
     );
   }
 
@@ -102,7 +104,7 @@ class ItemBody extends HookWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Open the parent of this single comment thread',
+                    'Open the parent of this single thread',
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
