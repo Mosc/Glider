@@ -32,7 +32,7 @@ class ItemBody extends HookWidget {
       onRefresh: () => _refresh(context),
       loadingBuilder: () => SliverList(
         delegate: SliverChildBuilderDelegate(
-          (_, int index) => _buildItemLoading(index, animate: false),
+          (_, int index) => _buildItemLoading(index),
         ),
       ),
       dataBuilder: (ItemTree itemTree) => <Widget>[
@@ -44,7 +44,7 @@ class ItemBody extends HookWidget {
           delegate: SliverChildBuilderDelegate(
             (_, int index) => _loaded(itemTree, index)
                 ? _buildItem(itemTree, index, collapsedNotifier)
-                : _buildItemLoading(index, animate: false),
+                : _buildItemLoading(index),
             childCount: itemTree.hasMore ? null : itemTree.items.length,
           ),
         ),
@@ -59,9 +59,9 @@ class ItemBody extends HookWidget {
 
   bool _loaded(ItemTree itemTree, int index) => index < itemTree.items.length;
 
-  Widget _buildItemLoading(int index, {bool animate = true}) => index == 0
-      ? StoryTileLoading(animate: animate)
-      : CommentTileLoading(animate: animate);
+  Widget _buildItemLoading(int index) {
+    return index == 0 ? const StoryTileLoading() : const CommentTileLoading();
+  }
 
   Widget _buildItem(
       ItemTree itemTree, int index, ValueNotifier<Set<int>> collapsedNotifier) {

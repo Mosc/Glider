@@ -3,16 +3,13 @@ import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 
 class CommentTileLoading extends StatelessWidget {
-  const CommentTileLoading({Key key, this.animate = true}) : super(key: key);
-
-  final bool animate;
+  const CommentTileLoading({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return TileLoading(
-      animate: animate,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(

@@ -16,7 +16,7 @@ class FavoritesBody extends HookWidget {
       provider: favoriteIdsProvider,
       loadingBuilder: () => SliverList(
         delegate: SliverChildBuilderDelegate(
-          (_, int index) => _buildItemLoading(index, animate: false),
+          (_, int index) => _buildItemLoading(index),
         ),
       ),
       dataBuilder: (Iterable<int> ids) => <Widget>[
@@ -39,7 +39,7 @@ class FavoritesBody extends HookWidget {
     );
   }
 
-  Widget _buildItemLoading(int index, {bool animate = true}) => index.isEven
-      ? StoryTileLoading(animate: animate)
-      : CommentTileLoading(animate: animate);
+  Widget _buildItemLoading(int index) {
+    return index.isEven ? const StoryTileLoading() : const CommentTileLoading();
+  }
 }

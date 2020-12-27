@@ -4,16 +4,13 @@ import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 
 class StoryTileLoading extends StatelessWidget {
-  const StoryTileLoading({Key key, this.animate = true}) : super(key: key);
-
-  final bool animate;
+  const StoryTileLoading({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return TileLoading(
-      animate: animate,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
