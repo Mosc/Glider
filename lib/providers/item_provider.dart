@@ -31,13 +31,13 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, StoryType>
   return apiRepository.getStoryIds(storyType);
 });
 
-final StateProviderFamily<Item, int> itemStateProvider =
+final StateProviderFamily<Item, int> itemCacheStateProvider =
     StateProvider.family((ProviderReference ref, int id) => null);
 
 final FutureProviderFamily<Item, int> itemProvider =
     FutureProvider.family((ProviderReference ref, int id) async {
   final Item item = await ref.read(apiRepositoryProvider).getItem(id);
-  ref.read(itemStateProvider(id)).state = item;
+  ref.read(itemCacheStateProvider(id)).state = item;
   return item;
 });
 
@@ -115,5 +115,5 @@ Future<void> _loadItemTree(Future<Item> Function(int) getItem,
 }
 
 Future<Item> _readItem(ProviderReference ref, {@required int id}) async =>
-    ref.read(itemStateProvider(id)).state ??
+    ref.read(itemCacheStateProvider(id)).state ??
     await ref.read(itemProvider(id).future);

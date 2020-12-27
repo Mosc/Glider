@@ -145,14 +145,14 @@ class ReplyBody extends HookWidget {
         final int previewId = previewIdstateController.state;
 
         // Make comment preview available.
-        context.read(itemStateProvider(previewId)).state = _buildItem(
+        context.read(itemCacheStateProvider(previewId)).state = _buildItem(
           id: previewId,
           username: await authRepository.username,
           text: text,
         );
 
         // Add comment preview to parent's list of children.
-        context.read(itemStateProvider(replyToItem.id)).state =
+        context.read(itemCacheStateProvider(replyToItem.id)).state =
             replyToItem.copyWith(
           kids: <int>[
             previewId,

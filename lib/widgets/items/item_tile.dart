@@ -29,7 +29,7 @@ class ItemTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Item item = useProvider(itemStateProvider(id)).state ??
+    final Item item = useProvider(itemCacheStateProvider(id)).state ??
         useProvider(itemProvider(id)).maybeWhen(
           data: (Item item) => item,
           orElse: () => null,

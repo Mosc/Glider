@@ -401,7 +401,7 @@ class ItemTileData extends HookWidget {
         await context.refresh(upvotedProvider(item.id));
 
         if (item.score != null) {
-          context.read(itemStateProvider(item.id)).state =
+          context.read(itemCacheStateProvider(item.id)).state =
               item.copyWith(score: item.score + (up ? 1 : -1));
         }
       } else {
