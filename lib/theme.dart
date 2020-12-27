@@ -11,6 +11,9 @@ ThemeData get lightTheme => ThemeData(
       buttonTheme: const ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
       ),
+      appBarTheme: const AppBarTheme(
+        brightness: Brightness.dark,
+      ),
       colorScheme: ColorScheme.light(
         primary: _primaryColor,
         secondary: _secondaryColor,
@@ -27,7 +30,10 @@ ThemeData get darkTheme => ThemeData(
       buttonTheme: const ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
       ),
-      appBarTheme: AppBarTheme(color: Colors.grey[900]),
+      appBarTheme: AppBarTheme(
+        brightness: Brightness.dark,
+        color: Colors.grey[900],
+      ),
       colorScheme: ColorScheme.dark(
         primary: _primaryColor,
         secondary: _secondaryColor,
