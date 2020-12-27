@@ -287,9 +287,13 @@ class ItemTileData extends HookWidget {
             const MetadataItem(icon: FluentIcons.briefcase_24_regular)
           else if (item.type == ItemType.poll)
             const MetadataItem(icon: FluentIcons.poll_24_regular),
+          if (item.dead == true)
+            const MetadataItem(
+              icon: FluentIcons.flag_24_regular,
+            ),
           if (item.deleted == true)
             const MetadataItem(
-              icon: FluentIcons.comment_delete_24_regular,
+              icon: FluentIcons.delete_24_regular,
               text: '[deleted]',
             )
           else if (item.by != null && item.type != ItemType.pollopt)
