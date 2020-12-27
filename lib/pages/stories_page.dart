@@ -15,7 +15,7 @@ import 'package:glider/widgets/items/stories_body.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final AutoDisposeStateProvider<StoryType> navigationItemStateProvider =
+final AutoDisposeStateProvider<StoryType> storyTypeStateProvider =
     StateProvider.autoDispose<StoryType>(
         (ProviderReference ref) => StoryType.topStories);
 
@@ -44,7 +44,7 @@ class StoriesPage extends HookWidget {
     );
 
     final StateController<StoryType> storyTypeStateController =
-        useProvider(navigationItemStateProvider);
+        useProvider(storyTypeStateProvider);
 
     final AsyncValue<Iterable<int>> favoritesValue =
         useProvider(favoriteIdsProvider);
