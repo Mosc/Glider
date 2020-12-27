@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
-import 'package:glider/models/navigation_item.dart';
+import 'package:glider/models/story_type.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/utils/service_exception.dart';
@@ -15,20 +15,20 @@ final AutoDisposeFutureProvider<Iterable<int>> favoriteIdsProvider =
   (ProviderReference ref) => ref.read(storageRepositoryProvider).favoriteIds,
 );
 
-final AutoDisposeFutureProviderFamily<Iterable<int>, NavigationItem>
+final AutoDisposeFutureProviderFamily<Iterable<int>, StoryType>
     storyIdsProvider = FutureProvider.autoDispose
-        .family((ProviderReference ref, NavigationItem navigationItem) async {
+        .family((ProviderReference ref, StoryType storyType) async {
   final ApiRepository apiRepository = ref.read(apiRepositoryProvider);
 
-  if (navigationItem == NavigationItem.newTopStories) {
+  if (storyType == StoryType.newTopStories) {
     final Iterable<int> newStoryIds =
-        await apiRepository.getStoryIds(NavigationItem.newStories);
+        await apiRepository.getStoryIds(StoryType.newStories);
     final Iterable<int> topStoryIds =
-        await apiRepository.getStoryIds(NavigationItem.topStories);
+        await apiRepository.getStoryIds(StoryType.topStories);
     return newStoryIds.toSet().intersection(topStoryIds.toSet());
   }
 
-  return apiRepository.getStoryIds(navigationItem);
+  return apiRepository.getStoryIds(storyType);
 });
 
 final StateProviderFamily<Item, int> itemStateProvider =

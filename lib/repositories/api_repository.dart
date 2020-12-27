@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:glider/models/item.dart';
+import 'package:glider/models/story_type.dart';
 import 'package:glider/models/user.dart';
-import 'package:glider/models/navigation_item.dart';
 import 'package:glider/utils/service_exception.dart';
 
 class ApiRepository {
@@ -11,8 +11,8 @@ class ApiRepository {
 
   final Dio _dio;
 
-  Future<Iterable<int>> getStoryIds(NavigationItem navigationItem) async {
-    final String url = '$baseUrl/${navigationItem.jsonName}.json';
+  Future<Iterable<int>> getStoryIds(StoryType storyType) async {
+    final String url = '$baseUrl/${storyType.jsonName}.json';
 
     try {
       final Response<Iterable<dynamic>> response =

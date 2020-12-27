@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:glider/models/navigation_item.dart';
+import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/favorites_page.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -15,9 +15,9 @@ import 'package:glider/widgets/items/stories_body.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final AutoDisposeStateProvider<NavigationItem> navigationItemStateProvider =
-    StateProvider.autoDispose<NavigationItem>(
-        (ProviderReference ref) => NavigationItem.topStories);
+final AutoDisposeStateProvider<StoryType> navigationItemStateProvider =
+    StateProvider.autoDispose<StoryType>(
+        (ProviderReference ref) => StoryType.topStories);
 
 class StoriesPage extends HookWidget {
   const StoriesPage({Key key}) : super(key: key);
@@ -43,7 +43,7 @@ class StoriesPage extends HookWidget {
       <Object>[scrollController],
     );
 
-    final StateController<NavigationItem> navigationItemStateController =
+    final StateController<StoryType> storyTypeStateController =
         useProvider(navigationItemStateProvider);
 
     final AsyncValue<Iterable<int>> favoritesValue =
@@ -109,18 +109,18 @@ class StoriesPage extends HookWidget {
       ),
       floatingActionButton: SpeedDial(
         children: <SpeedDialChild>[
-          for (NavigationItem navigationItem in NavigationItem.values)
+          for (StoryType storyType in StoryType.values)
             SpeedDialChild(
-              label: navigationItem.title,
-              child: Icon(navigationItem.icon),
-              onTap: () => navigationItemStateController.state = navigationItem,
+              label: storyType.title,
+              child: Icon(storyType.icon),
+              onTap: () => storyTypeStateController.state = storyType,
             ),
         ],
         visible: speedDialVisibleState.value,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         animationSpeed: 100,
-        child: Icon(navigationItemStateController.state.icon),
+        child: Icon(storyTypeStateController.state.icon),
       ),
     );
   }

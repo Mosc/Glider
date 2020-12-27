@@ -1,7 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/widgets.dart';
 
-enum NavigationItem {
+enum StoryType {
   topStories,
   newTopStories,
   newStories,
@@ -10,20 +10,20 @@ enum NavigationItem {
   showStories,
 }
 
-extension NavigationItemExtension on NavigationItem {
+extension StoryTypeExtension on StoryType {
   String get title {
     switch (this) {
-      case NavigationItem.topStories:
+      case StoryType.topStories:
         return 'Top stories';
-      case NavigationItem.newTopStories:
+      case StoryType.newTopStories:
         return 'New top stories';
-      case NavigationItem.newStories:
+      case StoryType.newStories:
         return 'New stories';
-      case NavigationItem.bestStories:
+      case StoryType.bestStories:
         return 'Best stories';
-      case NavigationItem.askStories:
+      case StoryType.askStories:
         return 'Ask HN';
-      case NavigationItem.showStories:
+      case StoryType.showStories:
         return 'Show HN';
     }
 
@@ -32,17 +32,17 @@ extension NavigationItemExtension on NavigationItem {
 
   IconData get icon {
     switch (this) {
-      case NavigationItem.topStories:
+      case StoryType.topStories:
         return FluentIcons.arrow_trending_24_filled;
-      case NavigationItem.newTopStories:
+      case StoryType.newTopStories:
         return FluentIcons.rocket_24_filled;
-      case NavigationItem.newStories:
+      case StoryType.newStories:
         return FluentIcons.new_24_filled;
-      case NavigationItem.bestStories:
+      case StoryType.bestStories:
         return FluentIcons.ribbon_star_24_filled;
-      case NavigationItem.askStories:
+      case StoryType.askStories:
         return FluentIcons.chat_help_24_filled;
-      case NavigationItem.showStories:
+      case StoryType.showStories:
         return FluentIcons.chat_warning_24_filled;
     }
 
@@ -51,17 +51,17 @@ extension NavigationItemExtension on NavigationItem {
 
   String get jsonName {
     switch (this) {
-      case NavigationItem.topStories:
+      case StoryType.topStories:
         return 'topstories';
-      case NavigationItem.newTopStories:
+      case StoryType.newTopStories:
         break;
-      case NavigationItem.newStories:
+      case StoryType.newStories:
         return 'newstories';
-      case NavigationItem.bestStories:
+      case StoryType.bestStories:
         return 'beststories';
-      case NavigationItem.askStories:
+      case StoryType.askStories:
         return 'askstories';
-      case NavigationItem.showStories:
+      case StoryType.showStories:
         return 'showstories';
     }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:glider/models/navigation_item.dart';
+import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/stories_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
@@ -14,11 +14,11 @@ class StoriesBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StateController<NavigationItem> navigationItemStateController =
+    final StateController<StoryType> storyTypeStateController =
         useProvider(navigationItemStateProvider);
 
     return RefreshableBody<Iterable<int>>(
-      provider: storyIdsProvider(navigationItemStateController.state),
+      provider: storyIdsProvider(storyTypeStateController.state),
       loadingBuilder: () => SliverPrototypeExtentList(
         delegate: SliverChildBuilderDelegate(
           (_, __) => _buildStoryLoading(),
