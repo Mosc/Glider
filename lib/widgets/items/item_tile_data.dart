@@ -84,8 +84,10 @@ class ItemTileData extends HookWidget {
     final bool active =
         item.id != null && item.deleted != true && item.localOnly != true;
     final bool canVote = active && item.type != ItemType.job;
-    final bool canReply =
-        active && item.type != ItemType.job && item.type != ItemType.pollopt;
+    final bool canReply = active &&
+        item.type != ItemType.job &&
+        item.type != ItemType.pollopt &&
+        root?.id != null;
 
     return Slidable(
       key: ValueKey<int>(item.id),
