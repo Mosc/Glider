@@ -17,15 +17,16 @@ final StateProvider<int> _previewIdStateProvider =
     StateProvider<int>((ProviderReference ref) => -1);
 
 class ReplyBody extends HookWidget {
-  const ReplyBody({Key key, @required this.replyToItem}) : super(key: key);
+  const ReplyBody({Key key, @required this.parent}) : super(key: key);
 
-  final Item replyToItem;
+  final Item parent;
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey =
         useMemoized(() => GlobalKey<FormState>());
 
+    final ValueNotifier<bool> parentCollapsedState = useState(true);
     final ValueNotifier<String> commentTextState = useState('');
     final TextEditingController commentController = useTextEditingController();
     useEffect(
@@ -55,21 +56,22 @@ class ReplyBody extends HookWidget {
                       border: OutlineInputBorder(),
                       labelText: 'Comment',
                     ),
+                    keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
+                    autofocus: true,
+                    maxLines: null,
                     validator: (String value) {
                       if (value.isEmpty) {
                         return 'Comment must not be empty';
                       }
                       return null;
                     },
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    textCapitalization: TextCapitalization.sentences,
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      if (replyToItem.text != null) ...<Widget>[
+                      if (parent.text != null) ...<Widget>[
                         OutlinedButton(
                           onPressed: () =>
                               _handleQuoteParent(commentController),
@@ -98,11 +100,17 @@ class ReplyBody extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Comment preview',
+                  'Preview',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
               ],
             ),
+          ),
+          ItemTileData(
+            parent.copyWith(kids: null, ancestors: null),
+            onTap: () =>
+                parentCollapsedState.value = !parentCollapsedState.value,
+            dense: parentCollapsedState.value,
           ),
           ItemTileData(
             _buildItem(
@@ -113,7 +121,7 @@ class ReplyBody extends HookWidget {
               ),
               text: commentTextState.value,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -121,8 +129,7 @@ class ReplyBody extends HookWidget {
 
   void _handleQuoteParent(TextEditingController commentController) {
     final String quotedParent =
-        FormattingUtil.convertHtmlToHackerNews(replyToItem.text)
-            .replaceAllMapped(
+        FormattingUtil.convertHtmlToHackerNews(parent.text).replaceAllMapped(
       RegExp('^.+', multiLine: true),
       (Match match) => '> ${match[0]}',
     );
@@ -135,7 +142,7 @@ class ReplyBody extends HookWidget {
 
     if (await authRepository.loggedIn) {
       final bool success = await authRepository.reply(
-        parentId: replyToItem.id,
+        parentId: parent.id,
         text: text,
       );
 
@@ -152,11 +159,10 @@ class ReplyBody extends HookWidget {
         );
 
         // Add comment preview to parent's list of children.
-        context.read(itemCacheStateProvider(replyToItem.id)).state =
-            replyToItem.copyWith(
+        context.read(itemCacheStateProvider(parent.id)).state = parent.copyWith(
           kids: <int>[
             previewId,
-            if (replyToItem.kids != null) ...replyToItem.kids,
+            if (parent.kids != null) ...parent.kids,
           ],
         );
 
@@ -194,5 +200,6 @@ class ReplyBody extends HookWidget {
         text: text.isNotEmpty
             ? FormattingUtil.convertHackerNewsToHtml(text)
             : null,
+        ancestors: <int>[parent.id],
       );
 }

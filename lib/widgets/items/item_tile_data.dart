@@ -434,7 +434,7 @@ class ItemTileData extends HookWidget {
     if (await authRepository.loggedIn) {
       final bool success = await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
-          builder: (_) => ReplyPage(replyToItem: item),
+          builder: (_) => ReplyPage(parent: item),
           fullscreenDialog: true,
         ),
       );

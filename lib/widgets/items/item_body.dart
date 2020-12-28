@@ -25,7 +25,7 @@ class ItemBody extends HookWidget {
   Widget build(BuildContext context) {
     useMemoized(() => _refresh(context));
 
-    final ValueNotifier<Set<int>> collapsedNotifier = useState(<int>{});
+    final ValueNotifier<Set<int>> collapsedState = useState(<int>{});
 
     return RefreshableBody<ItemTree>(
       provider: itemTreeStreamProvider(id),
@@ -44,7 +44,7 @@ class ItemBody extends HookWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (_, int index) => _loaded(itemTree, index)
-                  ? _buildItem(itemTree, index, collapsedNotifier)
+                  ? _buildItem(itemTree, index, collapsedState)
                   : _buildItemLoading(index),
               childCount: itemTree.hasMore ? null : itemTree.items.length,
             ),
@@ -66,18 +66,18 @@ class ItemBody extends HookWidget {
   }
 
   Widget _buildItem(
-      ItemTree itemTree, int index, ValueNotifier<Set<int>> collapsedNotifier) {
+      ItemTree itemTree, int index, ValueNotifier<Set<int>> collapsedState) {
     final Item item = itemTree.items.elementAt(index);
-    final bool collapsed = _collapsed(collapsedNotifier, item.id);
+    final bool collapsed = _collapsed(collapsedState, item.id);
 
     return SmoothAnimatedSwitcher(
-      condition: _collapsedAncestors(collapsedNotifier, item.ancestors),
+      condition: _collapsedAncestors(collapsedState, item.ancestors),
       falseChild: ItemTile(
         id: item.id,
         ancestors: item.ancestors,
         root: itemTree.items.first,
         onTap: item.type == ItemType.comment
-            ? () => _collapse(collapsedNotifier, item.id)
+            ? () => _collapse(collapsedState, item.id)
             : null,
         dense: collapsed,
         loading: () => _buildItemLoading(index),
@@ -116,20 +116,20 @@ class ItemBody extends HookWidget {
     );
   }
 
-  void _collapse(ValueNotifier<Set<int>> collapsedNotifier, int id) {
-    if (collapsedNotifier.value.contains(id)) {
-      collapsedNotifier.value.remove(id);
+  void _collapse(ValueNotifier<Set<int>> collapsedState, int id) {
+    if (collapsedState.value.contains(id)) {
+      collapsedState.value.remove(id);
     } else {
-      collapsedNotifier.value.add(id);
+      collapsedState.value.add(id);
     }
 
-    collapsedNotifier.value = <int>{...collapsedNotifier.value};
+    collapsedState.value = <int>{...collapsedState.value};
   }
 
-  bool _collapsed(ValueNotifier<Set<int>> collapsedNotifier, int id) =>
-      collapsedNotifier.value.contains(id);
+  bool _collapsed(ValueNotifier<Set<int>> collapsedState, int id) =>
+      collapsedState.value.contains(id);
 
   bool _collapsedAncestors(
-          ValueNotifier<Set<int>> collapsedNotifier, Iterable<int> ids) =>
-      ids.any((int ancestor) => _collapsed(collapsedNotifier, ancestor));
+          ValueNotifier<Set<int>> collapsedState, Iterable<int> ids) =>
+      ids.any((int ancestor) => _collapsed(collapsedState, ancestor));
 }
