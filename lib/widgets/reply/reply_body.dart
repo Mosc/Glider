@@ -140,9 +140,9 @@ class ReplyBody extends HookWidget {
       );
 
       if (success) {
-        final StateController<int> previewIdstateController =
+        final StateController<int> previewIdStateController =
             context.read(_previewIdStateProvider);
-        final int previewId = previewIdstateController.state;
+        final int previewId = previewIdStateController.state;
 
         // Make comment preview available.
         context.read(itemCacheStateProvider(previewId)).state = _buildItem(
@@ -161,7 +161,7 @@ class ReplyBody extends HookWidget {
         );
 
         // Decrement preview ID to prevent duplicates.
-        previewIdstateController.state--;
+        previewIdStateController.state--;
 
         Navigator.of(context).pop(true);
       } else {
