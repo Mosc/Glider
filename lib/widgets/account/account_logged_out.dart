@@ -6,6 +6,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 class AccountLoggedOut extends HookWidget {
   const AccountLoggedOut({Key key}) : super(key: key);
@@ -71,7 +72,8 @@ class AccountLoggedOut extends HookWidget {
                         );
 
                         if (success) {
-                          await context.refresh(loggedInProvider);
+                          unawaited(context.refresh(usernameProvider));
+                          unawaited(context.refresh(loggedInProvider));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBarQuickly(
                             const SnackBar(content: Text('Registering failed')),
@@ -94,7 +96,8 @@ class AccountLoggedOut extends HookWidget {
                         );
 
                         if (success) {
-                          await context.refresh(loggedInProvider);
+                          unawaited(context.refresh(usernameProvider));
+                          unawaited(context.refresh(loggedInProvider));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBarQuickly(
                             const SnackBar(content: Text('Logging in failed')),

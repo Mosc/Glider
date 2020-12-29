@@ -8,6 +8,7 @@ import 'package:glider/widgets/common/error.dart';
 import 'package:glider/widgets/common/loading.dart';
 import 'package:glider/widgets/users/user_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 class AccountLoggedIn extends HookWidget {
   const AccountLoggedIn({Key key}) : super(key: key);
@@ -22,7 +23,8 @@ class AccountLoggedIn extends HookWidget {
           tooltip: 'Log out',
           onPressed: () async {
             await context.read(authRepositoryProvider).logout();
-            await context.refresh(loggedInProvider);
+            unawaited(context.refresh(loggedInProvider));
+            unawaited(context.refresh(usernameProvider));
           },
         ),
       ],
