@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
-import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/common/block.dart';
@@ -76,10 +75,9 @@ class ItemBody extends HookWidget {
         id: item.id,
         ancestors: item.ancestors,
         root: itemTree.items.first,
-        onTap: item.type == ItemType.comment
-            ? () => _collapse(collapsedState, item.id)
-            : null,
+        onTap: () => _collapse(collapsedState, item.id),
         dense: collapsed,
+        collapsible: true,
         loading: () => _buildItemLoading(index),
       ),
     );
@@ -131,5 +129,6 @@ class ItemBody extends HookWidget {
 
   bool _collapsedAncestors(
           ValueNotifier<Set<int>> collapsedState, Iterable<int> ids) =>
-      ids.any((int ancestor) => _collapsed(collapsedState, ancestor));
+      ids.any((int ancestor) =>
+          id != ancestor && _collapsed(collapsedState, ancestor));
 }

@@ -18,6 +18,7 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
+import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/common/slidable.dart';
@@ -34,6 +35,7 @@ class ItemTileData extends HookWidget {
     this.root,
     this.onTap,
     this.dense = false,
+    this.collapsible = false,
     this.fadeable = false,
   }) : super(key: key);
 
@@ -41,6 +43,7 @@ class ItemTileData extends HookWidget {
   final Item root;
   final void Function() onTap;
   final bool dense;
+  final bool collapsible;
   final bool fadeable;
 
   @override
@@ -193,65 +196,73 @@ class ItemTileData extends HookWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: Hero(
-              tag: 'item_title_${item.id}',
-              child: Text.rich(
-                TextSpan(
-                  children: <InlineSpan>[
-                    TextSpan(
-                      text: item.title,
-                      style: textTheme.subtitle1,
-                    ),
-                    if (item.url != null) ...<InlineSpan>[
-                      TextSpan(text: ' ', style: textTheme.subtitle1),
-                      TextSpan(
-                        text: '(${item.urlHost})',
-                        style: textTheme.caption.copyWith(height: 1.6),
-                      ),
-                    ]
-                  ],
-                ),
-                maxLines: dense ? 2 : null,
-                overflow: dense ? TextOverflow.ellipsis : null,
-              ),
-            ),
-          ),
+          Expanded(child: _buildTitle(textTheme)),
           if (item.url != null) ...<Widget>[
             const SizedBox(width: 12),
-            Hero(
-              tag: 'item_thumbnail_${item.id}',
-              child: CachedNetworkImage(
-                imageUrl: item.thumbnailUrl,
-                imageBuilder: (_, ImageProvider<dynamic> imageProvider) =>
-                    Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: imageProvider),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                placeholder: (_, __) =>
-                    const TileLoading(child: TileLoadingBlock()),
-                width: ItemTile.thumbnailSize,
-                height: ItemTile.thumbnailSize,
-              ),
-            ),
+            _buildThumbnail(),
           ],
         ],
       ),
     );
   }
 
+  Widget _buildTitle(TextTheme textTheme) {
+    Text titleText({@required bool dense}) => Text.rich(
+          TextSpan(
+            children: <InlineSpan>[
+              TextSpan(
+                text: item.title,
+                style: textTheme.subtitle1,
+              ),
+              if (item.url != null) ...<InlineSpan>[
+                TextSpan(text: ' ', style: textTheme.subtitle1),
+                TextSpan(
+                  text: '(${item.urlHost})',
+                  style: textTheme.caption.copyWith(height: 1.6),
+                ),
+              ]
+            ],
+          ),
+          key: ValueKey<bool>(dense),
+          maxLines: dense ? 2 : null,
+          overflow: dense ? TextOverflow.ellipsis : null,
+        );
+
+    return Hero(
+      tag: 'item_title_${item.id}',
+      child: SmoothAnimatedCrossFade(
+        condition: dense,
+        trueChild: titleText(dense: true),
+        falseChild: titleText(dense: false),
+      ),
+    );
+  }
+
+  Widget _buildThumbnail() {
+    return Hero(
+      tag: 'item_thumbnail_${item.id}',
+      child: CachedNetworkImage(
+        imageUrl: item.thumbnailUrl,
+        imageBuilder: (_, ImageProvider<dynamic> imageProvider) => Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(image: imageProvider),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        placeholder: (_, __) => const TileLoading(child: TileLoadingBlock()),
+        width: ItemTile.thumbnailSize,
+        height: ItemTile.thumbnailSize,
+      ),
+    );
+  }
+
   Widget _buildMetadataSection(BuildContext context, TextTheme textTheme) {
-    Widget upvotedMetadata({bool upvoted = false}) => MetadataItem(
+    Widget upvotedMetadata({@required bool upvoted}) => MetadataItem(
           key: ValueKey<bool>(upvoted),
           icon: FluentIcons.arrow_up_24_regular,
           text: item.score?.toString(),
           highlight: upvoted,
         );
-    final Widget upvotedMetadataTrue = upvotedMetadata(upvoted: true);
-    final Widget upvotedMetadataFalse =
-        item.score != null ? upvotedMetadata() : const SizedBox.shrink();
 
     return Hero(
       tag: 'item_metadata_${item.id}',
@@ -269,16 +280,18 @@ class ItemTileData extends HookWidget {
             orElse: () => const SizedBox.shrink(),
           ),
           useProvider(upvotedProvider(item.id)).maybeWhen(
-            data: (bool upvoted) => SmoothAnimatedSwitcher(
-              transitionBuilder: item.score != null
-                  ? SmoothAnimatedSwitcher.fadeTransitionBuilder
-                  : null,
-              condition: upvoted,
-              trueChild: upvotedMetadataTrue,
-              falseChild: upvotedMetadataFalse,
-              axis: Axis.horizontal,
-            ),
-            orElse: () => upvotedMetadataFalse,
+            data: (bool upvoted) => item.score != null
+                ? SmoothAnimatedCrossFade(
+                    condition: upvoted,
+                    trueChild: upvotedMetadata(upvoted: true),
+                    falseChild: upvotedMetadata(upvoted: false),
+                  )
+                : SmoothAnimatedSwitcher(
+                    condition: upvoted,
+                    trueChild: upvotedMetadata(upvoted: true),
+                    axis: Axis.horizontal,
+                  ),
+            orElse: () => upvotedMetadata(upvoted: false),
           ),
           if (item.descendants != null)
             MetadataItem(
@@ -332,13 +345,14 @@ class ItemTileData extends HookWidget {
                 const SizedBox(width: 8),
               ]),
             ),
-          if (item.type == ItemType.comment)
+          if (collapsible)
             SmoothAnimatedSwitcher(
               transitionBuilder: SmoothAnimatedSwitcher.fadeTransitionBuilder,
               condition: dense,
               trueChild: MetadataItem(
                 icon: FluentIcons.add_circle_24_regular,
-                text: item.kids?.length?.toString(),
+                text:
+                    item.id != root?.id ? item.kids?.length?.toString() : null,
               ),
             ),
           const Spacer(),

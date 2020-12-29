@@ -10,9 +10,9 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     this.axis = Axis.vertical,
   }) : super(key: key);
 
+  final bool condition;
   final Widget trueChild;
   final Widget falseChild;
-  final bool condition;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
   final Axis axis;
 
@@ -30,6 +30,16 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     return FadeTransition(opacity: animation, child: child);
   }
 
+  Widget _defaultLayoutBuilder(
+      Widget currentChild, List<Widget> previousChildren) {
+    return Stack(
+      children: <Widget>[
+        ...previousChildren,
+        if (currentChild != null) currentChild,
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
@@ -37,6 +47,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
       switchInCurve: Curves.easeInOut,
       switchOutCurve: Curves.easeInOut,
       transitionBuilder: transitionBuilder ?? _defaultTransitionBuilder,
+      layoutBuilder: _defaultLayoutBuilder,
       child: condition ? trueChild : falseChild,
     );
   }

@@ -10,6 +10,7 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/uni_links_handler.dart';
+import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/stories_body.dart';
 import 'package:hooks_riverpod/all.dart';
@@ -59,7 +60,7 @@ class StoriesPage extends HookWidget {
         );
 
     final AsyncValue<bool> loggedInValue = useProvider(loggedInProvider);
-    Widget accountIcon({bool loggedIn = false}) => IconButton(
+    Widget accountIcon({@required bool loggedIn}) => IconButton(
           key: ValueKey<bool>(loggedIn),
           icon: Icon(loggedIn
               ? FluentIcons.person_available_24_filled
@@ -81,24 +82,26 @@ class StoriesPage extends HookWidget {
             leading: AppBarUtil.buildFluentIconsLeading(context),
             title: const Text('Glider'),
             actions: <Widget>[
-              favoritesValue.maybeWhen(
-                data: (Iterable<int> favorites) => SmoothAnimatedSwitcher(
-                  transitionBuilder:
-                      SmoothAnimatedSwitcher.fadeTransitionBuilder,
-                  condition: favorites.isNotEmpty,
-                  trueChild: favoritesIcon(),
+              Center(
+                child: favoritesValue.maybeWhen(
+                  data: (Iterable<int> favorites) => SmoothAnimatedSwitcher(
+                    transitionBuilder:
+                        SmoothAnimatedSwitcher.fadeTransitionBuilder,
+                    condition: favorites.isNotEmpty,
+                    trueChild: favoritesIcon(),
+                  ),
+                  orElse: () => const SizedBox.shrink(),
                 ),
-                orElse: () => const SizedBox.shrink(),
               ),
-              loggedInValue.maybeWhen(
-                data: (bool loggedIn) => SmoothAnimatedSwitcher(
-                  transitionBuilder:
-                      SmoothAnimatedSwitcher.fadeTransitionBuilder,
-                  condition: loggedIn,
-                  trueChild: accountIcon(loggedIn: true),
-                  falseChild: accountIcon(),
+              Center(
+                child: loggedInValue.maybeWhen(
+                  data: (bool loggedIn) => SmoothAnimatedCrossFade(
+                    condition: loggedIn,
+                    trueChild: accountIcon(loggedIn: true),
+                    falseChild: accountIcon(loggedIn: false),
+                  ),
+                  orElse: accountIcon,
                 ),
-                orElse: accountIcon,
               ),
             ],
             forceElevated: innerBoxIsScrolled,
