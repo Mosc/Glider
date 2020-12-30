@@ -14,13 +14,8 @@ class End extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Icon(
-                FluentIcons.reading_list_24_regular,
+                FluentIcons.pulse_24_regular,
                 size: Theme.of(context).textTheme.bodyText2.fontSize * 2,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Hic sunt dracones',
-                style: Theme.of(context).textTheme.bodyText2,
               ),
             ],
           ),
