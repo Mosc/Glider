@@ -4,15 +4,13 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
   const SmoothAnimatedSwitcher({
     Key key,
     @required this.condition,
-    this.trueChild = const SizedBox.shrink(),
-    this.falseChild = const SizedBox.shrink(),
+    @required this.child,
     this.transitionBuilder,
     this.axis = Axis.vertical,
   }) : super(key: key);
 
   final bool condition;
-  final Widget trueChild;
-  final Widget falseChild;
+  final Widget child;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
   final Axis axis;
 
@@ -48,7 +46,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
       switchOutCurve: Curves.easeInOut,
       transitionBuilder: transitionBuilder ?? _defaultTransitionBuilder,
       layoutBuilder: _defaultLayoutBuilder,
-      child: condition ? trueChild : falseChild,
+      child: condition ? child : const SizedBox.shrink(),
     );
   }
 }

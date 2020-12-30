@@ -70,8 +70,8 @@ class ItemBody extends HookWidget {
     final bool collapsed = _collapsed(collapsedState, item.id);
 
     return SmoothAnimatedSwitcher(
-      condition: _collapsedAncestors(collapsedState, item.ancestors),
-      falseChild: ItemTile(
+      condition: !_collapsedAncestors(collapsedState, item.ancestors),
+      child: ItemTile(
         id: item.id,
         ancestors: item.ancestors,
         root: itemTree.items.first,

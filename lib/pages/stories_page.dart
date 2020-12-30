@@ -88,7 +88,7 @@ class StoriesPage extends HookWidget {
                     transitionBuilder:
                         SmoothAnimatedSwitcher.fadeTransitionBuilder,
                     condition: favorites.isNotEmpty,
-                    trueChild: favoritesIcon(),
+                    child: favoritesIcon(),
                   ),
                   orElse: () => const SizedBox.shrink(),
                 ),

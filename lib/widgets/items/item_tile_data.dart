@@ -160,8 +160,8 @@ class ItemTileData extends HookWidget {
               ],
               _buildMetadataSection(context, textTheme),
               SmoothAnimatedSwitcher(
-                condition: dense,
-                falseChild: Column(
+                condition: !dense,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     if (item.text != null) ...<Widget>[
@@ -270,12 +270,12 @@ class ItemTileData extends HookWidget {
         children: <Widget>[
           useProvider(favoritedProvider(item.id)).maybeWhen(
             data: (bool favorited) => SmoothAnimatedSwitcher(
+              axis: Axis.horizontal,
               condition: favorited,
-              trueChild: const MetadataItem(
+              child: const MetadataItem(
                 icon: FluentIcons.star_24_regular,
                 highlight: true,
               ),
-              axis: Axis.horizontal,
             ),
             orElse: () => const SizedBox.shrink(),
           ),
@@ -287,9 +287,9 @@ class ItemTileData extends HookWidget {
                     falseChild: upvotedMetadata(upvoted: false),
                   )
                 : SmoothAnimatedSwitcher(
-                    condition: upvoted,
-                    trueChild: upvotedMetadata(upvoted: true),
                     axis: Axis.horizontal,
+                    condition: upvoted,
+                    child: upvotedMetadata(upvoted: true),
                   ),
             orElse: () => upvotedMetadata(upvoted: false),
           ),
@@ -349,7 +349,7 @@ class ItemTileData extends HookWidget {
             SmoothAnimatedSwitcher(
               transitionBuilder: SmoothAnimatedSwitcher.fadeTransitionBuilder,
               condition: dense,
-              trueChild: MetadataItem(
+              child: MetadataItem(
                 icon: FluentIcons.add_circle_24_regular,
                 text:
                     item.id != root?.id ? item.kids?.length?.toString() : null,
