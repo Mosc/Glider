@@ -100,7 +100,7 @@ class StoriesPage extends HookWidget {
                     trueChild: accountIcon(loggedIn: true),
                     falseChild: accountIcon(loggedIn: false),
                   ),
-                  orElse: accountIcon,
+                  orElse: () => accountIcon(loggedIn: false),
                 ),
               ),
             ],
