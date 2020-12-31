@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class TileLoadingBlock extends StatelessWidget {
@@ -13,7 +14,7 @@ class TileLoadingBlock extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        color: Colors.white,
+        color: kIsWeb ? Theme.of(context).colorScheme.surface : Colors.white,
       ),
     );
   }
