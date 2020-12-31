@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +7,6 @@ import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/reply_page.dart';
-import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
@@ -16,15 +14,13 @@ import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
-import 'package:glider/widgets/common/block.dart';
-import 'package:glider/widgets/common/decorated_html.dart';
-import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
-import 'package:glider/widgets/common/tile_loading.dart';
-import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
-import 'package:glider/widgets/items/item_tile.dart';
-import 'package:glider/widgets/common/metadata_item.dart';
+import 'package:glider/widgets/items/item_tile_header.dart';
+import 'package:glider/widgets/items/item_tile_metadata.dart';
+import 'package:glider/widgets/items/item_tile_preview.dart';
+import 'package:glider/widgets/items/item_tile_text.dart';
+import 'package:glider/widgets/items/item_tile_url.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share/share.dart';
 
@@ -132,7 +128,6 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildTappable(BuildContext context, bool active) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     final bool visited = fadeable &&
         useProvider(visitedProvider(item.id)).maybeWhen(
           data: (bool value) => value,
@@ -151,14 +146,19 @@ class ItemTileData extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               if (item.localOnly) ...<Widget>[
-                _buildPreviewSection(context),
+                const ItemTilePreview(),
                 const SizedBox(height: 12),
               ],
               if (item.title != null) ...<Widget>[
-                _buildStorySection(textTheme),
+                ItemTileHeader(item, dense: dense),
                 const SizedBox(height: 12),
               ],
-              _buildMetadataSection(context, textTheme),
+              ItemTileMetadata(
+                item,
+                root: root,
+                dense: dense,
+                collapsible: collapsible,
+              ),
               SmoothAnimatedSwitcher(
                 condition: !dense,
                 child: Column(
@@ -166,231 +166,13 @@ class ItemTileData extends HookWidget {
                   children: <Widget>[
                     if (item.text != null) ...<Widget>[
                       const SizedBox(height: 12),
-                      _buildTextSection(),
+                      ItemTileText(item),
                     ],
                     if (item.url != null) ...<Widget>[
                       const SizedBox(height: 12),
-                      _buildUrlSection(textTheme),
+                      ItemTileUrl(item),
                     ],
                   ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Text _buildPreviewSection(BuildContext context) {
-    return Text(
-      'Note: The following is a preview. It may not accurately depict what '
-      'the result will look like once it has been processed.',
-      style: Theme.of(context).textTheme.caption,
-    );
-  }
-
-  Widget _buildStorySection(TextTheme textTheme) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: ItemTile.thumbnailSize),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(child: _buildTitle(textTheme)),
-          if (item.url != null) ...<Widget>[
-            const SizedBox(width: 12),
-            _buildThumbnail(),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTitle(TextTheme textTheme) {
-    Text titleText({@required bool dense}) => Text.rich(
-          TextSpan(
-            children: <InlineSpan>[
-              TextSpan(
-                text: item.title,
-                style: textTheme.subtitle1,
-              ),
-              if (item.url != null) ...<InlineSpan>[
-                TextSpan(text: ' ', style: textTheme.subtitle1),
-                TextSpan(
-                  text: '(${item.urlHost})',
-                  style: textTheme.caption.copyWith(height: 1.6),
-                ),
-              ]
-            ],
-          ),
-          key: ValueKey<bool>(dense),
-          maxLines: dense ? 2 : null,
-          overflow: dense ? TextOverflow.ellipsis : null,
-        );
-
-    return Hero(
-      tag: 'item_title_${item.id}',
-      child: SmoothAnimatedCrossFade(
-        condition: dense,
-        trueChild: titleText(dense: true),
-        falseChild: titleText(dense: false),
-      ),
-    );
-  }
-
-  Widget _buildThumbnail() {
-    return Hero(
-      tag: 'item_thumbnail_${item.id}',
-      child: CachedNetworkImage(
-        imageUrl: item.thumbnailUrl,
-        imageBuilder: (_, ImageProvider<dynamic> imageProvider) => Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(image: imageProvider),
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        placeholder: (_, __) => const TileLoading(child: TileLoadingBlock()),
-        width: ItemTile.thumbnailSize,
-        height: ItemTile.thumbnailSize,
-      ),
-    );
-  }
-
-  Widget _buildMetadataSection(BuildContext context, TextTheme textTheme) {
-    Widget upvotedMetadata({@required bool upvoted}) => MetadataItem(
-          key: ValueKey<bool>(upvoted),
-          icon: FluentIcons.arrow_up_24_regular,
-          text: item.score?.toString(),
-          highlight: upvoted,
-        );
-
-    return Hero(
-      tag: 'item_metadata_${item.id}',
-      child: Row(
-        children: <Widget>[
-          useProvider(favoritedProvider(item.id)).maybeWhen(
-            data: (bool favorited) => SmoothAnimatedSwitcher(
-              axis: Axis.horizontal,
-              condition: favorited,
-              child: const MetadataItem(
-                icon: FluentIcons.star_24_regular,
-                highlight: true,
-              ),
-            ),
-            orElse: () => const SizedBox.shrink(),
-          ),
-          useProvider(upvotedProvider(item.id)).maybeWhen(
-            data: (bool upvoted) => item.score != null
-                ? SmoothAnimatedCrossFade(
-                    condition: upvoted,
-                    trueChild: upvotedMetadata(upvoted: true),
-                    falseChild: upvotedMetadata(upvoted: false),
-                  )
-                : SmoothAnimatedSwitcher(
-                    axis: Axis.horizontal,
-                    condition: upvoted,
-                    child: upvotedMetadata(upvoted: true),
-                  ),
-            orElse: () => upvotedMetadata(upvoted: false),
-          ),
-          if (item.descendants != null)
-            MetadataItem(
-              icon: FluentIcons.comment_24_regular,
-              text: item.descendants.toString(),
-            ),
-          if (item.type == ItemType.job)
-            const MetadataItem(icon: FluentIcons.briefcase_24_regular)
-          else if (item.type == ItemType.poll)
-            const MetadataItem(icon: FluentIcons.poll_24_regular),
-          if (item.dead == true)
-            const MetadataItem(
-              icon: FluentIcons.flag_24_regular,
-            ),
-          if (item.deleted == true)
-            const MetadataItem(
-              icon: FluentIcons.delete_24_regular,
-              text: '[deleted]',
-            )
-          else if (item.by != null && item.type != ItemType.pollopt)
-            GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => UserPage(id: item.by),
-                ),
-              ),
-              child: Row(children: <Widget>[
-                if (item.by == root?.by)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      item.by,
-                      style: textTheme.caption.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                  )
-                else
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 1),
-                    child: Text(
-                      item.by,
-                      style: textTheme.caption.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ),
-                const SizedBox(width: 8),
-              ]),
-            ),
-          if (collapsible)
-            SmoothAnimatedSwitcher(
-              transitionBuilder: SmoothAnimatedSwitcher.fadeTransitionBuilder,
-              condition: dense,
-              child: MetadataItem(
-                icon: FluentIcons.add_circle_24_regular,
-                text:
-                    item.id != root?.id ? item.kids?.length?.toString() : null,
-              ),
-            ),
-          const Spacer(),
-          if (item.type != ItemType.pollopt)
-            Text(
-              item.timeAgo,
-              style: textTheme.caption,
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextSection() {
-    return Hero(
-      tag: 'item_text_${item.id}',
-      child: DecoratedHtml(item.text),
-    );
-  }
-
-  Widget _buildUrlSection(TextTheme textTheme) {
-    return Hero(
-      tag: 'item_url_${item.id}',
-      child: GestureDetector(
-        onTap: () => UrlUtil.tryLaunch(item.url),
-        child: Block(
-          child: Row(
-            children: <Widget>[
-              Icon(
-                FluentIcons.open_in_browser_24_regular,
-                size: textTheme.bodyText2.fontSize,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  item.url,
-                  style: textTheme.bodyText2
-                      .copyWith(decoration: TextDecoration.underline),
                 ),
               ),
             ],
