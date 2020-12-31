@@ -58,6 +58,7 @@ class ItemTileData extends HookWidget {
                     child: VerticalDivider(
                       width: 0,
                       color: i == item.ancestors.length - 1 &&
+                              item.by != null &&
                               useProvider(usernameProvider).maybeWhen(
                                 data: (String by) => by == item.by,
                                 orElse: () => false,
