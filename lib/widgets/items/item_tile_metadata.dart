@@ -55,7 +55,9 @@ class ItemTileMetadata extends HookWidget {
                     condition: upvoted,
                     child: _buildUpvotedMetadata(upvoted: true),
                   ),
-            orElse: () => _buildUpvotedMetadata(upvoted: false),
+            orElse: () => item.score != null
+                ? _buildUpvotedMetadata(upvoted: false)
+                : const SizedBox.shrink(),
           ),
           if (item.descendants != null)
             MetadataItem(
