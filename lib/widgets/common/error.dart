@@ -12,7 +12,7 @@ class Error extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Icon(
-              FluentIcons.error_circle_24_filled,
+              FluentIcons.error_circle_24_regular,
               size: Theme.of(context).textTheme.bodyText2.fontSize * 2,
             ),
             const SizedBox(height: 12),
