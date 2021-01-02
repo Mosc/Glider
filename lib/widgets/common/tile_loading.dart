@@ -13,8 +13,8 @@ class TileLoading extends StatelessWidget {
       return child;
     } else {
       return Shimmer.fromColors(
-        baseColor: Theme.of(context).colorScheme.surface.withOpacity(0.1),
-        highlightColor: Theme.of(context).colorScheme.surface.withOpacity(0.2),
+        baseColor: Theme.of(context).colorScheme.surface,
+        highlightColor: Theme.of(context).colorScheme.surface.withOpacity(0.25),
         child: child,
       );
     }
