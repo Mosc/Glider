@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/user_page.dart';
 import 'package:uni_links/uni_links.dart';
@@ -12,15 +12,15 @@ class UniLinksHandler {
   static StreamSubscription<Uri> uriSubscription;
 
   static Future<void> init(BuildContext context) async {
+    if (kIsWeb) {
+      return;
+    }
+
     uriSubscription = getUriLinksStream().listen(
       (Uri uri) => _handleUri(context, uri),
     );
 
-    try {
-      _handleUri(context, await getInitialUri());
-    } on MissingPluginException {
-      // Fail silently.
-    }
+    _handleUri(context, await getInitialUri());
   }
 
   static void dispose() {

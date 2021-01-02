@@ -125,6 +125,7 @@ class StoriesPage extends HookWidget {
         animationSpeed: 100,
         child: Icon(storyTypeStateController.state.icon),
       ),
+      extendBody: true,
     );
   }
 }
