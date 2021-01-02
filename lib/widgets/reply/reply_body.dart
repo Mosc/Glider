@@ -29,17 +29,9 @@ class ReplyBody extends HookWidget {
         useMemoized(() => GlobalKey<FormState>());
 
     final ValueNotifier<bool> parentCollapsedState = useState(true);
-    final ValueNotifier<String> commentTextState = useState('');
     final TextEditingController commentController = useTextEditingController();
-    useEffect(
-      () {
-        void onScrollForwardListener() =>
-            commentTextState.value = commentController.text;
-        commentController.addListener(onScrollForwardListener);
-        return () => commentController.removeListener(onScrollForwardListener);
-      },
-      <Object>[commentController],
-    );
+    final TextEditingValue commentListenable =
+        useValueListenable(commentController);
 
     return SingleChildScrollView(
       child: Column(
@@ -122,7 +114,7 @@ class ReplyBody extends HookWidget {
                 data: (String username) => username,
                 orElse: () => null,
               ),
-              text: commentTextState.value,
+              text: commentListenable.text,
             ),
           ),
         ],
