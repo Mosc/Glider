@@ -7,6 +7,7 @@ import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
+import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -60,9 +61,11 @@ class ItemTileMetadata extends HookWidget {
                 : const SizedBox.shrink(),
           ),
           if (item.descendants != null)
-            MetadataItem(
-              icon: FluentIcons.comment_24_regular,
-              text: item.descendants.toString(),
+            SmoothAnimatedSize(
+              child: MetadataItem(
+                icon: FluentIcons.comment_24_regular,
+                text: item.descendants.toString(),
+              ),
             ),
           if (item.type == ItemType.job)
             const MetadataItem(icon: FluentIcons.briefcase_24_regular)
