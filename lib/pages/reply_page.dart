@@ -5,9 +5,11 @@ import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/reply/reply_body.dart';
 
 class ReplyPage extends HookWidget {
-  const ReplyPage({Key key, @required this.parent}) : super(key: key);
+  const ReplyPage({Key key, @required this.parent, this.root})
+      : super(key: key);
 
   final Item parent;
+  final Item root;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class ReplyPage extends HookWidget {
             floating: true,
           ),
         ],
-        body: ReplyBody(parent: parent),
+        body: ReplyBody(parent: parent, root: root),
       ),
     );
   }

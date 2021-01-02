@@ -17,9 +17,11 @@ final StateProvider<int> _previewIdStateProvider =
     StateProvider<int>((ProviderReference ref) => -1);
 
 class ReplyBody extends HookWidget {
-  const ReplyBody({Key key, @required this.parent}) : super(key: key);
+  const ReplyBody({Key key, @required this.parent, this.root})
+      : super(key: key);
 
   final Item parent;
+  final Item root;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +169,13 @@ class ReplyBody extends HookWidget {
           ],
         );
 
+        // Increment root's number of descendants.
+        if (root?.descendants != null) {
+          context.read(itemCacheStateProvider(root.id)).state = root.copyWith(
+            descendants: root.descendants + 1,
+          );
+        }
+
         // Decrement preview ID to prevent duplicates.
         previewIdStateController.state--;
 
@@ -193,12 +202,17 @@ class ReplyBody extends HookWidget {
     }
   }
 
-  Item _buildItem({int id, String username, String text}) => Item(
+  Item _buildItem({
+    @required int id,
+    @required String username,
+    @required String text,
+  }) =>
+      Item(
         id: id,
         type: ItemType.comment,
         by: username,
         time: DateTime.now().secondsSinceEpoch,
-        text: text.isNotEmpty
+        text: text?.isNotEmpty == true
             ? FormattingUtil.convertHackerNewsToHtml(text)
             : null,
         ancestors: <int>[parent.id],
