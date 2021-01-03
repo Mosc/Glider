@@ -49,29 +49,8 @@ class StoriesPage extends HookWidget {
 
     final AsyncValue<Iterable<int>> favoritesValue =
         useProvider(favoriteIdsProvider);
-    Widget favoritesIcon() => IconButton(
-          icon: const Icon(FluentIcons.star_line_horizontal_3_24_filled),
-          tooltip: 'Favorites',
-          onPressed: () => Navigator.of(context).push<void>(
-            MaterialPageRoute<void>(
-              builder: (_) => const FavoritesPage(),
-            ),
-          ),
-        );
 
     final AsyncValue<bool> loggedInValue = useProvider(loggedInProvider);
-    Widget accountIcon({@required bool loggedIn}) => IconButton(
-          key: ValueKey<bool>(loggedIn),
-          icon: Icon(loggedIn
-              ? FluentIcons.person_available_24_filled
-              : FluentIcons.person_24_filled),
-          tooltip: 'Account',
-          onPressed: () => Navigator.of(context).push<void>(
-            MaterialPageRoute<void>(
-              builder: (_) => const AccountPage(),
-            ),
-          ),
-        );
 
     return Scaffold(
       body: NestedScrollView(
@@ -88,7 +67,7 @@ class StoriesPage extends HookWidget {
                     transitionBuilder:
                         SmoothAnimatedSwitcher.fadeTransitionBuilder,
                     condition: favorites.isNotEmpty,
-                    child: favoritesIcon(),
+                    child: _buildFavoritesIcon(context),
                   ),
                   orElse: () => const SizedBox.shrink(),
                 ),
@@ -97,10 +76,10 @@ class StoriesPage extends HookWidget {
                 child: loggedInValue.maybeWhen(
                   data: (bool loggedIn) => SmoothAnimatedCrossFade(
                     condition: loggedIn,
-                    trueChild: accountIcon(loggedIn: true),
-                    falseChild: accountIcon(loggedIn: false),
+                    trueChild: _buildAccountIcon(context, loggedIn: true),
+                    falseChild: _buildAccountIcon(context, loggedIn: false),
                   ),
-                  orElse: () => accountIcon(loggedIn: false),
+                  orElse: () => _buildAccountIcon(context, loggedIn: false),
                 ),
               ),
             ],
@@ -126,6 +105,33 @@ class StoriesPage extends HookWidget {
         child: Icon(storyTypeStateController.state.icon),
       ),
       extendBody: true,
+    );
+  }
+
+  Widget _buildFavoritesIcon(BuildContext context) {
+    return IconButton(
+      icon: const Icon(FluentIcons.star_line_horizontal_3_24_filled),
+      tooltip: 'Favorites',
+      onPressed: () => Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => const FavoritesPage(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAccountIcon(BuildContext context, {@required bool loggedIn}) {
+    return IconButton(
+      key: ValueKey<bool>(loggedIn),
+      icon: Icon(loggedIn
+          ? FluentIcons.person_available_24_filled
+          : FluentIcons.person_24_filled),
+      tooltip: 'Account',
+      onPressed: () => Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => const AccountPage(),
+        ),
+      ),
     );
   }
 }
