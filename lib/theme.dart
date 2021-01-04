@@ -30,6 +30,7 @@ ThemeData get darkTheme => ThemeData(
       buttonTheme: const ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
       ),
+      toggleableActiveColor: _primaryColor,
       appBarTheme: AppBarTheme(
         brightness: Brightness.dark,
         color: Colors.grey[900],
