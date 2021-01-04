@@ -28,17 +28,21 @@ abstract class Item with _$Item {
   }) = _Item;
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+}
 
-  @late
+extension ItemExtension on Item {
   String get urlHost => Uri.parse(url)?.host;
 
-  @late
   String get timeAgo =>
       timeago.format(DateTime.fromMillisecondsSinceEpoch(time * 1000));
 
-  @late
   String get thumbnailUrl => 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
 
-  @late
   bool get localOnly => id != null && id < 0;
+
+  Item addKid(int kidId) =>
+      copyWith(kids: <int>[kidId, if (kids != null) ...kids]);
+
+  Item incrementDescendants() =>
+      copyWith(descendants: descendants != null ? descendants + 1 : null);
 }

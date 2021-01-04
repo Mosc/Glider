@@ -154,18 +154,13 @@ class ReplyBody extends HookWidget {
         );
 
         // Add comment preview to parent's list of children.
-        context.read(itemCacheStateProvider(parent.id)).state = parent.copyWith(
-          kids: <int>[
-            previewId,
-            if (parent.kids != null) ...parent.kids,
-          ],
-        );
+        context.read(itemCacheStateProvider(parent.id)).state =
+            parent.incrementDescendants().addKid(previewId);
 
         // Increment root's number of descendants.
-        if (root?.descendants != null) {
-          context.read(itemCacheStateProvider(root.id)).state = root.copyWith(
-            descendants: root.descendants + 1,
-          );
+        if (parent != root) {
+          context.read(itemCacheStateProvider(root.id)).state =
+              root.incrementDescendants();
         }
 
         // Decrement preview ID to prevent duplicates.
