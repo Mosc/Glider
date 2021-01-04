@@ -45,7 +45,7 @@ class ItemBody extends HookWidget {
               (_, int index) => _loaded(itemTree, index)
                   ? _buildItem(itemTree, index, collapsedState)
                   : _buildItemLoading(index),
-              childCount: itemTree.hasMore ? null : itemTree.items.length,
+              childCount: itemTree.done ? itemTree.items.length : null,
             ),
           ),
         ];

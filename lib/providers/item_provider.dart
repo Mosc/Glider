@@ -50,10 +50,10 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
 
   await for (final Item item in itemStream) {
     items.add(item);
-    yield ItemTree(items: items, hasMore: true);
+    yield ItemTree(items: items, done: false);
   }
 
-  yield ItemTree(items: items, hasMore: false);
+  yield ItemTree(items: items, done: true);
 });
 
 Stream<Item> _itemStream(ProviderReference ref,
