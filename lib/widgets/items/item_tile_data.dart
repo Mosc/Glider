@@ -297,13 +297,14 @@ class ItemTileData extends HookWidget {
                 orElse: () => null,
               ),
           if (item.url != null) ...<Widget>[
-            ListTile(
-              title: const Text('Open link'),
-              onTap: () async {
-                await UrlUtil.tryLaunch(item.url);
-                Navigator.of(context).pop();
-              },
-            ),
+            if (!dense)
+              ListTile(
+                title: const Text('Open link'),
+                onTap: () async {
+                  await UrlUtil.tryLaunch(item.url);
+                  Navigator.of(context).pop();
+                },
+              ),
             ListTile(
               title: const Text('Share link'),
               onTap: () async {
