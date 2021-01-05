@@ -10,6 +10,7 @@ import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/date_time_extension.dart';
 import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
+import 'package:glider/utils/validators.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -46,20 +47,12 @@ class ReplyBody extends HookWidget {
                 children: <Widget>[
                   TextFormField(
                     controller: commentController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Comment',
-                    ),
+                    decoration: const InputDecoration(labelText: 'Comment'),
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
                     autofocus: true,
                     maxLines: null,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Comment must not be empty';
-                      }
-                      return null;
-                    },
+                    validator: Validators.notEmpty,
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -67,8 +60,7 @@ class ReplyBody extends HookWidget {
                     children: <Widget>[
                       if (parent.text != null) ...<Widget>[
                         OutlinedButton(
-                          onPressed: () =>
-                              _handleQuoteParent(commentController),
+                          onPressed: () => _quoteParent(commentController),
                           child: const Text('Insert parent quote'),
                         ),
                         const SizedBox(width: 16),
@@ -76,8 +68,7 @@ class ReplyBody extends HookWidget {
                       ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState.validate()) {
-                            await _handleReply(context,
-                                text: commentController.text);
+                            await _reply(context, text: commentController.text);
                           }
                         },
                         child: const Text('Reply'),
@@ -90,14 +81,9 @@ class ReplyBody extends HookWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Preview',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ],
+            child: Text(
+              'Preview',
+              style: Theme.of(context).textTheme.subtitle1,
             ),
           ),
           ItemTileData(
@@ -122,7 +108,7 @@ class ReplyBody extends HookWidget {
     );
   }
 
-  void _handleQuoteParent(TextEditingController commentController) {
+  void _quoteParent(TextEditingController commentController) {
     final String quotedParent =
         FormattingUtil.convertHtmlToHackerNews(parent.text).replaceAllMapped(
       RegExp('^.+', multiLine: true),
@@ -131,8 +117,7 @@ class ReplyBody extends HookWidget {
     commentController.text = '$quotedParent\n\n${commentController.text}';
   }
 
-  Future<void> _handleReply(BuildContext context,
-      {@required String text}) async {
+  Future<void> _reply(BuildContext context, {@required String text}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
