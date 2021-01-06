@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/repositories/storage_repository.dart';
+import 'package:glider/repositories/web_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,6 +46,12 @@ final Provider<AuthRepository> authRepositoryProvider =
 
 final Provider<ApiRepository> apiRepositoryProvider = Provider<ApiRepository>(
   (ProviderReference ref) => ApiRepository(
+    ref.read(_dioProvider),
+  ),
+);
+
+final Provider<WebRepository> webRepositoryProvider = Provider<WebRepository>(
+  (ProviderReference ref) => WebRepository(
     ref.read(_dioProvider),
   ),
 );

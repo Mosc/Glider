@@ -90,4 +90,18 @@ class AuthRepository {
 
     return false;
   }
+
+  Future<bool> submit({@required String title, String url, String text}) async {
+    if (await _storageRepository.loggedIn) {
+      return _websiteRepository.submit(
+        username: await _storageRepository.username,
+        password: await _storageRepository.password,
+        title: title,
+        url: url,
+        text: text,
+      );
+    }
+
+    return false;
+  }
 }

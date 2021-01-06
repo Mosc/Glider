@@ -4,10 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'post_data.freezed.dart';
 part 'post_data.g.dart';
 
+// ignore: one_member_abstracts
 abstract class PostData {
-  String get acct;
-  String get pw;
-
   Map<String, dynamic> toJson();
 }
 
@@ -73,4 +71,31 @@ abstract class CommentPostData with _$CommentPostData implements PostData {
 
   factory CommentPostData.fromJson(Map<String, dynamic> json) =>
       _$CommentPostDataFromJson(json);
+}
+
+@freezed
+abstract class SubmitFormPostData
+    with _$SubmitFormPostData
+    implements PostData {
+  factory SubmitFormPostData({
+    @required String acct,
+    @required String pw,
+  }) = _SubmitFormPostData;
+
+  factory SubmitFormPostData.fromJson(Map<String, dynamic> json) =>
+      _$SubmitFormPostDataFromJson(json);
+}
+
+@freezed
+abstract class SubmitPostData with _$SubmitPostData implements PostData {
+  factory SubmitPostData({
+    @required String fnid,
+    @required String fnop,
+    @required String title,
+    String url,
+    String text,
+  }) = _SubmitPostData;
+
+  factory SubmitPostData.fromJson(Map<String, dynamic> json) =>
+      _$SubmitPostDataFromJson(json);
 }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:glider/models/post_data.dart';
+import 'package:glider/utils/html_util.dart';
 
 class WebsiteRepository {
   const WebsiteRepository(this._dio);
@@ -13,29 +14,29 @@ class WebsiteRepository {
     @required String username,
     @required String password,
   }) async {
-    const String url = '$baseUrl/login';
-    final PostData postData = RegisterPostData(
+    const String path = '$baseUrl/login';
+    final PostData data = RegisterPostData(
       acct: username,
       pw: password,
       creating: 't',
       goto: 'news',
     );
 
-    return _performPost(url, postData);
+    return _performDefaultPost(path, data);
   }
 
   Future<bool> login({
     @required String username,
     @required String password,
   }) async {
-    const String url = '$baseUrl/login';
-    final PostData postData = LoginPostData(
+    const String path = '$baseUrl/login';
+    final PostData data = LoginPostData(
       acct: username,
       pw: password,
       goto: 'news',
     );
 
-    return _performPost(url, postData);
+    return _performDefaultPost(path, data);
   }
 
   Future<bool> favorite({
@@ -44,15 +45,15 @@ class WebsiteRepository {
     @required int id,
     @required bool favorite,
   }) async {
-    const String url = '$baseUrl/fave';
-    final PostData postData = FavoritePostData(
+    const String path = '$baseUrl/fave';
+    final PostData data = FavoritePostData(
       acct: username,
       pw: password,
       id: id,
       un: favorite ? null : 't',
     );
 
-    return _performPost(url, postData);
+    return _performDefaultPost(path, data);
   }
 
   Future<bool> vote({
@@ -61,15 +62,15 @@ class WebsiteRepository {
     @required int id,
     @required bool up,
   }) async {
-    const String url = '$baseUrl/vote';
-    final PostData postData = VotePostData(
+    const String path = '$baseUrl/vote';
+    final PostData data = VotePostData(
       acct: username,
       pw: password,
       id: id,
       how: up ? 'up' : 'un',
     );
 
-    return _performPost(url, postData);
+    return _performDefaultPost(path, data);
   }
 
   Future<bool> comment({
@@ -78,31 +79,91 @@ class WebsiteRepository {
     @required int parentId,
     @required String text,
   }) async {
-    const String url = '$baseUrl/comment';
-    final PostData postData = CommentPostData(
+    const String path = '$baseUrl/comment';
+    final PostData data = CommentPostData(
       acct: username,
       pw: password,
       parent: parentId,
       text: text,
     );
 
-    return _performPost(url, postData);
+    return _performDefaultPost(path, data);
   }
 
-  Future<bool> _performPost(String url, PostData data) async {
+  Future<bool> submit({
+    @required String username,
+    @required String password,
+    @required String title,
+    String url,
+    String text,
+  }) async {
+    const String formPath = '$baseUrl/submitlink';
+    final PostData formData = SubmitFormPostData(
+      acct: username,
+      pw: password,
+    );
+
+    final Response<List<int>> response = await _performPost<List<int>>(
+      formPath,
+      formData,
+      responseType: ResponseType.bytes,
+      validateStatus: (int status) => status == 200,
+    );
+    final Map<String, String> formValues =
+        HtmlUtil.getHiddenFormValues(response.data);
+
+    if (formValues == null || formValues.isEmpty) {
+      return false;
+    }
+
+    const String path = '$baseUrl/r';
+    final PostData data = SubmitPostData(
+      fnid: formValues['fnid'],
+      fnop: formValues['fnop'],
+      title: title,
+      url: url,
+      text: text,
+    );
+    final String cookie = response.headers.value('set-cookie');
+
+    return _performDefaultPost(path, data, cookie: cookie);
+  }
+
+  Future<bool> _performDefaultPost(String path, PostData data,
+      {String cookie}) async {
     try {
-      final Response<String> response = await _dio.post<String>(
-        url,
-        data: data.toJson(),
-        options: Options(
-          contentType: 'application/x-www-form-urlencoded',
-          followRedirects: false,
-          validateStatus: (int status) => status >= 200 && status < 400,
-        ),
+      await _performPost<void>(
+        path,
+        data,
+        cookie: cookie,
+        validateStatus: (int status) => status == 302,
       );
-      return response.statusCode == 302;
+      return true;
     } on DioError {
       return false;
+    }
+  }
+
+  Future<Response<T>> _performPost<T>(
+    String path,
+    PostData data, {
+    String cookie,
+    ResponseType responseType,
+    bool Function(int) validateStatus,
+  }) async {
+    try {
+      return _dio.post<T>(
+        path,
+        data: data.toJson(),
+        options: Options(
+          headers: <String, dynamic>{if (cookie != null) 'cookie': cookie},
+          responseType: responseType,
+          contentType: 'application/x-www-form-urlencoded',
+          validateStatus: validateStatus,
+        ),
+      );
+    } on DioError {
+      return null;
     }
   }
 }
