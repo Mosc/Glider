@@ -87,7 +87,11 @@ class WebsiteRepository {
       text: text,
     );
 
-    return _performDefaultPost(path, data);
+    return _performDefaultPost(
+      path,
+      data,
+      validateLocation: (String location) => location == '/',
+    );
   }
 
   Future<bool> submit({
@@ -126,18 +130,32 @@ class WebsiteRepository {
     );
     final String cookie = response.headers.value('set-cookie');
 
-    return _performDefaultPost(path, data, cookie: cookie);
+    return _performDefaultPost(
+      path,
+      data,
+      cookie: cookie,
+      validateLocation: (String location) => location == '/newest',
+    );
   }
 
-  Future<bool> _performDefaultPost(String path, PostData data,
-      {String cookie}) async {
+  Future<bool> _performDefaultPost(
+    String path,
+    PostData data, {
+    String cookie,
+    bool Function(String) validateLocation,
+  }) async {
     try {
-      await _performPost<void>(
+      final Response<void> response = await _performPost<void>(
         path,
         data,
         cookie: cookie,
         validateStatus: (int status) => status == 302,
       );
+
+      if (validateLocation != null) {
+        return validateLocation(response.headers.value('location'));
+      }
+
       return true;
     } on DioError {
       return false;
