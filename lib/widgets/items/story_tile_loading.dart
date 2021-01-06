@@ -39,7 +39,7 @@ class StoryTileLoading extends StatelessWidget {
                 const TileLoadingBlock(
                   width: ItemTile.thumbnailSize,
                   height: ItemTile.thumbnailSize,
-                )
+                ),
               ],
             ),
             const SizedBox(height: 15),

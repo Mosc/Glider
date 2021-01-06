@@ -36,7 +36,8 @@ extension ItemExtension on Item {
   String get timeAgo =>
       timeago.format(DateTime.fromMillisecondsSinceEpoch(time * 1000));
 
-  String get thumbnailUrl => 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
+  String get thumbnailUrl =>
+      localOnly ? null : 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
 
   bool get localOnly => id != null && id < 0;
 

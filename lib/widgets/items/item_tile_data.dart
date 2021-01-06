@@ -238,7 +238,7 @@ class ItemTileData extends HookWidget {
         ),
       );
 
-      if (success != null && success && root?.id != null) {
+      if (success == true && root?.id != null) {
         context.refresh(itemTreeStreamProvider(root.id));
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(
