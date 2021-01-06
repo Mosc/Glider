@@ -10,6 +10,9 @@ import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
+final StateProvider<int> previewIdStateProvider =
+    StateProvider<int>((ProviderReference ref) => -1);
+
 final AutoDisposeFutureProvider<Iterable<int>> favoriteIdsProvider =
     FutureProvider.autoDispose(
   (ProviderReference ref) => ref.read(storageRepositoryProvider).favoriteIds,

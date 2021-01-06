@@ -14,9 +14,6 @@ import 'package:glider/utils/validators.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final StateProvider<int> _previewIdStateProvider =
-    StateProvider<int>((ProviderReference ref) => -1);
-
 class ReplyBody extends HookWidget {
   const ReplyBody({Key key, @required this.parent, this.root})
       : super(key: key);
@@ -95,7 +92,7 @@ class ReplyBody extends HookWidget {
           ),
           ItemTileData(
             _buildItem(
-              id: context.read(_previewIdStateProvider).state,
+              id: context.read(previewIdStateProvider).state,
               username: useProvider(usernameProvider).maybeWhen(
                 data: (String username) => username,
                 orElse: () => null,
@@ -128,7 +125,7 @@ class ReplyBody extends HookWidget {
 
       if (success) {
         final StateController<int> previewIdStateController =
-            context.read(_previewIdStateProvider);
+            context.read(previewIdStateProvider);
         final int previewId = previewIdStateController.state;
 
         // Make comment preview available.
