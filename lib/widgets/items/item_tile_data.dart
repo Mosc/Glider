@@ -294,7 +294,7 @@ class ItemTileData extends HookWidget {
                           Navigator.of(context).pop();
                         },
                       ),
-                orElse: () => null,
+                orElse: () => const SizedBox.shrink(),
               ),
           if (item.url != null) ...<Widget>[
             if (!dense)
