@@ -95,13 +95,13 @@ class ItemTileData extends HookWidget {
           ? useProvider(upvotedProvider(item.id)).maybeWhen(
               data: (bool upvoted) => !upvoted
                   ? SlidableAction(
-                      action: () => _handleVote(context, up: true),
+                      action: () => _vote(context, up: true),
                       icon: FluentIcons.arrow_up_24_filled,
                       color: Theme.of(context).colorScheme.primary,
                       iconColor: Theme.of(context).colorScheme.onPrimary,
                     )
                   : SlidableAction(
-                      action: () => _handleVote(context, up: false),
+                      action: () => _vote(context, up: false),
                       icon: FluentIcons.arrow_undo_24_filled,
                     ),
               orElse: () => null,
@@ -118,17 +118,17 @@ class ItemTileData extends HookWidget {
               : null
           : canReply
               ? SlidableAction(
-                  action: () => _handleReply(context),
+                  action: () => _reply(context),
                   icon: FluentIcons.arrow_reply_24_filled,
                   color: Theme.of(context).colorScheme.surface,
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )
               : null,
-      child: _buildTappable(context, active),
+      child: _buildTappable(context, active: active),
     );
   }
 
-  Widget _buildTappable(BuildContext context, bool active) {
+  Widget _buildTappable(BuildContext context, {@required bool active}) {
     final bool visited = fadeable &&
         useProvider(visitedProvider(item.id)).maybeWhen(
           data: (bool value) => value,
@@ -183,7 +183,7 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Future<void> _handleFavorite(BuildContext context,
+  Future<void> _favorite(BuildContext context,
       {@required bool favorite}) async {
     await context
         .read(authRepositoryProvider)
@@ -192,7 +192,7 @@ class ItemTileData extends HookWidget {
     await context.refresh(favoriteIdsProvider);
   }
 
-  Future<void> _handleVote(BuildContext context, {@required bool up}) async {
+  Future<void> _vote(BuildContext context, {@required bool up}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -227,7 +227,7 @@ class ItemTileData extends HookWidget {
     }
   }
 
-  Future<void> _handleReply(BuildContext context) async {
+  Future<void> _reply(BuildContext context) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -283,14 +283,14 @@ class ItemTileData extends HookWidget {
                     ? ListTile(
                         title: const Text('Favorite'),
                         onTap: () async {
-                          await _handleFavorite(context, favorite: true);
+                          await _favorite(context, favorite: true);
                           Navigator.of(context).pop();
                         },
                       )
                     : ListTile(
                         title: const Text('Unfavorite'),
                         onTap: () async {
-                          await _handleFavorite(context, favorite: false);
+                          await _favorite(context, favorite: false);
                           Navigator.of(context).pop();
                         },
                       ),
