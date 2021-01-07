@@ -63,6 +63,7 @@ class ItemTileMetadata extends HookWidget {
           if (item.descendants != null)
             SmoothAnimatedSize(
               child: MetadataItem(
+                key: ValueKey<int>(item.descendants),
                 icon: FluentIcons.comment_24_regular,
                 text: item.descendants.toString(),
               ),
@@ -94,7 +95,7 @@ class ItemTileMetadata extends HookWidget {
 
   Widget _buildUpvotedMetadata({@required bool upvoted}) {
     return MetadataItem(
-      key: ValueKey<bool>(upvoted),
+      key: ValueKey<int>(item.score),
       icon: FluentIcons.arrow_up_24_regular,
       text: item.score?.toString(),
       highlight: upvoted,

@@ -18,6 +18,7 @@ import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/items/item_tile_content.dart';
 import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:share/share.dart';
 
 class ItemTileData extends HookWidget {
@@ -84,23 +85,32 @@ class ItemTileData extends HookWidget {
         active && item.type != ItemType.job && item.type != ItemType.pollopt;
     final bool canReply = canVote && root?.id != null;
 
+    // We don't want the slidable to update while being slided, so we delay any
+    // upvote state until after the call has actually finished.
+    final ValueNotifier<bool> delayedUpvotedState = useState();
+    Future<void> updateDelayedUpvoted() async => delayedUpvotedState.value =
+        await context.read(upvotedProvider(item.id).future);
+    useMemoized(updateDelayedUpvoted);
+
+    Future<void> vote({@required bool up}) async {
+      await _vote(context, up: up);
+      unawaited(updateDelayedUpvoted());
+    }
+
     return Slidable(
       key: ValueKey<int>(item.id),
-      startToEndAction: canVote
-          ? useProvider(upvotedProvider(item.id)).maybeWhen(
-              data: (bool upvoted) => !upvoted
-                  ? SlidableAction(
-                      action: () => _vote(context, up: true),
-                      icon: FluentIcons.arrow_up_24_filled,
-                      color: Theme.of(context).colorScheme.primary,
-                      iconColor: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : SlidableAction(
-                      action: () => _vote(context, up: false),
-                      icon: FluentIcons.arrow_undo_24_filled,
-                    ),
-              orElse: () => null,
-            )
+      startToEndAction: canVote && delayedUpvotedState.value != null
+          ? !delayedUpvotedState.value
+              ? SlidableAction(
+                  action: () => vote(up: true),
+                  icon: FluentIcons.arrow_up_24_filled,
+                  color: Theme.of(context).colorScheme.primary,
+                  iconColor: Theme.of(context).colorScheme.onPrimary,
+                )
+              : SlidableAction(
+                  action: () => vote(up: false),
+                  icon: FluentIcons.arrow_undo_24_filled,
+                )
           : null,
       endToStartAction: dense
           ? item.url != null
@@ -182,15 +192,15 @@ class ItemTileData extends HookWidget {
                 data: (bool favorited) => !favorited
                     ? ListTile(
                         title: const Text('Favorite'),
-                        onTap: () async {
-                          await _favorite(context, favorite: true);
+                        onTap: () {
+                          _favorite(context, favorite: true);
                           Navigator.of(context).pop();
                         },
                       )
                     : ListTile(
                         title: const Text('Unfavorite'),
-                        onTap: () async {
-                          await _favorite(context, favorite: false);
+                        onTap: () {
+                          _favorite(context, favorite: false);
                           Navigator.of(context).pop();
                         },
                       ),
@@ -237,24 +247,27 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Future<void> _favorite(BuildContext context,
-      {@required bool favorite}) async {
-    await context
-        .read(authRepositoryProvider)
-        .favorite(id: item.id, favorite: favorite);
-    await context.refresh(favoritedProvider(item.id));
-    await context.refresh(favoriteIdsProvider);
+  void _favorite(BuildContext context, {@required bool favorite}) {
+    context.read(authRepositoryProvider).favorite(
+          id: item.id,
+          favorite: favorite,
+          onUpdate: () => context
+            ..refresh(favoritedProvider(item.id))
+            ..refresh(favoriteIdsProvider),
+        );
   }
 
   Future<void> _vote(BuildContext context, {@required bool up}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final bool success = await authRepository.vote(id: item.id, up: up);
+      final bool success = await authRepository.vote(
+        id: item.id,
+        up: up,
+        onUpdate: () => context.refresh(upvotedProvider(item.id)),
+      );
 
       if (success) {
-        await context.refresh(upvotedProvider(item.id));
-
         if (item.score != null) {
           context.read(itemCacheStateProvider(item.id)).state =
               item.copyWith(score: item.score + (up ? 1 : -1));

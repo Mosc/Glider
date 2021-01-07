@@ -29,7 +29,7 @@ class Slidable extends StatelessWidget {
               ? DismissDirection.horizontal
               : DismissDirection.startToEnd
           : DismissDirection.endToStart,
-      confirmDismiss: (DismissDirection direction) async {
+      confirmDismiss: (DismissDirection direction) {
         switch (direction) {
           case DismissDirection.startToEnd:
             startToEndAction.action?.call();

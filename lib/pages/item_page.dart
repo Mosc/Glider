@@ -5,6 +5,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/items/item_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 class ItemPage extends HookWidget {
   const ItemPage({Key key, @required this.id}) : super(key: key);
@@ -32,6 +33,6 @@ class ItemPage extends HookWidget {
 
   Future<void> _setVisited(BuildContext context) async {
     await context.read(storageRepositoryProvider).setVisited(id: id);
-    await context.refresh(visitedProvider(id));
+    unawaited(context.refresh(visitedProvider(id)));
   }
 }

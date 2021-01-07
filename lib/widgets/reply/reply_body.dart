@@ -92,7 +92,7 @@ class ReplyBody extends HookWidget {
           ),
           ItemTileData(
             _buildItem(
-              id: context.read(previewIdStateProvider).state,
+              id: useProvider(previewIdStateProvider).state,
               username: useProvider(usernameProvider).maybeWhen(
                 data: (String username) => username,
                 orElse: () => null,

@@ -44,8 +44,10 @@ class AuthRepository {
 
   Future<void> logout() async => _storageRepository.removeAuth();
 
-  Future<bool> favorite({@required int id, @required bool favorite}) async {
+  Future<bool> favorite(
+      {@required int id, @required bool favorite, Function onUpdate}) async {
     await _storageRepository.setFavorited(id: id, favorite: favorite);
+    onUpdate?.call();
 
     if (await _storageRepository.loggedIn) {
       return _websiteRepository.favorite(
@@ -59,7 +61,12 @@ class AuthRepository {
     return false;
   }
 
-  Future<bool> vote({@required int id, @required bool up}) async {
+  Future<bool> vote(
+      {@required int id, @required bool up, Function onUpdate}) async {
+    final bool oldUp = await _storageRepository.upvoted(id: id);
+    await _storageRepository.setUpvoted(id: id, up: up);
+    onUpdate?.call();
+
     if (await _storageRepository.loggedIn) {
       final bool success = await _websiteRepository.vote(
         username: await _storageRepository.username,
@@ -68,8 +75,9 @@ class AuthRepository {
         up: up,
       );
 
-      if (success) {
-        await _storageRepository.setUpvoted(id: id, up: up);
+      if (!success) {
+        await _storageRepository.setUpvoted(id: id, up: oldUp);
+        onUpdate?.call();
       }
 
       return success;
