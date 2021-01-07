@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:html/dom.dart' as dom;
@@ -28,7 +30,7 @@ class HtmlRepository {
         data: data,
         options: Options(
           responseType: ResponseType.bytes,
-          validateStatus: (int status) => status == 200,
+          validateStatus: (int status) => status == HttpStatus.ok,
         ),
       );
       final dom.Document document = parser.parse(response.data);

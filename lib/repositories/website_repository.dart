@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:glider/models/post_data.dart';
@@ -111,7 +113,7 @@ class WebsiteRepository {
       formPath,
       formData,
       responseType: ResponseType.bytes,
-      validateStatus: (int status) => status == 200,
+      validateStatus: (int status) => status == HttpStatus.ok,
     );
     final Map<String, String> formValues =
         HtmlUtil.getHiddenFormValues(response.data);
@@ -149,7 +151,7 @@ class WebsiteRepository {
         path,
         data,
         cookie: cookie,
-        validateStatus: (int status) => status == 302,
+        validateStatus: (int status) => status == HttpStatus.found,
       );
 
       if (validateLocation != null) {
