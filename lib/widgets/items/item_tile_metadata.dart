@@ -73,12 +73,14 @@ class ItemTileMetadata extends HookWidget {
             const MetadataItem(icon: FluentIcons.poll_24_regular),
           if (item.dead == true)
             const MetadataItem(icon: FluentIcons.flag_24_regular),
-          if (item.deleted == true)
-            const MetadataItem(
-              icon: FluentIcons.delete_24_regular,
-              text: '[deleted]',
-            )
-          else if (item.by != null && item.type != ItemType.pollopt)
+          if (item.deleted == true) ...<Widget>[
+            const MetadataItem(icon: FluentIcons.delete_24_regular),
+            Text(
+              '[deleted]',
+              style: textTheme.bodyText2
+                  .copyWith(fontSize: textTheme.caption.fontSize),
+            ),
+          ] else if (item.by != null && item.type != ItemType.pollopt)
             _buildUsername(context, textTheme),
           if (collapsible) _buildCollapsedIndicator(),
           const Spacer(),
