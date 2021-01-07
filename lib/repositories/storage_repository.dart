@@ -33,7 +33,8 @@ class StorageRepository {
   }
 
   Future<Iterable<int>> get favoriteIds async =>
-      (await _sharedPreferences).getStringList(_favoritedKey).map(int.parse);
+      (await _sharedPreferences).getStringList(_favoritedKey)?.map(int.parse) ??
+      <int>[];
 
   Future<bool> favorited({@required int id}) async =>
       (await _sharedPreferences).containsElement(_favoritedKey, id.toString());
