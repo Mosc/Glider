@@ -77,7 +77,7 @@ class ItemBody extends HookWidget {
         root: itemTree.items.first,
         onTap: () => _collapse(collapsedState, item.id),
         dense: collapsed,
-        collapsible: true,
+        interactive: true,
         loading: () => _buildItemLoading(index),
       ),
     );

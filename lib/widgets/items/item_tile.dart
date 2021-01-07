@@ -13,7 +13,7 @@ class ItemTile extends HookWidget {
     this.root,
     this.onTap,
     this.dense = false,
-    this.collapsible = false,
+    this.interactive = false,
     this.fadeable = false,
     @required this.loading,
   }) : super(key: key);
@@ -23,7 +23,7 @@ class ItemTile extends HookWidget {
   final Item root;
   final void Function() onTap;
   final bool dense;
-  final bool collapsible;
+  final bool interactive;
   final bool fadeable;
   final Widget Function() loading;
 
@@ -42,7 +42,7 @@ class ItemTile extends HookWidget {
             root: root,
             onTap: onTap,
             dense: dense,
-            collapsible: collapsible,
+            interactive: interactive,
             fadeable: fadeable,
           )
         : loading();

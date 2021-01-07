@@ -15,12 +15,8 @@ import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/slidable.dart';
-import 'package:glider/widgets/common/smooth_animated_switcher.dart';
-import 'package:glider/widgets/items/item_tile_header.dart';
-import 'package:glider/widgets/items/item_tile_metadata.dart';
-import 'package:glider/widgets/items/item_tile_preview.dart';
-import 'package:glider/widgets/items/item_tile_text.dart';
-import 'package:glider/widgets/items/item_tile_url.dart';
+import 'package:glider/widgets/items/item_tile_content.dart';
+import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share/share.dart';
 
@@ -31,7 +27,7 @@ class ItemTileData extends HookWidget {
     this.root,
     this.onTap,
     this.dense = false,
-    this.collapsible = false,
+    this.interactive = false,
     this.fadeable = false,
   }) : super(key: key);
 
@@ -39,16 +35,17 @@ class ItemTileData extends HookWidget {
   final Item root;
   final void Function() onTap;
   final bool dense;
-  final bool collapsible;
+  final bool interactive;
   final bool fadeable;
 
   @override
   Widget build(BuildContext context) {
-    final bool indented = item.ancestors != null && item.ancestors.isNotEmpty;
+    final bool indented =
+        item.ancestors?.isNotEmpty == true && item.type != ItemType.pollopt;
 
     return Stack(
       children: <Widget>[
-        if (indented && item.ancestors != null)
+        if (indented)
           Positioned.fill(
             child: Row(
               children: <Widget>[
@@ -83,11 +80,9 @@ class ItemTileData extends HookWidget {
   Widget _buildSlidable(BuildContext context) {
     final bool active =
         item.id != null && item.deleted != true && item.localOnly != true;
-    final bool canVote = active && item.type != ItemType.job;
-    final bool canReply = active &&
-        item.type != ItemType.job &&
-        item.type != ItemType.pollopt &&
-        root?.id != null;
+    final bool canVote =
+        active && item.type != ItemType.job && item.type != ItemType.pollopt;
+    final bool canReply = canVote && root?.id != null;
 
     return Slidable(
       key: ValueKey<int>(item.id),
@@ -129,56 +124,115 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildTappable(BuildContext context, {@required bool active}) {
-    final bool visited = fadeable &&
-        useProvider(visitedProvider(item.id)).maybeWhen(
-          data: (bool value) => value,
-          orElse: () => false,
-        );
-
     return InkWell(
-      onTap: active && onTap != null ? onTap : null,
+      onTap: active && onTap != null
+          ? item.type == ItemType.pollopt && interactive
+              ? () => _vote(
+                    context,
+                    up: !context.read(upvotedProvider(item.id)).maybeWhen(
+                          data: (bool upvoted) => upvoted,
+                          orElse: () => false,
+                        ),
+                  )
+              : onTap
+          : null,
       onLongPress: active ? () => _buildModalBottomSheet(context) : null,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 400),
-        opacity: visited ? 2 / 3 : 1,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (item.localOnly) ...<Widget>[
-                const ItemTilePreview(),
-                const SizedBox(height: 12),
-              ],
-              if (item.title != null) ...<Widget>[
-                ItemTileHeader(item, dense: dense),
-                const SizedBox(height: 12),
-              ],
-              ItemTileMetadata(
-                item,
-                root: root,
-                dense: dense,
-                collapsible: collapsible,
+      child: fadeable ? _buildFadeable(context) : _buildContent(context),
+    );
+  }
+
+  Widget _buildFadeable(BuildContext context) {
+    final bool visibility = useProvider(visitedProvider(item.id)).maybeWhen(
+      data: (bool value) => value,
+      orElse: () => false,
+    );
+
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 400),
+      opacity: visibility ? 2 / 3 : 1,
+      child: _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: item.type == ItemType.pollopt
+          ? ItemTileContentPollOption(
+              item,
+              root: root,
+              interactive: interactive,
+              vote: _vote,
+            )
+          : ItemTileContent(
+              item,
+              root: root,
+              dense: dense,
+              interactive: interactive,
+            ),
+    );
+  }
+
+  Future<void> _buildModalBottomSheet(BuildContext context) async {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => Wrap(
+        children: <Widget>[
+          context.read(favoritedProvider(item.id)).maybeWhen(
+                data: (bool favorited) => !favorited
+                    ? ListTile(
+                        title: const Text('Favorite'),
+                        onTap: () async {
+                          await _favorite(context, favorite: true);
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    : ListTile(
+                        title: const Text('Unfavorite'),
+                        onTap: () async {
+                          await _favorite(context, favorite: false);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                orElse: () => const SizedBox.shrink(),
               ),
-              SmoothAnimatedSwitcher(
-                condition: !dense,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (item.text != null) ...<Widget>[
-                      const SizedBox(height: 12),
-                      ItemTileText(item),
-                    ],
-                    if (item.url != null) ...<Widget>[
-                      const SizedBox(height: 12),
-                      ItemTileUrl(item),
-                    ],
-                  ],
-                ),
+          if (item.url != null) ...<Widget>[
+            if (!dense)
+              ListTile(
+                title: const Text('Open link'),
+                onTap: () async {
+                  await UrlUtil.tryLaunch(item.url);
+                  Navigator.of(context).pop();
+                },
               ),
-            ],
+            ListTile(
+              title: const Text('Share link'),
+              onTap: () async {
+                await Share.share(item.url);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          if (item.text != null)
+            ListTile(
+              title: const Text('Copy text'),
+              onTap: () async {
+                await Clipboard.setData(ClipboardData(text: item.text));
+                ScaffoldMessenger.of(context).showSnackBarQuickly(
+                  const SnackBar(content: Text('Text has been copied')),
+                );
+                Navigator.of(context).pop();
+              },
+            ),
+          ListTile(
+            title: const Text('Share item link'),
+            onTap: () async {
+              await Share.share(
+                  '${WebsiteRepository.baseUrl}/item?id=${item.id}');
+              Navigator.of(context).pop();
+            },
           ),
-        ),
+        ],
       ),
     );
   }
@@ -271,69 +325,5 @@ class ItemTileData extends HookWidget {
         ),
       );
     }
-  }
-
-  Future<void> _buildModalBottomSheet(BuildContext context) async {
-    return showModalBottomSheet<void>(
-      context: context,
-      builder: (_) => Wrap(
-        children: <Widget>[
-          context.read(favoritedProvider(item.id)).maybeWhen(
-                data: (bool favorited) => !favorited
-                    ? ListTile(
-                        title: const Text('Favorite'),
-                        onTap: () async {
-                          await _favorite(context, favorite: true);
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    : ListTile(
-                        title: const Text('Unfavorite'),
-                        onTap: () async {
-                          await _favorite(context, favorite: false);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                orElse: () => const SizedBox.shrink(),
-              ),
-          if (item.url != null) ...<Widget>[
-            if (!dense)
-              ListTile(
-                title: const Text('Open link'),
-                onTap: () async {
-                  await UrlUtil.tryLaunch(item.url);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ListTile(
-              title: const Text('Share link'),
-              onTap: () async {
-                await Share.share(item.url);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-          if (item.text != null)
-            ListTile(
-              title: const Text('Copy text'),
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: item.text));
-                ScaffoldMessenger.of(context).showSnackBarQuickly(
-                  const SnackBar(content: Text('Text has been copied')),
-                );
-                Navigator.of(context).pop();
-              },
-            ),
-          ListTile(
-            title: const Text('Share item link'),
-            onTap: () async {
-              await Share.share(
-                  '${WebsiteRepository.baseUrl}/item?id=${item.id}');
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
   }
 }

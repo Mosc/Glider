@@ -17,13 +17,13 @@ class ItemTileMetadata extends HookWidget {
     Key key,
     this.root,
     this.dense = false,
-    this.collapsible = false,
+    this.interactive = false,
   }) : super(key: key);
 
   final Item item;
   final Item root;
   final bool dense;
-  final bool collapsible;
+  final bool interactive;
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +82,11 @@ class ItemTileMetadata extends HookWidget {
             ),
           ] else if (item.by != null && item.type != ItemType.pollopt)
             _buildUsername(context, textTheme),
-          if (collapsible) _buildCollapsedIndicator(),
-          const Spacer(),
-          if (item.type != ItemType.pollopt)
+          if (interactive) _buildCollapsedIndicator(),
+          if (item.type != ItemType.pollopt) ...<Widget>[
+            const Spacer(),
             Text(item.timeAgo, style: textTheme.caption),
+          ],
         ],
       ),
     );

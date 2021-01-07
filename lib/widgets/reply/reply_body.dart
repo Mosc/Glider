@@ -88,7 +88,7 @@ class ReplyBody extends HookWidget {
             onTap: () =>
                 parentCollapsedState.value = !parentCollapsedState.value,
             dense: parentCollapsedState.value,
-            collapsible: true,
+            interactive: true,
           ),
           ItemTileData(
             _buildItem(
