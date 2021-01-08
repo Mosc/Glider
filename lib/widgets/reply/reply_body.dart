@@ -11,6 +11,7 @@ import 'package:glider/utils/date_time_extension.dart';
 import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/validators.dart';
+import 'package:glider/widgets/common/experimental.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -42,6 +43,8 @@ class ReplyBody extends HookWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  const Experimental(),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: commentController,
                     decoration: const InputDecoration(labelText: 'Comment'),
