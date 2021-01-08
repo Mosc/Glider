@@ -96,7 +96,7 @@ class ItemBody extends HookWidget {
             child: Row(
               children: <Widget>[
                 Icon(
-                  FluentIcons.arrow_up_circle_24_regular,
+                  FluentIcons.arrow_circle_up_24_regular,
                   size: Theme.of(context).textTheme.bodyText2.fontSize,
                 ),
                 const SizedBox(width: 12),

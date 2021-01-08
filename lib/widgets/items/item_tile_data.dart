@@ -116,7 +116,7 @@ class ItemTileData extends HookWidget {
           ? item.url != null
               ? SlidableAction(
                   action: () => UrlUtil.tryLaunch(item.url),
-                  icon: FluentIcons.open_in_browser_24_filled,
+                  icon: FluentIcons.window_arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.surface,
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )

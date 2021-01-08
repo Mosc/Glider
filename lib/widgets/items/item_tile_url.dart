@@ -22,7 +22,7 @@ class ItemTileUrl extends HookWidget {
           child: Row(
             children: <Widget>[
               Icon(
-                FluentIcons.open_in_browser_24_regular,
+                FluentIcons.window_arrow_up_24_regular,
                 size: textTheme.bodyText2.fontSize,
               ),
               const SizedBox(width: 12),
