@@ -1,6 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nl.viter.glider">
     <uses-permission android:name="android.permission.INTERNET" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Glider"
@@ -15,37 +25,35 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
             <meta-data
-              android:name="io.flutter.embedding.android.SplashScreenDrawable"
-              android:resource="@drawable/launch_background"
-              />
+                android:name="io.flutter.embedding.android.SplashScreenDrawable"
+                android:resource="@drawable/launch_background" />
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="http"
                     android:host="news.ycombinator.com"
-                    android:pathPrefix="/item"/>
+                    android:pathPrefix="/item" />
                 <data
                     android:scheme="https"
                     android:host="news.ycombinator.com"
-                    android:pathPrefix="/item"/>
+                    android:pathPrefix="/item" />
                 <data
                     android:scheme="http"
                     android:host="news.ycombinator.com"
-                    android:pathPrefix="/user"/>
+                    android:pathPrefix="/user" />
                 <data
                     android:scheme="https"
                     android:host="news.ycombinator.com"
-                    android:pathPrefix="/user"/>
+                    android:pathPrefix="/user" />
             </intent-filter>
         </activity>
         <meta-data
