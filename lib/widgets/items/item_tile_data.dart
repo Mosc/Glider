@@ -206,23 +206,6 @@ class ItemTileData extends HookWidget {
                       ),
                 orElse: () => const SizedBox.shrink(),
               ),
-          if (item.url != null) ...<Widget>[
-            if (!dense)
-              ListTile(
-                title: const Text('Open link'),
-                onTap: () async {
-                  await UrlUtil.tryLaunch(item.url);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ListTile(
-              title: const Text('Share link'),
-              onTap: () async {
-                await Share.share(item.url);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
           if (item.text != null)
             ListTile(
               title: const Text('Copy text'),
@@ -231,6 +214,14 @@ class ItemTileData extends HookWidget {
                 ScaffoldMessenger.of(context).showSnackBarQuickly(
                   const SnackBar(content: Text('Text has been copied')),
                 );
+                Navigator.of(context).pop();
+              },
+            ),
+          if (item.url != null)
+            ListTile(
+              title: const Text('Share link'),
+              onTap: () async {
+                await Share.share(item.url);
                 Navigator.of(context).pop();
               },
             ),
