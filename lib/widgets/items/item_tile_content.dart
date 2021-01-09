@@ -42,22 +42,23 @@ class ItemTileContent extends StatelessWidget {
             dense: dense,
             interactive: interactive,
           ),
-          SmoothAnimatedSwitcher(
-            condition: !dense,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                if (item.text != null) ...<Widget>[
-                  const SizedBox(height: 12),
-                  ItemTileText(item),
+          if (item.text != null || item.url != null)
+            SmoothAnimatedSwitcher(
+              condition: !dense,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  if (item.text != null) ...<Widget>[
+                    const SizedBox(height: 12),
+                    ItemTileText(item),
+                  ],
+                  if (item.url != null) ...<Widget>[
+                    const SizedBox(height: 12),
+                    ItemTileUrl(item),
+                  ],
                 ],
-                if (item.url != null) ...<Widget>[
-                  const SizedBox(height: 12),
-                  ItemTileUrl(item),
-                ],
-              ],
+              ),
             ),
-          ),
         ],
       ),
     );
