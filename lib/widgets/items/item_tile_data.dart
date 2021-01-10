@@ -17,9 +17,13 @@ import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/items/item_tile_content.dart';
 import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
+import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:share/share.dart';
+
+AutoDisposeStateProviderFamily<bool, int> delayedUpvoteStateProvider =
+    StateProvider.family.autoDispose((ProviderReference ref, int id) => null);
 
 class ItemTileData extends HookWidget {
   const ItemTileData(
@@ -87,20 +91,28 @@ class ItemTileData extends HookWidget {
 
     // We don't want the slidable to update while being slided, so we delay any
     // upvote state until after the call has actually finished.
-    final ValueNotifier<bool> delayedUpvotedState = useState();
-    Future<void> updateDelayedUpvoted() async => delayedUpvotedState.value =
-        await context.read(upvotedProvider(item.id).future);
-    useMemoized(updateDelayedUpvoted);
+    final StateController<bool> delayedUpvotedController =
+        useProvider(delayedUpvoteStateProvider(item.id));
+
+    Future<void> updateDelayedUpvoted() async {
+      final bool upvoted = await context.read(upvotedProvider(item.id).future);
+
+      if (delayedUpvotedController.mounted) {
+        delayedUpvotedController.state = upvoted;
+      }
+    }
 
     Future<void> vote({@required bool up}) async {
       await _vote(context, up: up);
       unawaited(updateDelayedUpvoted());
     }
 
+    useMemoized(updateDelayedUpvoted);
+
     return Slidable(
       key: ValueKey<int>(item.id),
-      startToEndAction: canVote && delayedUpvotedState.value != null
-          ? !delayedUpvotedState.value
+      startToEndAction: canVote && delayedUpvotedController.state != null
+          ? !delayedUpvotedController.state
               ? SlidableAction(
                   action: () => vote(up: true),
                   icon: FluentIcons.arrow_up_24_filled,
