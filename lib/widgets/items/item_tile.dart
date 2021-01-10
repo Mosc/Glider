@@ -37,14 +37,16 @@ class ItemTile extends HookWidget {
           orElse: () => null,
         );
     return item != null
-        ? ItemTileData(
-            item.copyWith(ancestors: ancestors),
-            root: root,
-            onTap: onTap,
-            dense: dense,
-            interactive: interactive,
-            fadeable: fadeable,
-          )
+        ? item.time != null
+            ? ItemTileData(
+                item.copyWith(ancestors: ancestors),
+                root: root,
+                onTap: onTap,
+                dense: dense,
+                interactive: interactive,
+                fadeable: fadeable,
+              )
+            : const SizedBox.shrink()
         : loading();
   }
 }
