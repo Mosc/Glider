@@ -40,6 +40,7 @@ class ItemTile extends HookWidget {
         ? item.time != null
             ? ItemTileData(
                 item.copyWith(ancestors: ancestors),
+                key: ValueKey<int>(item.id),
                 root: root,
                 onTap: onTap,
                 dense: dense,
