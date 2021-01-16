@@ -24,9 +24,7 @@ class ReplyBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey =
-        useMemoized(() => GlobalKey<FormState>());
-
+    final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final ValueNotifier<bool> parentCollapsedState = useState(true);
     final TextEditingController commentController = useTextEditingController();
     final TextEditingValue commentListenable =

@@ -25,9 +25,7 @@ class SubmitBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey =
-        useMemoized(() => GlobalKey<FormState>());
-
+    final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final ValueNotifier<SubmitType> submitTypeState = useState(SubmitType.url);
     final TextEditingController titleController = useTextEditingController();
     final TextEditingValue titleListenable =

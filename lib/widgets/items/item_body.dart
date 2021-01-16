@@ -37,15 +37,16 @@ class ItemBody extends HookWidget {
       dataBuilder: (ItemTree itemTree) {
         final Item firstItem = itemTree.items.first;
         final int parent = firstItem?.parent ?? firstItem?.poll;
+        final Iterable<Item> items = itemTree.items;
         return <Widget>[
           if (parent != null)
             SliverToBoxAdapter(child: _buildOpenParent(context, parent)),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (_, int index) => _loaded(itemTree, index)
-                  ? _buildItem(itemTree, index, collapsedState)
+              (_, int index) => _loaded(items, index)
+                  ? _buildItem(items, index, collapsedState)
                   : _buildItemLoading(index),
-              childCount: itemTree.done ? itemTree.items.length : null,
+              childCount: itemTree.done ? items.length : null,
             ),
           ),
         ];
@@ -58,25 +59,24 @@ class ItemBody extends HookWidget {
     return context.refresh(itemTreeStreamProvider(id));
   }
 
-  bool _loaded(ItemTree itemTree, int index) => index < itemTree.items.length;
+  bool _loaded(Iterable<Item> items, int index) => index < items.length;
 
   Widget _buildItemLoading(int index) {
     return index == 0 ? const StoryTileLoading() : const CommentTileLoading();
   }
 
   Widget _buildItem(
-      ItemTree itemTree, int index, ValueNotifier<Set<int>> collapsedState) {
-    final Item item = itemTree.items.elementAt(index);
-    final bool collapsed = _collapsed(collapsedState, item.id);
+      Iterable<Item> items, int index, ValueNotifier<Set<int>> collapsedState) {
+    final Item item = items.elementAt(index);
 
     return SmoothAnimatedSwitcher(
       condition: !_collapsedAncestors(collapsedState, item.ancestors),
       child: ItemTile(
         id: item.id,
         ancestors: item.ancestors,
-        root: itemTree.items.first,
+        root: items.first,
         onTap: () => _collapse(collapsedState, item.id),
-        dense: collapsed,
+        dense: _collapsed(collapsedState, item.id),
         interactive: true,
         loading: () => _buildItemLoading(index),
       ),
@@ -129,6 +129,7 @@ class ItemBody extends HookWidget {
 
   bool _collapsedAncestors(
           ValueNotifier<Set<int>> collapsedState, Iterable<int> ids) =>
+      collapsedState.value.isNotEmpty &&
       ids.any((int ancestor) =>
           id != ancestor && _collapsed(collapsedState, ancestor));
 }

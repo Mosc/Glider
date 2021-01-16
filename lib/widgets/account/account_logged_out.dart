@@ -19,9 +19,7 @@ class AccountLoggedOut extends HookWidget {
       () => context.read(actionsStateProvider).state = <Widget>[],
     );
 
-    final GlobalKey<FormState> formKey =
-        useMemoized(() => GlobalKey<FormState>());
-
+    final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final TextEditingController usernameController = useTextEditingController();
     final TextEditingController passwordController = useTextEditingController();
 

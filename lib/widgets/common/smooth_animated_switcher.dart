@@ -28,7 +28,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     return FadeTransition(opacity: animation, child: child);
   }
 
-  Widget _defaultLayoutBuilder(
+  static Widget _defaultLayoutBuilder(
       Widget currentChild, List<Widget> previousChildren) {
     return Stack(
       children: <Widget>[
