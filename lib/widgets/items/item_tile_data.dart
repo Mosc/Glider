@@ -196,28 +196,33 @@ class ItemTileData extends HookWidget {
   }
 
   Future<void> _buildModalBottomSheet(BuildContext context) async {
+    final AsyncValue<bool> favorited = context.read(favoritedProvider(item.id));
+
     return showModalBottomSheet<void>(
       context: context,
       builder: (_) => Wrap(
         children: <Widget>[
-          context.read(favoritedProvider(item.id)).maybeWhen(
-                data: (bool favorited) => !favorited
-                    ? ListTile(
-                        title: const Text('Favorite'),
-                        onTap: () {
-                          _favorite(context, favorite: true);
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    : ListTile(
-                        title: const Text('Unfavorite'),
-                        onTap: () {
-                          _favorite(context, favorite: false);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                orElse: () => const SizedBox.shrink(),
-              ),
+          if (favorited.data != null)
+            favorited
+                .whenData(
+                  (bool favorited) => !favorited
+                      ? ListTile(
+                          title: const Text('Favorite'),
+                          onTap: () {
+                            _favorite(context, favorite: true);
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      : ListTile(
+                          title: const Text('Unfavorite'),
+                          onTap: () {
+                            _favorite(context, favorite: false);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                )
+                .data
+                .value,
           if (item.text != null)
             ListTile(
               title: const Text('Copy text'),

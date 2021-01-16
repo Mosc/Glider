@@ -32,10 +32,7 @@ class ItemTile extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final Item item = useProvider(itemCacheStateProvider(id)).state ??
-        useProvider(itemProvider(id)).maybeWhen(
-          data: (Item item) => item,
-          orElse: () => null,
-        );
+        useProvider(itemProvider(id)).whenData((Item item) => item).data?.value;
     return item != null
         ? item.time != null
             ? ItemTileData(

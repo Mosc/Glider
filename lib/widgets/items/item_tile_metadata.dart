@@ -28,22 +28,26 @@ class ItemTileMetadata extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final AsyncValue<bool> favorited = useProvider(favoritedProvider(item.id));
 
     return Hero(
       tag: 'item_metadata_${item.id}',
       child: Row(
         children: <Widget>[
-          useProvider(favoritedProvider(item.id)).maybeWhen(
-            data: (bool favorited) => SmoothAnimatedSwitcher(
-              axis: Axis.horizontal,
-              condition: favorited,
-              child: const MetadataItem(
-                icon: FluentIcons.star_24_regular,
-                highlight: true,
-              ),
-            ),
-            orElse: () => const SizedBox.shrink(),
-          ),
+          if (favorited.data != null)
+            favorited
+                .whenData(
+                  (bool favorited) => SmoothAnimatedSwitcher(
+                    axis: Axis.horizontal,
+                    condition: favorited,
+                    child: const MetadataItem(
+                      icon: FluentIcons.star_24_regular,
+                      highlight: true,
+                    ),
+                  ),
+                )
+                .data
+                .value,
           useProvider(upvotedProvider(item.id)).maybeWhen(
             data: (bool upvoted) => item.score != null
                 ? SmoothAnimatedCrossFade(
