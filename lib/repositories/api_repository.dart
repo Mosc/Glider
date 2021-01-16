@@ -12,7 +12,7 @@ class ApiRepository {
   final Dio _dio;
 
   Future<Iterable<int>> getStoryIds(StoryType storyType) async {
-    final String url = '$baseUrl/${storyType.jsonName}.json';
+    final String url = '$baseUrl/${storyType.apiPath}.json';
 
     try {
       final Response<Iterable<dynamic>> response =

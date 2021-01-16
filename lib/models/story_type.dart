@@ -49,7 +49,7 @@ extension StoryTypeExtension on StoryType {
     throw UnsupportedError('$this does not have an icon');
   }
 
-  String get jsonName {
+  String get apiPath {
     switch (this) {
       case StoryType.topStories:
         return 'topstories';
@@ -65,6 +65,37 @@ extension StoryTypeExtension on StoryType {
         return 'showstories';
     }
 
-    throw UnsupportedError('$this does not have a JSON name');
+    throw UnsupportedError('$this does not have an API path');
+  }
+
+  String get searchApiPath {
+    switch (this) {
+      case StoryType.newStories:
+        return 'search_by_date';
+      case StoryType.bestStories:
+        return 'search';
+      case StoryType.topStories:
+      case StoryType.newTopStories:
+      case StoryType.askStories:
+      case StoryType.showStories:
+        break;
+    }
+
+    throw UnsupportedError('$this does not have a search API path');
+  }
+
+  bool get searchable {
+    switch (this) {
+      case StoryType.newStories:
+      case StoryType.bestStories:
+        return true;
+      case StoryType.topStories:
+      case StoryType.newTopStories:
+      case StoryType.askStories:
+      case StoryType.showStories:
+        return false;
+    }
+
+    throw UnsupportedError('$this does not have a searchable property');
   }
 }

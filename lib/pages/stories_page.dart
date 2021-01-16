@@ -6,6 +6,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/favorites_page.dart';
+import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/pages/submit_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
@@ -64,6 +65,7 @@ class StoriesPage extends HookWidget {
             leading: AppBarUtil.buildFluentIconsLeading(context),
             title: const Text('Glider'),
             actions: <Widget>[
+              _buildSearchIcon(context),
               _buildSubmitIcon(context),
               favoritesValue.maybeWhen(
                 data: (Iterable<int> favorites) => SmoothAnimatedSwitcher(
@@ -88,22 +90,39 @@ class StoriesPage extends HookWidget {
         ],
         body: const StoriesBody(),
       ),
-      floatingActionButton: SpeedDial(
-        children: <SpeedDialChild>[
-          for (StoryType storyType in StoryType.values)
-            SpeedDialChild(
-              label: storyType.title,
-              child: Icon(storyType.icon),
-              onTap: () => storyTypeStateController.state = storyType,
-            ),
-        ],
-        visible: speedDialVisibleState.value,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        animationSpeed: 100,
-        child: Icon(storyTypeStateController.state.icon),
+      floatingActionButton: Hero(
+        tag: 'fab',
+        child: SpeedDial(
+          children: <SpeedDialChild>[
+            for (StoryType storyType in StoryType.values)
+              SpeedDialChild(
+                label: storyType.title,
+                child: Icon(storyType.icon),
+                onTap: () => storyTypeStateController.state = storyType,
+              ),
+          ],
+          visible: speedDialVisibleState.value,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          animationSpeed: 100,
+          child: Icon(storyTypeStateController.state.icon),
+        ),
       ),
-      extendBody: true,
+    );
+  }
+
+  Widget _buildSearchIcon(BuildContext context) {
+    return IconButton(
+      icon: const Icon(FluentIcons.search_24_filled),
+      tooltip: 'Search',
+      onPressed: () => Navigator.of(context).push<void>(
+        PageRouteBuilder<void>(
+          pageBuilder: (_, __, ___) => const StoriesSearchPage(),
+          transitionsBuilder:
+              (_, Animation<double> animation, __, Widget child) =>
+                  FadeTransition(opacity: animation, child: child),
+        ),
+      ),
     );
   }
 

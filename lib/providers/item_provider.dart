@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
+import 'package:glider/models/search_parameters.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/api_repository.dart';
@@ -33,6 +34,12 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, StoryType>
 
   return apiRepository.getStoryIds(storyType);
 });
+
+final AutoDisposeFutureProviderFamily<Iterable<int>, SearchParameters>
+    storyIdsSearchProvider = FutureProvider.autoDispose.family(
+  (ProviderReference ref, SearchParameters searchParameters) =>
+      ref.read(searchApiRepositoryProvider).searchStoryIds(searchParameters),
+);
 
 final StateProviderFamily<Item, int> itemCacheStateProvider =
     StateProvider.family((ProviderReference ref, int id) => null);
