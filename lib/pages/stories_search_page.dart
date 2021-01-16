@@ -46,6 +46,17 @@ class StoriesSearchPage extends HookWidget {
     final StateController<StoryType> searchStoryTypeStateController =
         useProvider(storySearchTypeStateProvider);
 
+    final AnimationController animationController = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+    );
+    final double bottomHeightFactor = useAnimation(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+    useMemoized(animationController.forward);
+
     final ThemeData theme = Theme.of(context);
 
     return Theme(
@@ -86,7 +97,11 @@ class StoriesSearchPage extends HookWidget {
                     },
                   )
               ],
-              bottom: _buildBottom(context, storySearchRangeStateController),
+              bottom: _buildBottom(
+                context,
+                storySearchRangeStateController,
+                heightFactor: bottomHeightFactor,
+              ),
               forceElevated: innerBoxIsScrolled,
               floating: true,
             ),
@@ -117,34 +132,44 @@ class StoriesSearchPage extends HookWidget {
   }
 
   PreferredSizeWidget _buildBottom(BuildContext context,
-      StateController<SearchRange> storySearchRangeStateController) {
+      StateController<SearchRange> storySearchRangeStateController,
+      {double heightFactor}) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(kToolbarHeight),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Row(
-              children: <Widget>[
-                for (SearchRange searchRange in SearchRange.values)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: FilterChip(
-                      label: Text(searchRange.title),
-                      selected:
-                          storySearchRangeStateController.state == searchRange,
-                      onSelected: (bool selected) =>
-                          storySearchRangeStateController.state =
-                              selected ? searchRange : null,
+      preferredSize: Size.fromHeight(kToolbarHeight * heightFactor),
+      child: ClipRect(
+        child: Align(
+          heightFactor: heightFactor,
+          alignment: Alignment.topLeft,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Row(
+                children: <Widget>[
+                  for (SearchRange searchRange in SearchRange.values)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: _buildChip(
+                        searchRange,
+                        storySearchRangeStateController,
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildChip(SearchRange searchRange,
+      StateController<SearchRange> storySearchRangeStateController) {
+    return FilterChip(
+      label: Text(searchRange.title),
+      selected: storySearchRangeStateController.state == searchRange,
+      onSelected: (bool selected) =>
+          storySearchRangeStateController.state = selected ? searchRange : null,
     );
   }
 }
