@@ -10,7 +10,6 @@ import 'package:glider/pages/favorites_page.dart';
 import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/pages/submit_page.dart';
 import 'package:glider/providers/item_provider.dart';
-import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
@@ -49,8 +48,6 @@ class StoriesPage extends HookWidget {
 
     final StateController<StoryType> storyTypeStateController =
         useProvider(storyTypeStateProvider);
-
-    final AsyncValue<bool> loggedInValue = useProvider(loggedInProvider);
 
     return Scaffold(
       body: NestedScrollView(
