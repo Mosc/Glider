@@ -37,8 +37,15 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, StoryType>
 
 final AutoDisposeFutureProviderFamily<Iterable<int>, SearchParameters>
     storyIdsSearchProvider = FutureProvider.autoDispose.family(
-  (ProviderReference ref, SearchParameters searchParameters) =>
-      ref.read(searchApiRepositoryProvider).searchStoryIds(searchParameters),
+  (ProviderReference ref, SearchParameters searchParameters) async {
+    if (searchParameters.query == null) {
+      return <int>[];
+    }
+
+    return ref
+        .read(searchApiRepositoryProvider)
+        .searchStoryIds(searchParameters);
+  },
 );
 
 final StateProviderFamily<Item, int> itemCacheStateProvider =

@@ -10,11 +10,10 @@ import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/all.dart';
 
 final AutoDisposeStateProvider<String> storySearchQueryStateProvider =
-    StateProvider.autoDispose<String>((ProviderReference ref) => '');
+    StateProvider.autoDispose<String>((ProviderReference ref) => null);
 
 final AutoDisposeStateProvider<SearchRange> storySearchRangeStateProvider =
-    StateProvider.autoDispose<SearchRange>(
-        (ProviderReference ref) => SearchRange.pastMonth);
+    StateProvider.autoDispose<SearchRange>((ProviderReference ref) => null);
 
 final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
     StateProvider.autoDispose<StoryType>(
@@ -39,6 +38,9 @@ class StoriesSearchPage extends HookWidget {
     );
 
     final TextEditingController queryController = useTextEditingController();
+    final TextEditingValue queryListenable =
+        useValueListenable(queryController);
+
     final StateController<String> storySearchQueryStateController =
         useProvider(storySearchQueryStateProvider);
     final StateController<SearchRange> storySearchRangeStateController =
@@ -82,20 +84,31 @@ class StoriesSearchPage extends HookWidget {
                 decoration: const InputDecoration(hintText: 'Search...'),
                 textInputAction: TextInputAction.search,
                 autofocus: true,
-                onChanged: (String value) =>
+                onSubmitted: (String value) =>
                     storySearchQueryStateController.state = value,
               ),
               actions: <Widget>[
-                if (storySearchQueryStateController.state.isNotEmpty)
+                if (storySearchQueryStateController.state !=
+                    queryListenable.text)
+                  IconButton(
+                    icon: const Hero(
+                      tag: 'search_icon',
+                      child: Icon(FluentIcons.search_24_filled),
+                    ),
+                    tooltip: 'Search',
+                    onPressed: () => storySearchQueryStateController.state =
+                        queryController.text,
+                  ),
+                if (storySearchQueryStateController.state != null)
                   IconButton(
                     icon: const Icon(FluentIcons.dismiss_24_filled),
                     tooltip:
                         MaterialLocalizations.of(context).closeButtonTooltip,
                     onPressed: () {
                       queryController.clear();
-                      storySearchQueryStateController.state = '';
+                      storySearchQueryStateController.state = null;
                     },
-                  )
+                  ),
               ],
               bottom: _buildBottom(
                 context,
