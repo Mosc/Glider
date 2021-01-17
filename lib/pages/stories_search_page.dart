@@ -49,7 +49,7 @@ class StoriesSearchPage extends HookWidget {
         useProvider(storySearchTypeStateProvider);
 
     final AnimationController animationController = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
     );
     final double bottomHeightFactor = useAnimation(
       CurvedAnimation(
