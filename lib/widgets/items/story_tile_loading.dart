@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
-import 'package:glider/widgets/items/item_tile.dart';
+import 'package:glider/widgets/items/item_tile_header.dart';
 
 class StoryTileLoading extends StatelessWidget {
   const StoryTileLoading({Key key}) : super(key: key);
@@ -37,8 +37,8 @@ class StoryTileLoading extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 const TileLoadingBlock(
-                  width: ItemTile.thumbnailSize,
-                  height: ItemTile.thumbnailSize,
+                  width: ItemTileHeader.height,
+                  height: ItemTileHeader.height,
                 ),
               ],
             ),

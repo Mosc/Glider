@@ -27,8 +27,6 @@ class ItemTile extends HookWidget {
   final bool fadeable;
   final Widget Function() loading;
 
-  static const double thumbnailSize = 38;
-
   @override
   Widget build(BuildContext context) {
     final Item item = useProvider(itemCacheStateProvider(id)).state ??

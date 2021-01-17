@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
-import 'package:glider/widgets/items/item_tile.dart';
+import 'package:glider/widgets/items/item_tile_header.dart';
 import 'package:octo_image/octo_image.dart';
 
 class ItemTileThumbnail extends HookWidget {
@@ -20,8 +20,8 @@ class ItemTileThumbnail extends HookWidget {
       tag: 'item_thumbnail_${item.id}',
       child: item.localOnly
           ? TileLoadingBlock(
-              width: ItemTile.thumbnailSize,
-              height: ItemTile.thumbnailSize,
+              width: ItemTileHeader.height,
+              height: ItemTileHeader.height,
               color: Theme.of(context).colorScheme.surface,
             )
           : OctoImage(
@@ -31,14 +31,14 @@ class ItemTileThumbnail extends HookWidget {
                 child: child,
               ),
               placeholderBuilder: (_) => TileLoadingBlock(
-                width: ItemTile.thumbnailSize,
-                height: ItemTile.thumbnailSize,
+                width: ItemTileHeader.height,
+                height: ItemTileHeader.height,
                 color: Theme.of(context).colorScheme.surface,
               ),
               errorBuilder:
                   OctoError.icon(icon: FluentIcons.error_circle_24_regular),
-              width: ItemTile.thumbnailSize,
-              height: ItemTile.thumbnailSize,
+              width: ItemTileHeader.height,
+              height: ItemTileHeader.height,
             ),
     );
   }
