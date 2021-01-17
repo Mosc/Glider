@@ -152,10 +152,7 @@ class SubmitBody extends HookWidget {
           ItemTileData(
             _buildItem(
               id: useProvider(previewIdStateProvider).state,
-              username: useProvider(usernameProvider)
-                  .whenData((String username) => username)
-                  .data
-                  ?.value,
+              username: useProvider(usernameProvider).data?.value,
               title: titleListenable.text,
               url: url(),
               text: text(),

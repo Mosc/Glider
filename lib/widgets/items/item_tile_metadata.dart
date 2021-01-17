@@ -29,41 +29,33 @@ class ItemTileMetadata extends HookWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final AsyncValue<bool> favorited = useProvider(favoritedProvider(item.id));
+    final AsyncValue<bool> upvoted = useProvider(upvotedProvider(item.id));
 
     return Hero(
       tag: 'item_metadata_${item.id}',
       child: Row(
         children: <Widget>[
           if (favorited.data != null)
-            favorited
-                .whenData(
-                  (bool favorited) => SmoothAnimatedSwitcher(
-                    axis: Axis.horizontal,
-                    condition: favorited,
-                    child: const MetadataItem(
-                      icon: FluentIcons.star_24_regular,
-                      highlight: true,
-                    ),
-                  ),
-                )
-                .data
-                .value,
-          useProvider(upvotedProvider(item.id)).maybeWhen(
-            data: (bool upvoted) => item.score != null
-                ? SmoothAnimatedCrossFade(
-                    condition: upvoted,
-                    trueChild: _buildUpvotedMetadata(upvoted: true),
-                    falseChild: _buildUpvotedMetadata(upvoted: false),
-                  )
-                : SmoothAnimatedSwitcher(
-                    axis: Axis.horizontal,
-                    condition: upvoted,
-                    child: _buildUpvotedMetadata(upvoted: true),
-                  ),
-            orElse: () => item.score != null
-                ? _buildUpvotedMetadata(upvoted: false)
-                : const SizedBox.shrink(),
-          ),
+            SmoothAnimatedSwitcher(
+              axis: Axis.horizontal,
+              condition: favorited.data.value,
+              child: const MetadataItem(
+                icon: FluentIcons.star_24_regular,
+                highlight: true,
+              ),
+            ),
+          if (item.score != null)
+            SmoothAnimatedCrossFade(
+              condition: upvoted.data?.value ?? false,
+              trueChild: _buildUpvotedMetadata(upvoted: true),
+              falseChild: _buildUpvotedMetadata(upvoted: false),
+            )
+          else if (upvoted.data != null)
+            SmoothAnimatedSwitcher(
+              axis: Axis.horizontal,
+              condition: upvoted.data.value,
+              child: _buildUpvotedMetadata(upvoted: true),
+            ),
           if (item.descendants != null)
             SmoothAnimatedSize(
               child: MetadataItem(

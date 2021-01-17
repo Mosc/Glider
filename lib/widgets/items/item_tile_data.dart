@@ -203,26 +203,22 @@ class ItemTileData extends HookWidget {
       builder: (_) => Wrap(
         children: <Widget>[
           if (favorited.data != null)
-            favorited
-                .whenData(
-                  (bool favorited) => !favorited
-                      ? ListTile(
-                          title: const Text('Favorite'),
-                          onTap: () {
-                            _favorite(context, favorite: true);
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      : ListTile(
-                          title: const Text('Unfavorite'),
-                          onTap: () {
-                            _favorite(context, favorite: false);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                )
-                .data
-                .value,
+            if (favorited.data.value)
+              ListTile(
+                title: const Text('Unfavorite'),
+                onTap: () {
+                  _favorite(context, favorite: false);
+                  Navigator.of(context).pop();
+                },
+              )
+            else
+              ListTile(
+                title: const Text('Favorite'),
+                onTap: () {
+                  _favorite(context, favorite: true);
+                  Navigator.of(context).pop();
+                },
+              ),
           if (item.text != null)
             ListTile(
               title: const Text('Copy text'),
