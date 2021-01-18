@@ -75,7 +75,16 @@ class ItemBody extends HookWidget {
         id: item.id,
         ancestors: item.ancestors,
         root: items.first,
-        onTap: () => _collapse(collapsedState, item.id),
+        onTap: (BuildContext context) {
+          final ScrollableState scrollableState = Scrollable.of(context);
+          scrollableState.position.ensureVisible(
+            context.findRenderObject(),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+          );
+          _collapse(collapsedState, item.id);
+        },
         dense: _collapsed(collapsedState, item.id),
         interactive: true,
         loading: () => _buildItemLoading(index),

@@ -37,7 +37,7 @@ class StoriesSearchBody extends HookWidget {
               final int id = ids.elementAt(index);
               return ItemTile(
                 id: id,
-                onTap: () => Navigator.of(context).push(
+                onTap: (_) => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
                 ),
                 dense: true,

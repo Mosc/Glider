@@ -36,7 +36,7 @@ class StoriesBody extends HookWidget {
               context.refresh(itemProvider(id));
               return ItemTile(
                 id: id,
-                onTap: () => Navigator.of(context).push(
+                onTap: (_) => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
                 ),
                 dense: true,

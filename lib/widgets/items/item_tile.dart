@@ -21,7 +21,7 @@ class ItemTile extends HookWidget {
   final int id;
   final Iterable<int> ancestors;
   final Item root;
-  final void Function() onTap;
+  final void Function(BuildContext) onTap;
   final bool dense;
   final bool interactive;
   final bool fadeable;
@@ -31,18 +31,23 @@ class ItemTile extends HookWidget {
   Widget build(BuildContext context) {
     final Item item = useProvider(itemCacheStateProvider(id)).state ??
         useProvider(itemProvider(id)).data?.value;
-    return item != null
-        ? item.time != null
-            ? ItemTileData(
-                item.copyWith(ancestors: ancestors),
-                key: ValueKey<int>(item.id),
-                root: root,
-                onTap: onTap,
-                dense: dense,
-                interactive: interactive,
-                fadeable: fadeable,
-              )
-            : const SizedBox.shrink()
-        : loading();
+
+    if (item == null) {
+      return loading();
+    }
+
+    if (item.time == null) {
+      return const SizedBox.shrink();
+    }
+
+    return ItemTileData(
+      item.copyWith(ancestors: ancestors),
+      key: ValueKey<int>(id),
+      root: root,
+      onTap: () => onTap(context),
+      dense: dense,
+      interactive: interactive,
+      fadeable: fadeable,
+    );
   }
 }
