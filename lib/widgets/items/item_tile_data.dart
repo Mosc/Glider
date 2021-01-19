@@ -200,53 +200,55 @@ class ItemTileData extends HookWidget {
 
     return showModalBottomSheet<void>(
       context: context,
-      builder: (_) => Wrap(
-        children: <Widget>[
-          if (favorited.data != null)
-            if (favorited.data.value)
+      builder: (_) => SafeArea(
+        child: Wrap(
+          children: <Widget>[
+            if (favorited.data != null)
+              if (favorited.data.value)
+                ListTile(
+                  title: const Text('Unfavorite'),
+                  onTap: () {
+                    _favorite(context, favorite: false);
+                    Navigator.of(context).pop();
+                  },
+                )
+              else
+                ListTile(
+                  title: const Text('Favorite'),
+                  onTap: () {
+                    _favorite(context, favorite: true);
+                    Navigator.of(context).pop();
+                  },
+                ),
+            if (item.text != null)
               ListTile(
-                title: const Text('Unfavorite'),
-                onTap: () {
-                  _favorite(context, favorite: false);
-                  Navigator.of(context).pop();
-                },
-              )
-            else
-              ListTile(
-                title: const Text('Favorite'),
-                onTap: () {
-                  _favorite(context, favorite: true);
+                title: const Text('Copy text'),
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: item.text));
+                  ScaffoldMessenger.of(context).showSnackBarQuickly(
+                    const SnackBar(content: Text('Text has been copied')),
+                  );
                   Navigator.of(context).pop();
                 },
               ),
-          if (item.text != null)
+            if (item.url != null)
+              ListTile(
+                title: const Text('Share link'),
+                onTap: () async {
+                  await Share.share(item.url);
+                  Navigator.of(context).pop();
+                },
+              ),
             ListTile(
-              title: const Text('Copy text'),
+              title: const Text('Share item link'),
               onTap: () async {
-                await Clipboard.setData(ClipboardData(text: item.text));
-                ScaffoldMessenger.of(context).showSnackBarQuickly(
-                  const SnackBar(content: Text('Text has been copied')),
-                );
+                await Share.share(
+                    '${WebsiteRepository.baseUrl}/item?id=${item.id}');
                 Navigator.of(context).pop();
               },
             ),
-          if (item.url != null)
-            ListTile(
-              title: const Text('Share link'),
-              onTap: () async {
-                await Share.share(item.url);
-                Navigator.of(context).pop();
-              },
-            ),
-          ListTile(
-            title: const Text('Share item link'),
-            onTap: () async {
-              await Share.share(
-                  '${WebsiteRepository.baseUrl}/item?id=${item.id}');
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
