@@ -68,18 +68,11 @@ class StoriesPage extends HookWidget {
               ),
               PopupMenuButton<MenuAction>(
                 itemBuilder: (_) => <PopupMenuItem<MenuAction>>[
-                  const PopupMenuItem<MenuAction>(
-                    value: MenuAction.favorites,
-                    child: Text('Favorites'),
-                  ),
-                  const PopupMenuItem<MenuAction>(
-                    value: MenuAction.submit,
-                    child: Text('Submit'),
-                  ),
-                  const PopupMenuItem<MenuAction>(
-                    value: MenuAction.account,
-                    child: Text('Account'),
-                  ),
+                  for (MenuAction menuAction in MenuAction.values)
+                    PopupMenuItem<MenuAction>(
+                      value: menuAction,
+                      child: Text(menuAction.title),
+                    ),
                 ],
                 onSelected: (MenuAction menuAction) async {
                   switch (menuAction) {
