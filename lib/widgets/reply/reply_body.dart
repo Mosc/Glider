@@ -98,6 +98,7 @@ class ReplyBody extends HookWidget {
               text: commentListenable.text,
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );

@@ -158,6 +158,7 @@ class SubmitBody extends HookWidget {
               text: text(),
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );
