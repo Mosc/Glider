@@ -59,10 +59,7 @@ class StoriesPage extends HookWidget {
             title: const Text('Glider'),
             actions: <Widget>[
               IconButton(
-                icon: const Hero(
-                  tag: 'search_icon',
-                  child: Icon(FluentIcons.search_24_filled),
-                ),
+                icon: const Icon(FluentIcons.search_24_filled),
                 tooltip: 'Search',
                 onPressed: () => _searchSelected(context),
               ),
