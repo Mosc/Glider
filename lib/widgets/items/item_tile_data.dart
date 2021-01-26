@@ -243,7 +243,12 @@ class ItemTileData extends HookWidget {
               title: const Text('Share item link'),
               onTap: () async {
                 await Share.share(
-                    '${WebsiteRepository.baseUrl}/item?id=${item.id}');
+                  Uri.https(
+                    WebsiteRepository.authority,
+                    'item',
+                    <String, String>{'id': item.id.toString()},
+                  ).toString(),
+                );
                 Navigator.of(context).pop();
               },
             ),

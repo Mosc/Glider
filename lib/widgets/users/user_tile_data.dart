@@ -84,7 +84,12 @@ class UserTileData extends StatelessWidget {
             title: const Text('Share user link'),
             onTap: () async {
               await Share.share(
-                  '${WebsiteRepository.baseUrl}/user?id=${user.id}');
+                Uri.https(
+                  WebsiteRepository.authority,
+                  'user',
+                  <String, String>{'id': user.id},
+                ).toString(),
+              );
               Navigator.of(context).pop();
             },
           ),

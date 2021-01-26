@@ -7,16 +7,17 @@ import 'package:glider/utils/service_exception.dart';
 class ApiRepository {
   const ApiRepository(this._dio);
 
-  static const String baseUrl = 'https://hacker-news.firebaseio.com/v0';
+  static const String authority = 'hacker-news.firebaseio.com';
+  static const String basePath = 'v0';
 
   final Dio _dio;
 
   Future<Iterable<int>> getStoryIds(StoryType storyType) async {
-    final String url = '$baseUrl/${storyType.apiPath}.json';
+    final Uri uri = Uri.https(authority, '$basePath/${storyType.apiPath}.json');
 
     try {
       final Response<Iterable<dynamic>> response =
-          await _dio.get<Iterable<dynamic>>(url);
+          await _dio.getUri<Iterable<dynamic>>(uri);
       return response.data.map((dynamic id) => id as int);
     } on DioError catch (e) {
       throw ServiceException(e.message);
@@ -24,11 +25,11 @@ class ApiRepository {
   }
 
   Future<Item> getItem(int id) async {
-    final String url = '$baseUrl/item/$id.json';
+    final Uri uri = Uri.https(authority, '$basePath/item/$id.json');
 
     try {
       final Response<Map<String, Object>> response =
-          await _dio.get<Map<String, Object>>(url);
+          await _dio.getUri<Map<String, Object>>(uri);
 
       if (response.data == null) {
         throw ServiceException();
@@ -41,11 +42,11 @@ class ApiRepository {
   }
 
   Future<User> getUser(String id) async {
-    final String url = '$baseUrl/user/$id.json';
+    final Uri uri = Uri.https(authority, '$basePath/user/$id.json');
 
     try {
       final Response<Map<String, Object>> response =
-          await _dio.get<Map<String, Object>>(url);
+          await _dio.getUri<Map<String, Object>>(uri);
 
       if (response.data == null) {
         throw ServiceException();

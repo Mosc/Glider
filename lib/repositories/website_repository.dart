@@ -4,11 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:glider/models/post_data.dart';
 import 'package:glider/utils/html_util.dart';
+import 'package:glider/utils/service_exception.dart';
 
 class WebsiteRepository {
   const WebsiteRepository(this._dio);
 
-  static const String baseUrl = 'https://news.ycombinator.com';
+  static const String authority = 'news.ycombinator.com';
 
   final Dio _dio;
 
@@ -16,7 +17,7 @@ class WebsiteRepository {
     @required String username,
     @required String password,
   }) async {
-    const String path = '$baseUrl/login';
+    final Uri uri = Uri.https(authority, 'login');
     final PostData data = RegisterPostData(
       acct: username,
       pw: password,
@@ -24,21 +25,21 @@ class WebsiteRepository {
       goto: 'news',
     );
 
-    return _performDefaultPost(path, data);
+    return _performDefaultPost(uri, data);
   }
 
   Future<bool> login({
     @required String username,
     @required String password,
   }) async {
-    const String path = '$baseUrl/login';
+    final Uri uri = Uri.https(authority, 'login');
     final PostData data = LoginPostData(
       acct: username,
       pw: password,
       goto: 'news',
     );
 
-    return _performDefaultPost(path, data);
+    return _performDefaultPost(uri, data);
   }
 
   Future<bool> favorite({
@@ -47,7 +48,7 @@ class WebsiteRepository {
     @required int id,
     @required bool favorite,
   }) async {
-    const String path = '$baseUrl/fave';
+    final Uri uri = Uri.https(authority, 'fave');
     final PostData data = FavoritePostData(
       acct: username,
       pw: password,
@@ -55,7 +56,7 @@ class WebsiteRepository {
       un: favorite ? null : 't',
     );
 
-    return _performDefaultPost(path, data);
+    return _performDefaultPost(uri, data);
   }
 
   Future<bool> vote({
@@ -64,7 +65,7 @@ class WebsiteRepository {
     @required int id,
     @required bool up,
   }) async {
-    const String path = '$baseUrl/vote';
+    final Uri uri = Uri.https(authority, 'vote');
     final PostData data = VotePostData(
       acct: username,
       pw: password,
@@ -72,7 +73,7 @@ class WebsiteRepository {
       how: up ? 'up' : 'un',
     );
 
-    return _performDefaultPost(path, data);
+    return _performDefaultPost(uri, data);
   }
 
   Future<bool> comment({
@@ -81,7 +82,7 @@ class WebsiteRepository {
     @required int parentId,
     @required String text,
   }) async {
-    const String path = '$baseUrl/comment';
+    final Uri uri = Uri.https(authority, 'comment');
     final PostData data = CommentPostData(
       acct: username,
       pw: password,
@@ -90,7 +91,7 @@ class WebsiteRepository {
     );
 
     return _performDefaultPost(
-      path,
+      uri,
       data,
       validateLocation: (String location) => location == '/',
     );
@@ -103,14 +104,14 @@ class WebsiteRepository {
     String url,
     String text,
   }) async {
-    const String formPath = '$baseUrl/submitlink';
+    final Uri formUri = Uri.https(authority, 'submitlink');
     final PostData formData = SubmitFormPostData(
       acct: username,
       pw: password,
     );
 
     final Response<List<int>> response = await _performPost<List<int>>(
-      formPath,
+      formUri,
       formData,
       responseType: ResponseType.bytes,
       validateStatus: (int status) => status == HttpStatus.ok,
@@ -122,7 +123,7 @@ class WebsiteRepository {
       return false;
     }
 
-    const String path = '$baseUrl/r';
+    final Uri uri = Uri.https(authority, 'r');
     final PostData data = SubmitPostData(
       fnid: formValues['fnid'],
       fnop: formValues['fnop'],
@@ -133,7 +134,7 @@ class WebsiteRepository {
     final String cookie = response.headers.value('set-cookie');
 
     return _performDefaultPost(
-      path,
+      uri,
       data,
       cookie: cookie,
       validateLocation: (String location) => location == '/newest',
@@ -141,14 +142,14 @@ class WebsiteRepository {
   }
 
   Future<bool> _performDefaultPost(
-    String path,
+    Uri uri,
     PostData data, {
     String cookie,
     bool Function(String) validateLocation,
   }) async {
     try {
       final Response<void> response = await _performPost<void>(
-        path,
+        uri,
         data,
         cookie: cookie,
         validateStatus: (int status) => status == HttpStatus.found,
@@ -165,15 +166,15 @@ class WebsiteRepository {
   }
 
   Future<Response<T>> _performPost<T>(
-    String path,
+    Uri uri,
     PostData data, {
     String cookie,
     ResponseType responseType,
     bool Function(int) validateStatus,
   }) async {
     try {
-      return _dio.post<T>(
-        path,
+      return _dio.postUri<T>(
+        uri,
         data: data.toJson(),
         options: Options(
           headers: <String, dynamic>{if (cookie != null) 'cookie': cookie},
