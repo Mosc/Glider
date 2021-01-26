@@ -42,7 +42,10 @@ class AuthRepository {
     return success;
   }
 
-  Future<void> logout() async => _storageRepository.removeAuth();
+  Future<void> logout() async {
+    await _storageRepository.clearUpvoted();
+    await _storageRepository.removeAuth();
+  }
 
   Future<bool> favorite(
       {@required int id, @required bool favorite, Function onUpdate}) async {

@@ -62,6 +62,9 @@ class StorageRepository {
     }
   }
 
+  Future<bool> clearUpvoted() async =>
+      (await _sharedPreferences).remove(_upvotedKey);
+
   Future<bool> visited({@required int id}) async =>
       (await _sharedPreferences).containsElement(_visitedKey, id.toString());
 
