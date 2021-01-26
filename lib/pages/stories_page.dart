@@ -73,6 +73,8 @@ class StoriesPage extends HookWidget {
                 ],
                 onSelected: (MenuAction menuAction) async {
                   switch (menuAction) {
+                    case MenuAction.catchUp:
+                      return _catchUpSelected(context);
                     case MenuAction.favorites:
                       return _favoritesSelected(context);
                     case MenuAction.submit:
@@ -118,6 +120,14 @@ class StoriesPage extends HookWidget {
         transitionsBuilder:
             (_, Animation<double> animation, __, Widget child) =>
                 FadeTransition(opacity: animation, child: child),
+      ),
+    );
+  }
+
+  Future<void> _catchUpSelected(BuildContext context) {
+    return Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => const StoriesSearchPage(enableSearch: false),
       ),
     );
   }

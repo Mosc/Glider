@@ -21,7 +21,10 @@ final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
         (ProviderReference ref) => StoryType.bestStories);
 
 class StoriesSearchPage extends HookWidget {
-  const StoriesSearchPage({Key key}) : super(key: key);
+  const StoriesSearchPage({Key key, this.enableSearch = true})
+      : super(key: key);
+
+  final bool enableSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +80,16 @@ class StoriesSearchPage extends HookWidget {
           headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
             SliverAppBar(
               leading: AppBarUtil.buildFluentIconsLeading(context),
-              title: TextField(
-                controller: queryController,
-                decoration: const InputDecoration(hintText: 'Search...'),
-                textInputAction: TextInputAction.search,
-                autofocus: true,
-                onChanged: (String value) =>
-                    storySearchQueryStateController.state = value,
-              ),
+              title: enableSearch
+                  ? TextField(
+                      controller: queryController,
+                      decoration: const InputDecoration(hintText: 'Search...'),
+                      textInputAction: TextInputAction.search,
+                      autofocus: true,
+                      onChanged: (String value) =>
+                          storySearchQueryStateController.state = value,
+                    )
+                  : const Text('Catch up'),
               actions: <Widget>[
                 if (storySearchQueryStateController.state.isNotEmpty)
                   IconButton(

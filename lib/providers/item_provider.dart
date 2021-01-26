@@ -44,8 +44,8 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, SearchParameters>
 final StateProviderFamily<Item, int> itemCacheStateProvider =
     StateProvider.family((ProviderReference ref, int id) => null);
 
-final FutureProviderFamily<Item, int> itemProvider =
-    FutureProvider.family((ProviderReference ref, int id) async {
+final AutoDisposeFutureProviderFamily<Item, int> itemProvider =
+    FutureProvider.autoDispose.family((ProviderReference ref, int id) async {
   final Item item = await ref.read(apiRepositoryProvider).getItem(id);
   ref.read(itemCacheStateProvider(id)).state = item;
   return item;
