@@ -121,8 +121,8 @@ class StoriesSearchPage extends HookWidget {
                 ),
             ],
             visible: speedDialVisibleState.value,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
             animationSpeed: 100,
             child: Icon(searchStoryTypeStateController.state.icon),
           ),
@@ -165,7 +165,7 @@ class StoriesSearchPage extends HookWidget {
 
   Widget _buildChip(SearchRange searchRange,
       StateController<SearchRange> storySearchRangeStateController) {
-    return FilterChip(
+    return ChoiceChip(
       label: Text(searchRange.title),
       selected: storySearchRangeStateController.state == searchRange,
       onSelected: (bool selected) =>

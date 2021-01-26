@@ -14,6 +14,15 @@ ThemeData get lightTheme => ThemeData(
       appBarTheme: const AppBarTheme(
         brightness: Brightness.dark,
       ),
+      chipTheme: ChipThemeData.fromDefaults(
+        brightness: Brightness.light,
+        secondaryColor: _secondaryColor,
+        labelStyle: const TextStyle(),
+      ).copyWith(
+        backgroundColor: Colors.transparent,
+        selectedColor: Colors.transparent,
+        side: _StateBorderSide(),
+      ),
       colorScheme: ColorScheme.light(
         primary: _primaryColor,
         secondary: _secondaryColor,
@@ -35,6 +44,15 @@ ThemeData get darkTheme => ThemeData(
         brightness: Brightness.dark,
         color: Colors.grey[900],
       ),
+      chipTheme: ChipThemeData.fromDefaults(
+        brightness: Brightness.dark,
+        secondaryColor: _secondaryColor,
+        labelStyle: const TextStyle(),
+      ).copyWith(
+        backgroundColor: Colors.transparent,
+        selectedColor: Colors.transparent,
+        side: _StateBorderSide(),
+      ),
       colorScheme: ColorScheme.dark(
         primary: _primaryColor,
         secondary: _secondaryColor,
@@ -43,3 +61,14 @@ ThemeData get darkTheme => ThemeData(
         onSecondary: Colors.white,
       ),
     );
+
+class _StateBorderSide extends MaterialStateBorderSide {
+  @override
+  BorderSide resolve(Set<MaterialState> states) {
+    return BorderSide(
+      color: states.contains(MaterialState.selected)
+          ? _primaryColor
+          : _surfaceColor,
+    );
+  }
+}
