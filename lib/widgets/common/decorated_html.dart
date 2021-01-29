@@ -30,16 +30,16 @@ class DecoratedHtml extends StatelessWidget {
           };
         }
 
-        if (isQuote(element)) {
+        if (_isQuote(element)) {
           return <String, String>{'margin': '0'};
         }
 
         return null;
       },
       customWidgetBuilder: (dom.Element element) {
-        if (isQuote(element)) {
+        if (_isQuote(element)) {
           final String unquotedInnerHtml =
-              trimQuoteCharacters(element.innerHtml).trimLeft();
+              _trimQuoteCharacters(element.innerHtml).trimLeft();
 
           if (unquotedInnerHtml.isNotEmpty) {
             final String unquotedOuterHtml = element.outerHtml
@@ -62,10 +62,9 @@ class DecoratedHtml extends StatelessWidget {
     );
   }
 
-  static bool isQuote(dom.Element element) =>
+  static bool _isQuote(dom.Element element) =>
       element.innerHtml.startsWith(_quoteCharacter);
 
-  static String trimQuoteCharacters(String from) {
-    return from.replaceFirst(RegExp('^($_quoteCharacter)+'), '');
-  }
+  static String _trimQuoteCharacters(String from) =>
+      from.replaceFirst(RegExp('^($_quoteCharacter)+'), '');
 }
