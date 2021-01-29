@@ -22,6 +22,7 @@ class ReplyPage extends HookWidget {
             title: const Text('Reply'),
             forceElevated: innerBoxIsScrolled,
             floating: true,
+            backwardsCompatibility: false,
           ),
         ],
         body: ReplyBody(parent: parent, root: root),

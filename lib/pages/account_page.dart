@@ -27,6 +27,7 @@ class AccountPage extends HookWidget {
             actions: actionsStateController.state,
             forceElevated: innerBoxIsScrolled,
             floating: true,
+            backwardsCompatibility: false,
           ),
         ],
         body: const AccountBody(),

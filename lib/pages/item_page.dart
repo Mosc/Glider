@@ -24,6 +24,7 @@ class ItemPage extends HookWidget {
             leading: AppBarUtil.buildFluentIconsLeading(context),
             forceElevated: innerBoxIsScrolled,
             floating: true,
+            backwardsCompatibility: false,
           ),
         ],
         body: ItemBody(id: id),

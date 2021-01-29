@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/search_range.dart';
@@ -61,14 +62,16 @@ class StoriesSearchPage extends HookWidget {
     useMemoized(animationController.forward);
 
     final ThemeData theme = Theme.of(context);
+    final bool dark = theme.colorScheme.brightness == Brightness.dark;
 
     return Theme(
       data: theme.copyWith(
         appBarTheme: theme.appBarTheme.copyWith(
-          color: theme.colorScheme.brightness == Brightness.dark
-              ? null
-              : theme.scaffoldBackgroundColor,
+          backgroundColor: dark ? null : theme.scaffoldBackgroundColor,
           iconTheme: theme.iconTheme,
+          titleTextStyle: theme.textTheme.headline6,
+          systemOverlayStyle:
+              dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         ),
         inputDecorationTheme:
             theme.inputDecorationTheme.copyWith(border: InputBorder.none),
@@ -109,6 +112,7 @@ class StoriesSearchPage extends HookWidget {
               ),
               forceElevated: innerBoxIsScrolled,
               floating: true,
+              backwardsCompatibility: false,
             ),
           ],
           body: const StoriesSearchBody(),

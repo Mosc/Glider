@@ -17,6 +17,7 @@ class SubmitPage extends HookWidget {
             title: const Text('Submit'),
             forceElevated: innerBoxIsScrolled,
             floating: true,
+            backwardsCompatibility: false,
           ),
         ],
         body: const SubmitBody(),

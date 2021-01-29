@@ -19,6 +19,7 @@ class UserPage extends HookWidget {
             title: Text(id),
             forceElevated: innerBoxIsScrolled,
             floating: true,
+            backwardsCompatibility: false,
           ),
         ],
         body: UserBody(id: id),

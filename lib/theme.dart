@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Color get _primaryColor => Colors.red[300];
 Color get _secondaryColor => _primaryColor;
@@ -12,7 +13,7 @@ ThemeData get lightTheme => ThemeData(
         textTheme: ButtonTextTheme.primary,
       ),
       appBarTheme: const AppBarTheme(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       chipTheme: ChipThemeData.fromDefaults(
         brightness: Brightness.light,
@@ -41,8 +42,7 @@ ThemeData get darkTheme => ThemeData(
       ),
       toggleableActiveColor: _primaryColor,
       appBarTheme: AppBarTheme(
-        brightness: Brightness.dark,
-        color: Colors.grey[900],
+        backgroundColor: Colors.grey[900],
       ),
       chipTheme: ChipThemeData.fromDefaults(
         brightness: Brightness.dark,

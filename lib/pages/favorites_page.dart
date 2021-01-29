@@ -17,6 +17,7 @@ class FavoritesPage extends HookWidget {
             title: const Text('Favorites'),
             forceElevated: innerBoxIsScrolled,
             floating: true,
+            backwardsCompatibility: false,
           ),
         ],
         body: const FavoritesBody(),

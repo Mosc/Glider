@@ -64,7 +64,7 @@ class StoriesPage extends HookWidget {
                 onPressed: () => _searchSelected(context),
               ),
               PopupMenuButton<MenuAction>(
-                itemBuilder: (_) => <PopupMenuItem<MenuAction>>[
+                itemBuilder: (_) => <PopupMenuEntry<MenuAction>>[
                   for (MenuAction menuAction in MenuAction.values)
                     PopupMenuItem<MenuAction>(
                       value: menuAction,
@@ -88,6 +88,7 @@ class StoriesPage extends HookWidget {
             ],
             forceElevated: innerBoxIsScrolled,
             floating: true,
+            backwardsCompatibility: false,
           ),
         ],
         body: const StoriesBody(),
