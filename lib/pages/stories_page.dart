@@ -105,10 +105,11 @@ class StoriesPage extends HookWidget {
               ),
           ],
           visible: speedDialVisibleState.value,
+          useRotationAnimation: false,
+          icon: storyTypeStateController.state.icon,
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           animationSpeed: 100,
-          child: Icon(storyTypeStateController.state.icon),
         ),
       ),
     );
