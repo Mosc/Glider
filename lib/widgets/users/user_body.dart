@@ -19,7 +19,11 @@ class UserBody extends HookWidget {
   Widget build(BuildContext context) {
     return RefreshableBody<User>(
       provider: userProvider(id),
-      loadingBuilder: () => const SliverToBoxAdapter(child: UserTileLoading()),
+      loadingBuilder: () => SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (_, int index) => _buildItemLoading(index),
+        ),
+      ),
       dataBuilder: (User user) => <Widget>[
         SliverToBoxAdapter(child: UserTileData(user)),
         SliverList(
@@ -31,7 +35,7 @@ class UserBody extends HookWidget {
                 onTap: (_) => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
                 ),
-                loading: () => _buildItemLoading(index),
+                loading: () => _buildItemLoading(index + 1),
               );
             },
             childCount: user.submitted?.length ?? 0,
@@ -42,6 +46,10 @@ class UserBody extends HookWidget {
   }
 
   Widget _buildItemLoading(int index) {
-    return index.isEven ? const StoryTileLoading() : const CommentTileLoading();
+    return index == 0
+        ? const UserTileLoading()
+        : index.isEven
+            ? const StoryTileLoading()
+            : const CommentTileLoading();
   }
 }
