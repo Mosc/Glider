@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
@@ -14,11 +13,6 @@ class AccountLoggedOut extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // We can't set this during initial build, so delay execution by one frame.
-    Future<void>.microtask(
-      () => context.read(actionsStateProvider).state = <Widget>[],
-    );
-
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final TextEditingController usernameController = useTextEditingController();
     final TextEditingController passwordController = useTextEditingController();
