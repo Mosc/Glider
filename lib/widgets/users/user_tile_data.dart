@@ -1,12 +1,9 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:glider/models/user.dart';
-import 'package:glider/repositories/website_repository.dart';
-import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
-import 'package:share/share.dart';
+import 'package:glider/widgets/users/user_bottom_sheet.dart';
 
 class UserTileData extends StatelessWidget {
   const UserTileData(this.user, {Key key}) : super(key: key);
@@ -67,34 +64,7 @@ class UserTileData extends StatelessWidget {
   Future<void> _buildModalBottomSheet(BuildContext context) async {
     return showModalBottomSheet<void>(
       context: context,
-      builder: (_) => Wrap(
-        children: <Widget>[
-          if (user.about != null)
-            ListTile(
-              title: const Text('Copy text'),
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: user.about));
-                ScaffoldMessenger.of(context).showSnackBarQuickly(
-                  const SnackBar(content: Text('Text has been copied')),
-                );
-                Navigator.of(context).pop();
-              },
-            ),
-          ListTile(
-            title: const Text('Share user link'),
-            onTap: () async {
-              await Share.share(
-                Uri.https(
-                  WebsiteRepository.authority,
-                  'user',
-                  <String, String>{'id': user.id},
-                ).toString(),
-              );
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
+      builder: (_) => UserBottomSheet(user),
     );
   }
 }
