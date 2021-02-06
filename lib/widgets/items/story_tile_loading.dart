@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/items/item_tile_header.dart';
@@ -9,6 +10,7 @@ class StoryTileLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final double thumbnailSize = ItemTileHeader.calculateHeight(context);
 
     return TileLoading(
       child: Padding(
@@ -25,20 +27,20 @@ class StoryTileLoading extends StatelessWidget {
                     children: <Widget>[
                       const SizedBox(height: 3),
                       TileLoadingBlock(
-                        height: textTheme.subtitle1.fontSize,
+                        height: textTheme.subtitle1.scaledFontSize(context),
                       ),
                       const SizedBox(height: 3),
                       TileLoadingBlock(
                         width: 120,
-                        height: textTheme.subtitle1.fontSize,
+                        height: textTheme.subtitle1.scaledFontSize(context),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 12),
-                const TileLoadingBlock(
-                  width: ItemTileHeader.height,
-                  height: ItemTileHeader.height,
+                TileLoadingBlock(
+                  width: thumbnailSize,
+                  height: thumbnailSize,
                 ),
               ],
             ),
@@ -48,12 +50,12 @@ class StoryTileLoading extends StatelessWidget {
               children: <Widget>[
                 TileLoadingBlock(
                   width: 160,
-                  height: textTheme.caption.fontSize,
+                  height: textTheme.caption.scaledFontSize(context),
                 ),
                 const Spacer(),
                 TileLoadingBlock(
                   width: 80,
-                  height: textTheme.caption.fontSize,
+                  height: textTheme.caption.scaledFontSize(context),
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:glider/utils/text_style_extension.dart';
 
 class End extends StatelessWidget {
   const End({Key key}) : super(key: key);
@@ -15,7 +16,11 @@ class End extends StatelessWidget {
             children: <Widget>[
               Icon(
                 FluentIcons.pulse_24_regular,
-                size: Theme.of(context).textTheme.bodyText2.fontSize * 2,
+                size: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .scaledFontSize(context) *
+                    2,
               ),
             ],
           ),

@@ -7,6 +7,7 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
+import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -106,7 +107,10 @@ class ItemBody extends HookWidget {
               children: <Widget>[
                 Icon(
                   FluentIcons.arrow_circle_up_24_regular,
-                  size: Theme.of(context).textTheme.bodyText2.fontSize,
+                  size: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .scaledFontSize(context),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

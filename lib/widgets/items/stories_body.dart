@@ -13,8 +13,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class StoriesBody extends HookWidget {
   const StoriesBody({Key key}) : super(key: key);
 
-  static const double storyExtent = 90;
-
   @override
   Widget build(BuildContext context) {
     final StateController<StoryType> storyTypeStateController =
@@ -22,14 +20,13 @@ class StoriesBody extends HookWidget {
 
     return RefreshableBody<Iterable<int>>(
       provider: storyIdsProvider(storyTypeStateController.state),
-      loadingBuilder: () => SliverFixedExtentList(
+      loadingBuilder: () => SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, __) => const StoryTileLoading(),
         ),
-        itemExtent: storyExtent,
       ),
       dataBuilder: (Iterable<int> ids) => <Widget>[
-        SliverFixedExtentList(
+        SliverList(
           delegate: SliverChildBuilderDelegate(
             (_, int index) {
               final int id = ids.elementAt(index);
@@ -46,7 +43,6 @@ class StoriesBody extends HookWidget {
             },
             childCount: ids.length,
           ),
-          itemExtent: storyExtent,
         ),
       ],
     );

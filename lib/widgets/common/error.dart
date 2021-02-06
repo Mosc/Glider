@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:glider/utils/text_style_extension.dart';
 
 class Error extends StatelessWidget {
   const Error({Key key}) : super(key: key);
@@ -13,7 +14,11 @@ class Error extends StatelessWidget {
           children: <Widget>[
             Icon(
               FluentIcons.error_circle_24_regular,
-              size: Theme.of(context).textTheme.bodyText2.fontSize * 2,
+              size: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .scaledFontSize(context) *
+                  2,
             ),
             const SizedBox(height: 12),
             Text(

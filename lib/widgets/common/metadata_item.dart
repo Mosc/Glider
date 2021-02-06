@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/utils/text_style_extension.dart';
 
 class MetadataItem extends StatelessWidget {
   const MetadataItem(
@@ -21,7 +22,7 @@ class MetadataItem extends StatelessWidget {
         children: <Widget>[
           Icon(
             icon,
-            size: textTheme.bodyText2.fontSize,
+            size: textTheme.bodyText2.scaledFontSize(context),
             color: color,
           ),
           if (text != null) ...<Widget>[

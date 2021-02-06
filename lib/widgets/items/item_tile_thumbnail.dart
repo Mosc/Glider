@@ -16,30 +16,34 @@ class ItemTileThumbnail extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double size = ItemTileHeader.calculateHeight(context);
+
     return Hero(
       tag: 'item_thumbnail_${item.id}',
       child: item.localOnly
-          ? TileLoadingBlock(
-              width: ItemTileHeader.height,
-              height: ItemTileHeader.height,
-              color: Theme.of(context).colorScheme.surface,
-            )
+          ? _placeholderBuilder(context, size: size)
           : OctoImage(
               image: CachedNetworkImageProvider(item.thumbnailUrl),
               imageBuilder: (_, Widget child) => ClipRRect(
                 borderRadius: _borderRadius,
                 child: child,
               ),
-              placeholderBuilder: (_) => TileLoadingBlock(
-                width: ItemTileHeader.height,
-                height: ItemTileHeader.height,
-                color: Theme.of(context).colorScheme.surface,
-              ),
+              placeholderBuilder: (BuildContext context) =>
+                  _placeholderBuilder(context, size: size),
               errorBuilder:
                   OctoError.icon(icon: FluentIcons.error_circle_24_regular),
-              width: ItemTileHeader.height,
-              height: ItemTileHeader.height,
+              width: size,
+              height: size,
             ),
+    );
+  }
+
+  static Widget _placeholderBuilder(BuildContext context,
+      {@required double size}) {
+    return TileLoadingBlock(
+      width: size,
+      height: size,
+      color: Theme.of(context).colorScheme.surface,
     );
   }
 }

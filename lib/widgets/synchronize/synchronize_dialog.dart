@@ -4,6 +4,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
+import 'package:glider/utils/text_style_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SynchronizeDialog extends HookWidget {
@@ -12,7 +13,8 @@ class SynchronizeDialog extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> loadingState = useState(false);
-    final double titleHeight = Theme.of(context).textTheme.headline6.fontSize;
+    final double titleHeight =
+        Theme.of(context).textTheme.headline6.scaledFontSize(context);
 
     return AlertDialog(
       title: Row(children: <Widget>[

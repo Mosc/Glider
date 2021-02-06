@@ -7,7 +7,6 @@ import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/items/item_tile.dart';
-import 'package:glider/widgets/items/stories_body.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -24,14 +23,13 @@ class StoriesSearchBody extends HookWidget {
           storyType: useProvider(storySearchTypeStateProvider).state,
         ),
       ),
-      loadingBuilder: () => SliverFixedExtentList(
+      loadingBuilder: () => SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, __) => const StoryTileLoading(),
         ),
-        itemExtent: StoriesBody.storyExtent,
       ),
       dataBuilder: (Iterable<int> ids) => <Widget>[
-        SliverFixedExtentList(
+        SliverList(
           delegate: SliverChildBuilderDelegate(
             (_, int index) {
               final int id = ids.elementAt(index);
@@ -47,7 +45,6 @@ class StoriesSearchBody extends HookWidget {
             },
             childCount: ids.length,
           ),
-          itemExtent: StoriesBody.storyExtent,
         ),
       ],
     );
