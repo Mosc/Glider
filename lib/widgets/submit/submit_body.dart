@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/submit_type.dart';
-import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
@@ -184,40 +183,23 @@ class SubmitBody extends HookWidget {
   Future<void> _submit(BuildContext context,
       {@required String title, String url, String text}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final bool success = await authRepository.submit(
+      title: title,
+      url: url,
+      text: text,
+    );
 
-    if (await authRepository.loggedIn) {
-      final bool success = await authRepository.submit(
-        title: title,
-        url: url,
-        text: text,
-      );
+    if (success) {
+      final StateController<int> previewIdStateController =
+          context.read(previewIdStateProvider);
 
-      if (success) {
-        final StateController<int> previewIdStateController =
-            context.read(previewIdStateProvider);
+      // Decrement preview ID to prevent duplicates.
+      previewIdStateController.state--;
 
-        // Decrement preview ID to prevent duplicates.
-        previewIdStateController.state--;
-
-        Navigator.of(context).pop(true);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBarQuickly(
-          const SnackBar(content: Text('Something went wrong')),
-        );
-      }
+      Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        SnackBar(
-          content: const Text('Log in to submit'),
-          action: SnackBarAction(
-            label: 'Log in',
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute<void>(
-                builder: (_) => const AccountPage(),
-              ),
-            ),
-          ),
-        ),
+        const SnackBar(content: Text('Something went wrong')),
       );
     }
   }

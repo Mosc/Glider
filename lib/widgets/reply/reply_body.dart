@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
-import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
@@ -115,57 +114,40 @@ class ReplyBody extends HookWidget {
 
   Future<void> _reply(BuildContext context, {@required String text}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final bool success = await authRepository.reply(
+      parentId: parent.id,
+      text: text,
+    );
 
-    if (await authRepository.loggedIn) {
-      final bool success = await authRepository.reply(
-        parentId: parent.id,
+    if (success) {
+      final StateController<int> previewIdStateController =
+          context.read(previewIdStateProvider);
+      final int previewId = previewIdStateController.state;
+
+      // Make comment preview available.
+      context.read(itemCacheStateProvider(previewId)).state = _buildItem(
+        id: previewId,
+        username: await authRepository.username,
         text: text,
       );
 
-      if (success) {
-        final StateController<int> previewIdStateController =
-            context.read(previewIdStateProvider);
-        final int previewId = previewIdStateController.state;
+      // Add comment preview to parent's list of children.
+      context.read(itemCacheStateProvider(parent.id)).state =
+          parent.incrementDescendants().addKid(previewId);
 
-        // Make comment preview available.
-        context.read(itemCacheStateProvider(previewId)).state = _buildItem(
-          id: previewId,
-          username: await authRepository.username,
-          text: text,
-        );
-
-        // Add comment preview to parent's list of children.
-        context.read(itemCacheStateProvider(parent.id)).state =
-            parent.incrementDescendants().addKid(previewId);
-
-        // Increment root's number of descendants.
-        if (parent != root) {
-          context.read(itemCacheStateProvider(root.id)).state =
-              root.incrementDescendants();
-        }
-
-        // Decrement preview ID to prevent duplicates.
-        previewIdStateController.state--;
-
-        Navigator.of(context).pop(true);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBarQuickly(
-          const SnackBar(content: Text('Something went wrong')),
-        );
+      // Increment root's number of descendants.
+      if (parent != root) {
+        context.read(itemCacheStateProvider(root.id)).state =
+            root.incrementDescendants();
       }
+
+      // Decrement preview ID to prevent duplicates.
+      previewIdStateController.state--;
+
+      Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        SnackBar(
-          content: const Text('Log in to reply'),
-          action: SnackBarAction(
-            label: 'Log in',
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute<void>(
-                builder: (_) => const AccountPage(),
-              ),
-            ),
-          ),
-        ),
+        const SnackBar(content: Text('Something went wrong')),
       );
     }
   }
