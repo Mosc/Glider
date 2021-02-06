@@ -16,7 +16,8 @@ dependencies:
   flutter_secure_storage: ^3.3.5
   flutter_speed_dial:
     git:
-      url: http://github.com/darioielardi/flutter_speed_dial
+      url: https://github.com/darioielardi/flutter_speed_dial
+      ref: 282dd8956404944972c5a7eac51d52690c7582f5
   flutter_widget_from_html_core: ^0.5.1+4
   freezed_annotation: ^0.12.0
   hooks_riverpod: ^0.12.3+1

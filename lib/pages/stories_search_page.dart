@@ -130,7 +130,6 @@ class StoriesSearchPage extends HookWidget {
                 ),
             ],
             visible: speedDialVisibleState.value,
-            useRotationAnimation: false,
             icon: searchStoryTypeStateController.state.icon,
             backgroundColor: theme.colorScheme.primary,
             foregroundColor: theme.colorScheme.onPrimary,

@@ -269,11 +269,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: fa3257ad170d45a743319743409523b6f4e24f0c
-      url: "http://github.com/darioielardi/flutter_speed_dial"
+      ref: "282dd8956404944972c5a7eac51d52690c7582f5"
+      resolved-ref: "282dd8956404944972c5a7eac51d52690c7582f5"
+      url: "https://github.com/darioielardi/flutter_speed_dial"
     source: git
-    version: "2.1.0"
+    version: "1.6.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
