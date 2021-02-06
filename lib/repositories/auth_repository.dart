@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:glider/repositories/storage_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
+import 'package:glider/utils/service_exception.dart';
 
 class AuthRepository {
   const AuthRepository(this._websiteRepository, this._storageRepository);
@@ -47,8 +48,58 @@ class AuthRepository {
     await _storageRepository.removeAuth();
   }
 
+  Future<bool> fetchFavorited({Function(int) onUpdate}) async {
+    if (await _storageRepository.loggedIn) {
+      try {
+        final List<int> ids = <int>[
+          ...await _websiteRepository.getFavorited(
+            username: await _storageRepository.username,
+          ),
+          ...await _websiteRepository.getFavorited(
+            username: await _storageRepository.username,
+            comments: true,
+          ),
+        ];
+        await _storageRepository.clearFavorited();
+        await _storageRepository.setFavoriteds(ids: ids, favorite: true);
+        ids.forEach(onUpdate?.call);
+        return true;
+      } on ServiceException {
+        return false;
+      }
+    }
+
+    return false;
+  }
+
+  Future<bool> fetchUpvoted({Function(int) onUpdate}) async {
+    if (await _storageRepository.loggedIn) {
+      try {
+        final List<int> ids = <int>[
+          ...await _websiteRepository.getUpvoted(
+            username: await _storageRepository.username,
+            password: await _storageRepository.password,
+          ),
+          ...await _websiteRepository.getUpvoted(
+            username: await _storageRepository.username,
+            password: await _storageRepository.password,
+            comments: true,
+          ),
+        ];
+        await _storageRepository.clearUpvoted();
+        await _storageRepository.setUpvoteds(ids: ids, up: true);
+        ids.forEach(onUpdate?.call);
+        return true;
+      } on ServiceException {
+        return false;
+      }
+    }
+
+    return false;
+  }
+
   Future<bool> favorite(
-      {@required int id, @required bool favorite, Function onUpdate}) async {
+      {@required int id, @required bool favorite, Function() onUpdate}) async {
     await _storageRepository.setFavorited(id: id, favorite: favorite);
     onUpdate?.call();
 
@@ -65,7 +116,7 @@ class AuthRepository {
   }
 
   Future<bool> vote(
-      {@required int id, @required bool up, Function onUpdate}) async {
+      {@required int id, @required bool up, Function() onUpdate}) async {
     final bool oldUp = await _storageRepository.upvoted(id: id);
     await _storageRepository.setUpvoted(id: id, up: up);
     onUpdate?.call();

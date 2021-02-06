@@ -11,10 +11,12 @@ import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/pages/submit_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
+import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/uni_links_handler.dart';
 import 'package:glider/widgets/items/stories_body.dart';
+import 'package:glider/widgets/synchronize/synchronize_dialog.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -79,6 +81,8 @@ class StoriesPage extends HookWidget {
                       return _favoritesSelected(context);
                     case MenuAction.submit:
                       return _submitSelected(context);
+                    case MenuAction.synchronize:
+                      return _synchronizeSelected(context);
                     case MenuAction.account:
                       return _accountSelected(context);
                   }
@@ -143,7 +147,9 @@ class StoriesPage extends HookWidget {
   }
 
   Future<void> _submitSelected(BuildContext context) async {
-    if (await context.read(authRepositoryProvider).loggedIn) {
+    final AuthRepository authRepository = context.read(authRepositoryProvider);
+
+    if (await authRepository.loggedIn) {
       final bool success = await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
           builder: (_) => const SubmitPage(),
@@ -151,7 +157,7 @@ class StoriesPage extends HookWidget {
         ),
       );
 
-      if (success != null && success) {
+      if (success == true) {
         await context.refresh(storyIdsProvider(StoryType.newStories));
         context.read(storyTypeStateProvider).state = StoryType.newStories;
         ScaffoldMessenger.of(context).showSnackBarQuickly(
@@ -172,6 +178,31 @@ class StoriesPage extends HookWidget {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
         SnackBar(
           content: const Text('Log in to submit'),
+          action: SnackBarAction(
+            label: 'Log in',
+            onPressed: () => Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(
+                builder: (_) => const AccountPage(),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _synchronizeSelected(BuildContext context) async {
+    final AuthRepository authRepository = context.read(authRepositoryProvider);
+
+    if (await authRepository.loggedIn) {
+      await showDialog<bool>(
+        context: context,
+        builder: (_) => const SynchronizeDialog(),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBarQuickly(
+        SnackBar(
+          content: const Text('Log in to sync'),
           action: SnackBarAction(
             label: 'Log in',
             onPressed: () => Navigator.of(context).push<void>(

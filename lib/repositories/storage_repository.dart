@@ -49,6 +49,22 @@ class StorageRepository {
     }
   }
 
+  Future<void> setFavoriteds(
+      {@required Iterable<int> ids, @required bool favorite}) async {
+    final SharedPreferences sharedPreferences = await _sharedPreferences;
+
+    if (favorite) {
+      await sharedPreferences.addElements(
+          _favoritedKey, ids.map((int id) => id.toString()));
+    } else {
+      await sharedPreferences.removeElements(
+          _favoritedKey, ids.map((int id) => id.toString()));
+    }
+  }
+
+  Future<bool> clearFavorited() async =>
+      (await _sharedPreferences).remove(_favoritedKey);
+
   Future<bool> upvoted({@required int id}) async =>
       (await _sharedPreferences).containsElement(_upvotedKey, id.toString());
 
@@ -59,6 +75,19 @@ class StorageRepository {
       await sharedPreferences.addElement(_upvotedKey, id.toString());
     } else {
       await sharedPreferences.removeElement(_upvotedKey, id.toString());
+    }
+  }
+
+  Future<void> setUpvoteds(
+      {@required Iterable<int> ids, @required bool up}) async {
+    final SharedPreferences sharedPreferences = await _sharedPreferences;
+
+    if (up) {
+      await sharedPreferences.addElements(
+          _upvotedKey, ids.map((int id) => id.toString()));
+    } else {
+      await sharedPreferences.removeElements(
+          _upvotedKey, ids.map((int id) => id.toString()));
     }
   }
 

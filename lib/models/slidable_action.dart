@@ -9,7 +9,7 @@ part 'slidable_action.freezed.dart';
 @freezed
 abstract class SlidableAction with _$SlidableAction {
   factory SlidableAction({
-    @required Function action,
+    @required Function() action,
     @required IconData icon,
     Color color,
     Color iconColor,

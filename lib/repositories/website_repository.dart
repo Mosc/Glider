@@ -11,6 +11,8 @@ class WebsiteRepository {
 
   static const String authority = 'news.ycombinator.com';
 
+  static const String _itemSelector = '.athing';
+
   final Dio _dio;
 
   Future<bool> register({
@@ -104,24 +106,16 @@ class WebsiteRepository {
     String url,
     String text,
   }) async {
-    final Uri formUri = Uri.https(authority, 'submitlink');
-    final PostData formData = SubmitFormPostData(
-      acct: username,
-      pw: password,
-    );
-
-    final Response<List<int>> response = await _performPost<List<int>>(
-      formUri,
-      formData,
-      responseType: ResponseType.bytes,
-      validateStatus: (int status) => status == HttpStatus.ok,
-    );
+    final Response<List<int>> formResponse =
+        await _getSubmitFormResponse(username: username, password: password);
     final Map<String, String> formValues =
-        HtmlUtil.getHiddenFormValues(response.data);
+        HtmlUtil.getHiddenFormValues(formResponse.data);
 
     if (formValues == null || formValues.isEmpty) {
       return false;
     }
+
+    final String cookie = formResponse.headers.value('set-cookie');
 
     final Uri uri = Uri.https(authority, 'r');
     final PostData data = SubmitPostData(
@@ -131,7 +125,6 @@ class WebsiteRepository {
       url: url,
       text: text,
     );
-    final String cookie = response.headers.value('set-cookie');
 
     return _performDefaultPost(
       uri,
@@ -139,6 +132,83 @@ class WebsiteRepository {
       cookie: cookie,
       validateLocation: (String location) => location == '/newest',
     );
+  }
+
+  Future<Iterable<int>> getFavorited({
+    @required String username,
+    bool comments = false,
+  }) async {
+    final Uri uri = Uri.https(
+      authority,
+      'favorites',
+      <String, String>{
+        'id': username,
+        if (comments) 'comments': 't',
+      },
+    );
+
+    final Response<List<int>> response = await _performGet(uri);
+    return HtmlUtil.getIds(response.data, selector: _itemSelector)
+        .map(int.parse);
+  }
+
+  Future<Iterable<int>> getUpvoted({
+    @required String username,
+    @required String password,
+    bool comments = false,
+  }) async {
+    // We're not interested in the submit form specifically, but it's a rather
+    // small page that returns the cookie we need for the next call.
+    final Response<void> formResponse =
+        await _getSubmitFormResponse(username: username, password: password);
+    final String cookie = formResponse.headers.value('set-cookie');
+
+    final Uri uri = Uri.https(
+      authority,
+      'upvoted',
+      <String, String>{
+        'id': username,
+        if (comments) 'comments': 't',
+      },
+    );
+
+    final Response<List<int>> response = await _performGet(
+      uri,
+      cookie: cookie,
+    );
+    return HtmlUtil.getIds(response.data, selector: _itemSelector)
+        .map(int.parse);
+  }
+
+  Future<Response<List<int>>> _getSubmitFormResponse({
+    @required String username,
+    @required String password,
+  }) async {
+    final Uri uri = Uri.https(authority, 'submitlink');
+    final PostData data = SubmitFormPostData(
+      acct: username,
+      pw: password,
+    );
+    return _performPost(
+      uri,
+      data,
+      responseType: ResponseType.bytes,
+      validateStatus: (int status) => status == HttpStatus.ok,
+    );
+  }
+
+  Future<Response<T>> _performGet<T>(Uri uri, {String cookie}) async {
+    try {
+      return await _dio.getUri<T>(
+        uri,
+        options: Options(
+          headers: <String, dynamic>{if (cookie != null) 'cookie': cookie},
+          responseType: ResponseType.bytes,
+        ),
+      );
+    } on DioError catch (e) {
+      throw ServiceException(e.message);
+    }
   }
 
   Future<bool> _performDefaultPost(
@@ -160,7 +230,7 @@ class WebsiteRepository {
       }
 
       return true;
-    } on DioError {
+    } on ServiceException {
       return false;
     }
   }
@@ -173,7 +243,7 @@ class WebsiteRepository {
     bool Function(int) validateStatus,
   }) async {
     try {
-      return _dio.postUri<T>(
+      return await _dio.postUri<T>(
         uri,
         data: data.toJson(),
         options: Options(
@@ -183,8 +253,8 @@ class WebsiteRepository {
           validateStatus: validateStatus,
         ),
       );
-    } on DioError {
-      return null;
+    } on DioError catch (e) {
+      throw ServiceException(e.message);
     }
   }
 }

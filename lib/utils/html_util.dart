@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 
@@ -20,5 +21,11 @@ class HtmlUtil {
         for (dom.Element hiddenInput in hiddenInputs)
           hiddenInput.attributes['name']: hiddenInput.attributes['value']
     };
+  }
+
+  static Iterable<String> getIds(dynamic input, {@required String selector}) {
+    final dom.Document document = parser.parse(input);
+    final List<dom.Element> list = document?.body?.querySelectorAll(selector);
+    return list?.map((dom.Element element) => element.id);
   }
 }
