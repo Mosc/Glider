@@ -17,6 +17,7 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/uni_links_handler.dart';
 import 'package:glider/widgets/items/stories_body.dart';
 import 'package:glider/widgets/synchronize/synchronize_dialog.dart';
+import 'package:glider/widgets/theme/theme_bottom_sheet.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -81,6 +82,8 @@ class StoriesPage extends HookWidget {
                       return _favoritesSelected(context);
                     case MenuAction.submit:
                       return _submitSelected(context);
+                    case MenuAction.theme:
+                      return _themeSelected(context);
                     case MenuAction.synchronize:
                       return _synchronizeSelected(context);
                     case MenuAction.account:
@@ -190,11 +193,18 @@ class StoriesPage extends HookWidget {
     }
   }
 
+  Future<void> _themeSelected(BuildContext context) async {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => const ThemeDialog(),
+    );
+  }
+
   Future<void> _synchronizeSelected(BuildContext context) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      await showDialog<bool>(
+      return showDialog<bool>(
         context: context,
         builder: (_) => const SynchronizeDialog(),
       );

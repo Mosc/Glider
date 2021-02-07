@@ -1,11 +1,16 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:glider/models/theme_base.dart';
 import 'package:glider/utils/shared_preferences_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageRepository {
   const StorageRepository(this._secureStorage, this._sharedPreferences);
 
+  static const String _themeBaseKey = 'theme_base';
+  static const String _themeColorKey = 'theme_color';
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
   static const String _favoritedKey = 'favorited';
@@ -14,6 +19,18 @@ class StorageRepository {
 
   final FlutterSecureStorage _secureStorage;
   final Future<SharedPreferences> _sharedPreferences;
+
+  Future<ThemeBase> get themeBase async =>
+      ThemeBase.values[((await _sharedPreferences).getInt(_themeBaseKey))];
+
+  Future<void> setThemeMode(ThemeBase themeMode) async =>
+      (await _sharedPreferences).setInt(_themeBaseKey, themeMode.index);
+
+  Future<Color> get themeColor async =>
+      Color((await _sharedPreferences).getInt(_themeColorKey));
+
+  Future<void> setThemeColor(Color color) async =>
+      (await _sharedPreferences).setInt(_themeColorKey, color.value);
 
   Future<bool> get loggedIn async => await username != null;
 

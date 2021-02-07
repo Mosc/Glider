@@ -33,17 +33,17 @@ extension StoryTypeExtension on StoryType {
   IconData get icon {
     switch (this) {
       case StoryType.topStories:
-        return FluentIcons.arrow_trending_24_filled;
+        return FluentIcons.arrow_trending_24_regular;
       case StoryType.newTopStories:
         return FluentIcons.rocket_24_filled;
       case StoryType.newStories:
-        return FluentIcons.new_24_filled;
+        return FluentIcons.new_24_regular;
       case StoryType.bestStories:
-        return FluentIcons.ribbon_star_24_filled;
+        return FluentIcons.ribbon_star_24_regular;
       case StoryType.askStories:
-        return FluentIcons.chat_help_24_filled;
+        return FluentIcons.chat_help_24_regular;
       case StoryType.showStories:
-        return FluentIcons.chat_warning_24_filled;
+        return FluentIcons.chat_warning_24_regular;
     }
 
     throw UnsupportedError('$this does not have an icon');

@@ -70,7 +70,7 @@ class ItemBody extends HookWidget {
       Iterable<Item> items, int index, ValueNotifier<Set<int>> collapsedState) {
     final Item item = items.elementAt(index);
 
-    return SmoothAnimatedSwitcher(
+    return SmoothAnimatedSwitcher.vertical(
       condition: !_collapsedAncestors(collapsedState, item.ancestors),
       child: ItemTile(
         id: item.id,

@@ -2,6 +2,7 @@ enum MenuAction {
   catchUp,
   favorites,
   submit,
+  theme,
   synchronize,
   account,
 }
@@ -15,6 +16,8 @@ extension MenuActionExtension on MenuAction {
         return 'Favorites';
       case MenuAction.submit:
         return 'Submit';
+      case MenuAction.theme:
+        return 'Theme';
       case MenuAction.synchronize:
         return 'Synchronize';
       case MenuAction.account:

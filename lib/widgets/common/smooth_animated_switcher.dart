@@ -5,6 +5,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     Key key,
     @required this.condition,
     @required this.child,
+    this.duration,
   })  : transitionBuilder = _defaultTransitionBuilder,
         super(key: key);
 
@@ -12,6 +13,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     Key key,
     @required this.condition,
     @required this.child,
+    this.duration,
   })  : transitionBuilder = _verticalTransitionBuilder,
         super(key: key);
 
@@ -19,11 +21,13 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     Key key,
     @required this.condition,
     @required this.child,
+    this.duration,
   })  : transitionBuilder = _horizontalTransitionBuilder,
         super(key: key);
 
   final bool condition;
   final Widget child;
+  final Duration duration;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
 
   static Widget _defaultTransitionBuilder(
@@ -64,7 +68,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
+      duration: duration ?? const Duration(milliseconds: 400),
       switchInCurve: Curves.easeInOut,
       switchOutCurve: Curves.easeInOut,
       transitionBuilder: transitionBuilder,
