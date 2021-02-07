@@ -43,7 +43,7 @@ class ItemTileContent extends StatelessWidget {
             interactive: interactive,
           ),
           if (item.text != null || item.url != null)
-            SmoothAnimatedSwitcher(
+            SmoothAnimatedSwitcher.vertical(
               condition: !dense,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

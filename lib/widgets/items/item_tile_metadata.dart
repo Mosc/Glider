@@ -36,8 +36,7 @@ class ItemTileMetadata extends HookWidget {
       child: Row(
         children: <Widget>[
           if (favorited.data != null)
-            SmoothAnimatedSwitcher(
-              axis: Axis.horizontal,
+            SmoothAnimatedSwitcher.horizontal(
               condition: favorited.data.value,
               child: const MetadataItem(
                 icon: FluentIcons.star_24_regular,
@@ -51,8 +50,7 @@ class ItemTileMetadata extends HookWidget {
               falseChild: _buildUpvotedMetadata(upvoted: false),
             )
           else if (upvoted.data != null)
-            SmoothAnimatedSwitcher(
-              axis: Axis.horizontal,
+            SmoothAnimatedSwitcher.horizontal(
               condition: upvoted.data.value,
               child: _buildUpvotedMetadata(upvoted: true),
             ),
@@ -135,7 +133,6 @@ class ItemTileMetadata extends HookWidget {
 
   Widget _buildCollapsedIndicator() {
     return SmoothAnimatedSwitcher(
-      transitionBuilder: SmoothAnimatedSwitcher.fadeTransitionBuilder,
       condition: dense,
       child: MetadataItem(
         icon: FluentIcons.add_circle_24_regular,
