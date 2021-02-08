@@ -7,6 +7,7 @@ enum ThemeBase {
   light,
   dark,
   black,
+  space,
 }
 
 extension ExpandedThemeModeExtension on ThemeBase {
@@ -20,6 +21,8 @@ extension ExpandedThemeModeExtension on ThemeBase {
         return 'Dark';
       case ThemeBase.black:
         return 'Black';
+      case ThemeBase.space:
+        return 'Space';
     }
 
     throw UnsupportedError('$this does not have a title');
@@ -37,6 +40,8 @@ extension ExpandedThemeModeExtension on ThemeBase {
         return AppTheme.darkBackgroundColor;
       case ThemeBase.black:
         return AppTheme.blackBackgroundColor;
+      case ThemeBase.space:
+        return AppTheme.spaceBackgroundColor;
     }
 
     throw UnsupportedError('$this does not have a title');
@@ -49,6 +54,7 @@ extension ExpandedThemeModeExtension on ThemeBase {
         return AppTheme.lightTheme(color);
       case ThemeBase.dark:
       case ThemeBase.black:
+      case ThemeBase.space:
         return null;
     }
 
@@ -62,6 +68,8 @@ extension ExpandedThemeModeExtension on ThemeBase {
         return AppTheme.darkTheme(color);
       case ThemeBase.black:
         return AppTheme.blackTheme(color);
+      case ThemeBase.space:
+        return AppTheme.spaceTheme(color);
       case ThemeBase.light:
         return null;
     }
@@ -77,6 +85,7 @@ extension ExpandedThemeModeExtension on ThemeBase {
         return ThemeMode.light;
       case ThemeBase.dark:
       case ThemeBase.black:
+      case ThemeBase.space:
         return ThemeMode.dark;
     }
 

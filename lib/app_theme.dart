@@ -8,7 +8,8 @@ class AppTheme {
   static final Color surfaceColor = Colors.grey.withOpacity(0.15);
   static final Color lightBackgroundColor = Colors.grey[50];
   static final Color darkBackgroundColor = Colors.grey[900];
-  static final Color blackBackgroundColor = Colors.black;
+  static const Color blackBackgroundColor = Colors.black;
+  static final Color spaceBackgroundColor = Colors.blueGrey[900];
 
   static ThemeData lightTheme(Color color) =>
       _buildTheme(color, backgroundColor: lightBackgroundColor);
@@ -18,6 +19,9 @@ class AppTheme {
 
   static ThemeData blackTheme(Color color) =>
       _buildTheme(color, backgroundColor: blackBackgroundColor);
+
+  static ThemeData spaceTheme(Color color) =>
+      _buildTheme(color, backgroundColor: spaceBackgroundColor);
 
   static ThemeData _buildTheme(Color color, {@required Color backgroundColor}) {
     final Brightness brightness =
