@@ -1,10 +1,12 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/models/account_menu_action.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/account/account_body.dart';
+import 'package:glider/widgets/synchronize/synchronize_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -24,14 +26,24 @@ class AccountPage extends HookWidget {
             title: const Text('Account'),
             actions: loggedIn.data?.value == true
                 ? <Widget>[
-                    IconButton(
-                      icon: const Icon(FluentIcons.sign_out_24_filled),
-                      tooltip: 'Log out',
-                      onPressed: () async {
-                        await context.read(authRepositoryProvider).logout();
-                        unawaited(context.refresh(loggedInProvider));
-                        unawaited(context.refresh(usernameProvider));
+                    PopupMenuButton<AccountMenuAction>(
+                      itemBuilder: (_) => <PopupMenuEntry<AccountMenuAction>>[
+                        for (AccountMenuAction menuAction
+                            in AccountMenuAction.values)
+                          PopupMenuItem<AccountMenuAction>(
+                            value: menuAction,
+                            child: Text(menuAction.title),
+                          ),
+                      ],
+                      onSelected: (AccountMenuAction menuAction) async {
+                        switch (menuAction) {
+                          case AccountMenuAction.synchronize:
+                            return _synchronizeSelected(context);
+                          case AccountMenuAction.logOut:
+                            return _logOutSelected(context);
+                        }
                       },
+                      icon: const Icon(FluentIcons.more_vertical_24_filled),
                     ),
                   ]
                 : null,
@@ -43,5 +55,18 @@ class AccountPage extends HookWidget {
         body: const AccountBody(),
       ),
     );
+  }
+
+  Future<void> _synchronizeSelected(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (_) => const SynchronizeDialog(),
+    );
+  }
+
+  Future<void> _logOutSelected(BuildContext context) async {
+    await context.read(authRepositoryProvider).logout();
+    unawaited(context.refresh(loggedInProvider));
+    unawaited(context.refresh(usernameProvider));
   }
 }

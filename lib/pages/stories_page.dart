@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:glider/models/menu_action.dart';
+import 'package:glider/models/stories_menu_action.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/favorites_page.dart';
@@ -16,7 +16,6 @@ import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/uni_links_handler.dart';
 import 'package:glider/widgets/items/stories_body.dart';
-import 'package:glider/widgets/synchronize/synchronize_dialog.dart';
 import 'package:glider/widgets/theme/theme_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -65,27 +64,25 @@ class StoriesPage extends HookWidget {
                 tooltip: 'Search',
                 onPressed: () => _searchSelected(context),
               ),
-              PopupMenuButton<MenuAction>(
-                itemBuilder: (_) => <PopupMenuEntry<MenuAction>>[
-                  for (MenuAction menuAction in MenuAction.values)
-                    PopupMenuItem<MenuAction>(
+              PopupMenuButton<StoriesMenuAction>(
+                itemBuilder: (_) => <PopupMenuEntry<StoriesMenuAction>>[
+                  for (StoriesMenuAction menuAction in StoriesMenuAction.values)
+                    PopupMenuItem<StoriesMenuAction>(
                       value: menuAction,
                       child: Text(menuAction.title),
                     ),
                 ],
-                onSelected: (MenuAction menuAction) async {
+                onSelected: (StoriesMenuAction menuAction) async {
                   switch (menuAction) {
-                    case MenuAction.catchUp:
+                    case StoriesMenuAction.catchUp:
                       return _catchUpSelected(context);
-                    case MenuAction.favorites:
+                    case StoriesMenuAction.favorites:
                       return _favoritesSelected(context);
-                    case MenuAction.submit:
+                    case StoriesMenuAction.submit:
                       return _submitSelected(context);
-                    case MenuAction.theme:
+                    case StoriesMenuAction.theme:
                       return _themeSelected(context);
-                    case MenuAction.synchronize:
-                      return _synchronizeSelected(context);
-                    case MenuAction.account:
+                    case StoriesMenuAction.account:
                       return _accountSelected(context);
                   }
                 },
@@ -197,31 +194,6 @@ class StoriesPage extends HookWidget {
       context: context,
       builder: (_) => const ThemeDialog(),
     );
-  }
-
-  Future<void> _synchronizeSelected(BuildContext context) async {
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
-
-    if (await authRepository.loggedIn) {
-      return showDialog<bool>(
-        context: context,
-        builder: (_) => const SynchronizeDialog(),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
-        SnackBar(
-          content: const Text('Log in to sync'),
-          action: SnackBarAction(
-            label: 'Log in',
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute<void>(
-                builder: (_) => const AccountPage(),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
   }
 
   Future<void> _accountSelected(BuildContext context) {

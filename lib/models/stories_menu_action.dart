@@ -1,26 +1,23 @@
-enum MenuAction {
+enum StoriesMenuAction {
   catchUp,
   favorites,
   submit,
   theme,
-  synchronize,
   account,
 }
 
-extension MenuActionExtension on MenuAction {
+extension StoriesMenuActionExtension on StoriesMenuAction {
   String get title {
     switch (this) {
-      case MenuAction.catchUp:
+      case StoriesMenuAction.catchUp:
         return 'Catch up';
-      case MenuAction.favorites:
+      case StoriesMenuAction.favorites:
         return 'Favorites';
-      case MenuAction.submit:
+      case StoriesMenuAction.submit:
         return 'Submit';
-      case MenuAction.theme:
+      case StoriesMenuAction.theme:
         return 'Theme';
-      case MenuAction.synchronize:
-        return 'Synchronize';
-      case MenuAction.account:
+      case StoriesMenuAction.account:
         return 'Account';
     }
 
