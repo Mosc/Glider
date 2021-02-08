@@ -8,7 +8,7 @@ import 'package:glider/models/search_range.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeStateProvider<String> storySearchQueryStateProvider =
     StateProvider.autoDispose<String>((ProviderReference ref) => '');

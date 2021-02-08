@@ -6,7 +6,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share/share.dart';
 
 class ItemBottomSheet extends StatelessWidget {

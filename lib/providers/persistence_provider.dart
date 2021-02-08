@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:glider/models/theme_base.dart';
 import 'package:glider/providers/repository_provider.dart';
-import 'package:hooks_riverpod/all.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeFutureProvider<ThemeBase> themeBaseProvider =

@@ -20,7 +20,7 @@ dependencies:
       ref: 282dd8956404944972c5a7eac51d52690c7582f5
   flutter_widget_from_html_core: ^0.5.1+4
   freezed_annotation: ^0.12.0
-  hooks_riverpod: ^0.12.3+1
+  hooks_riverpod: ^0.12.4
   html_unescape: ^1.0.2
   octo_image: ^0.3.0
   share: ^0.6.5+4

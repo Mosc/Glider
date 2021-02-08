@@ -4,7 +4,7 @@ import 'package:glider/app_theme.dart';
 import 'package:glider/models/theme_base.dart';
 import 'package:glider/pages/stories_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class App extends HookWidget {
   const App({Key key}) : super(key: key);

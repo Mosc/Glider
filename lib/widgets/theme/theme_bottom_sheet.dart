@@ -9,7 +9,7 @@ import 'package:glider/repositories/storage_repository.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ThemeDialog extends HookWidget {
   const ThemeDialog({Key key}) : super(key: key);
