@@ -15,10 +15,10 @@ class ItemTileUrl extends HookWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Hero(
-      tag: 'item_url_${item.id}',
-      child: GestureDetector(
-        onTap: () => UrlUtil.tryLaunch(item.url),
+    return InkWell(
+      onTap: () => UrlUtil.tryLaunch(item.url),
+      child: Hero(
+        tag: 'item_url_${item.id}',
         child: Block(
           child: Row(
             children: <Widget>[

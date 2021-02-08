@@ -96,12 +96,12 @@ class ItemBody extends HookWidget {
   Widget _buildOpenParent(BuildContext context, int parentId) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Hero(
-        tag: 'open_parent',
-        child: GestureDetector(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (_) => ItemPage(id: parentId)),
-          ),
+      child: InkWell(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => ItemPage(id: parentId)),
+        ),
+        child: Hero(
+          tag: 'open_parent',
           child: Block(
             child: Row(
               children: <Widget>[
