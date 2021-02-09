@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:glider/models/post_data.dart';
 import 'package:glider/utils/html_util.dart';
 import 'package:glider/utils/service_exception.dart';
+import 'package:html/dom.dart' as dom;
 
 class WebsiteRepository {
   const WebsiteRepository(this._dio);
@@ -12,6 +13,7 @@ class WebsiteRepository {
   static const String authority = 'news.ycombinator.com';
 
   static const String _itemSelector = '.athing';
+  static const String _moreSelector = '.morelink';
 
   final Dio _dio;
 
@@ -136,6 +138,7 @@ class WebsiteRepository {
 
   Future<Iterable<int>> getFavorited({
     @required String username,
+    int page = 1,
     bool comments = false,
   }) async {
     final Uri uri = Uri.https(
@@ -143,18 +146,28 @@ class WebsiteRepository {
       'favorites',
       <String, String>{
         'id': username,
+        if (page > 1) 'p': page.toString(),
         if (comments) 'comments': 't',
       },
     );
 
     final Response<List<int>> response = await _performGet(uri);
-    return HtmlUtil.getIds(response.data, selector: _itemSelector)
-        .map(int.parse);
+    final dom.Element body = HtmlUtil.getBody(response.data);
+    return <int>[
+      ...HtmlUtil.getIds(body, selector: _itemSelector).map(int.parse),
+      if (HtmlUtil.hasMatch(body, selector: _moreSelector))
+        ...await getFavorited(
+          username: username,
+          comments: comments,
+          page: page + 1,
+        ),
+    ];
   }
 
   Future<Iterable<int>> getUpvoted({
     @required String username,
     @required String password,
+    int page = 1,
     bool comments = false,
   }) async {
     // We're not interested in the submit form specifically, but it's a rather
@@ -168,6 +181,7 @@ class WebsiteRepository {
       'upvoted',
       <String, String>{
         'id': username,
+        if (page > 1) 'p': page.toString(),
         if (comments) 'comments': 't',
       },
     );
@@ -176,8 +190,17 @@ class WebsiteRepository {
       uri,
       cookie: cookie,
     );
-    return HtmlUtil.getIds(response.data, selector: _itemSelector)
-        .map(int.parse);
+    final dom.Element body = HtmlUtil.getBody(response.data);
+    return <int>[
+      ...HtmlUtil.getIds(body, selector: _itemSelector).map(int.parse),
+      if (HtmlUtil.hasMatch(body, selector: _moreSelector))
+        ...await getUpvoted(
+          username: username,
+          password: password,
+          comments: comments,
+          page: page + 1,
+        ),
+    ];
   }
 
   Future<Response<List<int>>> _getSubmitFormResponse({
