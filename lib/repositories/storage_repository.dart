@@ -23,8 +23,8 @@ class StorageRepository {
   Future<ThemeBase> get themeBase async =>
       ThemeBase.values[((await _sharedPreferences).getInt(_themeBaseKey))];
 
-  Future<void> setThemeMode(ThemeBase themeMode) async =>
-      (await _sharedPreferences).setInt(_themeBaseKey, themeMode.index);
+  Future<void> setThemeBase(ThemeBase themeBase) async =>
+      (await _sharedPreferences).setInt(_themeBaseKey, themeBase.index);
 
   Future<Color> get themeColor async =>
       Color((await _sharedPreferences).getInt(_themeColorKey));
