@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
@@ -89,7 +90,7 @@ class SubmitBody extends HookWidget {
                     autofocus: true,
                     maxLines: null,
                     maxLength: _maxTitleLength,
-                    maxLengthEnforced: false,
+                    maxLengthEnforcement: MaxLengthEnforcement.none,
                     validator: (String value) =>
                         Validators.notEmpty(value) ??
                         Validators.maxLength(value, _maxTitleLength),
