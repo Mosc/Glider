@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:glider/models/search_range.dart';
 import 'package:glider/models/stories_menu_action.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/account_page.dart';
@@ -118,9 +119,12 @@ class StoriesPage extends HookWidget {
   }
 
   Future<void> _searchSelected(BuildContext context) {
+    context.read(storySearchRangeStateProvider).state = SearchRange.pastYear;
     return Navigator.of(context).push<void>(
       PageRouteBuilder<void>(
-        pageBuilder: (_, __, ___) => const StoriesSearchPage(),
+        pageBuilder: (_, __, ___) => const StoriesSearchPage(
+          initialSearchRange: SearchRange.pastYear,
+        ),
         transitionsBuilder:
             (_, Animation<double> animation, __, Widget child) =>
                 FadeTransition(opacity: animation, child: child),
@@ -131,7 +135,10 @@ class StoriesPage extends HookWidget {
   Future<void> _catchUpSelected(BuildContext context) {
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
-        builder: (_) => const StoriesSearchPage(enableSearch: false),
+        builder: (_) => const StoriesSearchPage(
+          initialSearchRange: SearchRange.pastWeek,
+          enableSearch: false,
+        ),
       ),
     );
   }

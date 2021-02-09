@@ -14,17 +14,18 @@ final AutoDisposeStateProvider<String> storySearchQueryStateProvider =
     StateProvider.autoDispose<String>((ProviderReference ref) => '');
 
 final AutoDisposeStateProvider<SearchRange> storySearchRangeStateProvider =
-    StateProvider.autoDispose<SearchRange>(
-        (ProviderReference ref) => SearchRange.pastMonth);
+    StateProvider.autoDispose<SearchRange>((ProviderReference ref) => null);
 
 final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
     StateProvider.autoDispose<StoryType>(
         (ProviderReference ref) => StoryType.bestStories);
 
 class StoriesSearchPage extends HookWidget {
-  const StoriesSearchPage({Key key, this.enableSearch = true})
+  const StoriesSearchPage(
+      {Key key, this.initialSearchRange, this.enableSearch = true})
       : super(key: key);
 
+  final SearchRange initialSearchRange;
   final bool enableSearch;
 
   @override
@@ -49,6 +50,11 @@ class StoriesSearchPage extends HookWidget {
         useProvider(storySearchRangeStateProvider);
     final StateController<StoryType> searchStoryTypeStateController =
         useProvider(storySearchTypeStateProvider);
+    useMemoized(
+      () => Future<void>.microtask(
+        () => storySearchRangeStateController.state = initialSearchRange,
+      ),
+    );
 
     final AnimationController animationController = useAnimationController(
       duration: const Duration(milliseconds: 400),
