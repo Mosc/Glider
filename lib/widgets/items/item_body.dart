@@ -113,11 +113,8 @@ class ItemBody extends HookWidget {
                       .scaledFontSize(context),
                 ),
                 const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Open the parent of this single thread',
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
+                const Expanded(
+                  child: Text('Open the parent of this single thread'),
                 ),
               ],
             ),

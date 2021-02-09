@@ -17,25 +17,27 @@ class SynchronizeDialog extends HookWidget {
         Theme.of(context).textTheme.headline6.scaledFontSize(context);
 
     return AlertDialog(
-      title: Row(children: <Widget>[
-        const Expanded(
-          child: Text('Synchronize'),
-        ),
-        if (loadingState.value)
-          Center(
-            child: SizedBox(
-              width: titleHeight,
-              height: titleHeight,
-              child: const CircularProgressIndicator(strokeWidth: 2),
-            ),
+      title: Row(
+        children: <Widget>[
+          const Expanded(
+            child: Text('Synchronize'),
           ),
-      ]),
+          if (loadingState.value)
+            Center(
+              child: SizedBox(
+                width: titleHeight,
+                height: titleHeight,
+                child: const CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+        ],
+      ),
       content: const Text(
         'Glider sends favorites and upvotes to your Hacker News account, '
         'but it is not aware of actions performed in other interfaces, '
         'such as the official website or alternative apps.\n\n'
-        'The synchronization feature attempts to keep data consistent '
-        'by treating the server data as the source of truth.\n\n'
+        'Synchronize fetches this data from the Hacker News server '
+        'and overwrites locally stored data. '
         'Any favorites added in the app before logging in will be lost.\n\n'
         'Do you want to synchronize now?',
       ),
@@ -84,7 +86,7 @@ class SynchronizeDialog extends HookWidget {
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
         const SnackBar(
-          content: Text('Something went wrong'),
+          content: Text('Synchronization failed'),
         ),
       );
     }

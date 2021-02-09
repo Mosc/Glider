@@ -103,31 +103,33 @@ class ItemTileMetadata extends HookWidget {
           builder: (_) => UserPage(id: item.by),
         ),
       ),
-      child: Row(children: <Widget>[
-        if (item.by == root?.by)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(4),
+      child: Row(
+        children: <Widget>[
+          if (item.by == root?.by)
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                item.by,
+                style: textTheme.caption
+                    .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+              ),
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1),
+              child: Text(
+                item.by,
+                style: textTheme.caption
+                    .copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
             ),
-            child: Text(
-              item.by,
-              style: textTheme.caption
-                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-            ),
-          )
-        else
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1),
-            child: Text(
-              item.by,
-              style: textTheme.caption
-                  .copyWith(color: Theme.of(context).colorScheme.primary),
-            ),
-          ),
-        const SizedBox(width: 8),
-      ]),
+          const SizedBox(width: 8),
+        ],
+      ),
     );
   }
 

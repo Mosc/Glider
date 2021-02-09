@@ -21,10 +21,7 @@ class Error extends StatelessWidget {
                   2,
             ),
             const SizedBox(height: 12),
-            Text(
-              "It doesn't look like anything to me",
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
+            const Text("It doesn't look like anything to me"),
           ],
         ),
       ),
