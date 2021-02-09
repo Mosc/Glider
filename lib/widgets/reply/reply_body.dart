@@ -23,6 +23,7 @@ class ReplyBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final ValueNotifier<bool> parentCollapsedState = useState(true);
     final TextEditingController commentController = useTextEditingController();
@@ -50,6 +51,7 @@ class ReplyBody extends HookWidget {
                     autofocus: true,
                     maxLines: null,
                     validator: Validators.notEmpty,
+                    enabled: !loadingState.value,
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -57,17 +59,24 @@ class ReplyBody extends HookWidget {
                     children: <Widget>[
                       if (parent.text != null) ...<Widget>[
                         OutlinedButton(
-                          onPressed: () => _quoteParent(commentController),
+                          onPressed: loadingState.value
+                              ? null
+                              : () => _quoteParent(commentController),
                           child: const Text('Insert parent quote'),
                         ),
                         const SizedBox(width: 16),
                       ],
                       ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState.validate()) {
-                            await _reply(context, text: commentController.text);
-                          }
-                        },
+                        onPressed: loadingState.value
+                            ? null
+                            : () async {
+                                if (formKey.currentState.validate()) {
+                                  loadingState.value = true;
+                                  await _reply(context,
+                                      text: commentController.text);
+                                  loadingState.value = false;
+                                }
+                              },
                         child: const Text('Reply'),
                       ),
                     ],

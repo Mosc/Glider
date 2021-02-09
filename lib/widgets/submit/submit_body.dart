@@ -24,6 +24,7 @@ class SubmitBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final ValueNotifier<SubmitType> submitTypeState = useState(SubmitType.url);
     final TextEditingController titleController = useTextEditingController();
@@ -66,11 +67,14 @@ class SubmitBody extends HookWidget {
                             Radio<SubmitType>(
                               value: submitType,
                               groupValue: submitTypeState.value,
-                              onChanged: (_) =>
-                                  submitTypeState.value = submitType,
+                              onChanged: loadingState.value
+                                  ? null
+                                  : (_) => submitTypeState.value = submitType,
                             ),
                             GestureDetector(
-                              onTap: () => submitTypeState.value = submitType,
+                              onTap: loadingState.value
+                                  ? null
+                                  : () => submitTypeState.value = submitType,
                               child: Text(submitType.title),
                             ),
                           ],
@@ -89,6 +93,7 @@ class SubmitBody extends HookWidget {
                     validator: (String value) =>
                         Validators.notEmpty(value) ??
                         Validators.maxLength(value, _maxTitleLength),
+                    enabled: !loadingState.value,
                   ),
                   if (submitTypeState.value == SubmitType.url)
                     TextFormField(
@@ -98,6 +103,7 @@ class SubmitBody extends HookWidget {
                       maxLines: null,
                       validator: (String value) =>
                           Validators.notEmpty(value) ?? Validators.url(value),
+                      enabled: !loadingState.value,
                     ),
                   if (submitTypeState.value == SubmitType.text)
                     TextFormField(
@@ -107,6 +113,7 @@ class SubmitBody extends HookWidget {
                       textCapitalization: TextCapitalization.sentences,
                       maxLines: null,
                       validator: Validators.notEmpty,
+                      enabled: !loadingState.value,
                     ),
                   const SizedBox(height: 16),
                   Row(
@@ -114,25 +121,34 @@ class SubmitBody extends HookWidget {
                     children: <Widget>[
                       if (submitTypeState.value == SubmitType.url) ...<Widget>[
                         OutlinedButton(
-                          onPressed: _isUrl(urlController.text)
-                              ? () => _autofillTitle(context, titleController,
-                                  url: urlController.text)
-                              : null,
+                          onPressed: loadingState.value
+                              ? null
+                              : _isUrl(urlController.text)
+                                  ? () => _autofillTitle(
+                                        context,
+                                        titleController,
+                                        url: urlController.text,
+                                      )
+                                  : null,
                           child: const Text('Autofill title'),
                         ),
                         const SizedBox(width: 16),
                       ],
                       ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState.validate()) {
-                            await _submit(
-                              context,
-                              title: titleListenable.text,
-                              url: url(),
-                              text: text(),
-                            );
-                          }
-                        },
+                        onPressed: loadingState.value
+                            ? null
+                            : () async {
+                                if (formKey.currentState.validate()) {
+                                  loadingState.value = true;
+                                  await _submit(
+                                    context,
+                                    title: titleListenable.text,
+                                    url: url(),
+                                    text: text(),
+                                  );
+                                  loadingState.value = false;
+                                }
+                              },
                         child: const Text('Submit'),
                       ),
                     ],

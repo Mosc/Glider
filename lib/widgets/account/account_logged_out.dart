@@ -13,6 +13,7 @@ class AccountLoggedOut extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final TextEditingController usernameController = useTextEditingController();
     final TextEditingController passwordController = useTextEditingController();
@@ -29,6 +30,8 @@ class AccountLoggedOut extends HookWidget {
                 controller: usernameController,
                 decoration: const InputDecoration(labelText: 'Username'),
                 validator: Validators.notEmpty,
+                autofocus: true,
+                enabled: !loadingState.value,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -36,34 +39,44 @@ class AccountLoggedOut extends HookWidget {
                 obscureText: true,
                 decoration: const InputDecoration(labelText: 'Password'),
                 validator: Validators.notEmpty,
+                enabled: !loadingState.value,
               ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   OutlinedButton(
-                    onPressed: () async {
-                      if (formKey.currentState.validate()) {
-                        await _register(
-                          context,
-                          username: usernameController.text,
-                          password: passwordController.text,
-                        );
-                      }
-                    },
+                    onPressed: loadingState.value
+                        ? null
+                        : () async {
+                            if (formKey.currentState.validate()) {
+                              loadingState.value = true;
+                              await _register(
+                                context,
+                                username: usernameController.text,
+                                password: passwordController.text,
+                              );
+                              loadingState.value = false;
+                            }
+                          },
                     child: const Text('Register'),
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
-                    onPressed: () async {
-                      if (formKey.currentState.validate()) {
-                        await _login(
-                          context,
-                          username: usernameController.text,
-                          password: passwordController.text,
-                        );
-                      }
-                    },
+                    onPressed: loadingState.value
+                        ? null
+                        : () async {
+                            if (formKey.currentState.validate()) {
+                              loadingState.value = true;
+                              await _login(
+                                context,
+                                username: usernameController.text,
+                                password: passwordController.text,
+                                synchronize: synchronizeState.value,
+                              );
+                              loadingState.value = false;
+                            }
+                          },
                     child: const Text('Login'),
                   ),
                 ],
