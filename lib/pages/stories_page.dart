@@ -51,6 +51,8 @@ class StoriesPage extends HookWidget {
     final StateController<StoryType> storyTypeStateController =
         useProvider(storyTypeStateProvider);
 
+    final ThemeData theme = Theme.of(context);
+
     return Scaffold(
       body: NestedScrollView(
         controller: scrollController,
@@ -99,20 +101,23 @@ class StoriesPage extends HookWidget {
       ),
       floatingActionButton: Hero(
         tag: 'fab',
-        child: SpeedDial(
-          children: <SpeedDialChild>[
-            for (StoryType storyType in StoryType.values)
-              SpeedDialChild(
-                label: storyType.title,
-                child: Icon(storyType.icon),
-                onTap: () => storyTypeStateController.state = storyType,
-              ),
-          ],
-          visible: speedDialVisibleState.value,
-          icon: storyTypeStateController.state.icon,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          animationSpeed: 100,
+        child: MediaQuery(
+          data: MediaQueryData(platformBrightness: theme.brightness),
+          child: SpeedDial(
+            children: <SpeedDialChild>[
+              for (StoryType storyType in StoryType.values)
+                SpeedDialChild(
+                  label: storyType.title,
+                  child: Icon(storyType.icon),
+                  onTap: () => storyTypeStateController.state = storyType,
+                ),
+            ],
+            visible: speedDialVisibleState.value,
+            icon: storyTypeStateController.state.icon,
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
+            animationSpeed: 100,
+          ),
         ),
       ),
     );
