@@ -7,6 +7,7 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
+import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
@@ -80,7 +81,7 @@ class ItemBody extends HookWidget {
           final ScrollableState scrollableState = Scrollable.of(context);
           scrollableState.position.ensureVisible(
             context.findRenderObject(),
-            duration: const Duration(milliseconds: 400),
+            duration: AnimationUtil.defaultDuration,
             curve: Curves.easeInOut,
             alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
           );

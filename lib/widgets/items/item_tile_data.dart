@@ -10,6 +10,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
+import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/slidable.dart';
@@ -165,7 +166,7 @@ class ItemTileData extends HookWidget {
         useProvider(visitedProvider(item.id)).data?.value ?? false;
 
     return AnimatedOpacity(
-      duration: const Duration(milliseconds: 400),
+      duration: AnimationUtil.defaultDuration,
       opacity: visibility ? 2 / 3 : 1,
       child: _buildContent(context),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:glider/utils/animation_util.dart';
 
 class SmoothAnimatedCrossFade extends StatelessWidget {
   const SmoothAnimatedCrossFade({
@@ -17,7 +18,7 @@ class SmoothAnimatedCrossFade extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
-      duration: duration ?? const Duration(milliseconds: 400),
+      duration: duration ?? AnimationUtil.defaultDuration,
       firstCurve: Curves.easeIn,
       secondCurve: Curves.easeOut,
       sizeCurve: Curves.easeInOut,

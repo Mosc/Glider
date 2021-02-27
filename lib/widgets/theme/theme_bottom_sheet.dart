@@ -5,6 +5,7 @@ import 'package:glider/app_theme.dart';
 import 'package:glider/models/theme_base.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
+import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -71,7 +72,7 @@ class _ThemeBaseButton extends HookWidget {
         if (base == themeBase) {
           Scrollable.ensureVisible(
             context,
-            duration: const Duration(milliseconds: 400),
+            duration: AnimationUtil.defaultDuration,
             curve: Curves.easeInOut,
             alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
           );
@@ -122,7 +123,7 @@ class _ThemeColorButton extends HookWidget {
         if (color == themeColor) {
           Scrollable.ensureVisible(
             context,
-            duration: const Duration(milliseconds: 400),
+            duration: AnimationUtil.defaultDuration,
             curve: Curves.easeInOut,
             alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
           );

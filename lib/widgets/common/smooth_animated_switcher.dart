@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:glider/utils/animation_util.dart';
 
 class SmoothAnimatedSwitcher extends StatelessWidget {
   const SmoothAnimatedSwitcher({
@@ -6,7 +7,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     @required this.condition,
     @required this.child,
     this.duration,
-  })  : transitionBuilder = _defaultTransitionBuilder,
+  })  : transitionBuilder = AnimationUtil.fadeTransitionBuilder,
         super(key: key);
 
   const SmoothAnimatedSwitcher.vertical({
@@ -14,7 +15,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     @required this.condition,
     @required this.child,
     this.duration,
-  })  : transitionBuilder = _verticalTransitionBuilder,
+  })  : transitionBuilder = AnimationUtil.verticalFadeTransitionBuilder,
         super(key: key);
 
   const SmoothAnimatedSwitcher.horizontal({
@@ -22,38 +23,13 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
     @required this.condition,
     @required this.child,
     this.duration,
-  })  : transitionBuilder = _horizontalTransitionBuilder,
+  })  : transitionBuilder = AnimationUtil.horizontalFadeTransitionBuilder,
         super(key: key);
 
   final bool condition;
   final Widget child;
   final Duration duration;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
-
-  static Widget _defaultTransitionBuilder(
-      Widget child, Animation<double> animation) {
-    return FadeTransition(opacity: animation, child: child);
-  }
-
-  static Widget _horizontalTransitionBuilder(
-      Widget child, Animation<double> animation) {
-    return _sizeTransitionBuilder(child, animation, Axis.horizontal);
-  }
-
-  static Widget _verticalTransitionBuilder(
-      Widget child, Animation<double> animation) {
-    return _sizeTransitionBuilder(child, animation, Axis.vertical);
-  }
-
-  static Widget _sizeTransitionBuilder(
-      Widget child, Animation<double> animation, Axis axis) {
-    return SizeTransition(
-      axis: axis,
-      axisAlignment: -1,
-      sizeFactor: animation,
-      child: _defaultTransitionBuilder(child, animation),
-    );
-  }
 
   static Widget _defaultLayoutBuilder(
       Widget currentChild, List<Widget> previousChildren) {
@@ -68,7 +44,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: duration ?? const Duration(milliseconds: 400),
+      duration: duration ?? AnimationUtil.defaultDuration,
       switchInCurve: Curves.easeInOut,
       switchOutCurve: Curves.easeInOut,
       transitionBuilder: transitionBuilder,
