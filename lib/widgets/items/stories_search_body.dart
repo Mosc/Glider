@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/search_parameters.dart';
+import 'package:glider/models/search_range.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -19,7 +20,9 @@ class StoriesSearchBody extends HookWidget {
       provider: storyIdsSearchProvider(
         SearchParameters(
           query: useProvider(storySearchQueryStateProvider).state,
-          searchRange: useProvider(storySearchRangeStateProvider).state,
+          dateTimeRange: useProvider(storySearchRangeStateProvider)
+              .state
+              ?.dateTimeRange(context),
           storyType: useProvider(storySearchTypeStateProvider).state,
         ),
       ),

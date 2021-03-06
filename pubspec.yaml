@@ -38,6 +38,9 @@ dev_dependencies:
   freezed: ^0.12.7
   json_serializable: ^3.5.1
 
+flutter:
+  uses-material-design: true
+
 flutter_icons:
   android: true
   ios: true
