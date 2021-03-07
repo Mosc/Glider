@@ -6,7 +6,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/models/story_type.dart';
-import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -112,7 +111,7 @@ class StoriesSearchPage extends HookWidget {
                     },
                   )
               ],
-              bottom: _buildBottom(
+              bottom: _buildAppBarBottom(
                 context,
                 storySearchRangeStateController,
                 heightFactor: bottomHeightFactor,
@@ -151,7 +150,7 @@ class StoriesSearchPage extends HookWidget {
     );
   }
 
-  PreferredSizeWidget _buildBottom(BuildContext context,
+  PreferredSizeWidget _buildAppBarBottom(BuildContext context,
       StateController<SearchRange> storySearchRangeStateController,
       {double heightFactor}) {
     return PreferredSize(
@@ -169,10 +168,7 @@ class StoriesSearchPage extends HookWidget {
                   for (SearchRange searchRange in SearchRange.values)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: _SearchRangeChip(
-                        searchRange: searchRange,
-                        initial: searchRange == initialSearchRange,
-                      ),
+                      child: _SearchRangeChip(searchRange: searchRange),
                     ),
                 ],
               ),
@@ -185,32 +181,15 @@ class StoriesSearchPage extends HookWidget {
 }
 
 class _SearchRangeChip extends HookWidget {
-  const _SearchRangeChip({
-    Key key,
-    @required this.searchRange,
-    this.initial,
-  }) : super(key: key);
+  const _SearchRangeChip({Key key, @required this.searchRange})
+      : super(key: key);
 
   final SearchRange searchRange;
-  final bool initial;
 
   @override
   Widget build(BuildContext context) {
     final StateController<SearchRange> storySearchRangeStateController =
         useProvider(storySearchRangeStateProvider);
-
-    useMemoized(
-      () => Future<void>.microtask(() {
-        if (initial) {
-          Scrollable.ensureVisible(
-            context,
-            duration: AnimationUtil.defaultDuration,
-            curve: Curves.easeInOut,
-            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
-          );
-        }
-      }),
-    );
 
     return ChoiceChip(
       label: Text(searchRange.title(context)),
