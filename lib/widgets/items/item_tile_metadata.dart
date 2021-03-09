@@ -62,12 +62,6 @@ class ItemTileMetadata extends HookWidget {
                 text: item.descendants.toString(),
               ),
             ),
-          if (item.type == ItemType.job)
-            const MetadataItem(icon: FluentIcons.briefcase_24_regular)
-          else if (item.type == ItemType.poll)
-            const MetadataItem(icon: FluentIcons.poll_24_regular),
-          if (item.dead == true)
-            const MetadataItem(icon: FluentIcons.flag_24_regular),
           if (item.deleted == true) ...<Widget>[
             const MetadataItem(icon: FluentIcons.delete_24_regular),
             Text(
@@ -77,6 +71,13 @@ class ItemTileMetadata extends HookWidget {
             ),
           ] else if (item.by != null && item.type != ItemType.pollopt)
             _buildUsername(context, textTheme),
+          if (item.dead == true)
+            const MetadataItem(icon: FluentIcons.flag_24_regular),
+          if (item.hasOriginalYear == true)
+            MetadataItem(
+              icon: FluentIcons.shifts_activity_24_regular,
+              text: 'from ${item.originalYear}',
+            ),
           if (interactive) _buildCollapsedIndicator(),
           if (item.type != ItemType.pollopt) ...<Widget>[
             const Spacer(),
