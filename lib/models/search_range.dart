@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:glider/utils/date_time_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 final StateProvider<DateTimeRange> customDateTimeRangeStateProvider =
     StateProvider<DateTimeRange>((ProviderReference ref) => null);
@@ -55,7 +55,7 @@ extension SearchRangeExtension on SearchRange {
             context.read(customDateTimeRangeStateProvider).state;
         return DateTimeRange(
           start: customDateTimeRange.start,
-          end: customDateTimeRange.end.endOfDay,
+          end: (Jiffy(customDateTimeRange.end)..endOf(Units.DAY)).dateTime,
         );
       case SearchRange.pastDay:
         return pastDays(1);

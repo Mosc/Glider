@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glider/models/item_type.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:jiffy/jiffy.dart';
 
 part 'item.freezed.dart';
 part 'item.g.dart';
@@ -42,8 +42,7 @@ extension ItemExtension on Item {
 
   String get urlHost => Uri.parse(url)?.host;
 
-  String get timeAgo =>
-      timeago.format(DateTime.fromMillisecondsSinceEpoch(time * 1000));
+  String get timeAgo => Jiffy.unix(time).fromNow();
 
   String get thumbnailUrl =>
       localOnly ? null : 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
