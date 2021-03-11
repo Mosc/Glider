@@ -10,7 +10,7 @@ enum ThemeBase {
   space,
 }
 
-extension ExpandedThemeModeExtension on ThemeBase {
+extension ThemeBaseExtension on ThemeBase {
   String get title {
     switch (this) {
       case ThemeBase.system:

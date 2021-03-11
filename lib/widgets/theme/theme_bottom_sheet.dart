@@ -28,15 +28,7 @@ class ThemeDialog extends HookWidget {
             ),
             const SizedBox(width: double.infinity, height: 12),
             _buildHorizontalScrollable(
-              children: Colors.primaries
-                  .map(
-                    (MaterialColor materialColor) => <int>[300, 400, 500, 600]
-                        .map((int shade) => materialColor[shade])
-                        .firstWhere(
-                          (Color color) => color.isDark,
-                          orElse: () => materialColor[700],
-                        ),
-                  )
+              children: AppTheme.themeColors
                   .map((Color color) => _ThemeColorButton(color))
                   .toList(growable: false),
             ),

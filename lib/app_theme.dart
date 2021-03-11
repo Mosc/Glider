@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:glider/utils/color_extension.dart';
 
 class AppTheme {
   AppTheme._();
 
-  static final Color defaultColor = Colors.red[300];
+  static Iterable<Color> get themeColors => Colors.primaries.map(
+        (MaterialColor materialColor) => <int>[300, 400, 500, 600]
+            .map((int shade) => materialColor[shade])
+            .firstWhere(
+              (Color color) => color.isDark,
+              orElse: () => materialColor[700],
+            ),
+      );
+
+  static final Color defaultColor = themeColors.first;
   static final Color surfaceColor = Colors.grey.withOpacity(0.15);
   static final Color lightBackgroundColor = Colors.grey[50];
   static final Color darkBackgroundColor = Colors.grey[900];
