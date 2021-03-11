@@ -62,6 +62,8 @@ class ItemTileMetadata extends HookWidget {
                 text: item.descendants.toString(),
               ),
             ),
+          if (item.dead == true)
+            const MetadataItem(icon: FluentIcons.flag_24_regular),
           if (item.deleted == true) ...<Widget>[
             const MetadataItem(icon: FluentIcons.delete_24_regular),
             Text(
@@ -71,8 +73,6 @@ class ItemTileMetadata extends HookWidget {
             ),
           ] else if (item.by != null && item.type != ItemType.pollopt)
             _buildUsername(context, textTheme),
-          if (item.dead == true)
-            const MetadataItem(icon: FluentIcons.flag_24_regular),
           if (item.hasOriginalYear == true)
             MetadataItem(
               icon: FluentIcons.shifts_activity_24_regular,
