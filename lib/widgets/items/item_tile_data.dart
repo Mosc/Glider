@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/app_theme.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
@@ -43,46 +44,23 @@ class ItemTileData extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool indented =
-        item.ancestors?.isNotEmpty == true && item.type != ItemType.pollopt;
+    final bool active =
+        item.id != null && item.deleted != true && item.localOnly != true;
+    final Widget content = fadeable
+        ? _buildFadeable(child: _buildContent(context))
+        : _buildContent(context);
 
-    return Stack(
-      children: <Widget>[
-        if (indented)
-          Positioned.fill(
-            child: Row(
-              children: <Widget>[
-                for (int i = 0; i < item.ancestors.length; i++)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: VerticalDivider(
-                      width: 0,
-                      color: i == item.ancestors.length - 1 &&
-                              item.by != null &&
-                              useProvider(usernameProvider).maybeWhen(
-                                data: (String by) => by == item.by,
-                                orElse: () => false,
-                              )
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        Padding(
-          padding: indented
-              ? EdgeInsets.only(left: item.ancestors.length * 8.0)
-              : EdgeInsets.zero,
-          child: _buildSlidable(context),
-        ),
-      ],
+    return _buildSlidable(
+      context,
+      active: active,
+      child: _buildIndented(
+        child: active ? _buildTappable(context, child: content) : content,
+      ),
     );
   }
 
-  Widget _buildSlidable(BuildContext context) {
-    final bool active =
-        item.id != null && item.deleted != true && item.localOnly != true;
+  Widget _buildSlidable(BuildContext context,
+      {@required Widget child, @required bool active}) {
     final bool canVote =
         active && item.type != ItemType.job && item.type != ItemType.pollopt;
     final bool canReply = canVote && root?.id != null;
@@ -139,36 +117,70 @@ class ItemTileData extends HookWidget {
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )
               : null,
-      child: _buildTappable(context, active: active),
+      child: child,
     );
   }
 
-  Widget _buildTappable(BuildContext context, {@required bool active}) {
+  Widget _buildIndented({@required Widget child}) {
+    final int indentation =
+        item.type != ItemType.pollopt ? item.ancestors?.length ?? 0 : 0;
+    final double indentationPadding = indentation.toDouble() * 8;
+
+    Color _determineDividerColor() {
+      final List<Color> colors = AppTheme.themeColors.toList(growable: false);
+      final Color themeColor = useProvider(themeColorProvider).data?.value;
+      final int initialOffset = colors.indexOf(themeColor) ?? 0;
+      final int offset =
+          (initialOffset + (indentation - 1) * 2) % colors.length;
+      return colors[offset];
+    }
+
+    return indentation > 0
+        ? Stack(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: indentationPadding),
+                child: child,
+              ),
+              PositionedDirectional(
+                start: indentationPadding - 1,
+                top: 4,
+                bottom: 4,
+                child: VerticalDivider(
+                  width: 1,
+                  thickness: 1,
+                  color: _determineDividerColor(),
+                ),
+              ),
+            ],
+          )
+        : child;
+  }
+
+  Widget _buildTappable(BuildContext context, {@required Widget child}) {
     return InkWell(
-      onTap: active && onTap != null
-          ? item.type == ItemType.pollopt && interactive
-              ? () => _vote(
-                    context,
-                    up: !context.read(upvotedProvider(item.id)).maybeWhen(
-                          data: (bool upvoted) => upvoted,
-                          orElse: () => false,
-                        ),
-                  )
-              : onTap
-          : null,
-      onLongPress: active ? () => _buildModalBottomSheet(context) : null,
-      child: fadeable ? _buildFadeable(context) : _buildContent(context),
+      onTap: item.type == ItemType.pollopt && interactive
+          ? () => _vote(
+                context,
+                up: !context.read(upvotedProvider(item.id)).maybeWhen(
+                      data: (bool upvoted) => upvoted,
+                      orElse: () => false,
+                    ),
+              )
+          : onTap,
+      onLongPress: () => _buildModalBottomSheet(context),
+      child: child,
     );
   }
 
-  Widget _buildFadeable(BuildContext context) {
+  Widget _buildFadeable({@required Widget child}) {
     final bool visibility =
         useProvider(visitedProvider(item.id)).data?.value ?? false;
 
     return AnimatedOpacity(
       duration: AnimationUtil.defaultDuration,
       opacity: visibility ? 2 / 3 : 1,
-      child: _buildContent(context),
+      child: child,
     );
   }
 
