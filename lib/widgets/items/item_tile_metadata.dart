@@ -71,8 +71,13 @@ class ItemTileMetadata extends HookWidget {
               style: textTheme.bodyText2
                   .copyWith(fontSize: textTheme.caption.fontSize),
             ),
-          ] else if (item.by != null && item.type != ItemType.pollopt)
+          ] else if (item.by != null &&
+              item.type != ItemType.pollopt) ...<Widget>[
+            if (item.by == root?.by && item.parent != null)
+              const MetadataItem(icon: FluentIcons.person_circle_20_regular),
             _buildUsername(context, textTheme),
+            const SizedBox(width: 8),
+          ],
           if (item.hasOriginalYear == true)
             MetadataItem(
               icon: FluentIcons.shifts_activity_24_regular,
@@ -104,10 +109,8 @@ class ItemTileMetadata extends HookWidget {
           builder: (_) => UserPage(id: item.by),
         ),
       ),
-      child: Row(
-        children: <Widget>[
-          if (item.by == root?.by)
-            Container(
+      child: item.by == useProvider(usernameProvider).data?.value
+          ? Container(
               padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
@@ -119,8 +122,7 @@ class ItemTileMetadata extends HookWidget {
                     .copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             )
-          else
-            Padding(
+          : Padding(
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: Text(
                 item.by,
@@ -128,9 +130,6 @@ class ItemTileMetadata extends HookWidget {
                     .copyWith(color: Theme.of(context).colorScheme.primary),
               ),
             ),
-          const SizedBox(width: 8),
-        ],
-      ),
     );
   }
 
