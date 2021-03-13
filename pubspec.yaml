@@ -7,27 +7,23 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  cached_network_image: ^2.5.0
+  cached_network_image: ^2.5.1
   dio: ^3.0.10
-  fluentui_system_icons: ^1.1.100
+  fluentui_system_icons: ^1.1.109
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.16.0
   flutter_secure_storage: ^4.0.0
   flutter_speed_dial:
     git:
       url: https://github.com/darioielardi/flutter_speed_dial
       ref: 282dd8956404944972c5a7eac51d52690c7582f5
-  flutter_widget_from_html_core: ^0.5.2+1
-  freezed_annotation: ^0.12.0
+  flutter_widget_from_html_core: ^0.6.0-rc
   hooks_riverpod: ^0.12.4
-  html_unescape: ^1.0.2
-  intl: ^0.17.0
+  html_unescape: ^2.0.0-nullsafety
   jiffy: ^4.0.0
-  octo_image: ^0.3.0
   share: ^2.0.0
-  shared_preferences: ^0.5.12+4
-  shimmer: ^1.1.2
+  shared_preferences: ^2.0.4
+  shimmer: ^2.0.0-nullsafety
   uni_links: ^0.4.0
   url_launcher: ^6.0.0
   validators: ^2.0.1
