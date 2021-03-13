@@ -12,7 +12,6 @@
         </intent>
     </queries>
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="Glider"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="true"
