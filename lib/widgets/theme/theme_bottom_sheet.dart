@@ -88,7 +88,12 @@ class _ThemeBaseButton extends HookWidget {
             await context.read(storageRepositoryProvider).setThemeBase(base);
             await context.refresh(themeBaseProvider);
           },
-          label: Text(base.title),
+          label: Row(
+            children: <Widget>[
+              Text(base.title),
+              const SizedBox(width: 4),
+            ],
+          ),
           icon: SmoothAnimatedCrossFade(
             duration: kThemeChangeDuration,
             condition: base == themeBase,
