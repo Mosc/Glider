@@ -32,9 +32,12 @@ class SearchApiRepository {
     try {
       final Response<Map<String, dynamic>> response =
           await _dio.getUri<Map<String, dynamic>>(uri);
-      return response.data['hits']
-          .map<int>((dynamic hit) => int.parse(hit['objectID'] as String))
-          .toList() as Iterable<int>;
+      final List<dynamic> hits = response.data['hits'] as List<dynamic>;
+      return hits.map((dynamic hit) {
+        final Map<String, dynamic> hitMap = hit as Map<String, dynamic>;
+        final String objectId = hitMap['objectID'] as String;
+        return int.parse(objectId);
+      }).toList();
     } on DioError catch (e) {
       throw ServiceException(e.message);
     }
