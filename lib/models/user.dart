@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -17,8 +17,8 @@ abstract class User with _$User {
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+}
 
-  @late
-  String get createdDate => DateFormat.yMMMMd()
-      .format(DateTime.fromMillisecondsSinceEpoch(created * 1000));
+extension UserExtension on User {
+  String get createdDate => Jiffy.unix(created).yMMMMd;
 }

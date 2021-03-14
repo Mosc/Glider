@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
 final StateProvider<DateTimeRange> customDateTimeRangeStateProvider =
@@ -16,7 +15,7 @@ enum SearchRange {
 
 extension SearchRangeExtension on SearchRange {
   String title(BuildContext context) {
-    String formatDate(DateTime dateTime) => DateFormat.yMMMd().format(dateTime);
+    String formatDate(DateTime dateTime) => Jiffy(dateTime).yMMMd;
 
     switch (this) {
       case SearchRange.custom:
