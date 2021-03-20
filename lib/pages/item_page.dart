@@ -8,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
 class ItemPage extends HookWidget {
-  const ItemPage({Key key, @required this.id}) : super(key: key);
+  const ItemPage({Key? key, required this.id}) : super(key: key);
 
   final int id;
 

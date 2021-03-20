@@ -5,12 +5,12 @@ import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/items/item_tile_header.dart';
 
 class StoryTileLoading extends StatelessWidget {
-  const StoryTileLoading({Key key}) : super(key: key);
+  const StoryTileLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final double thumbnailSize = ItemTileHeader.calculateHeight(context);
+    final double? thumbnailSize = ItemTileHeader.calculateHeight(context);
 
     return TileLoading(
       child: Padding(
@@ -27,12 +27,12 @@ class StoryTileLoading extends StatelessWidget {
                     children: <Widget>[
                       const SizedBox(height: 3),
                       TileLoadingBlock(
-                        height: textTheme.subtitle1.scaledFontSize(context),
+                        height: textTheme.subtitle1?.scaledFontSize(context),
                       ),
                       const SizedBox(height: 3),
                       TileLoadingBlock(
                         width: 120,
-                        height: textTheme.subtitle1.scaledFontSize(context),
+                        height: textTheme.subtitle1?.scaledFontSize(context),
                       ),
                     ],
                   ),
@@ -50,12 +50,12 @@ class StoryTileLoading extends StatelessWidget {
               children: <Widget>[
                 TileLoadingBlock(
                   width: 160,
-                  height: textTheme.caption.scaledFontSize(context),
+                  height: textTheme.caption?.scaledFontSize(context),
                 ),
                 const Spacer(),
                 TileLoadingBlock(
                   width: 80,
-                  height: textTheme.caption.scaledFontSize(context),
+                  height: textTheme.caption?.scaledFontSize(context),
                 ),
               ],
             ),

@@ -10,14 +10,14 @@ import 'package:glider/widgets/items/item_tile_url.dart';
 class ItemTileContent extends StatelessWidget {
   const ItemTileContent(
     this.item, {
-    Key key,
+    Key? key,
     this.root,
-    this.dense,
-    this.interactive,
+    this.dense = false,
+    this.interactive = false,
   }) : super(key: key);
 
   final Item item;
-  final Item root;
+  final Item? root;
   final bool dense;
   final bool interactive;
 

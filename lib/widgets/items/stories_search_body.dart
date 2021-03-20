@@ -12,7 +12,7 @@ import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class StoriesSearchBody extends HookWidget {
-  const StoriesSearchBody({Key key}) : super(key: key);
+  const StoriesSearchBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

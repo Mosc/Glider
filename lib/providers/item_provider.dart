@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/search_parameters.dart';
@@ -40,7 +38,7 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, SearchParameters>
       ref.read(searchApiRepositoryProvider).searchStoryIds(searchParameters),
 );
 
-final StateProviderFamily<Item, int> itemCacheStateProvider =
+final StateProviderFamily<Item?, int> itemCacheStateProvider =
     StateProvider.family((ProviderReference ref, int id) => null);
 
 final AutoDisposeFutureProviderFamily<Item, int> itemProvider =
@@ -66,63 +64,51 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
 });
 
 Stream<Item> _itemStream(ProviderReference ref,
-    {@required int id, Iterable<int> ancestors = const <int>[]}) async* {
+    {required int id, Iterable<int> ancestors = const <int>[]}) async* {
   try {
     final Item item = await _readItem(ref, id: id);
-
-    if (item == null) {
-      return;
-    }
 
     yield item.copyWith(ancestors: ancestors);
 
     final Iterable<int> childAncestors = <int>[id, ...ancestors];
 
-    if (item.parts != null) {
-      for (final int partId in item.parts) {
-        yield* _itemStream(ref, id: partId, ancestors: childAncestors);
-      }
+    for (final int partId in item.parts) {
+      yield* _itemStream(ref, id: partId, ancestors: childAncestors);
     }
 
-    if (item.kids != null) {
-      for (final int kidId in item.kids) {
-        yield* _itemStream(ref, id: kidId, ancestors: childAncestors);
-      }
+    for (final int kidId in item.kids) {
+      yield* _itemStream(ref, id: kidId, ancestors: childAncestors);
     }
   } on ServiceException {
     // Fail silently.
   }
 }
 
-Future<void> _preloadItemTree(ProviderReference ref, {@required int id}) =>
+Future<void> _preloadItemTree(ProviderReference ref, {required int id}) =>
     _loadItemTree((int id) => _readItem(ref, id: id), id: id);
 
 Future<void> reloadItemTree(
         Item Function<Item>(RootProvider<Item, Object>) refresh,
-        {@required int id}) =>
+        {required int id}) =>
     _loadItemTree((int id) => refresh(itemProvider(id)), id: id);
 
 Future<void> _loadItemTree(Future<Item> Function(int) getItem,
-    {@required int id}) async {
+    {required int id}) async {
   try {
     final Item item = await getItem(id);
 
-    if (item.parts != null) {
-      await Future.wait(
-        item.parts.map((int partId) => _loadItemTree(getItem, id: partId)),
-      );
-    }
+    await Future.wait(
+      item.parts.map((int partId) => _loadItemTree(getItem, id: partId)),
+    );
 
-    if (item.kids != null) {
-      await Future.wait(
-        item.kids.map((int kidId) => _loadItemTree(getItem, id: kidId)),
-      );
-    }
+    await Future.wait(
+      item.kids.map((int kidId) => _loadItemTree(getItem, id: kidId)),
+    );
   } on ServiceException {
     // Fail silently.
   }
 }
 
-Future<Item> _readItem(ProviderReference ref, {@required int id}) async =>
+Future<Item> _readItem(ProviderReference ref, {required int id}) async =>
     ref.read(itemCacheStateProvider(id)).state ??
     await ref.read(itemProvider(id).future);

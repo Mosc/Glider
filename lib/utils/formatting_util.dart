@@ -17,12 +17,12 @@ class FormattingUtil {
       // reproduced verbatim. (This is intended for code.)"
       .replaceAllMapped(
         RegExp(r'\<pre\>\<code\>(.*?)\<\/code\>\<\/pre\>', dotAll: true),
-        (Match match) => match[1].trimRight(),
+        (Match match) => match[1]?.trimRight() ?? '',
       )
       // "Urls become links, except in the text field of a submission."
       .replaceAllMapped(
         RegExp(r'\<a href=\"(.*?)\".*?\>.*?\<\/a\>'),
-        (Match match) => match[1],
+        (Match match) => match[1] ?? '',
       )
       .replaceAll('\n', '\n\n');
 

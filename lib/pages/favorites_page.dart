@@ -4,7 +4,7 @@ import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/favorites/favorites_body.dart';
 
 class FavoritesPage extends HookWidget {
-  const FavoritesPage({Key key}) : super(key: key);
+  const FavoritesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

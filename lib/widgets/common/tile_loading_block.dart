@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class TileLoadingBlock extends StatelessWidget {
-  const TileLoadingBlock({Key key, this.width, this.height, this.color})
+  const TileLoadingBlock({Key? key, this.width, this.height, this.color})
       : super(key: key);
 
-  final double width;
-  final double height;
-  final Color color;
+  final double? width;
+  final double? height;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

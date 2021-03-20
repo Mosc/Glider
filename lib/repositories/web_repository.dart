@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:glider/utils/html_util.dart';
 import 'package:glider/utils/service_exception.dart';
 
@@ -8,7 +7,7 @@ class WebRepository {
 
   final Dio _dio;
 
-  Future<String> extractTitle({@required String url}) async {
+  Future<String?> extractTitle({required String url}) async {
     try {
       final Response<List<int>> response = await _dio.get<List<int>>(
         url,

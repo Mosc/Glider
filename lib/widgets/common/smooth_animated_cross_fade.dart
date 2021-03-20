@@ -3,8 +3,8 @@ import 'package:glider/utils/animation_util.dart';
 
 class SmoothAnimatedCrossFade extends StatelessWidget {
   const SmoothAnimatedCrossFade({
-    Key key,
-    @required this.condition,
+    Key? key,
+    required this.condition,
     this.trueChild = const SizedBox.shrink(),
     this.falseChild = const SizedBox.shrink(),
     this.duration,
@@ -13,7 +13,7 @@ class SmoothAnimatedCrossFade extends StatelessWidget {
   final bool condition;
   final Widget trueChild;
   final Widget falseChild;
-  final Duration duration;
+  final Duration? duration;
 
   @override
   Widget build(BuildContext context) {

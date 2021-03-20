@@ -4,7 +4,7 @@ import 'package:glider/widgets/common/block.dart';
 import 'package:glider/utils/text_style_extension.dart';
 
 class Experimental extends StatelessWidget {
-  const Experimental({Key key}) : super(key: key);
+  const Experimental({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,8 @@ class Experimental extends StatelessWidget {
         children: <Widget>[
           Icon(
             FluentIcons.warning_24_regular,
-            size: Theme.of(context).textTheme.bodyText2.scaledFontSize(context),
+            size:
+                Theme.of(context).textTheme.bodyText2?.scaledFontSize(context),
           ),
           const SizedBox(width: 12),
           const Text('This feature is experimental. Things may go wrong.'),

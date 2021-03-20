@@ -6,7 +6,7 @@ import 'package:glider/widgets/items/item_tile_thumbnail.dart';
 import 'package:glider/widgets/items/item_tile_title.dart';
 
 class ItemTileHeader extends HookWidget {
-  const ItemTileHeader(this.item, {Key key, this.dense = false})
+  const ItemTileHeader(this.item, {Key? key, this.dense = false})
       : super(key: key);
 
   final Item item;
@@ -15,7 +15,7 @@ class ItemTileHeader extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: calculateHeight(context)),
+      constraints: BoxConstraints(minHeight: calculateHeight(context) ?? 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -31,6 +31,9 @@ class ItemTileHeader extends HookWidget {
     );
   }
 
-  static double calculateHeight(BuildContext context) =>
-      Theme.of(context).textTheme.subtitle1.scaledFontSize(context) * 2 + 6;
+  static double? calculateHeight(BuildContext context) {
+    final double? fontSize =
+        Theme.of(context).textTheme.subtitle1?.scaledFontSize(context);
+    return fontSize != null ? fontSize * 2 + 6 : null;
+  }
 }

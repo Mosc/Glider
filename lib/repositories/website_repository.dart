@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:glider/models/post_data.dart';
 import 'package:glider/utils/html_util.dart';
 import 'package:glider/utils/service_exception.dart';
@@ -18,8 +17,8 @@ class WebsiteRepository {
   final Dio _dio;
 
   Future<bool> register({
-    @required String username,
-    @required String password,
+    required String username,
+    required String password,
   }) async {
     final Uri uri = Uri.https(authority, 'login');
     final PostData data = RegisterPostData(
@@ -33,8 +32,8 @@ class WebsiteRepository {
   }
 
   Future<bool> login({
-    @required String username,
-    @required String password,
+    required String username,
+    required String password,
   }) async {
     final Uri uri = Uri.https(authority, 'login');
     final PostData data = LoginPostData(
@@ -47,10 +46,10 @@ class WebsiteRepository {
   }
 
   Future<bool> favorite({
-    @required String username,
-    @required String password,
-    @required int id,
-    @required bool favorite,
+    required String username,
+    required String password,
+    required int id,
+    required bool favorite,
   }) async {
     final Uri uri = Uri.https(authority, 'fave');
     final PostData data = FavoritePostData(
@@ -64,10 +63,10 @@ class WebsiteRepository {
   }
 
   Future<bool> vote({
-    @required String username,
-    @required String password,
-    @required int id,
-    @required bool up,
+    required String username,
+    required String password,
+    required int id,
+    required bool up,
   }) async {
     final Uri uri = Uri.https(authority, 'vote');
     final PostData data = VotePostData(
@@ -81,10 +80,10 @@ class WebsiteRepository {
   }
 
   Future<bool> comment({
-    @required String username,
-    @required String password,
-    @required int parentId,
-    @required String text,
+    required String username,
+    required String password,
+    required int parentId,
+    required String text,
   }) async {
     final Uri uri = Uri.https(authority, 'comment');
     final PostData data = CommentPostData(
@@ -97,32 +96,32 @@ class WebsiteRepository {
     return _performDefaultPost(
       uri,
       data,
-      validateLocation: (String location) => location == '/',
+      validateLocation: (String? location) => location == '/',
     );
   }
 
   Future<bool> submit({
-    @required String username,
-    @required String password,
-    @required String title,
-    String url,
-    String text,
+    required String username,
+    required String password,
+    required String title,
+    String? url,
+    String? text,
   }) async {
     final Response<List<int>> formResponse =
         await _getSubmitFormResponse(username: username, password: password);
-    final Map<String, String> formValues =
+    final Map<String, String>? formValues =
         HtmlUtil.getHiddenFormValues(formResponse.data);
 
     if (formValues == null || formValues.isEmpty) {
       return false;
     }
 
-    final String cookie = formResponse.headers.value('set-cookie');
+    final String? cookie = formResponse.headers.value('set-cookie');
 
     final Uri uri = Uri.https(authority, 'r');
     final PostData data = SubmitPostData(
-      fnid: formValues['fnid'],
-      fnop: formValues['fnop'],
+      fnid: formValues['fnid']!,
+      fnop: formValues['fnop']!,
       title: title,
       url: url,
       text: text,
@@ -132,12 +131,12 @@ class WebsiteRepository {
       uri,
       data,
       cookie: cookie,
-      validateLocation: (String location) => location == '/newest',
+      validateLocation: (String? location) => location == '/newest',
     );
   }
 
   Future<Iterable<int>> getFavorited({
-    @required String username,
+    required String username,
     int page = 1,
     bool comments = false,
   }) async {
@@ -152,9 +151,9 @@ class WebsiteRepository {
     );
 
     final Response<List<int>> response = await _performGet(uri);
-    final dom.Element body = HtmlUtil.getBody(response.data);
+    final dom.Element? body = HtmlUtil.getBody(response.data);
     return <int>[
-      ...HtmlUtil.getIds(body, selector: _itemSelector).map(int.parse),
+      ...?HtmlUtil.getIds(body, selector: _itemSelector)?.map(int.parse),
       if (HtmlUtil.hasMatch(body, selector: _moreSelector))
         ...await getFavorited(
           username: username,
@@ -165,8 +164,8 @@ class WebsiteRepository {
   }
 
   Future<Iterable<int>> getUpvoted({
-    @required String username,
-    @required String password,
+    required String username,
+    required String password,
     int page = 1,
     bool comments = false,
   }) async {
@@ -174,7 +173,7 @@ class WebsiteRepository {
     // small page that returns the cookie we need for the next call.
     final Response<void> formResponse =
         await _getSubmitFormResponse(username: username, password: password);
-    final String cookie = formResponse.headers.value('set-cookie');
+    final String? cookie = formResponse.headers.value('set-cookie');
 
     final Uri uri = Uri.https(
       authority,
@@ -190,9 +189,9 @@ class WebsiteRepository {
       uri,
       cookie: cookie,
     );
-    final dom.Element body = HtmlUtil.getBody(response.data);
+    final dom.Element? body = HtmlUtil.getBody(response.data);
     return <int>[
-      ...HtmlUtil.getIds(body, selector: _itemSelector).map(int.parse),
+      ...?HtmlUtil.getIds(body, selector: _itemSelector)?.map(int.parse),
       if (HtmlUtil.hasMatch(body, selector: _moreSelector))
         ...await getUpvoted(
           username: username,
@@ -204,8 +203,8 @@ class WebsiteRepository {
   }
 
   Future<Response<List<int>>> _getSubmitFormResponse({
-    @required String username,
-    @required String password,
+    required String username,
+    required String password,
   }) async {
     final Uri uri = Uri.https(authority, 'submitlink');
     final PostData data = SubmitFormPostData(
@@ -216,11 +215,11 @@ class WebsiteRepository {
       uri,
       data,
       responseType: ResponseType.bytes,
-      validateStatus: (int status) => status == HttpStatus.ok,
+      validateStatus: (int? status) => status == HttpStatus.ok,
     );
   }
 
-  Future<Response<T>> _performGet<T>(Uri uri, {String cookie}) async {
+  Future<Response<T>> _performGet<T>(Uri uri, {String? cookie}) async {
     try {
       return await _dio.getUri<T>(
         uri,
@@ -237,15 +236,15 @@ class WebsiteRepository {
   Future<bool> _performDefaultPost(
     Uri uri,
     PostData data, {
-    String cookie,
-    bool Function(String) validateLocation,
+    String? cookie,
+    bool Function(String?)? validateLocation,
   }) async {
     try {
       final Response<void> response = await _performPost<void>(
         uri,
         data,
         cookie: cookie,
-        validateStatus: (int status) => status == HttpStatus.found,
+        validateStatus: (int? status) => status == HttpStatus.found,
       );
 
       if (validateLocation != null) {
@@ -261,9 +260,9 @@ class WebsiteRepository {
   Future<Response<T>> _performPost<T>(
     Uri uri,
     PostData data, {
-    String cookie,
-    ResponseType responseType,
-    bool Function(int) validateStatus,
+    String? cookie,
+    ResponseType? responseType,
+    bool Function(int?)? validateStatus,
   }) async {
     try {
       return await _dio.postUri<T>(

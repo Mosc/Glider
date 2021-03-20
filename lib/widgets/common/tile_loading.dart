@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TileLoading extends StatelessWidget {
-  const TileLoading({Key key, this.child}) : super(key: key);
+  const TileLoading({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 

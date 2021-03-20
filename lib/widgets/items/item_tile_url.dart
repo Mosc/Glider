@@ -7,7 +7,7 @@ import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
 
 class ItemTileUrl extends HookWidget {
-  const ItemTileUrl(this.item, {Key key}) : super(key: key);
+  const ItemTileUrl(this.item, {Key? key}) : super(key: key);
 
   final Item item;
 
@@ -16,20 +16,20 @@ class ItemTileUrl extends HookWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: () => UrlUtil.tryLaunch(item.url),
+      onTap: () => UrlUtil.tryLaunch(item.url!),
       child: Hero(
         tag: 'item_url_${item.id}',
         child: Block(
           child: Row(
             children: <Widget>[
               Icon(FluentIcons.window_arrow_up_24_regular,
-                  size: textTheme.bodyText2.scaledFontSize(context)),
+                  size: textTheme.bodyText2?.scaledFontSize(context)),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  item.url,
+                  item.url!,
                   style: textTheme.bodyText2
-                      .copyWith(decoration: TextDecoration.underline),
+                      ?.copyWith(decoration: TextDecoration.underline),
                 ),
               ),
             ],

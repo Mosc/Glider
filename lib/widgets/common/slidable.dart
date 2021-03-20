@@ -3,15 +3,15 @@ import 'package:glider/models/slidable_action.dart';
 
 class Slidable extends StatelessWidget {
   const Slidable({
-    @required Key key,
+    required Key key,
     this.startToEndAction,
     this.endToStartAction,
-    this.child,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
-  final SlidableAction startToEndAction;
-  final SlidableAction endToStartAction;
+  final SlidableAction? startToEndAction;
+  final SlidableAction? endToStartAction;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class Slidable extends StatelessWidget {
     }
 
     return Dismissible(
-      key: key,
+      key: key!,
       background: _buildBackground(startToEndAction, Alignment.centerLeft),
       secondaryBackground:
           _buildBackground(endToStartAction, Alignment.centerRight),
@@ -29,13 +29,13 @@ class Slidable extends StatelessWidget {
               ? DismissDirection.horizontal
               : DismissDirection.startToEnd
           : DismissDirection.endToStart,
-      confirmDismiss: (DismissDirection direction) {
+      confirmDismiss: (DismissDirection direction) async {
         switch (direction) {
           case DismissDirection.startToEnd:
-            startToEndAction.action?.call();
+            startToEndAction?.action.call();
             break;
           case DismissDirection.endToStart:
-            endToStartAction.action?.call();
+            endToStartAction?.action.call();
             break;
           case DismissDirection.horizontal:
           case DismissDirection.vertical:
@@ -52,7 +52,7 @@ class Slidable extends StatelessWidget {
     );
   }
 
-  Widget _buildBackground(SlidableAction action, Alignment alignment) {
+  Widget _buildBackground(SlidableAction? action, Alignment alignment) {
     if (action != null) {
       return Container(
         color: action.color,

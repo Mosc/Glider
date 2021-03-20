@@ -7,7 +7,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class App extends HookWidget {
-  const App({Key key}) : super(key: key);
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

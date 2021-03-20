@@ -15,11 +15,11 @@ import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReplyBody extends HookWidget {
-  const ReplyBody({Key key, @required this.parent, this.root})
+  const ReplyBody({Key? key, required this.parent, this.root})
       : super(key: key);
 
   final Item parent;
-  final Item root;
+  final Item? root;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +29,7 @@ class ReplyBody extends HookWidget {
     final TextEditingController commentController = useTextEditingController();
     final TextEditingValue commentListenable =
         useValueListenable(commentController);
+    final String? username = useProvider(usernameProvider).data?.value;
 
     return SingleChildScrollView(
       child: Column(
@@ -70,7 +71,7 @@ class ReplyBody extends HookWidget {
                         onPressed: loadingState.value
                             ? null
                             : () async {
-                                if (formKey.currentState.validate()) {
+                                if (formKey.currentState?.validate() == true) {
                                   loadingState.value = true;
                                   await _reply(context,
                                       text: commentController.text);
@@ -93,19 +94,20 @@ class ReplyBody extends HookWidget {
             ),
           ),
           ItemTileData(
-            parent.copyWith(kids: null, ancestors: null),
+            parent.copyWith(kids: <int>[], ancestors: <int>[]),
             onTap: () =>
                 parentCollapsedState.value = !parentCollapsedState.value,
             dense: parentCollapsedState.value,
             interactive: true,
           ),
-          ItemTileData(
-            _buildItem(
-              id: useProvider(previewIdStateProvider).state,
-              username: useProvider(usernameProvider).data?.value,
-              text: commentListenable.text,
+          if (username != null)
+            ItemTileData(
+              _buildItem(
+                id: useProvider(previewIdStateProvider).state,
+                username: username,
+                text: commentListenable.text,
+              ),
             ),
-          ),
           const SizedBox(height: 16),
         ],
       ),
@@ -114,14 +116,14 @@ class ReplyBody extends HookWidget {
 
   void _quoteParent(TextEditingController commentController) {
     final String quotedParent =
-        FormattingUtil.convertHtmlToHackerNews(parent.text).replaceAllMapped(
+        FormattingUtil.convertHtmlToHackerNews(parent.text!).replaceAllMapped(
       RegExp('^.+', multiLine: true),
       (Match match) => '> ${match[0]}',
     );
     commentController.text = '$quotedParent\n\n${commentController.text}';
   }
 
-  Future<void> _reply(BuildContext context, {@required String text}) async {
+  Future<void> _reply(BuildContext context, {required String text}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success = await authRepository.reply(
       parentId: parent.id,
@@ -145,9 +147,9 @@ class ReplyBody extends HookWidget {
           parent.incrementDescendants().addKid(previewId);
 
       // Increment root's number of descendants.
-      if (parent != root) {
-        context.read(itemCacheStateProvider(root.id)).state =
-            root.incrementDescendants();
+      if (root != null && parent != root) {
+        context.read(itemCacheStateProvider(root!.id)).state =
+            root!.incrementDescendants();
       }
 
       // Decrement preview ID to prevent duplicates.
@@ -162,16 +164,16 @@ class ReplyBody extends HookWidget {
   }
 
   Item _buildItem({
-    @required int id,
-    @required String username,
-    @required String text,
+    required int id,
+    String? username,
+    String? text,
   }) =>
       Item(
         id: id,
         type: ItemType.comment,
         by: username,
         time: DateTime.now().secondsSinceEpoch,
-        text: text?.isNotEmpty == true
+        text: text != null && text.isNotEmpty == true
             ? FormattingUtil.convertHackerNewsToHtml(text)
             : null,
         ancestors: <int>[parent.id],

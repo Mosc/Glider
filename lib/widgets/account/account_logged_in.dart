@@ -7,14 +7,15 @@ import 'package:glider/widgets/users/user_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedIn extends HookWidget {
-  const AccountLoggedIn({Key key}) : super(key: key);
+  const AccountLoggedIn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return useProvider(usernameProvider).when(
       loading: () => const Loading(),
       error: (_, __) => const Error(),
-      data: (String username) => UserBody(id: username),
+      data: (String? username) =>
+          username != null ? UserBody(id: username) : const Error(),
     );
   }
 }

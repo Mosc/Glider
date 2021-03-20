@@ -8,13 +8,13 @@ import 'package:glider/utils/text_style_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SynchronizeDialog extends HookWidget {
-  const SynchronizeDialog({Key key}) : super(key: key);
+  const SynchronizeDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> loadingState = useState(false);
-    final double titleHeight =
-        Theme.of(context).textTheme.headline6.scaledFontSize(context);
+    final double? titleHeight =
+        Theme.of(context).textTheme.headline6?.scaledFontSize(context);
 
     return AlertDialog(
       title: Row(

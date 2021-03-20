@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:glider/models/theme_base.dart';
 import 'package:glider/utils/shared_preferences_extension.dart';
@@ -20,26 +19,31 @@ class StorageRepository {
   final FlutterSecureStorage _secureStorage;
   final Future<SharedPreferences> _sharedPreferences;
 
-  Future<ThemeBase> get themeBase async =>
-      ThemeBase.values[((await _sharedPreferences).getInt(_themeBaseKey))];
+  Future<ThemeBase?> get themeBase async {
+    final int? themeBaseValue =
+        (await _sharedPreferences).getInt(_themeBaseKey);
+    return themeBaseValue != null ? ThemeBase.values[themeBaseValue] : null;
+  }
 
   Future<void> setThemeBase(ThemeBase themeBase) async =>
       (await _sharedPreferences).setInt(_themeBaseKey, themeBase.index);
 
-  Future<Color> get themeColor async =>
-      Color((await _sharedPreferences).getInt(_themeColorKey));
+  Future<Color?> get themeColor async {
+    final int? colorValue = (await _sharedPreferences).getInt(_themeColorKey);
+    return colorValue != null ? Color(colorValue) : null;
+  }
 
   Future<void> setThemeColor(Color color) async =>
       (await _sharedPreferences).setInt(_themeColorKey, color.value);
 
   Future<bool> get loggedIn async => await username != null;
 
-  Future<String> get username async => _secureStorage.read(key: _usernameKey);
+  Future<String?> get username async => _secureStorage.read(key: _usernameKey);
 
-  Future<String> get password async => _secureStorage.read(key: _passwordKey);
+  Future<String?> get password async => _secureStorage.read(key: _passwordKey);
 
   Future<void> setAuth(
-      {@required String username, @required String password}) async {
+      {required String username, required String password}) async {
     await _secureStorage.write(key: _usernameKey, value: username);
     await _secureStorage.write(key: _passwordKey, value: password);
   }
@@ -53,10 +57,10 @@ class StorageRepository {
       (await _sharedPreferences).getStringList(_favoritedKey)?.map(int.parse) ??
       <int>[];
 
-  Future<bool> favorited({@required int id}) async =>
+  Future<bool> favorited({required int id}) async =>
       (await _sharedPreferences).containsElement(_favoritedKey, id.toString());
 
-  Future<void> setFavorited({@required int id, @required bool favorite}) async {
+  Future<void> setFavorited({required int id, required bool favorite}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
     if (favorite) {
@@ -67,7 +71,7 @@ class StorageRepository {
   }
 
   Future<void> setFavoriteds(
-      {@required Iterable<int> ids, @required bool favorite}) async {
+      {required Iterable<int> ids, required bool favorite}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
     if (favorite) {
@@ -82,10 +86,10 @@ class StorageRepository {
   Future<bool> clearFavorited() async =>
       (await _sharedPreferences).remove(_favoritedKey);
 
-  Future<bool> upvoted({@required int id}) async =>
+  Future<bool> upvoted({required int id}) async =>
       (await _sharedPreferences).containsElement(_upvotedKey, id.toString());
 
-  Future<void> setUpvoted({@required int id, @required bool up}) async {
+  Future<void> setUpvoted({required int id, required bool up}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
     if (up) {
@@ -96,7 +100,7 @@ class StorageRepository {
   }
 
   Future<void> setUpvoteds(
-      {@required Iterable<int> ids, @required bool up}) async {
+      {required Iterable<int> ids, required bool up}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
     if (up) {
@@ -111,9 +115,9 @@ class StorageRepository {
   Future<bool> clearUpvoted() async =>
       (await _sharedPreferences).remove(_upvotedKey);
 
-  Future<bool> visited({@required int id}) async =>
+  Future<bool> visited({required int id}) async =>
       (await _sharedPreferences).containsElement(_visitedKey, id.toString());
 
-  Future<void> setVisited({@required int id}) async =>
+  Future<void> setVisited({required int id}) async =>
       (await _sharedPreferences).addElement(_visitedKey, id.toString());
 }

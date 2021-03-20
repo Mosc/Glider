@@ -4,12 +4,12 @@ import 'package:glider/models/theme_base.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final AutoDisposeFutureProvider<ThemeBase> themeBaseProvider =
+final AutoDisposeFutureProvider<ThemeBase?> themeBaseProvider =
     FutureProvider.autoDispose(
   (ProviderReference ref) => ref.read(storageRepositoryProvider).themeBase,
 );
 
-final AutoDisposeFutureProvider<Color> themeColorProvider =
+final AutoDisposeFutureProvider<Color?> themeColorProvider =
     FutureProvider.autoDispose(
   (ProviderReference ref) => ref.read(storageRepositoryProvider).themeColor,
 );
@@ -19,7 +19,7 @@ final AutoDisposeFutureProvider<bool> loggedInProvider =
   (ProviderReference ref) => ref.read(authRepositoryProvider).loggedIn,
 );
 
-final AutoDisposeFutureProvider<String> usernameProvider =
+final AutoDisposeFutureProvider<String?> usernameProvider =
     FutureProvider.autoDispose(
   (ProviderReference ref) => ref.read(authRepositoryProvider).username,
 );

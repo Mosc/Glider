@@ -8,7 +8,7 @@ import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 
 class FavoritesBody extends HookWidget {
-  const FavoritesBody({Key key}) : super(key: key);
+  const FavoritesBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

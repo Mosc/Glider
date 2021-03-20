@@ -14,30 +14,31 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ItemTileMetadata extends HookWidget {
   const ItemTileMetadata(
     this.item, {
-    Key key,
+    Key? key,
     this.root,
     this.dense = false,
     this.interactive = false,
   }) : super(key: key);
 
   final Item item;
-  final Item root;
+  final Item? root;
   final bool dense;
   final bool interactive;
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final AsyncValue<bool> favorited = useProvider(favoritedProvider(item.id));
-    final AsyncValue<bool> upvoted = useProvider(upvotedProvider(item.id));
+    final AsyncData<bool>? favorited =
+        useProvider(favoritedProvider(item.id)).data;
+    final AsyncData<bool>? upvoted = useProvider(upvotedProvider(item.id)).data;
 
     return Hero(
       tag: 'item_metadata_${item.id}',
       child: Row(
         children: <Widget>[
-          if (favorited.data != null)
+          if (favorited != null)
             SmoothAnimatedSwitcher.horizontal(
-              condition: favorited.data.value,
+              condition: favorited.value,
               child: const MetadataItem(
                 icon: FluentIcons.star_24_regular,
                 highlight: true,
@@ -45,19 +46,19 @@ class ItemTileMetadata extends HookWidget {
             ),
           if (item.score != null)
             SmoothAnimatedCrossFade(
-              condition: upvoted.data?.value ?? false,
+              condition: upvoted?.value ?? false,
               trueChild: _buildUpvotedMetadata(upvoted: true),
               falseChild: _buildUpvotedMetadata(upvoted: false),
             )
-          else if (upvoted.data != null)
+          else if (upvoted != null)
             SmoothAnimatedSwitcher.horizontal(
-              condition: upvoted.data.value,
+              condition: upvoted.value,
               child: _buildUpvotedMetadata(upvoted: true),
             ),
           if (item.descendants != null)
             SmoothAnimatedSize(
               child: MetadataItem(
-                key: ValueKey<int>(item.descendants),
+                key: ValueKey<int?>(item.descendants),
                 icon: FluentIcons.comment_24_regular,
                 text: item.descendants.toString(),
               ),
@@ -69,13 +70,13 @@ class ItemTileMetadata extends HookWidget {
             Text(
               '[deleted]',
               style: textTheme.bodyText2
-                  .copyWith(fontSize: textTheme.caption.fontSize),
+                  ?.copyWith(fontSize: textTheme.caption?.fontSize),
             ),
           ] else if (item.by != null &&
               item.type != ItemType.pollopt) ...<Widget>[
             if (item.by == root?.by && item.parent != null)
               const MetadataItem(icon: FluentIcons.person_circle_20_regular),
-            _buildUsername(context, textTheme),
+            _buildUsername(context, textTheme, by: item.by!),
             const SizedBox(width: 8),
           ],
           if (item.hasOriginalYear == true)
@@ -84,29 +85,30 @@ class ItemTileMetadata extends HookWidget {
               text: 'from ${item.originalYear}',
             ),
           if (interactive) _buildCollapsedIndicator(),
-          if (item.type != ItemType.pollopt) ...<Widget>[
+          if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
             const Spacer(),
-            Text(item.timeAgo, style: textTheme.caption),
+            Text(item.timeAgo!, style: textTheme.caption),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildUpvotedMetadata({@required bool upvoted}) {
+  Widget _buildUpvotedMetadata({required bool upvoted}) {
     return MetadataItem(
-      key: ValueKey<int>(item.score),
+      key: ValueKey<int?>(item.score),
       icon: FluentIcons.arrow_up_24_regular,
       text: item.score?.toString(),
       highlight: upvoted,
     );
   }
 
-  Widget _buildUsername(BuildContext context, TextTheme textTheme) {
+  Widget _buildUsername(BuildContext context, TextTheme textTheme,
+      {required String by}) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
-          builder: (_) => UserPage(id: item.by),
+          builder: (_) => UserPage(id: by),
         ),
       ),
       child: item.by == useProvider(usernameProvider).data?.value
@@ -117,17 +119,17 @@ class ItemTileMetadata extends HookWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                item.by,
+                by,
                 style: textTheme.caption
-                    .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             )
           : Padding(
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: Text(
-                item.by,
+                by,
                 style: textTheme.caption
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
             ),
     );
@@ -138,7 +140,7 @@ class ItemTileMetadata extends HookWidget {
       condition: dense,
       child: MetadataItem(
         icon: FluentIcons.add_circle_24_regular,
-        text: item.id != root?.id ? item.kids?.length?.toString() : null,
+        text: item.id != root?.id ? item.kids.length.toString() : null,
       ),
     );
   }

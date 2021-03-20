@@ -4,13 +4,13 @@ import 'package:glider/utils/animation_util.dart';
 
 class SmoothAnimatedSize extends HookWidget {
   const SmoothAnimatedSize({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.duration,
   }) : super(key: key);
 
   final Widget child;
-  final Duration duration;
+  final Duration? duration;
 
   @override
   Widget build(BuildContext context) {

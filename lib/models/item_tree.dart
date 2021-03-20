@@ -5,9 +5,9 @@ import 'package:glider/models/item.dart';
 part 'item_tree.freezed.dart';
 
 @freezed
-abstract class ItemTree with _$ItemTree {
+class ItemTree with _$ItemTree {
   factory ItemTree({
-    @required Iterable<Item> items,
-    bool done,
+    required Iterable<Item> items,
+    required bool done,
   }) = _ItemTree;
 }

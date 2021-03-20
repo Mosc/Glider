@@ -21,5 +21,5 @@ extension SharedPreferencesExtension on SharedPreferences {
       );
 
   List<String> _getDistinctElements(String key) =>
-      getStringList(key)?.toSet()?.toList() ?? <String>[];
+      getStringList(key)?.toSet().toList() ?? <String>[];
 }

@@ -7,7 +7,7 @@ import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 
 class ItemTileTitle extends HookWidget {
-  const ItemTileTitle(this.item, {Key key, this.dense = false})
+  const ItemTileTitle(this.item, {Key? key, this.dense = false})
       : super(key: key);
 
   final Item item;
@@ -25,7 +25,7 @@ class ItemTileTitle extends HookWidget {
     );
   }
 
-  Widget _buildTitleText(BuildContext context, {@required bool dense}) {
+  Widget _buildTitleText(BuildContext context, {required bool dense}) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Text.rich(
@@ -37,7 +37,7 @@ class ItemTileTitle extends HookWidget {
               baseline: TextBaseline.ideographic,
               child: Icon(
                 FluentIcons.briefcase_24_regular,
-                size: textTheme.subtitle1.scaledFontSize(context),
+                size: textTheme.subtitle1?.scaledFontSize(context),
               ),
             ),
             TextSpan(text: ' ', style: textTheme.subtitle1),
@@ -47,7 +47,7 @@ class ItemTileTitle extends HookWidget {
               baseline: TextBaseline.ideographic,
               child: Icon(
                 FluentIcons.poll_24_regular,
-                size: textTheme.subtitle1.scaledFontSize(context),
+                size: textTheme.subtitle1?.scaledFontSize(context),
               ),
             ),
             TextSpan(text: ' ', style: textTheme.subtitle1),
@@ -58,7 +58,7 @@ class ItemTileTitle extends HookWidget {
               baseline: TextBaseline.ideographic,
               child: Icon(
                 FluentIcons.video_clip_24_regular,
-                size: textTheme.subtitle1.scaledFontSize(context),
+                size: textTheme.subtitle1?.scaledFontSize(context),
               ),
             ),
             TextSpan(text: ' ', style: textTheme.subtitle1),
@@ -69,7 +69,7 @@ class ItemTileTitle extends HookWidget {
               baseline: TextBaseline.ideographic,
               child: Icon(
                 FluentIcons.document_24_regular,
-                size: textTheme.subtitle1.scaledFontSize(context),
+                size: textTheme.subtitle1?.scaledFontSize(context),
               ),
             ),
             TextSpan(text: ' ', style: textTheme.subtitle1),
@@ -82,7 +82,7 @@ class ItemTileTitle extends HookWidget {
             TextSpan(text: ' ', style: textTheme.subtitle1),
             TextSpan(
               text: '(${item.urlHost})',
-              style: textTheme.caption.copyWith(height: 1.6),
+              style: textTheme.caption?.copyWith(height: 1.6),
             ),
           ]
         ],

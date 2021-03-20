@@ -6,10 +6,10 @@ import 'package:glider/models/story_type.dart';
 part 'search_parameters.freezed.dart';
 
 @freezed
-abstract class SearchParameters with _$SearchParameters {
+class SearchParameters with _$SearchParameters {
   factory SearchParameters({
-    String query,
-    DateTimeRange dateTimeRange,
+    required String query,
+    DateTimeRange? dateTimeRange,
     @Default(StoryType.bestStories) StoryType storyType,
   }) = _SearchParameters;
 }

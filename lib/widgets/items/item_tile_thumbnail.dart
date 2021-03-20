@@ -9,7 +9,7 @@ import 'package:glider/widgets/items/item_tile_header.dart';
 import 'package:octo_image/octo_image.dart';
 
 class ItemTileThumbnail extends HookWidget {
-  const ItemTileThumbnail(this.item, {Key key}) : super(key: key);
+  const ItemTileThumbnail(this.item, {Key? key}) : super(key: key);
 
   final Item item;
 
@@ -17,16 +17,16 @@ class ItemTileThumbnail extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double size = ItemTileHeader.calculateHeight(context);
+    final double? size = ItemTileHeader.calculateHeight(context);
 
     return GestureDetector(
-      onTap: () => UrlUtil.tryLaunch(item.url),
+      onTap: () => UrlUtil.tryLaunch(item.url!),
       child: Hero(
         tag: 'item_thumbnail_${item.id}',
         child: item.localOnly
             ? _placeholderBuilder(context, size: size)
             : OctoImage(
-                image: CachedNetworkImageProvider(item.thumbnailUrl),
+                image: CachedNetworkImageProvider(item.thumbnailUrl!),
                 imageBuilder: (_, Widget child) => ClipRRect(
                   borderRadius: _borderRadius,
                   child: child,
@@ -42,8 +42,7 @@ class ItemTileThumbnail extends HookWidget {
     );
   }
 
-  static Widget _placeholderBuilder(BuildContext context,
-      {@required double size}) {
+  static Widget _placeholderBuilder(BuildContext context, {double? size}) {
     return TileLoadingBlock(
       width: size,
       height: size,

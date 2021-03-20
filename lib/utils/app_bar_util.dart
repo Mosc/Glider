@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class AppBarUtil {
   const AppBarUtil._();
 
-  static Widget buildFluentIconsLeading(BuildContext context) {
-    final ModalRoute<dynamic> parentRoute = ModalRoute.of(context);
+  static Widget? buildFluentIconsLeading(BuildContext context) {
+    final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
 
     final bool canPop = parentRoute?.canPop ?? false;
     final bool useCloseButton =

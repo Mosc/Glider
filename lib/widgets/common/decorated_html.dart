@@ -6,7 +6,7 @@ import 'package:glider/widgets/common/block.dart';
 import 'package:html/dom.dart' as dom;
 
 class DecoratedHtml extends StatelessWidget {
-  const DecoratedHtml(String html, {Key key, bool prependParagraphTag = true})
+  const DecoratedHtml(String html, {Key? key, bool prependParagraphTag = true})
       // Hacker News prefixes every paragraph with a tag except the first one.
       : _html = prependParagraphTag ? '<p>$html' : html,
         super(key: key);

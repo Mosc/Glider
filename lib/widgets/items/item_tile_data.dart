@@ -21,13 +21,13 @@ import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
-AutoDisposeStateProviderFamily<bool, int> delayedUpvoteStateProvider =
+AutoDisposeStateProviderFamily<bool?, int> delayedUpvoteStateProvider =
     StateProvider.family.autoDispose((ProviderReference ref, int id) => null);
 
 class ItemTileData extends HookWidget {
   const ItemTileData(
     this.item, {
-    Key key,
+    Key? key,
     this.root,
     this.onTap,
     this.dense = false,
@@ -36,16 +36,15 @@ class ItemTileData extends HookWidget {
   }) : super(key: key);
 
   final Item item;
-  final Item root;
-  final void Function() onTap;
+  final Item? root;
+  final void Function()? onTap;
   final bool dense;
   final bool interactive;
   final bool fadeable;
 
   @override
   Widget build(BuildContext context) {
-    final bool active =
-        item.id != null && item.deleted != true && item.localOnly != true;
+    final bool active = item.deleted != true && item.localOnly != true;
     final Widget content = fadeable
         ? _buildFadeable(child: _buildContent(context))
         : _buildContent(context);
@@ -60,14 +59,14 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildSlidable(BuildContext context,
-      {@required Widget child, @required bool active}) {
+      {required Widget child, required bool active}) {
     final bool canVote =
         active && item.type != ItemType.job && item.type != ItemType.pollopt;
     final bool canReply = canVote && root?.id != null;
 
     // We don't want the slidable to update while being slided, so we delay any
     // upvote state until after the call has actually finished.
-    final StateController<bool> delayedUpvotedController =
+    final StateController<bool?> delayedUpvotedController =
         useProvider(delayedUpvoteStateProvider(item.id));
 
     Future<void> updateDelayedUpvoted() async {
@@ -78,7 +77,7 @@ class ItemTileData extends HookWidget {
       }
     }
 
-    Future<void> vote({@required bool up}) async {
+    Future<void> vote({required bool up}) async {
       await _vote(context, up: up);
       unawaited(updateDelayedUpvoted());
     }
@@ -88,7 +87,7 @@ class ItemTileData extends HookWidget {
     return Slidable(
       key: ValueKey<int>(item.id),
       startToEndAction: canVote && delayedUpvotedController.state != null
-          ? !delayedUpvotedController.state
+          ? delayedUpvotedController.state != true
               ? SlidableAction(
                   action: () => vote(up: true),
                   icon: FluentIcons.arrow_up_24_filled,
@@ -103,7 +102,7 @@ class ItemTileData extends HookWidget {
       endToStartAction: dense
           ? item.url != null
               ? SlidableAction(
-                  action: () => UrlUtil.tryLaunch(item.url),
+                  action: () => UrlUtil.tryLaunch(item.url!),
                   icon: FluentIcons.window_arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.surface,
                   iconColor: Theme.of(context).colorScheme.onSurface,
@@ -121,15 +120,16 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Widget _buildIndented({@required Widget child}) {
+  Widget _buildIndented({required Widget child}) {
     final int indentation =
-        item.type != ItemType.pollopt ? item.ancestors?.length ?? 0 : 0;
+        item.type != ItemType.pollopt ? item.ancestors.length : 0;
     final double indentationPadding = indentation.toDouble() * 8;
 
     Color _determineDividerColor() {
       final List<Color> colors = AppTheme.themeColors.toList(growable: false);
-      final Color themeColor = useProvider(themeColorProvider).data?.value;
-      final int initialOffset = colors.indexOf(themeColor) ?? 0;
+      final Color? themeColor = useProvider(themeColorProvider).data?.value;
+      final int initialOffset =
+          themeColor != null ? colors.indexOf(themeColor) : 0;
       final int offset =
           (initialOffset + (indentation - 1) * 2) % colors.length;
       return colors[offset];
@@ -157,7 +157,7 @@ class ItemTileData extends HookWidget {
         : child;
   }
 
-  Widget _buildTappable(BuildContext context, {@required Widget child}) {
+  Widget _buildTappable(BuildContext context, {required Widget child}) {
     return InkWell(
       onTap: item.type == ItemType.pollopt && interactive
           ? () => _vote(
@@ -173,7 +173,7 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Widget _buildFadeable({@required Widget child}) {
+  Widget _buildFadeable({required Widget child}) {
     final bool visibility =
         useProvider(visitedProvider(item.id)).data?.value ?? false;
 
@@ -210,7 +210,7 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Future<void> _vote(BuildContext context, {@required bool up}) async {
+  Future<void> _vote(BuildContext context, {required bool up}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -221,9 +221,10 @@ class ItemTileData extends HookWidget {
       );
 
       if (success) {
-        if (item.score != null) {
+        final int? score = item.score;
+        if (score != null) {
           context.read(itemCacheStateProvider(item.id)).state =
-              item.copyWith(score: item.score + (up ? 1 : -1));
+              item.copyWith(score: score + (up ? 1 : -1));
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBarQuickly(
@@ -251,15 +252,17 @@ class ItemTileData extends HookWidget {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final bool success = await Navigator.of(context).push<bool>(
+      final bool? success = await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
           builder: (_) => ReplyPage(parent: item, root: root),
           fullscreenDialog: true,
         ),
       );
 
-      if (success == true && root?.id != null) {
-        context.refresh(itemTreeStreamProvider(root.id));
+      final int? rootId = root?.id;
+
+      if (success == true && rootId != null) {
+        context.refresh(itemTreeStreamProvider(rootId));
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(
             content: const Text(
@@ -269,8 +272,8 @@ class ItemTileData extends HookWidget {
             action: SnackBarAction(
               label: 'Refresh',
               onPressed: () async {
-                await reloadItemTree(context.refresh, id: root.id);
-                return context.refresh(itemTreeStreamProvider(root.id));
+                await reloadItemTree(context.refresh, id: rootId);
+                return context.refresh(itemTreeStreamProvider(rootId));
               },
             ),
           ),

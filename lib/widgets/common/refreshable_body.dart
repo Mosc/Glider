@@ -6,15 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RefreshableBody<T> extends HookWidget {
   const RefreshableBody({
-    Key key,
-    @required this.provider,
+    Key? key,
+    required this.provider,
     this.onRefresh,
-    @required this.loadingBuilder,
-    @required this.dataBuilder,
+    required this.loadingBuilder,
+    required this.dataBuilder,
   }) : super(key: key);
 
   final RootProvider<Object, AsyncValue<T>> provider;
-  final Future<void> Function() onRefresh;
+  final Future<void> Function()? onRefresh;
   final Widget Function() loadingBuilder;
   final Iterable<Widget> Function(T) dataBuilder;
 

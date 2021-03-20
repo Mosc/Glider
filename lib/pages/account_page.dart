@@ -11,7 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
 class AccountPage extends HookWidget {
-  const AccountPage({Key key}) : super(key: key);
+  const AccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class AccountPage extends HookWidget {
   }
 
   Future<void> _synchronizeSelected(BuildContext context) async {
-    return showDialog<bool>(
+    await showDialog<bool>(
       context: context,
       builder: (_) => const SynchronizeDialog(),
     );

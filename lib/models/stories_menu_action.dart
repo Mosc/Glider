@@ -20,7 +20,5 @@ extension StoriesMenuActionExtension on StoriesMenuAction {
       case StoriesMenuAction.account:
         return 'Account';
     }
-
-    throw UnsupportedError('$this does not have a title');
   }
 }

@@ -10,12 +10,12 @@ abstract class PostData {
 }
 
 @freezed
-abstract class RegisterPostData with _$RegisterPostData implements PostData {
+class RegisterPostData with _$RegisterPostData implements PostData {
   factory RegisterPostData({
-    @required String acct,
-    @required String pw,
-    @required String creating,
-    @required String goto,
+    required String acct,
+    required String pw,
+    required String creating,
+    required String goto,
   }) = _RegisterPostData;
 
   factory RegisterPostData.fromJson(Map<String, dynamic> json) =>
@@ -23,11 +23,11 @@ abstract class RegisterPostData with _$RegisterPostData implements PostData {
 }
 
 @freezed
-abstract class LoginPostData with _$LoginPostData implements PostData {
+class LoginPostData with _$LoginPostData implements PostData {
   factory LoginPostData({
-    @required String acct,
-    @required String pw,
-    @required String goto,
+    required String acct,
+    required String pw,
+    required String goto,
   }) = _LoginPostData;
 
   factory LoginPostData.fromJson(Map<String, dynamic> json) =>
@@ -35,12 +35,12 @@ abstract class LoginPostData with _$LoginPostData implements PostData {
 }
 
 @freezed
-abstract class FavoritePostData with _$FavoritePostData implements PostData {
+class FavoritePostData with _$FavoritePostData implements PostData {
   factory FavoritePostData({
-    @required String acct,
-    @required String pw,
-    @required int id,
-    String un,
+    required String acct,
+    required String pw,
+    required int id,
+    String? un,
   }) = _FavoritePostData;
 
   factory FavoritePostData.fromJson(Map<String, dynamic> json) =>
@@ -48,12 +48,12 @@ abstract class FavoritePostData with _$FavoritePostData implements PostData {
 }
 
 @freezed
-abstract class VotePostData with _$VotePostData implements PostData {
+class VotePostData with _$VotePostData implements PostData {
   factory VotePostData({
-    @required String acct,
-    @required String pw,
-    @required int id,
-    @required String how,
+    required String acct,
+    required String pw,
+    required int id,
+    required String how,
   }) = _VotePostData;
 
   factory VotePostData.fromJson(Map<String, dynamic> json) =>
@@ -61,12 +61,12 @@ abstract class VotePostData with _$VotePostData implements PostData {
 }
 
 @freezed
-abstract class CommentPostData with _$CommentPostData implements PostData {
+class CommentPostData with _$CommentPostData implements PostData {
   factory CommentPostData({
-    @required String acct,
-    @required String pw,
-    @required int parent,
-    @required String text,
+    required String acct,
+    required String pw,
+    required int parent,
+    required String text,
   }) = _CommentPostData;
 
   factory CommentPostData.fromJson(Map<String, dynamic> json) =>
@@ -74,12 +74,10 @@ abstract class CommentPostData with _$CommentPostData implements PostData {
 }
 
 @freezed
-abstract class SubmitFormPostData
-    with _$SubmitFormPostData
-    implements PostData {
+class SubmitFormPostData with _$SubmitFormPostData implements PostData {
   factory SubmitFormPostData({
-    @required String acct,
-    @required String pw,
+    required String acct,
+    required String pw,
   }) = _SubmitFormPostData;
 
   factory SubmitFormPostData.fromJson(Map<String, dynamic> json) =>
@@ -87,13 +85,13 @@ abstract class SubmitFormPostData
 }
 
 @freezed
-abstract class SubmitPostData with _$SubmitPostData implements PostData {
+class SubmitPostData with _$SubmitPostData implements PostData {
   factory SubmitPostData({
-    @required String fnid,
-    @required String fnop,
-    @required String title,
-    String url,
-    String text,
+    required String fnid,
+    required String fnop,
+    required String title,
+    String? url,
+    String? text,
   }) = _SubmitPostData;
 
   factory SubmitPostData.fromJson(Map<String, dynamic> json) =>

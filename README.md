@@ -25,7 +25,7 @@ Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
 Glider is built with the latest beta version of Flutter. Code that can be generated is not included in the repository. Generate it by running `build_runner`:
 
 ```sh
-flutter pub run --no-sound-null-safety build_runner build --delete-conflicting-outputs
+flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
 [play store]: https://play.google.com/store/apps/details?id=nl.viter.glider

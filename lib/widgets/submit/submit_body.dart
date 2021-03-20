@@ -16,10 +16,10 @@ import 'package:glider/utils/validators.dart';
 import 'package:glider/widgets/common/experimental.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:validators/validators.dart' as validators;
+import 'package:string_validator/string_validator.dart';
 
 class SubmitBody extends HookWidget {
-  const SubmitBody({Key key}) : super(key: key);
+  const SubmitBody({Key? key}) : super(key: key);
 
   static const int _maxTitleLength = 80;
 
@@ -35,11 +35,12 @@ class SubmitBody extends HookWidget {
     final TextEditingValue urlListenable = useValueListenable(urlController);
     final TextEditingController textController = useTextEditingController();
     final TextEditingValue textListenable = useValueListenable(textController);
+    final String? username = useProvider(usernameProvider).data?.value;
 
-    String url() =>
+    String? url() =>
         submitTypeState.value == SubmitType.url ? urlListenable.text : null;
 
-    String text() =>
+    String? text() =>
         submitTypeState.value == SubmitType.text ? textListenable.text : null;
 
     return SingleChildScrollView(
@@ -91,7 +92,7 @@ class SubmitBody extends HookWidget {
                     maxLines: null,
                     maxLength: _maxTitleLength,
                     maxLengthEnforcement: MaxLengthEnforcement.none,
-                    validator: (String value) =>
+                    validator: (String? value) =>
                         Validators.notEmpty(value) ??
                         Validators.maxLength(value, _maxTitleLength),
                     enabled: !loadingState.value,
@@ -102,7 +103,7 @@ class SubmitBody extends HookWidget {
                       decoration: const InputDecoration(labelText: 'URL'),
                       keyboardType: TextInputType.url,
                       maxLines: null,
-                      validator: (String value) =>
+                      validator: (String? value) =>
                           Validators.notEmpty(value) ?? Validators.url(value),
                       enabled: !loadingState.value,
                     ),
@@ -139,7 +140,7 @@ class SubmitBody extends HookWidget {
                         onPressed: loadingState.value
                             ? null
                             : () async {
-                                if (formKey.currentState.validate()) {
+                                if (formKey.currentState?.validate() == true) {
                                   loadingState.value = true;
                                   await _submit(
                                     context,
@@ -165,31 +166,36 @@ class SubmitBody extends HookWidget {
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),
-          ItemTileData(
-            _buildItem(
-              id: useProvider(previewIdStateProvider).state,
-              username: useProvider(usernameProvider).data?.value,
-              title: titleListenable.text,
-              url: url(),
-              text: text(),
+          if (username != null)
+            ItemTileData(
+              _buildItem(
+                id: useProvider(previewIdStateProvider).state,
+                username: username,
+                title: titleListenable.text,
+                url: url(),
+                text: text(),
+              ),
             ),
-          ),
           const SizedBox(height: 16),
         ],
       ),
     );
   }
 
-  bool _isUrl(String url) => validators.isURL(url, requireProtocol: true);
+  bool _isUrl(String url) =>
+      isURL(url, <String, Object>{'requireProtocol': true});
 
   Future<void> _autofillTitle(
       BuildContext context, TextEditingController titleController,
-      {@required String url}) async {
+      {required String url}) async {
     final WebRepository webRepository = context.read(webRepositoryProvider);
 
     try {
-      final String title = await webRepository.extractTitle(url: url);
-      titleController.text = title?.trim();
+      final String? title = await webRepository.extractTitle(url: url);
+
+      if (title != null) {
+        titleController.text = title.trim();
+      }
     } on Exception {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
         const SnackBar(content: Text('Could not autofill title')),
@@ -198,7 +204,7 @@ class SubmitBody extends HookWidget {
   }
 
   Future<void> _submit(BuildContext context,
-      {@required String title, String url, String text}) async {
+      {required String title, String? url, String? text}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success = await authRepository.submit(
       title: title,
@@ -222,11 +228,11 @@ class SubmitBody extends HookWidget {
   }
 
   Item _buildItem({
-    @required int id,
-    @required String username,
-    String title,
-    String url,
-    String text,
+    required int id,
+    required String username,
+    String? title,
+    String? url,
+    String? text,
   }) =>
       Item(
         id: id,
@@ -234,9 +240,9 @@ class SubmitBody extends HookWidget {
         by: username,
         time: DateTime.now().secondsSinceEpoch,
         text: text?.isNotEmpty == true
-            ? FormattingUtil.convertHackerNewsToHtml(text)
+            ? FormattingUtil.convertHackerNewsToHtml(text!)
             : null,
-        url: _isUrl(url) ? url : null,
+        url: url != null && _isUrl(url) ? url : null,
         title: title?.isNotEmpty == true ? title : null,
         score: 1,
         descendants: 0,

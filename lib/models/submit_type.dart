@@ -11,7 +11,5 @@ extension SubmitTypeExtension on SubmitType {
       case SubmitType.text:
         return 'Text';
     }
-
-    throw UnsupportedError('$this does not have a title');
   }
 }

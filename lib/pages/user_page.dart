@@ -4,7 +4,7 @@ import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/users/user_body.dart';
 
 class UserPage extends HookWidget {
-  const UserPage({Key key, @required this.id}) : super(key: key);
+  const UserPage({Key? key, required this.id}) : super(key: key);
 
   final String id;
 

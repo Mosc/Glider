@@ -7,19 +7,19 @@ class AppTheme {
 
   static Iterable<Color> get themeColors => Colors.primaries.map(
         (MaterialColor materialColor) => <int>[300, 400, 500, 600]
-            .map((int shade) => materialColor[shade])
+            .map((int shade) => materialColor[shade]!)
             .firstWhere(
               (Color color) => color.isDark,
-              orElse: () => materialColor[700],
+              orElse: () => materialColor[700]!,
             ),
       );
 
   static final Color defaultColor = themeColors.first;
   static final Color surfaceColor = Colors.grey.withOpacity(0.15);
-  static final Color lightBackgroundColor = Colors.grey[50];
-  static final Color darkBackgroundColor = Colors.grey[900];
+  static final Color lightBackgroundColor = Colors.grey[50]!;
+  static final Color darkBackgroundColor = Colors.grey[900]!;
   static const Color blackBackgroundColor = Colors.black;
-  static final Color spaceBackgroundColor = Colors.blueGrey[900];
+  static final Color spaceBackgroundColor = Colors.blueGrey[900]!;
 
   static ThemeData lightTheme(Color color) =>
       _buildTheme(color, backgroundColor: lightBackgroundColor);
@@ -33,7 +33,7 @@ class AppTheme {
   static ThemeData spaceTheme(Color color) =>
       _buildTheme(color, backgroundColor: spaceBackgroundColor);
 
-  static ThemeData _buildTheme(Color color, {@required Color backgroundColor}) {
+  static ThemeData _buildTheme(Color color, {required Color backgroundColor}) {
     final Brightness brightness =
         ThemeData.estimateBrightnessForColor(backgroundColor);
     final Color onColor =
@@ -90,7 +90,7 @@ class AppTheme {
 
 class StateBorderSide extends MaterialStateBorderSide {
   const StateBorderSide(
-      {@required this.selectedColor, @required this.defaultColor});
+      {required this.selectedColor, required this.defaultColor});
 
   final Color selectedColor;
   final Color defaultColor;

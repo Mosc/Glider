@@ -15,7 +15,7 @@ class SearchApiRepository {
 
   Future<Iterable<int>> searchStoryIds(
       SearchParameters searchParameters) async {
-    final DateTimeRange dateTimeRange = searchParameters.dateTimeRange;
+    final DateTimeRange? dateTimeRange = searchParameters.dateTimeRange;
     final Uri uri = Uri.https(
       authority,
       '$basePath/${searchParameters.storyType.searchApiPath}',
@@ -32,7 +32,7 @@ class SearchApiRepository {
     try {
       final Response<Map<String, dynamic>> response =
           await _dio.getUri<Map<String, dynamic>>(uri);
-      final List<dynamic> hits = response.data['hits'] as List<dynamic>;
+      final List<dynamic> hits = response.data?['hits'] as List<dynamic>;
       return hits.map((dynamic hit) {
         final Map<String, dynamic> hitMap = hit as Map<String, dynamic>;
         final String objectId = hitMap['objectID'] as String;

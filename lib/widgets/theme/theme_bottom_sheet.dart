@@ -12,7 +12,7 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ThemeDialog extends HookWidget {
-  const ThemeDialog({Key key}) : super(key: key);
+  const ThemeDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class ThemeDialog extends HookWidget {
     );
   }
 
-  Widget _buildHorizontalScrollable({@required List<Widget> children}) {
+  Widget _buildHorizontalScrollable({required List<Widget> children}) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
@@ -50,7 +50,7 @@ class ThemeDialog extends HookWidget {
 }
 
 class _ThemeBaseButton extends HookWidget {
-  const _ThemeBaseButton(this.base, {Key key}) : super(key: key);
+  const _ThemeBaseButton(this.base, {Key? key}) : super(key: key);
 
   final ThemeBase base;
 
@@ -106,7 +106,7 @@ class _ThemeBaseButton extends HookWidget {
 }
 
 class _ThemeColorButton extends HookWidget {
-  const _ThemeColorButton(this.color, {Key key}) : super(key: key);
+  const _ThemeColorButton(this.color, {Key? key}) : super(key: key);
 
   final Color color;
 

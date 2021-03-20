@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:glider/utils/text_style_extension.dart';
 
 class End extends StatelessWidget {
-  const End({Key key}) : super(key: key);
+  const End({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final double? scaledFontSize =
+        Theme.of(context).textTheme.bodyText2?.scaledFontSize(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 16),
@@ -16,11 +19,7 @@ class End extends StatelessWidget {
             children: <Widget>[
               Icon(
                 FluentIcons.pulse_24_regular,
-                size: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .scaledFontSize(context) *
-                    2,
+                size: scaledFontSize != null ? scaledFontSize * 2 : null,
               ),
             ],
           ),

@@ -6,14 +6,14 @@ part 'user.freezed.dart';
 part 'user.g.dart';
 
 @freezed
-abstract class User with _$User {
+class User with _$User {
   factory User({
-    String id,
-    int delay,
-    int created,
-    int karma,
-    String about,
-    Iterable<int> submitted,
+    required String id,
+    int? delay,
+    required int created,
+    required int karma,
+    String? about,
+    @Default(<int>[]) Iterable<int> submitted,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

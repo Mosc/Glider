@@ -18,7 +18,7 @@ import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemBody extends HookWidget {
-  const ItemBody({Key key, @required this.id}) : super(key: key);
+  const ItemBody({Key? key, required this.id}) : super(key: key);
 
   final int id;
 
@@ -37,9 +37,9 @@ class ItemBody extends HookWidget {
         ),
       ),
       dataBuilder: (ItemTree itemTree) {
-        final Item firstItem = itemTree.items.first;
-        final int parent = firstItem?.parent ?? firstItem?.poll;
         final Iterable<Item> items = itemTree.items;
+        final Item? firstItem = items.isNotEmpty ? items.first : null;
+        final int? parent = firstItem?.parent ?? firstItem?.poll;
         return <Widget>[
           if (parent != null)
             SliverToBoxAdapter(child: _buildOpenParent(context, parent)),
@@ -78,13 +78,18 @@ class ItemBody extends HookWidget {
         ancestors: item.ancestors,
         root: items.first.parent != null ? null : items.first,
         onTap: (BuildContext context) {
-          final ScrollableState scrollableState = Scrollable.of(context);
-          scrollableState.position.ensureVisible(
-            context.findRenderObject(),
-            duration: AnimationUtil.defaultDuration,
-            curve: Curves.easeInOut,
-            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
-          );
+          final ScrollableState? scrollableState = Scrollable.of(context);
+          final RenderObject? renderObject = context.findRenderObject();
+
+          if (renderObject != null) {
+            scrollableState?.position.ensureVisible(
+              renderObject,
+              duration: AnimationUtil.defaultDuration,
+              curve: Curves.easeInOut,
+              alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+            );
+          }
+
           _collapse(collapsedState, item.id);
         },
         dense: _collapsed(collapsedState, item.id),
@@ -111,7 +116,7 @@ class ItemBody extends HookWidget {
                   size: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      .scaledFontSize(context),
+                      ?.scaledFontSize(context),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

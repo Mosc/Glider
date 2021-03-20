@@ -25,7 +25,7 @@ final AutoDisposeStateProvider<StoryType> storyTypeStateProvider =
         (ProviderReference ref) => StoryType.topStories);
 
 class StoriesPage extends HookWidget {
-  const StoriesPage({Key key}) : super(key: key);
+  const StoriesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +116,7 @@ class StoriesPage extends HookWidget {
             icon: storyTypeStateController.state.icon,
             backgroundColor: theme.colorScheme.primary,
             foregroundColor: theme.colorScheme.onPrimary,
+            useRotationAnimation: false,
             animationSpeed: 100,
           ),
         ),
@@ -160,7 +161,7 @@ class StoriesPage extends HookWidget {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final bool success = await Navigator.of(context).push<bool>(
+      final bool? success = await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
           builder: (_) => const SubmitPage(),
           fullscreenDialog: true,

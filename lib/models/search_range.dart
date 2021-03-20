@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jiffy/jiffy.dart';
 
-final StateProvider<DateTimeRange> customDateTimeRangeStateProvider =
-    StateProvider<DateTimeRange>((ProviderReference ref) => null);
+final StateProvider<DateTimeRange?> customDateTimeRangeStateProvider =
+    StateProvider<DateTimeRange?>((ProviderReference ref) => null);
 
 enum SearchRange {
   custom,
@@ -19,7 +19,7 @@ extension SearchRangeExtension on SearchRange {
 
     switch (this) {
       case SearchRange.custom:
-        final DateTimeRange customDateTimeRange =
+        final DateTimeRange? customDateTimeRange =
             context.read(customDateTimeRangeStateProvider).state;
         return customDateTimeRange != null
             ? customDateTimeRange.duration != Duration.zero
@@ -36,8 +36,6 @@ extension SearchRangeExtension on SearchRange {
       case SearchRange.pastYear:
         return 'Past year';
     }
-
-    throw UnsupportedError('$this does not have a title');
   }
 
   DateTimeRange dateTimeRange(BuildContext context) {
@@ -51,7 +49,7 @@ extension SearchRangeExtension on SearchRange {
     switch (this) {
       case SearchRange.custom:
         final DateTimeRange customDateTimeRange =
-            context.read(customDateTimeRangeStateProvider).state;
+            context.read(customDateTimeRangeStateProvider).state!;
         return DateTimeRange(
           start: customDateTimeRange.start,
           end: (Jiffy(customDateTimeRange.end)..endOf(Units.DAY)).dateTime,
@@ -65,7 +63,5 @@ extension SearchRangeExtension on SearchRange {
       case SearchRange.pastYear:
         return pastDays(365);
     }
-
-    throw UnsupportedError('$this does not have a date time range');
   }
 }

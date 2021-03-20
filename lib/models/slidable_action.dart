@@ -7,11 +7,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'slidable_action.freezed.dart';
 
 @freezed
-abstract class SlidableAction with _$SlidableAction {
+class SlidableAction with _$SlidableAction {
   factory SlidableAction({
-    @required Function() action,
-    @required IconData icon,
-    Color color,
-    Color iconColor,
+    required Function() action,
+    required IconData icon,
+    Color? color,
+    Color? iconColor,
   }) = _SlidableAction;
 }

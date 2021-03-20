@@ -9,12 +9,12 @@ import 'package:uni_links/uni_links.dart';
 class UniLinksHandler {
   UniLinksHandler._();
 
-  static StreamSubscription<Uri> uriSubscription;
+  static late StreamSubscription<Uri?> uriSubscription;
 
   static Future<void> init(BuildContext context) async {
     try {
-      uriSubscription = getUriLinksStream().listen(
-        (Uri uri) => _handleUri(context, uri),
+      uriSubscription = uriLinkStream.listen(
+        (Uri? uri) => _handleUri(context, uri),
       );
 
       _handleUri(context, await getInitialUri());
@@ -25,15 +25,13 @@ class UniLinksHandler {
 
   static void dispose() {
     try {
-      if (uriSubscription != null) {
-        uriSubscription.cancel();
-      }
+      uriSubscription.cancel();
     } on MissingPluginException {
       // Fail silently.
     }
   }
 
-  static void _handleUri(BuildContext context, Uri uri) {
+  static void _handleUri(BuildContext context, Uri? uri) {
     if (uri != null) {
       switch (uri.pathSegments.first) {
         case 'item':
@@ -50,7 +48,7 @@ class UniLinksHandler {
     const String idKey = 'id';
 
     if (uri.queryParameters.containsKey(idKey)) {
-      final int id = int.tryParse(uri.queryParameters[idKey]);
+      final int? id = int.tryParse(uri.queryParameters[idKey]!);
 
       if (id != null) {
         Navigator.of(context).push<void>(
@@ -66,7 +64,7 @@ class UniLinksHandler {
     const String idKey = 'id';
 
     if (uri.queryParameters.containsKey(idKey)) {
-      final String id = uri.queryParameters[idKey];
+      final String? id = uri.queryParameters[idKey];
 
       if (id != null) {
         Navigator.of(context).push<void>(

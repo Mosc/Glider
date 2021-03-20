@@ -4,7 +4,7 @@ import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 
 class UserTileLoading extends StatelessWidget {
-  const UserTileLoading({Key key}) : super(key: key);
+  const UserTileLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +22,12 @@ class UserTileLoading extends StatelessWidget {
               children: <Widget>[
                 TileLoadingBlock(
                   width: 160,
-                  height: textTheme.caption.scaledFontSize(context),
+                  height: textTheme.caption?.scaledFontSize(context),
                 ),
                 const Spacer(),
                 TileLoadingBlock(
                   width: 80,
-                  height: textTheme.caption.scaledFontSize(context),
+                  height: textTheme.caption?.scaledFontSize(context),
                 ),
               ],
             ),
@@ -35,13 +35,13 @@ class UserTileLoading extends StatelessWidget {
             for (int i = 0; i < 2; i++) ...<Widget>[
               const SizedBox(height: 2),
               TileLoadingBlock(
-                height: textTheme.bodyText2.scaledFontSize(context),
+                height: textTheme.bodyText2?.scaledFontSize(context),
               ),
             ],
             const SizedBox(height: 2),
             TileLoadingBlock(
               width: 120,
-              height: textTheme.bodyText2.scaledFontSize(context),
+              height: textTheme.bodyText2?.scaledFontSize(context),
             ),
           ],
         ),

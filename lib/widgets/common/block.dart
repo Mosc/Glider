@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Block extends StatelessWidget {
-  const Block({Key key, @required this.child}) : super(key: key);
+  const Block({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 

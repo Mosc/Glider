@@ -11,7 +11,7 @@ import 'package:glider/widgets/users/user_tile_data.dart';
 import 'package:glider/widgets/users/user_tile_loading.dart';
 
 class UserBody extends HookWidget {
-  const UserBody({Key key, @required this.id}) : super(key: key);
+  const UserBody({Key? key, required this.id}) : super(key: key);
 
   final String id;
 
@@ -38,7 +38,7 @@ class UserBody extends HookWidget {
                 loading: () => _buildItemLoading(index + 1),
               );
             },
-            childCount: user.submitted?.length ?? 0,
+            childCount: user.submitted.length,
           ),
         ),
       ],

@@ -18,7 +18,7 @@ class ApiRepository {
     try {
       final Response<Iterable<dynamic>> response =
           await _dio.getUri<Iterable<dynamic>>(uri);
-      return response.data.map((dynamic id) => id as int);
+      return response.data?.map((dynamic id) => id as int) ?? <int>[];
     } on DioError catch (e) {
       throw ServiceException(e.message);
     }
@@ -28,14 +28,14 @@ class ApiRepository {
     final Uri uri = Uri.https(authority, '$basePath/item/$id.json');
 
     try {
-      final Response<Map<String, Object>> response =
-          await _dio.getUri<Map<String, Object>>(uri);
+      final Response<Map<String, dynamic>> response =
+          await _dio.getUri<Map<String, dynamic>>(uri);
 
       if (response.data == null) {
         throw ServiceException();
       }
 
-      return Item.fromJson(response.data);
+      return Item.fromJson(response.data!);
     } on DioError catch (e) {
       throw ServiceException(e.message);
     }
@@ -45,14 +45,14 @@ class ApiRepository {
     final Uri uri = Uri.https(authority, '$basePath/user/$id.json');
 
     try {
-      final Response<Map<String, Object>> response =
-          await _dio.getUri<Map<String, Object>>(uri);
+      final Response<Map<String, dynamic>> response =
+          await _dio.getUri<Map<String, dynamic>>(uri);
 
       if (response.data == null) {
         throw ServiceException();
       }
 
-      return User.fromJson(response.data);
+      return User.fromJson(response.data!);
     } on DioError catch (e) {
       throw ServiceException(e.message);
     }

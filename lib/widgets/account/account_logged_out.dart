@@ -12,7 +12,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
 class AccountLoggedOut extends HookWidget {
-  const AccountLoggedOut({Key key}) : super(key: key);
+  const AccountLoggedOut({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class AccountLoggedOut extends HookWidget {
                     onPressed: loadingState.value
                         ? null
                         : () async {
-                            if (formKey.currentState.validate()) {
+                            if (formKey.currentState?.validate() == true) {
                               loadingState.value = true;
                               await _register(
                                 context,
@@ -92,7 +92,7 @@ class AccountLoggedOut extends HookWidget {
                     onPressed: loadingState.value
                         ? null
                         : () async {
-                            if (formKey.currentState.validate()) {
+                            if (formKey.currentState?.validate() == true) {
                               loadingState.value = true;
                               await _login(
                                 context,
@@ -120,7 +120,8 @@ class AccountLoggedOut extends HookWidget {
         children: <Widget>[
           Icon(
             FluentIcons.info_24_regular,
-            size: Theme.of(context).textTheme.bodyText2.scaledFontSize(context),
+            size:
+                Theme.of(context).textTheme.bodyText2?.scaledFontSize(context),
           ),
           const SizedBox(width: 12),
           const Expanded(
@@ -136,7 +137,7 @@ class AccountLoggedOut extends HookWidget {
   }
 
   Future<void> _register(BuildContext context,
-      {@required String username, @required String password}) async {
+      {required String username, required String password}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success =
         await authRepository.register(username: username, password: password);
@@ -152,9 +153,9 @@ class AccountLoggedOut extends HookWidget {
   }
 
   Future<void> _login(BuildContext context,
-      {@required String username,
-      @required String password,
-      @required bool synchronize}) async {
+      {required String username,
+      required String password,
+      required bool synchronize}) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success =
         await authRepository.login(username: username, password: password);

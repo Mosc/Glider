@@ -6,7 +6,7 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:share/share.dart';
 
 class UserBottomSheet extends StatelessWidget {
-  const UserBottomSheet(this.user, {Key key}) : super(key: key);
+  const UserBottomSheet(this.user, {Key? key}) : super(key: key);
 
   final User user;
 

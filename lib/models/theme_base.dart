@@ -24,8 +24,6 @@ extension ThemeBaseExtension on ThemeBase {
       case ThemeBase.space:
         return 'Space';
     }
-
-    throw UnsupportedError('$this does not have a title');
   }
 
   Color color(BuildContext context) {
@@ -43,11 +41,9 @@ extension ThemeBaseExtension on ThemeBase {
       case ThemeBase.space:
         return AppTheme.spaceBackgroundColor;
     }
-
-    throw UnsupportedError('$this does not have a title');
   }
 
-  ThemeData lightTheme(Color color) {
+  ThemeData? lightTheme(Color color) {
     switch (this) {
       case ThemeBase.system:
       case ThemeBase.light:
@@ -57,11 +53,9 @@ extension ThemeBaseExtension on ThemeBase {
       case ThemeBase.space:
         return null;
     }
-
-    throw UnsupportedError('$this does not have a light theme');
   }
 
-  ThemeData darkTheme(Color color) {
+  ThemeData? darkTheme(Color color) {
     switch (this) {
       case ThemeBase.system:
       case ThemeBase.dark:
@@ -73,8 +67,6 @@ extension ThemeBaseExtension on ThemeBase {
       case ThemeBase.light:
         return null;
     }
-
-    throw UnsupportedError('$this does not have a dark theme');
   }
 
   ThemeMode get themeMode {
@@ -88,7 +80,5 @@ extension ThemeBaseExtension on ThemeBase {
       case ThemeBase.space:
         return ThemeMode.dark;
     }
-
-    throw UnsupportedError('$this does not have a theme mode');
   }
 }

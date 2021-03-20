@@ -11,7 +11,5 @@ extension StoriesMenuActionExtension on AccountMenuAction {
       case AccountMenuAction.logOut:
         return 'Log out';
     }
-
-    throw UnsupportedError('$this does not have a title');
   }
 }

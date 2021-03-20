@@ -10,19 +10,20 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share/share.dart';
 
 class ItemBottomSheet extends StatelessWidget {
-  const ItemBottomSheet(this.item, {Key key}) : super(key: key);
+  const ItemBottomSheet(this.item, {Key? key}) : super(key: key);
 
   final Item item;
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<bool> favorited = context.read(favoritedProvider(item.id));
+    final AsyncData<bool>? favorited =
+        context.read(favoritedProvider(item.id)).data;
 
     return SafeArea(
       child: Wrap(
         children: <Widget>[
-          if (favorited.data != null)
-            if (favorited.data.value)
+          if (favorited != null)
+            if (favorited.value)
               ListTile(
                 title: const Text('Unfavorite'),
                 onTap: () {
@@ -53,7 +54,7 @@ class ItemBottomSheet extends StatelessWidget {
             ListTile(
               title: const Text('Share link'),
               onTap: () async {
-                await Share.share(item.url);
+                await Share.share(item.url!);
                 Navigator.of(context).pop();
               },
             ),
@@ -75,7 +76,7 @@ class ItemBottomSheet extends StatelessWidget {
     );
   }
 
-  void _favorite(BuildContext context, {@required bool favorite}) =>
+  void _favorite(BuildContext context, {required bool favorite}) =>
       context.read(authRepositoryProvider).favorite(
             id: item.id,
             favorite: favorite,

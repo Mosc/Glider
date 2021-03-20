@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:glider/repositories/storage_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/service_exception.dart';
@@ -11,12 +10,12 @@ class AuthRepository {
 
   Future<bool> get loggedIn async => _storageRepository.loggedIn;
 
-  Future<String> get username async => _storageRepository.username;
+  Future<String?> get username async => _storageRepository.username;
 
-  Future<String> get password async => _storageRepository.password;
+  Future<String?> get password async => _storageRepository.password;
 
   Future<bool> register(
-      {@required String username, @required String password}) async {
+      {required String username, required String password}) async {
     final bool success = await _websiteRepository.register(
       username: username,
       password: password,
@@ -30,7 +29,7 @@ class AuthRepository {
   }
 
   Future<bool> login(
-      {@required String username, @required String password}) async {
+      {required String username, required String password}) async {
     final bool success = await _websiteRepository.login(
       username: username,
       password: password,
@@ -48,21 +47,28 @@ class AuthRepository {
     await _storageRepository.removeAuth();
   }
 
-  Future<bool> fetchFavorited({Function(int) onUpdate}) async {
-    if (await _storageRepository.loggedIn) {
+  Future<bool> fetchFavorited({void Function(int)? onUpdate}) async {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
       try {
         final List<int> ids = <int>[
           ...await _websiteRepository.getFavorited(
-            username: await _storageRepository.username,
+            username: username,
           ),
           ...await _websiteRepository.getFavorited(
-            username: await _storageRepository.username,
+            username: username,
             comments: true,
           ),
         ];
         await _storageRepository.clearFavorited();
         await _storageRepository.setFavoriteds(ids: ids, favorite: true);
-        ids.forEach(onUpdate?.call);
+
+        if (onUpdate != null) {
+          ids.forEach(onUpdate.call);
+        }
+
         return true;
       } on ServiceException {
         return false;
@@ -72,23 +78,30 @@ class AuthRepository {
     return false;
   }
 
-  Future<bool> fetchUpvoted({Function(int) onUpdate}) async {
-    if (await _storageRepository.loggedIn) {
+  Future<bool> fetchUpvoted({void Function(int)? onUpdate}) async {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
       try {
         final List<int> ids = <int>[
           ...await _websiteRepository.getUpvoted(
-            username: await _storageRepository.username,
-            password: await _storageRepository.password,
+            username: username,
+            password: password,
           ),
           ...await _websiteRepository.getUpvoted(
-            username: await _storageRepository.username,
-            password: await _storageRepository.password,
+            username: username,
+            password: password,
             comments: true,
           ),
         ];
         await _storageRepository.clearUpvoted();
         await _storageRepository.setUpvoteds(ids: ids, up: true);
-        ids.forEach(onUpdate?.call);
+
+        if (onUpdate != null) {
+          ids.forEach(onUpdate.call);
+        }
+
         return true;
       } on ServiceException {
         return false;
@@ -99,14 +112,19 @@ class AuthRepository {
   }
 
   Future<bool> favorite(
-      {@required int id, @required bool favorite, Function() onUpdate}) async {
+      {required int id,
+      required bool favorite,
+      void Function()? onUpdate}) async {
     await _storageRepository.setFavorited(id: id, favorite: favorite);
     onUpdate?.call();
 
-    if (await _storageRepository.loggedIn) {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
       return _websiteRepository.favorite(
-        username: await _storageRepository.username,
-        password: await _storageRepository.password,
+        username: username,
+        password: password,
         id: id,
         favorite: favorite,
       );
@@ -116,15 +134,18 @@ class AuthRepository {
   }
 
   Future<bool> vote(
-      {@required int id, @required bool up, Function() onUpdate}) async {
+      {required int id, required bool up, void Function()? onUpdate}) async {
     final bool oldUp = await _storageRepository.upvoted(id: id);
     await _storageRepository.setUpvoted(id: id, up: up);
     onUpdate?.call();
 
-    if (await _storageRepository.loggedIn) {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
       final bool success = await _websiteRepository.vote(
-        username: await _storageRepository.username,
-        password: await _storageRepository.password,
+        username: username,
+        password: password,
         id: id,
         up: up,
       );
@@ -140,11 +161,14 @@ class AuthRepository {
     return false;
   }
 
-  Future<bool> reply({@required int parentId, @required String text}) async {
-    if (await _storageRepository.loggedIn) {
+  Future<bool> reply({required int parentId, required String text}) async {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
       return _websiteRepository.comment(
-        username: await _storageRepository.username,
-        password: await _storageRepository.password,
+        username: username,
+        password: password,
         parentId: parentId,
         text: text,
       );
@@ -153,11 +177,15 @@ class AuthRepository {
     return false;
   }
 
-  Future<bool> submit({@required String title, String url, String text}) async {
-    if (await _storageRepository.loggedIn) {
+  Future<bool> submit(
+      {required String title, String? url, String? text}) async {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
       return _websiteRepository.submit(
-        username: await _storageRepository.username,
-        password: await _storageRepository.password,
+        username: username,
+        password: password,
         title: title,
         url: url,
         text: text,

@@ -4,7 +4,7 @@ import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/submit/submit_body.dart';
 
 class SubmitPage extends HookWidget {
-  const SubmitPage({Key key}) : super(key: key);
+  const SubmitPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -26,8 +26,6 @@ extension StoryTypeExtension on StoryType {
       case StoryType.showStories:
         return 'Show HN';
     }
-
-    throw UnsupportedError('$this does not have a title');
   }
 
   IconData get icon {
@@ -45,8 +43,6 @@ extension StoryTypeExtension on StoryType {
       case StoryType.showStories:
         return FluentIcons.chat_warning_24_regular;
     }
-
-    throw UnsupportedError('$this does not have an icon');
   }
 
   String get apiPath {
@@ -95,7 +91,5 @@ extension StoryTypeExtension on StoryType {
       case StoryType.showStories:
         return false;
     }
-
-    throw UnsupportedError('$this does not have a searchable property');
   }
 }

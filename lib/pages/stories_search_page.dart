@@ -13,8 +13,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final AutoDisposeStateProvider<String> storySearchQueryStateProvider =
     StateProvider.autoDispose<String>((ProviderReference ref) => '');
 
-final AutoDisposeStateProvider<SearchRange> storySearchRangeStateProvider =
-    StateProvider.autoDispose<SearchRange>((ProviderReference ref) => null);
+final AutoDisposeStateProvider<SearchRange?> storySearchRangeStateProvider =
+    StateProvider.autoDispose<SearchRange?>((ProviderReference ref) => null);
 
 final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
     StateProvider.autoDispose<StoryType>(
@@ -22,10 +22,10 @@ final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
 
 class StoriesSearchPage extends HookWidget {
   const StoriesSearchPage(
-      {Key key, this.initialSearchRange, this.enableSearch = true})
+      {Key? key, this.initialSearchRange, this.enableSearch = true})
       : super(key: key);
 
-  final SearchRange initialSearchRange;
+  final SearchRange? initialSearchRange;
   final bool enableSearch;
 
   @override
@@ -46,7 +46,7 @@ class StoriesSearchPage extends HookWidget {
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> storySearchQueryStateController =
         useProvider(storySearchQueryStateProvider);
-    final StateController<SearchRange> storySearchRangeStateController =
+    final StateController<SearchRange?> storySearchRangeStateController =
         useProvider(storySearchRangeStateProvider);
     final StateController<StoryType> searchStoryTypeStateController =
         useProvider(storySearchTypeStateProvider);
@@ -142,6 +142,7 @@ class StoriesSearchPage extends HookWidget {
               icon: searchStoryTypeStateController.state.icon,
               backgroundColor: theme.colorScheme.primary,
               foregroundColor: theme.colorScheme.onPrimary,
+              useRotationAnimation: false,
               animationSpeed: 100,
             ),
           ),
@@ -151,8 +152,8 @@ class StoriesSearchPage extends HookWidget {
   }
 
   PreferredSizeWidget _buildAppBarBottom(BuildContext context,
-      StateController<SearchRange> storySearchRangeStateController,
-      {double heightFactor}) {
+      StateController<SearchRange?> storySearchRangeStateController,
+      {required double heightFactor}) {
     return PreferredSize(
       preferredSize: Size.fromHeight(kToolbarHeight * heightFactor),
       child: ClipRect(
@@ -181,21 +182,21 @@ class StoriesSearchPage extends HookWidget {
 }
 
 class _SearchRangeChip extends HookWidget {
-  const _SearchRangeChip({Key key, @required this.searchRange})
+  const _SearchRangeChip({Key? key, required this.searchRange})
       : super(key: key);
 
   final SearchRange searchRange;
 
   @override
   Widget build(BuildContext context) {
-    final StateController<SearchRange> storySearchRangeStateController =
+    final StateController<SearchRange?> storySearchRangeStateController =
         useProvider(storySearchRangeStateProvider);
 
     return ChoiceChip(
       label: Text(searchRange.title(context)),
       selected: storySearchRangeStateController.state == searchRange,
       onSelected: (bool selected) async {
-        final StateController<DateTimeRange>
+        final StateController<DateTimeRange?>
             customDateTimeRangeStateController =
             context.read(customDateTimeRangeStateProvider)..state = null;
 
