@@ -140,7 +140,9 @@ class ItemTileMetadata extends HookWidget {
       condition: dense,
       child: MetadataItem(
         icon: FluentIcons.add_circle_24_regular,
-        text: item.id != root?.id ? item.kids.length.toString() : null,
+        text: item.kids.isNotEmpty && item.id != root?.id
+            ? item.kids.length.toString()
+            : null,
       ),
     );
   }
