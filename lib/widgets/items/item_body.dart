@@ -76,7 +76,7 @@ class ItemBody extends HookWidget {
       child: ItemTile(
         id: item.id,
         ancestors: item.ancestors,
-        root: items.first.parent != null ? null : items.first,
+        root: items.first,
         onTap: (BuildContext context) {
           final ScrollableState? scrollableState = Scrollable.of(context);
           final RenderObject? renderObject = context.findRenderObject();
