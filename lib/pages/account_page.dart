@@ -24,7 +24,7 @@ class AccountPage extends HookWidget {
           SliverAppBar(
             leading: AppBarUtil.buildFluentIconsLeading(context),
             title: const Text('Account'),
-            actions: loggedIn.data?.value == true
+            actions: loggedIn.data?.value ?? false
                 ? <Widget>[
                     PopupMenuButton<AccountMenuAction>(
                       itemBuilder: (_) => <PopupMenuEntry<AccountMenuAction>>[

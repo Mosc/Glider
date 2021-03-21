@@ -71,7 +71,7 @@ class ReplyBody extends HookWidget {
                         onPressed: loadingState.value
                             ? null
                             : () async {
-                                if (formKey.currentState?.validate() == true) {
+                                if (formKey.currentState?.validate() ?? false) {
                                   loadingState.value = true;
                                   await _reply(context,
                                       text: commentController.text);

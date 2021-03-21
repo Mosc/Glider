@@ -252,16 +252,17 @@ class ItemTileData extends HookWidget {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final bool? success = await Navigator.of(context).push<bool>(
-        MaterialPageRoute<bool>(
-          builder: (_) => ReplyPage(parent: item, root: root),
-          fullscreenDialog: true,
-        ),
-      );
+      final bool success = await Navigator.of(context).push<bool>(
+            MaterialPageRoute<bool>(
+              builder: (_) => ReplyPage(parent: item, root: root),
+              fullscreenDialog: true,
+            ),
+          ) ??
+          false;
 
       final int? rootId = root?.id;
 
-      if (success == true && rootId != null) {
+      if (success && rootId != null) {
         context.refresh(itemTreeStreamProvider(rootId));
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(

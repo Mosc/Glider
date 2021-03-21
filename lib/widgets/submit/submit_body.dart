@@ -140,7 +140,7 @@ class SubmitBody extends HookWidget {
                         onPressed: loadingState.value
                             ? null
                             : () async {
-                                if (formKey.currentState?.validate() == true) {
+                                if (formKey.currentState?.validate() ?? false) {
                                   loadingState.value = true;
                                   await _submit(
                                     context,
@@ -239,11 +239,11 @@ class SubmitBody extends HookWidget {
         type: ItemType.story,
         by: username,
         time: DateTime.now().secondsSinceEpoch,
-        text: text?.isNotEmpty == true
+        text: text?.isNotEmpty ?? true
             ? FormattingUtil.convertHackerNewsToHtml(text!)
             : null,
         url: url != null && _isUrl(url) ? url : null,
-        title: title?.isNotEmpty == true ? title : null,
+        title: title?.isNotEmpty ?? true ? title : null,
         score: 1,
         descendants: 0,
       );

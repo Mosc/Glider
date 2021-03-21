@@ -30,7 +30,7 @@ class ItemTileContentPollOption extends HookWidget {
             orElse: () => false,
           ),
           onChanged:
-              interactive ? (bool? up) => vote(context, up: up == true) : null,
+              interactive ? (bool? up) => vote(context, up: up ?? false) : null,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         if (item.text != null)

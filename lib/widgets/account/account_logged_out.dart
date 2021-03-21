@@ -75,7 +75,7 @@ class AccountLoggedOut extends HookWidget {
                     onPressed: loadingState.value
                         ? null
                         : () async {
-                            if (formKey.currentState?.validate() == true) {
+                            if (formKey.currentState?.validate() ?? false) {
                               loadingState.value = true;
                               await _register(
                                 context,
@@ -92,7 +92,7 @@ class AccountLoggedOut extends HookWidget {
                     onPressed: loadingState.value
                         ? null
                         : () async {
-                            if (formKey.currentState?.validate() == true) {
+                            if (formKey.currentState?.validate() ?? false) {
                               loadingState.value = true;
                               await _login(
                                 context,

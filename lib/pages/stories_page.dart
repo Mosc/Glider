@@ -161,14 +161,15 @@ class StoriesPage extends HookWidget {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final bool? success = await Navigator.of(context).push<bool>(
-        MaterialPageRoute<bool>(
-          builder: (_) => const SubmitPage(),
-          fullscreenDialog: true,
-        ),
-      );
+      final bool success = await Navigator.of(context).push<bool>(
+            MaterialPageRoute<bool>(
+              builder: (_) => const SubmitPage(),
+              fullscreenDialog: true,
+            ),
+          ) ??
+          false;
 
-      if (success == true) {
+      if (success) {
         await context.refresh(storyIdsProvider(StoryType.newStories));
         context.read(storyTypeStateProvider).state = StoryType.newStories;
         ScaffoldMessenger.of(context).showSnackBarQuickly(

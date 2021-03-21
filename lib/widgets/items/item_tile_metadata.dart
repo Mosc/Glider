@@ -63,9 +63,9 @@ class ItemTileMetadata extends HookWidget {
                 text: item.descendants.toString(),
               ),
             ),
-          if (item.dead == true)
+          if (item.dead ?? false)
             const MetadataItem(icon: FluentIcons.flag_24_regular),
-          if (item.deleted == true) ...<Widget>[
+          if (item.deleted ?? false) ...<Widget>[
             const MetadataItem(icon: FluentIcons.delete_24_regular),
             Text(
               '[deleted]',
