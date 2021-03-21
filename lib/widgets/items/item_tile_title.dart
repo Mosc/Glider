@@ -17,10 +17,13 @@ class ItemTileTitle extends HookWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: 'item_title_${item.id}',
-      child: SmoothAnimatedCrossFade(
-        condition: dense,
-        trueChild: _buildTitleText(context, dense: true),
-        falseChild: _buildTitleText(context, dense: false),
+      child: Material(
+        type: MaterialType.transparency,
+        child: SmoothAnimatedCrossFade(
+          condition: dense,
+          trueChild: _buildTitleText(context, dense: true),
+          falseChild: _buildTitleText(context, dense: false),
+        ),
       ),
     );
   }
