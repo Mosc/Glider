@@ -20,23 +20,42 @@ class RefreshableBody<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EdgeInsets padding = MediaQuery.of(context).padding;
     return RefreshIndicator(
       onRefresh: onRefresh ?? () async => context.refresh(provider),
       child: CustomScrollView(
-        slivers: <Widget>[
-          ...useProvider(provider).when(
-            loading: () => <Widget>[
-              loadingBuilder(),
-            ],
-            error: (_, __) => <Widget>[
-              const SliverFillRemaining(child: Error()),
-            ],
-            data: (T data) => <Widget>[
-              ...dataBuilder(data),
-              const SliverToBoxAdapter(child: End()),
-            ],
-          ),
-        ],
+        slivers: useProvider(provider)
+            .when(
+              loading: () => <Widget>[
+                loadingBuilder(),
+                _buildSliverEnd(padding),
+              ],
+              error: (_, __) => <Widget>[
+                const SliverFillRemaining(
+                  child: Error(),
+                ),
+              ],
+              data: (T data) => <Widget>[
+                ...dataBuilder(data),
+                _buildSliverEnd(padding),
+              ],
+            )
+            .map(
+              (Widget sliver) => SliverPadding(
+                padding: padding.copyWith(top: 0, bottom: 0),
+                sliver: sliver,
+              ),
+            )
+            .toList(growable: false),
+      ),
+    );
+  }
+
+  Widget _buildSliverEnd(EdgeInsets padding) {
+    return SliverPadding(
+      padding: padding.copyWith(top: 0),
+      sliver: const SliverToBoxAdapter(
+        child: End(),
       ),
     );
   }

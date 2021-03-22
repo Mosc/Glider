@@ -43,142 +43,140 @@ class SubmitBody extends HookWidget {
     String? text() =>
         submitTypeState.value == SubmitType.text ? textListenable.text : null;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Experimental(),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Select the type of content to submit.',
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                  Wrap(
-                    children: <Widget>[
-                      for (SubmitType submitType in SubmitType.values)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Radio<SubmitType>(
-                              value: submitType,
-                              groupValue: submitTypeState.value,
-                              onChanged: loadingState.value
-                                  ? null
-                                  : (_) => submitTypeState.value = submitType,
-                            ),
-                            GestureDetector(
-                              onTap: loadingState.value
-                                  ? null
-                                  : () => submitTypeState.value = submitType,
-                              child: Text(submitType.title),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
+    return ListView(
+      padding: MediaQuery.of(context).padding.copyWith(top: 0),
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Experimental(),
+                const SizedBox(height: 16),
+                Text(
+                  'Select the type of content to submit.',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                Wrap(
+                  children: <Widget>[
+                    for (SubmitType submitType in SubmitType.values)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Radio<SubmitType>(
+                            value: submitType,
+                            groupValue: submitTypeState.value,
+                            onChanged: loadingState.value
+                                ? null
+                                : (_) => submitTypeState.value = submitType,
+                          ),
+                          GestureDetector(
+                            onTap: loadingState.value
+                                ? null
+                                : () => submitTypeState.value = submitType,
+                            child: Text(submitType.title),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+                TextFormField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: 'Title'),
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.words,
+                  autofocus: true,
+                  maxLines: null,
+                  maxLength: _maxTitleLength,
+                  maxLengthEnforcement: MaxLengthEnforcement.none,
+                  validator: (String? value) =>
+                      Validators.notEmpty(value) ??
+                      Validators.maxLength(value, _maxTitleLength),
+                  enabled: !loadingState.value,
+                ),
+                if (submitTypeState.value == SubmitType.url)
                   TextFormField(
-                    controller: titleController,
-                    decoration: const InputDecoration(labelText: 'Title'),
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    autofocus: true,
+                    controller: urlController,
+                    decoration: const InputDecoration(labelText: 'URL'),
+                    keyboardType: TextInputType.url,
                     maxLines: null,
-                    maxLength: _maxTitleLength,
-                    maxLengthEnforcement: MaxLengthEnforcement.none,
                     validator: (String? value) =>
-                        Validators.notEmpty(value) ??
-                        Validators.maxLength(value, _maxTitleLength),
+                        Validators.notEmpty(value) ?? Validators.url(value),
                     enabled: !loadingState.value,
                   ),
-                  if (submitTypeState.value == SubmitType.url)
-                    TextFormField(
-                      controller: urlController,
-                      decoration: const InputDecoration(labelText: 'URL'),
-                      keyboardType: TextInputType.url,
-                      maxLines: null,
-                      validator: (String? value) =>
-                          Validators.notEmpty(value) ?? Validators.url(value),
-                      enabled: !loadingState.value,
-                    ),
-                  if (submitTypeState.value == SubmitType.text)
-                    TextFormField(
-                      controller: textController,
-                      decoration: const InputDecoration(labelText: 'Text'),
-                      keyboardType: TextInputType.multiline,
-                      textCapitalization: TextCapitalization.sentences,
-                      maxLines: null,
-                      validator: Validators.notEmpty,
-                      enabled: !loadingState.value,
-                    ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      if (submitTypeState.value == SubmitType.url) ...<Widget>[
-                        OutlinedButton(
-                          onPressed: loadingState.value
-                              ? null
-                              : _isUrl(urlController.text)
-                                  ? () => _autofillTitle(
-                                        context,
-                                        titleController,
-                                        url: urlController.text,
-                                      )
-                                  : null,
-                          child: const Text('Autofill title'),
-                        ),
-                        const SizedBox(width: 16),
-                      ],
-                      ElevatedButton(
+                if (submitTypeState.value == SubmitType.text)
+                  TextFormField(
+                    controller: textController,
+                    decoration: const InputDecoration(labelText: 'Text'),
+                    keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLines: null,
+                    validator: Validators.notEmpty,
+                    enabled: !loadingState.value,
+                  ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    if (submitTypeState.value == SubmitType.url) ...<Widget>[
+                      OutlinedButton(
                         onPressed: loadingState.value
                             ? null
-                            : () async {
-                                if (formKey.currentState?.validate() ?? false) {
-                                  loadingState.value = true;
-                                  await _submit(
-                                    context,
-                                    title: titleListenable.text,
-                                    url: url(),
-                                    text: text(),
-                                  );
-                                  loadingState.value = false;
-                                }
-                              },
-                        child: const Text('Submit'),
+                            : _isUrl(urlController.text)
+                                ? () => _autofillTitle(
+                                      context,
+                                      titleController,
+                                      url: urlController.text,
+                                    )
+                                : null,
+                        child: const Text('Autofill title'),
                       ),
+                      const SizedBox(width: 16),
                     ],
-                  ),
-                ],
-              ),
+                    ElevatedButton(
+                      onPressed: loadingState.value
+                          ? null
+                          : () async {
+                              if (formKey.currentState?.validate() ?? false) {
+                                loadingState.value = true;
+                                await _submit(
+                                  context,
+                                  title: titleListenable.text,
+                                  url: url(),
+                                  text: text(),
+                                );
+                                loadingState.value = false;
+                              }
+                            },
+                      child: const Text('Submit'),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Preview',
-              style: Theme.of(context).textTheme.subtitle1,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'Preview',
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+        if (username != null)
+          ItemTileData(
+            _buildItem(
+              id: useProvider(previewIdStateProvider).state,
+              username: username,
+              title: titleListenable.text,
+              url: url(),
+              text: text(),
             ),
           ),
-          if (username != null)
-            ItemTileData(
-              _buildItem(
-                id: useProvider(previewIdStateProvider).state,
-                username: username,
-                title: titleListenable.text,
-                url: url(),
-                text: text(),
-              ),
-            ),
-          const SizedBox(height: 16),
-        ],
-      ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 

@@ -31,86 +31,83 @@ class ReplyBody extends HookWidget {
         useValueListenable(commentController);
     final String? username = useProvider(usernameProvider).data?.value;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Experimental(),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: commentController,
-                    decoration: const InputDecoration(labelText: 'Comment'),
-                    keyboardType: TextInputType.multiline,
-                    textCapitalization: TextCapitalization.sentences,
-                    autofocus: true,
-                    maxLines: null,
-                    validator: Validators.notEmpty,
-                    enabled: !loadingState.value,
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      if (parent.text != null) ...<Widget>[
-                        OutlinedButton(
-                          onPressed: loadingState.value
-                              ? null
-                              : () => _quoteParent(commentController),
-                          child: const Text('Insert parent quote'),
-                        ),
-                        const SizedBox(width: 16),
-                      ],
-                      ElevatedButton(
+    return ListView(
+      padding: MediaQuery.of(context).padding.copyWith(top: 0),
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Experimental(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: commentController,
+                  decoration: const InputDecoration(labelText: 'Comment'),
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
+                  autofocus: true,
+                  maxLines: null,
+                  validator: Validators.notEmpty,
+                  enabled: !loadingState.value,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    if (parent.text != null) ...<Widget>[
+                      OutlinedButton(
                         onPressed: loadingState.value
                             ? null
-                            : () async {
-                                if (formKey.currentState?.validate() ?? false) {
-                                  loadingState.value = true;
-                                  await _reply(context,
-                                      text: commentController.text);
-                                  loadingState.value = false;
-                                }
-                              },
-                        child: const Text('Reply'),
+                            : () => _quoteParent(commentController),
+                        child: const Text('Insert parent quote'),
                       ),
+                      const SizedBox(width: 16),
                     ],
-                  ),
-                ],
-              ),
+                    ElevatedButton(
+                      onPressed: loadingState.value
+                          ? null
+                          : () async {
+                              if (formKey.currentState?.validate() ?? false) {
+                                loadingState.value = true;
+                                await _reply(context,
+                                    text: commentController.text);
+                                loadingState.value = false;
+                              }
+                            },
+                      child: const Text('Reply'),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Preview',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'Preview',
+            style: Theme.of(context).textTheme.subtitle1,
           ),
+        ),
+        ItemTileData(
+          parent.copyWith(kids: <int>[], ancestors: <int>[]),
+          onTap: () => parentCollapsedState.value = !parentCollapsedState.value,
+          dense: parentCollapsedState.value,
+          interactive: true,
+        ),
+        if (username != null)
           ItemTileData(
-            parent.copyWith(kids: <int>[], ancestors: <int>[]),
-            onTap: () =>
-                parentCollapsedState.value = !parentCollapsedState.value,
-            dense: parentCollapsedState.value,
-            interactive: true,
-          ),
-          if (username != null)
-            ItemTileData(
-              _buildItem(
-                id: useProvider(previewIdStateProvider).state,
-                username: username,
-                text: commentListenable.text,
-              ),
+            _buildItem(
+              id: useProvider(previewIdStateProvider).state,
+              username: username,
+              text: commentListenable.text,
             ),
-          const SizedBox(height: 16),
-        ],
-      ),
+          ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 
