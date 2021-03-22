@@ -237,11 +237,11 @@ class SubmitBody extends HookWidget {
         type: ItemType.story,
         by: username,
         time: DateTime.now().secondsSinceEpoch,
-        text: text?.isNotEmpty ?? true
+        text: text?.isNotEmpty ?? false
             ? FormattingUtil.convertHackerNewsToHtml(text!)
             : null,
         url: url != null && _isUrl(url) ? url : null,
-        title: title?.isNotEmpty ?? true ? title : null,
+        title: title?.isNotEmpty ?? false ? title : null,
         score: 1,
         descendants: 0,
       );
