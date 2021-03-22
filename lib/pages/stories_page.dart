@@ -13,9 +13,9 @@ import 'package:glider/pages/submit_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
-import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/uni_links_handler.dart';
+import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_body.dart';
 import 'package:glider/widgets/theme/theme_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -54,47 +54,38 @@ class StoriesPage extends HookWidget {
     final ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      body: NestedScrollView(
+      body: FloatingAppBarScrollView(
         controller: scrollController,
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
-          SliverAppBar(
-            leading: AppBarUtil.buildFluentIconsLeading(context),
-            title: const Text('Glider'),
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(FluentIcons.search_24_filled),
-                tooltip: 'Search',
-                onPressed: () => _searchSelected(context),
-              ),
-              PopupMenuButton<StoriesMenuAction>(
-                itemBuilder: (_) => <PopupMenuEntry<StoriesMenuAction>>[
-                  for (StoriesMenuAction menuAction in StoriesMenuAction.values)
-                    PopupMenuItem<StoriesMenuAction>(
-                      value: menuAction,
-                      child: Text(menuAction.title),
-                    ),
-                ],
-                onSelected: (StoriesMenuAction menuAction) async {
-                  switch (menuAction) {
-                    case StoriesMenuAction.catchUp:
-                      return _catchUpSelected(context);
-                    case StoriesMenuAction.favorites:
-                      return _favoritesSelected(context);
-                    case StoriesMenuAction.submit:
-                      return _submitSelected(context);
-                    case StoriesMenuAction.theme:
-                      return _themeSelected(context);
-                    case StoriesMenuAction.account:
-                      return _accountSelected(context);
-                  }
-                },
-                icon: const Icon(FluentIcons.more_vertical_24_filled),
-              ),
+        title: const Text('Glider'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(FluentIcons.search_24_filled),
+            tooltip: 'Search',
+            onPressed: () => _searchSelected(context),
+          ),
+          PopupMenuButton<StoriesMenuAction>(
+            itemBuilder: (_) => <PopupMenuEntry<StoriesMenuAction>>[
+              for (StoriesMenuAction menuAction in StoriesMenuAction.values)
+                PopupMenuItem<StoriesMenuAction>(
+                  value: menuAction,
+                  child: Text(menuAction.title),
+                ),
             ],
-            forceElevated: innerBoxIsScrolled,
-            floating: true,
-            backwardsCompatibility: false,
+            onSelected: (StoriesMenuAction menuAction) async {
+              switch (menuAction) {
+                case StoriesMenuAction.catchUp:
+                  return _catchUpSelected(context);
+                case StoriesMenuAction.favorites:
+                  return _favoritesSelected(context);
+                case StoriesMenuAction.submit:
+                  return _submitSelected(context);
+                case StoriesMenuAction.theme:
+                  return _themeSelected(context);
+                case StoriesMenuAction.account:
+                  return _accountSelected(context);
+              }
+            },
+            icon: const Icon(FluentIcons.more_vertical_24_filled),
           ),
         ],
         body: const StoriesBody(),

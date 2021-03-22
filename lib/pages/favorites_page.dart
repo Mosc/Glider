@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:glider/utils/app_bar_util.dart';
+import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/favorites/favorites_body.dart';
 
 class FavoritesPage extends HookWidget {
@@ -8,19 +8,10 @@ class FavoritesPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
-          SliverAppBar(
-            leading: AppBarUtil.buildFluentIconsLeading(context),
-            title: const Text('Favorites'),
-            forceElevated: innerBoxIsScrolled,
-            floating: true,
-            backwardsCompatibility: false,
-          ),
-        ],
-        body: const FavoritesBody(),
+    return const Scaffold(
+      body: FloatingAppBarScrollView(
+        title: Text('Favorites'),
+        body: FavoritesBody(),
       ),
     );
   }

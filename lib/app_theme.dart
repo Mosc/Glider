@@ -58,6 +58,7 @@ class AppTheme {
           color: brightness == Brightness.dark ? Colors.white : onColor,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        backwardsCompatibility: false,
       ),
       toggleableActiveColor: color,
       chipTheme: ChipThemeData.fromDefaults(

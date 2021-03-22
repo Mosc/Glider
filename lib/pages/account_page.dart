@@ -4,8 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/account_menu_action.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
-import 'package:glider/utils/app_bar_util.dart';
 import 'package:glider/widgets/account/account_body.dart';
+import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/synchronize/synchronize_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
@@ -18,40 +18,31 @@ class AccountPage extends HookWidget {
     final AsyncValue<bool> loggedIn = useProvider(loggedInProvider);
 
     return Scaffold(
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
-          SliverAppBar(
-            leading: AppBarUtil.buildFluentIconsLeading(context),
-            title: const Text('Account'),
-            actions: loggedIn.data?.value ?? false
-                ? <Widget>[
-                    PopupMenuButton<AccountMenuAction>(
-                      itemBuilder: (_) => <PopupMenuEntry<AccountMenuAction>>[
-                        for (AccountMenuAction menuAction
-                            in AccountMenuAction.values)
-                          PopupMenuItem<AccountMenuAction>(
-                            value: menuAction,
-                            child: Text(menuAction.title),
-                          ),
-                      ],
-                      onSelected: (AccountMenuAction menuAction) async {
-                        switch (menuAction) {
-                          case AccountMenuAction.synchronize:
-                            return _synchronizeSelected(context);
-                          case AccountMenuAction.logOut:
-                            return _logOutSelected(context);
-                        }
-                      },
-                      icon: const Icon(FluentIcons.more_vertical_24_filled),
-                    ),
-                  ]
-                : null,
-            forceElevated: innerBoxIsScrolled,
-            floating: true,
-            backwardsCompatibility: false,
-          ),
-        ],
+      body: FloatingAppBarScrollView(
+        title: const Text('Account'),
+        actions: loggedIn.data?.value ?? false
+            ? <Widget>[
+                PopupMenuButton<AccountMenuAction>(
+                  itemBuilder: (_) => <PopupMenuEntry<AccountMenuAction>>[
+                    for (AccountMenuAction menuAction
+                        in AccountMenuAction.values)
+                      PopupMenuItem<AccountMenuAction>(
+                        value: menuAction,
+                        child: Text(menuAction.title),
+                      ),
+                  ],
+                  onSelected: (AccountMenuAction menuAction) async {
+                    switch (menuAction) {
+                      case AccountMenuAction.synchronize:
+                        return _synchronizeSelected(context);
+                      case AccountMenuAction.logOut:
+                        return _logOutSelected(context);
+                    }
+                  },
+                  icon: const Icon(FluentIcons.more_vertical_24_filled),
+                ),
+              ]
+            : null,
         body: const AccountBody(),
       ),
     );

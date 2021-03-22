@@ -6,7 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/models/story_type.dart';
-import 'package:glider/utils/app_bar_util.dart';
+import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -83,44 +83,34 @@ class StoriesSearchPage extends HookWidget {
             theme.inputDecorationTheme.copyWith(border: InputBorder.none),
       ),
       child: Scaffold(
-        body: NestedScrollView(
+        body: FloatingAppBarScrollView(
           controller: scrollController,
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
-            SliverAppBar(
-              leading: AppBarUtil.buildFluentIconsLeading(context),
-              title: enableSearch
-                  ? TextField(
-                      controller: queryController,
-                      decoration: const InputDecoration(hintText: 'Search...'),
-                      textInputAction: TextInputAction.search,
-                      autofocus: true,
-                      onChanged: (String value) =>
-                          storySearchQueryStateController.state = value,
-                    )
-                  : const Text('Catch up'),
-              actions: <Widget>[
-                if (storySearchQueryStateController.state.isNotEmpty)
-                  IconButton(
-                    icon: const Icon(FluentIcons.dismiss_24_filled),
-                    tooltip:
-                        MaterialLocalizations.of(context).closeButtonTooltip,
-                    onPressed: () {
-                      queryController.clear();
-                      storySearchQueryStateController.state = '';
-                    },
-                  )
-              ],
-              bottom: _buildAppBarBottom(
-                context,
-                storySearchRangeStateController,
-                heightFactor: bottomHeightFactor,
+          title: enableSearch
+              ? TextField(
+                  controller: queryController,
+                  decoration: const InputDecoration(hintText: 'Search...'),
+                  textInputAction: TextInputAction.search,
+                  autofocus: true,
+                  onChanged: (String value) =>
+                      storySearchQueryStateController.state = value,
+                )
+              : const Text('Catch up'),
+          actions: <Widget>[
+            if (storySearchQueryStateController.state.isNotEmpty)
+              IconButton(
+                icon: const Icon(FluentIcons.dismiss_24_filled),
+                tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                onPressed: () {
+                  queryController.clear();
+                  storySearchQueryStateController.state = '';
+                },
               ),
-              forceElevated: innerBoxIsScrolled,
-              floating: true,
-              backwardsCompatibility: false,
-            ),
           ],
+          bottom: _buildAppBarBottom(
+            context,
+            storySearchRangeStateController,
+            heightFactor: bottomHeightFactor,
+          ),
           body: const StoriesSearchBody(),
         ),
         floatingActionButton: Hero(
