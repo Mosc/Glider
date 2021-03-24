@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/user_page.dart';
-import 'package:uni_links/uni_links.dart';
+import 'package:uni_links2/uni_links.dart';
 
 class UniLinksHandler {
   UniLinksHandler._();
@@ -12,14 +13,16 @@ class UniLinksHandler {
   static late StreamSubscription<Uri?> uriSubscription;
 
   static Future<void> init(BuildContext context) async {
-    try {
-      uriSubscription = uriLinkStream.listen(
-        (Uri? uri) => _handleUri(context, uri),
-      );
+    if (!kIsWeb) {
+      try {
+        uriSubscription = uriLinkStream.listen(
+          (Uri? uri) => _handleUri(context, uri),
+        );
 
-      _handleUri(context, await getInitialUri());
-    } on MissingPluginException {
-      // Fail silently.
+        _handleUri(context, await getInitialUri());
+      } on MissingPluginException {
+        // Fail silently.
+      }
     }
   }
 

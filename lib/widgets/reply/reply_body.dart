@@ -170,7 +170,7 @@ class ReplyBody extends HookWidget {
         type: ItemType.comment,
         by: username,
         time: DateTime.now().secondsSinceEpoch,
-        text: text != null && text.isNotEmpty == true
+        text: text != null && text.isNotEmpty
             ? FormattingUtil.convertHackerNewsToHtml(text)
             : null,
         ancestors: <int>[parent.id],

@@ -79,7 +79,7 @@ class ItemTileMetadata extends HookWidget {
             _buildUsername(context, textTheme, by: item.by!),
             const SizedBox(width: 8),
           ],
-          if (item.hasOriginalYear == true)
+          if (item.hasOriginalYear)
             MetadataItem(
               icon: FluentIcons.shifts_activity_24_regular,
               text: 'from ${item.originalYear}',

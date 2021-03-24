@@ -34,49 +34,14 @@ class ItemTileTitle extends HookWidget {
     return Text.rich(
       TextSpan(
         children: <InlineSpan>[
-          if (item.type == ItemType.job) ...<InlineSpan>[
-            WidgetSpan(
-              alignment: PlaceholderAlignment.aboveBaseline,
-              baseline: TextBaseline.ideographic,
-              child: Icon(
-                FluentIcons.briefcase_24_regular,
-                size: textTheme.subtitle1?.scaledFontSize(context),
-              ),
-            ),
-            TextSpan(text: ' ', style: textTheme.subtitle1),
-          ] else if (item.type == ItemType.poll) ...<InlineSpan>[
-            WidgetSpan(
-              alignment: PlaceholderAlignment.aboveBaseline,
-              baseline: TextBaseline.ideographic,
-              child: Icon(
-                FluentIcons.poll_24_regular,
-                size: textTheme.subtitle1?.scaledFontSize(context),
-              ),
-            ),
-            TextSpan(text: ' ', style: textTheme.subtitle1),
-          ],
-          if (item.hasVideo == true) ...<InlineSpan>[
-            WidgetSpan(
-              alignment: PlaceholderAlignment.aboveBaseline,
-              baseline: TextBaseline.ideographic,
-              child: Icon(
-                FluentIcons.video_clip_24_regular,
-                size: textTheme.subtitle1?.scaledFontSize(context),
-              ),
-            ),
-            TextSpan(text: ' ', style: textTheme.subtitle1),
-          ],
-          if (item.hasPdf == true) ...<InlineSpan>[
-            WidgetSpan(
-              alignment: PlaceholderAlignment.aboveBaseline,
-              baseline: TextBaseline.ideographic,
-              child: Icon(
-                FluentIcons.document_24_regular,
-                size: textTheme.subtitle1?.scaledFontSize(context),
-              ),
-            ),
-            TextSpan(text: ' ', style: textTheme.subtitle1),
-          ],
+          if (item.type == ItemType.job)
+            ..._buildIconSpans(context, FluentIcons.briefcase_24_regular)
+          else if (item.type == ItemType.poll)
+            ..._buildIconSpans(context, FluentIcons.poll_24_regular),
+          if (item.hasVideo)
+            ..._buildIconSpans(context, FluentIcons.video_clip_24_regular),
+          if (item.hasPdf)
+            ..._buildIconSpans(context, FluentIcons.document_24_regular),
           TextSpan(
             text: item.taglessTitle,
             style: textTheme.subtitle1,
@@ -94,5 +59,21 @@ class ItemTileTitle extends HookWidget {
       maxLines: dense ? 2 : null,
       overflow: dense ? TextOverflow.ellipsis : null,
     );
+  }
+
+  Iterable<InlineSpan> _buildIconSpans(BuildContext context, IconData icon) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    return <InlineSpan>[
+      WidgetSpan(
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.ideographic,
+        child: Icon(
+          icon,
+          size: textTheme.subtitle1?.scaledFontSize(context),
+        ),
+      ),
+      TextSpan(text: ' ', style: textTheme.subtitle1),
+    ];
   }
 }

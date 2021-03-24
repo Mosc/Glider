@@ -77,7 +77,7 @@ class SynchronizeDialog extends HookWidget {
           onUpdate: (int id) => context.refresh(upvotedProvider(id)),
         );
 
-    if (success == true) {
+    if (success) {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
         const SnackBar(
           content: Text('Favorites and upvotes have been synchronized'),
