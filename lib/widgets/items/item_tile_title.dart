@@ -66,7 +66,7 @@ class ItemTileTitle extends HookWidget {
 
     return <InlineSpan>[
       WidgetSpan(
-        alignment: PlaceholderAlignment.aboveBaseline,
+        alignment: PlaceholderAlignment.baseline,
         baseline: TextBaseline.ideographic,
         child: Icon(
           icon,
