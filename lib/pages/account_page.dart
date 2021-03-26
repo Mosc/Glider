@@ -39,7 +39,7 @@ class AccountPage extends HookWidget {
                         return _logOutSelected(context);
                     }
                   },
-                  icon: const Icon(FluentIcons.more_vertical_24_filled),
+                  icon: const Icon(FluentIcons.more_vertical_24_regular),
                 ),
               ]
             : null,

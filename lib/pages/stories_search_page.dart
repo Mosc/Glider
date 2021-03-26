@@ -98,7 +98,7 @@ class StoriesSearchPage extends HookWidget {
           actions: <Widget>[
             if (storySearchQueryStateController.state.isNotEmpty)
               IconButton(
-                icon: const Icon(FluentIcons.dismiss_24_filled),
+                icon: const Icon(FluentIcons.dismiss_24_regular),
                 tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 onPressed: () {
                   queryController.clear();

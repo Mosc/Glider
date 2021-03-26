@@ -59,7 +59,7 @@ class StoriesPage extends HookWidget {
         title: const Text('Glider'),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(FluentIcons.search_24_filled),
+            icon: const Icon(FluentIcons.search_24_regular),
             tooltip: 'Search',
             onPressed: () => _searchSelected(context),
           ),
@@ -85,7 +85,7 @@ class StoriesPage extends HookWidget {
                   return _accountSelected(context);
               }
             },
-            icon: const Icon(FluentIcons.more_vertical_24_filled),
+            icon: const Icon(FluentIcons.more_vertical_24_regular),
           ),
         ],
         body: const StoriesBody(),

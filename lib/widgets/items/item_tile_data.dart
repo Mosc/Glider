@@ -89,20 +89,26 @@ class ItemTileData extends HookWidget {
       startToEndAction: canVote && delayedUpvotedController.state != null
           ? delayedUpvotedController.state != true
               ? SlidableAction(
-                  action: () => vote(up: true),
-                  icon: FluentIcons.arrow_up_24_filled,
+                  action: () async {
+                    await vote(up: true);
+                  },
+                  icon: FluentIcons.arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.primary,
                   iconColor: Theme.of(context).colorScheme.onPrimary,
                 )
               : SlidableAction(
-                  action: () => vote(up: false),
-                  icon: FluentIcons.arrow_undo_24_filled,
+                  action: () async {
+                    await vote(up: false);
+                  },
+                  icon: FluentIcons.arrow_undo_24_regular,
                 )
           : null,
       endToStartAction: dense
           ? item.url != null
               ? SlidableAction(
-                  action: () => UrlUtil.tryLaunch(item.url!),
+                  action: () async {
+                    await UrlUtil.tryLaunch(item.url!);
+                  },
                   icon: FluentIcons.window_arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.surface,
                   iconColor: Theme.of(context).colorScheme.onSurface,
@@ -110,8 +116,10 @@ class ItemTileData extends HookWidget {
               : null
           : canReply
               ? SlidableAction(
-                  action: () => _reply(context),
-                  icon: FluentIcons.arrow_reply_24_filled,
+                  action: () async {
+                    await _reply(context);
+                  },
+                  icon: FluentIcons.arrow_reply_24_regular,
                   color: Theme.of(context).colorScheme.surface,
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )
@@ -185,22 +193,21 @@ class ItemTileData extends HookWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: item.type == ItemType.pollopt
-          ? ItemTileContentPollOption(
-              item,
-              root: root,
-              interactive: interactive,
-              vote: _vote,
-            )
-          : ItemTileContent(
-              item,
-              root: root,
-              dense: dense,
-              interactive: interactive,
-            ),
-    );
+    if (item.type == ItemType.pollopt) {
+      return ItemTileContentPollOption(
+        item,
+        root: root,
+        interactive: interactive,
+        vote: _vote,
+      );
+    } else {
+      return ItemTileContent(
+        item,
+        root: root,
+        dense: dense,
+        interactive: interactive,
+      );
+    }
   }
 
   Future<void> _buildModalBottomSheet(BuildContext context) async {

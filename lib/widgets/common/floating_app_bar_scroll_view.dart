@@ -46,13 +46,13 @@ class FloatingAppBarScrollView extends StatelessWidget {
     if (canPop) {
       if (useCloseButton) {
         return IconButton(
-          icon: const Icon(FluentIcons.dismiss_24_filled),
+          icon: const Icon(FluentIcons.dismiss_24_regular),
           tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
           onPressed: () => Navigator.of(context).maybePop(),
         );
       } else {
         return IconButton(
-          icon: const Icon(FluentIcons.arrow_left_24_filled),
+          icon: const Icon(FluentIcons.arrow_left_24_regular),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () => Navigator.of(context).maybePop(),
         );

@@ -32,22 +32,18 @@ class Slidable extends StatelessWidget {
       confirmDismiss: (DismissDirection direction) async {
         switch (direction) {
           case DismissDirection.startToEnd:
-            startToEndAction?.action.call();
-            break;
+            return startToEndAction?.action();
           case DismissDirection.endToStart:
-            endToStartAction?.action.call();
-            break;
+            return endToStartAction?.action();
           case DismissDirection.horizontal:
           case DismissDirection.vertical:
           case DismissDirection.up:
           case DismissDirection.down:
           case DismissDirection.none:
             assert(false, 'Direction $direction is not supported');
+            return null;
         }
-
-        return null;
       },
-      resizeDuration: null,
       child: child,
     );
   }
