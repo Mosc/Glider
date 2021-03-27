@@ -68,8 +68,7 @@ class AppTheme {
         secondaryColor: color,
         labelStyle: const TextStyle(),
       ).copyWith(
-        backgroundColor: Colors.transparent,
-        selectedColor: Colors.transparent,
+        backgroundColor: backgroundColor,
         side: StateBorderSide(selectedColor: color, defaultColor: surfaceColor),
       ),
       colorScheme: brightness == Brightness.dark
