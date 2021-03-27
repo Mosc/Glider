@@ -5,19 +5,21 @@
 Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
 
 - Browse stories, comments and user profiles
+- Catch up on and search stories from any period
 - Log in using an existing or new Hacker News account
 - Vote on and favorite stories and comments
 - Write replies and submit new stories (experimental)
 - Collapse comment trees
 - No ads, no telemetry
-- Automatic theming
+- Extensive theming
 - Sensible defaults
 
 <p>
-  <img width="206px" src="./promotional/mockup-1.png">
-  <img width="206px" src="./promotional/mockup-2.png">
-  <img width="206px" src="./promotional/mockup-3.png">
-  <img width="206px" src="./promotional/mockup-4.png">
+  <img width="164px" src="./promotional/mockup-1.png">
+  <img width="164px" src="./promotional/mockup-2.png">
+  <img width="164px" src="./promotional/mockup-3.png">
+  <img width="164px" src="./promotional/mockup-4.png">
+  <img width="164px" src="./promotional/mockup-5.png">
 </p>
 
 ## Development
