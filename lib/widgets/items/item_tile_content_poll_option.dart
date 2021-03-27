@@ -22,25 +22,29 @@ class ItemTileContentPollOption extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Checkbox(
-          value: useProvider(upvotedProvider(item.id)).maybeWhen(
-            data: (bool upvoted) => upvoted,
-            orElse: () => false,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            value: useProvider(upvotedProvider(item.id)).maybeWhen(
+              data: (bool upvoted) => upvoted,
+              orElse: () => false,
+            ),
+            onChanged: interactive
+                ? (bool? up) => vote(context, up: up ?? false)
+                : null,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          onChanged:
-              interactive ? (bool? up) => vote(context, up: up ?? false) : null,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-        if (item.text != null)
-          Expanded(
-            child: ItemTileText(item),
-          )
-        else
-          const Spacer(),
-        ItemTileMetadata(item, root: root),
-      ],
+          if (item.text != null)
+            Expanded(
+              child: ItemTileText(item),
+            )
+          else
+            const Spacer(),
+          ItemTileMetadata(item, root: root),
+        ],
+      ),
     );
   }
 }
