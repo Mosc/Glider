@@ -16,6 +16,8 @@ class AppTheme {
 
   static final Color defaultColor = themeColors.first;
   static final Color surfaceColor = Colors.grey.withOpacity(0.15);
+  static final Color errorColor = Colors.red[400]!;
+  static const Color onErrorColor = Colors.white;
   static final Color lightBackgroundColor = Colors.grey[50]!;
   static final Color darkBackgroundColor = Colors.grey[900]!;
   static const Color blackBackgroundColor = Colors.black;
@@ -75,15 +77,20 @@ class AppTheme {
               primary: color,
               secondary: color,
               surface: surfaceColor,
+              error: errorColor,
               onPrimary: onColor,
               onSecondary: onColor,
+              onError: onErrorColor,
             )
           : ColorScheme.light(
               primary: color,
               secondary: color,
               surface: surfaceColor,
+              error: errorColor,
               onPrimary: onColor,
               onSecondary: onColor,
+              // ignore: avoid_redundant_argument_values
+              onError: onErrorColor,
             ),
     );
   }

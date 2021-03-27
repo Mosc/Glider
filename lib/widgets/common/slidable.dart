@@ -6,12 +6,16 @@ class Slidable extends StatelessWidget {
     required Key key,
     this.startToEndAction,
     this.endToStartAction,
+    this.onDismiss,
     required this.child,
   }) : super(key: key);
+
+  static const Duration movementDuration = Duration(milliseconds: 200);
 
   final Widget child;
   final SlidableAction? startToEndAction;
   final SlidableAction? endToStartAction;
+  final DismissDirectionCallback? onDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +48,9 @@ class Slidable extends StatelessWidget {
             return null;
         }
       },
+      onDismissed: onDismiss,
+      // ignore: avoid_redundant_argument_values
+      movementDuration: movementDuration,
       child: child,
     );
   }

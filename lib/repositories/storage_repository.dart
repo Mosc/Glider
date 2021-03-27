@@ -10,6 +10,7 @@ class StorageRepository {
 
   static const String _themeBaseKey = 'theme_base';
   static const String _themeColorKey = 'theme_color';
+  static const String _completedWalkthroughKey = 'completed_walkthrough';
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
   static const String _favoritedKey = 'favorited';
@@ -35,6 +36,12 @@ class StorageRepository {
 
   Future<void> setThemeColor(Color color) async =>
       (await _sharedPreferences).setInt(_themeColorKey, color.value);
+
+  Future<bool> get completedWalkthrough async =>
+      (await _sharedPreferences).getBool(_completedWalkthroughKey) ?? false;
+
+  Future<void> setCompletedWalkthrough() async =>
+      (await _sharedPreferences).setBool(_completedWalkthroughKey, true);
 
   Future<bool> get loggedIn async => await username != null;
 
