@@ -20,11 +20,13 @@ class StoriesBody extends HookWidget {
 
     return RefreshableBody<Iterable<int>>(
       provider: storyIdsProvider(storyTypeStateController.state),
-      loadingBuilder: () => SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, __) => const StoryTileLoading(),
+      loadingBuilder: () => <Widget>[
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, __) => const StoryTileLoading(),
+          ),
         ),
-      ),
+      ],
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

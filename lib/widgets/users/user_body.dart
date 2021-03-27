@@ -19,11 +19,13 @@ class UserBody extends HookWidget {
   Widget build(BuildContext context) {
     return RefreshableBody<User>(
       provider: userProvider(id),
-      loadingBuilder: () => SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, int index) => _buildItemLoading(index),
+      loadingBuilder: () => <Widget>[
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, int index) => _buildItemLoading(index),
+          ),
         ),
-      ),
+      ],
       dataBuilder: (User user) => <Widget>[
         SliverToBoxAdapter(child: UserTileData(user)),
         SliverList(

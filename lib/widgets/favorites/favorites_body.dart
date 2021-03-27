@@ -14,11 +14,13 @@ class FavoritesBody extends HookWidget {
   Widget build(BuildContext context) {
     return RefreshableBody<Iterable<int>>(
       provider: favoriteIdsProvider,
-      loadingBuilder: () => SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, int index) => _buildItemLoading(index),
+      loadingBuilder: () => <Widget>[
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, int index) => _buildItemLoading(index),
+          ),
         ),
-      ),
+      ],
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

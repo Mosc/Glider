@@ -31,11 +31,13 @@ class ItemBody extends HookWidget {
     return RefreshableBody<ItemTree>(
       provider: itemTreeStreamProvider(id),
       onRefresh: () => _refresh(context),
-      loadingBuilder: () => SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, int index) => _buildItemLoading(index),
+      loadingBuilder: () => <Widget>[
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, int index) => _buildItemLoading(index),
+          ),
         ),
-      ),
+      ],
       dataBuilder: (ItemTree itemTree) {
         final Iterable<Item> items = itemTree.items;
         final Item? firstItem = items.isNotEmpty ? items.first : null;

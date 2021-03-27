@@ -15,7 +15,7 @@ class RefreshableBody<T> extends HookWidget {
 
   final RootProvider<Object, AsyncValue<T>> provider;
   final Future<void> Function()? onRefresh;
-  final Widget Function() loadingBuilder;
+  final Iterable<Widget> Function() loadingBuilder;
   final Iterable<Widget> Function(T) dataBuilder;
 
   @override
@@ -27,7 +27,7 @@ class RefreshableBody<T> extends HookWidget {
         slivers: useProvider(provider)
             .when(
               loading: () => <Widget>[
-                loadingBuilder(),
+                ...loadingBuilder(),
                 _buildSliverEnd(padding),
               ],
               error: (_, __) => <Widget>[

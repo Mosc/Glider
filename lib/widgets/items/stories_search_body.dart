@@ -26,11 +26,13 @@ class StoriesSearchBody extends HookWidget {
           storyType: useProvider(storySearchTypeStateProvider).state,
         ),
       ),
-      loadingBuilder: () => SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, __) => const StoryTileLoading(),
+      loadingBuilder: () => <Widget>[
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, __) => const StoryTileLoading(),
+          ),
         ),
-      ),
+      ],
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
