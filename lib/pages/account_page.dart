@@ -15,12 +15,12 @@ class AccountPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<bool> loggedIn = useProvider(loggedInProvider);
+    final AsyncData<bool>? loggedIn = useProvider(loggedInProvider).data;
 
     return Scaffold(
       body: FloatingAppBarScrollView(
         title: const Text('Account'),
-        actions: loggedIn.data?.value ?? false
+        actions: loggedIn?.value ?? false
             ? <Widget>[
                 PopupMenuButton<AccountMenuAction>(
                   itemBuilder: (_) => <PopupMenuEntry<AccountMenuAction>>[
