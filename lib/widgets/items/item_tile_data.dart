@@ -90,7 +90,7 @@ class ItemTileData extends HookWidget {
           ? delayedUpvotedController.state != true
               ? SlidableAction(
                   action: () async {
-                    await vote(up: true);
+                    unawaited(vote(up: true));
                   },
                   icon: FluentIcons.arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.primary,
@@ -98,7 +98,7 @@ class ItemTileData extends HookWidget {
                 )
               : SlidableAction(
                   action: () async {
-                    await vote(up: false);
+                    unawaited(vote(up: false));
                   },
                   icon: FluentIcons.arrow_undo_24_regular,
                 )
@@ -107,7 +107,7 @@ class ItemTileData extends HookWidget {
           ? item.url != null
               ? SlidableAction(
                   action: () async {
-                    await UrlUtil.tryLaunch(item.url!);
+                    unawaited(UrlUtil.tryLaunch(item.url!));
                   },
                   icon: FluentIcons.window_arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.surface,
@@ -117,7 +117,7 @@ class ItemTileData extends HookWidget {
           : canReply
               ? SlidableAction(
                   action: () async {
-                    await _reply(context);
+                    unawaited(_reply(context));
                   },
                   icon: FluentIcons.arrow_reply_24_regular,
                   color: Theme.of(context).colorScheme.surface,
