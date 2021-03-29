@@ -10,7 +10,7 @@ import 'package:uni_links2/uni_links.dart';
 class UniLinksHandler {
   UniLinksHandler._();
 
-  static late StreamSubscription<Uri?> uriSubscription;
+  static StreamSubscription<Uri?>? uriSubscription;
 
   static Future<void> init(BuildContext context) async {
     if (!kIsWeb) {
@@ -28,7 +28,7 @@ class UniLinksHandler {
 
   static void dispose() {
     try {
-      uriSubscription.cancel();
+      uriSubscription?.cancel();
     } on MissingPluginException {
       // Fail silently.
     }

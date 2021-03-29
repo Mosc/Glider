@@ -32,7 +32,7 @@ class StoriesPage extends HookWidget {
     useMemoized(() => UniLinksHandler.init(context));
     useEffect(
       () => UniLinksHandler.dispose,
-      <Object>[UniLinksHandler.uriSubscription],
+      <Object?>[UniLinksHandler.uriSubscription],
     );
 
     final ValueNotifier<bool> speedDialVisibleState = useState(true);
