@@ -2,7 +2,13 @@
 // Microsoft Visual C++ generated include file.
 // Used by Runner.rc
 //
-#define IDI_APP_ICON                    101
+#define IDI_APP_ICON  101
+#define IDI_APP_ICON_32  102
+#define IDI_APP_ICON_64  103
+#define IDI_APP_ICON_128  104
+#define IDI_APP_ICON_256  105
+#define IDI_APP_ICON_512  106
+#define IDI_APP_ICON_1024  107
 
 // Next default values for new objects
 //
