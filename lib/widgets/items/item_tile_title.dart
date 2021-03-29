@@ -47,12 +47,20 @@ class ItemTileTitle extends HookWidget {
             style: textTheme.subtitle1,
           ),
           if (item.url != null) ...<InlineSpan>[
-            TextSpan(text: ' ', style: textTheme.subtitle1),
+            TextSpan(
+              text: '​ ',
+              style: textTheme.subtitle1,
+            ),
             TextSpan(
               text: '(${item.urlHost})',
-              style: textTheme.caption?.copyWith(height: 1.6),
+              style: textTheme.caption,
             ),
-          ]
+            // Attach zero-width space of title style to enforce height.
+            TextSpan(
+              text: '​\u200b',
+              style: textTheme.subtitle1,
+            ),
+          ],
         ],
       ),
       key: ValueKey<bool>(dense),
