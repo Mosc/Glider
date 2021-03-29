@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jiffy/jiffy.dart';
-
-final StateProvider<DateTimeRange?> customDateTimeRangeStateProvider =
-    StateProvider<DateTimeRange?>((ProviderReference ref) => null);
 
 enum SearchRange {
   custom,
@@ -14,13 +10,11 @@ enum SearchRange {
 }
 
 extension SearchRangeExtension on SearchRange {
-  String title(BuildContext context) {
+  String title(DateTimeRange? customDateTimeRange) {
     String formatDate(DateTime dateTime) => Jiffy(dateTime).yMMMd;
 
     switch (this) {
       case SearchRange.custom:
-        final DateTimeRange? customDateTimeRange =
-            context.read(customDateTimeRangeStateProvider).state;
         return customDateTimeRange != null
             ? customDateTimeRange.duration != Duration.zero
                 ? '${formatDate(customDateTimeRange.start)} to '
@@ -38,7 +32,7 @@ extension SearchRangeExtension on SearchRange {
     }
   }
 
-  DateTimeRange dateTimeRange(BuildContext context) {
+  DateTimeRange dateTimeRange(DateTimeRange? customDateTimeRange) {
     DateTimeRange pastDuration(Duration duration) {
       final DateTime now = DateTime.now();
       return DateTimeRange(start: now.subtract(duration), end: now);
@@ -48,10 +42,8 @@ extension SearchRangeExtension on SearchRange {
 
     switch (this) {
       case SearchRange.custom:
-        final DateTimeRange customDateTimeRange =
-            context.read(customDateTimeRangeStateProvider).state!;
         return DateTimeRange(
-          start: customDateTimeRange.start,
+          start: customDateTimeRange!.start,
           end: (Jiffy(customDateTimeRange.end)..endOf(Units.DAY)).dateTime,
         );
       case SearchRange.pastDay:

@@ -16,6 +16,10 @@ final AutoDisposeStateProvider<String> storySearchQueryStateProvider =
 final AutoDisposeStateProvider<SearchRange?> storySearchRangeStateProvider =
     StateProvider.autoDispose<SearchRange?>((ProviderReference ref) => null);
 
+final AutoDisposeStateProvider<DateTimeRange?>
+    storySearchCustomDateTimeRangeStateProvider =
+    StateProvider.autoDispose<DateTimeRange?>((ProviderReference ref) => null);
+
 final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
     StateProvider.autoDispose<StoryType>(
         (ProviderReference ref) => StoryType.bestStories);
@@ -181,14 +185,19 @@ class _SearchRangeChip extends HookWidget {
   Widget build(BuildContext context) {
     final StateController<SearchRange?> storySearchRangeStateController =
         useProvider(storySearchRangeStateProvider);
+    final StateController<DateTimeRange?>
+        storySearchCustomDateTimeRangeStateController =
+        useProvider(storySearchCustomDateTimeRangeStateProvider);
 
     return ChoiceChip(
-      label: Text(searchRange.title(context)),
+      label: Text(searchRange
+          .title(storySearchCustomDateTimeRangeStateController.state)),
       selected: storySearchRangeStateController.state == searchRange,
       onSelected: (bool selected) async {
         final StateController<DateTimeRange?>
-            customDateTimeRangeStateController =
-            context.read(customDateTimeRangeStateProvider)..state = null;
+            customDateTimeRangeStateController = context
+                .read(storySearchCustomDateTimeRangeStateProvider)
+                  ..state = null;
 
         if (searchRange == SearchRange.custom && selected) {
           customDateTimeRangeStateController.state = await showDateRangePicker(
