@@ -9,7 +9,6 @@ part 'user.g.dart';
 class User with _$User {
   factory User({
     required String id,
-    int? delay,
     required int created,
     required int karma,
     String? about,
