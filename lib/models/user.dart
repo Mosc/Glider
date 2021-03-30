@@ -15,9 +15,9 @@ class User with _$User {
     @Default(<int>[]) Iterable<int> submitted,
   }) = _User;
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
-}
+  User._();
 
-extension UserExtension on User {
-  String get createdDate => Jiffy.unix(created).yMMMMd;
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  late final String createdDate = Jiffy.unix(created).yMMMMd;
 }
