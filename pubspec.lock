@@ -161,7 +161,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   csslib:
     dependency: transitive
     description:
@@ -182,7 +182,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0-prev3"
+    version: "4.0.0"
   ffi:
     dependency: transitive
     description:
@@ -210,7 +210,7 @@ packages:
       name: fluentui_system_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.112"
+    version: "1.1.116"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -229,7 +229,7 @@ packages:
       name: flutter_cache_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   flutter_hooks:
     dependency: transitive
     description:
@@ -252,7 +252,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1+1"
+    version: "0.14.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -265,7 +265,7 @@ packages:
     description:
       path: "."
       ref: new
-      resolved-ref: "615560bbf288e1f6f9ebee074af629649a594046"
+      resolved-ref: "7b9bdf783562ec0e0842ac63f0d3e7381f1163ab"
       url: "https://github.com/darioielardi/flutter_speed_dial"
     source: git
     version: "3.0.5"
@@ -287,7 +287,7 @@ packages:
       name: freezed
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.1+1"
+    version: "0.14.1+2"
   freezed_annotation:
     dependency: transitive
     description:
@@ -315,7 +315,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1+1"
+    version: "0.14.0"
   html:
     dependency: transitive
     description:
@@ -434,7 +434,7 @@ packages:
       name: octo_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.0+1"
   package_config:
     dependency: transitive
     description:
@@ -497,7 +497,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.2"
+    version: "4.1.0"
   platform:
     dependency: transitive
     description:
@@ -546,7 +546,7 @@ packages:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1"
+    version: "0.14.0"
   rxdart:
     dependency: transitive
     description:
@@ -796,7 +796,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.3"
   vector_math:
     dependency: transitive
     description:
@@ -824,7 +824,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   xdg_directories:
     dependency: transitive
     description:
@@ -838,7 +838,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.2"
+    version: "5.1.0"
   yaml:
     dependency: transitive
     description:
