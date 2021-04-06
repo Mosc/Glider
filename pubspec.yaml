@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   cached_network_image: ^3.0.0
-  dio: ^4.0.0-prev3
-  fluentui_system_icons: ^1.1.112
+  dio: ^4.0.0
+  fluentui_system_icons: ^1.1.116
   flutter:
     sdk: flutter
   flutter_secure_storage: ^4.1.0
@@ -18,7 +18,7 @@ dependencies:
       url: https://github.com/darioielardi/flutter_speed_dial
       ref: new
   flutter_widget_from_html_core: ^0.6.0-rc.2021031201
-  hooks_riverpod: ^0.13.1+1
+  hooks_riverpod: ^0.14.0
   html_unescape: ^2.0.0
   jiffy: ^4.1.0
   share: ^2.0.0
@@ -33,7 +33,7 @@ dev_dependencies:
   flutter_launcher_icons:
     git:
       url: https://github.com/dirkbo/flutter_launcher_icons
-  freezed: ^0.14.1+1
+  freezed: ^0.14.1+2
   json_serializable: ^4.1.0
 
 flutter:
