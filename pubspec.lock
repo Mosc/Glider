@@ -269,6 +269,13 @@ packages:
       url: "https://github.com/darioielardi/flutter_speed_dial"
     source: git
     version: "3.0.5"
+  flutter_web_browser:
+    dependency: "direct main"
+    description:
+      name: flutter_web_browser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -428,6 +435,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  native_launcher:
+    dependency: "direct main"
+    description:
+      path: "packages/native_launcher"
+      relative: true
+    source: path
+    version: "0.0.1"
   octo_image:
     dependency: transitive
     description:

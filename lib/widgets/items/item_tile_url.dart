@@ -16,7 +16,7 @@ class ItemTileUrl extends HookWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: () => UrlUtil.tryLaunch(item.url!),
+      onTap: () => UrlUtil.tryLaunch(context, item.url!),
       child: Hero(
         tag: 'item_url_${item.id}',
         child: Block(
