@@ -20,7 +20,7 @@ class ItemTileThumbnail extends HookWidget {
     final double? size = ItemTileHeader.calculateHeight(context);
 
     return GestureDetector(
-      onTap: () => UrlUtil.tryLaunch(item.url!),
+      onTap: () => UrlUtil.tryLaunch(context, item.url!),
       child: Hero(
         tag: 'item_thumbnail_${item.id}',
         child: item.localOnly

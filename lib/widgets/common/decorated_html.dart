@@ -57,7 +57,7 @@ class DecoratedHtml extends StatelessWidget {
 
         return null;
       },
-      onTapUrl: UrlUtil.tryLaunch,
+      onTapUrl: (String url) => UrlUtil.tryLaunch(context, url),
       textStyle: Theme.of(context).textTheme.bodyText2,
     );
   }
