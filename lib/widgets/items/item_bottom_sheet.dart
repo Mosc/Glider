@@ -59,7 +59,7 @@ class ItemBottomSheet extends StatelessWidget {
               },
             ),
           ListTile(
-            title: const Text('Share item link'),
+            title: const Text('Share thread link'),
             onTap: () async {
               await Share.share(
                 Uri.https(
