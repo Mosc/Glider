@@ -20,7 +20,7 @@ class StoriesBody extends HookWidget {
     final StateController<StoryType> storyTypeStateController =
         useProvider(storyTypeStateProvider);
     final bool completedWalkthrough =
-        useProvider(completedWalkthroughProvider).data?.value ?? false;
+        useProvider(completedWalkthroughProvider).data?.value ?? true;
 
     return RefreshableBody<Iterable<int>>(
       provider: storyIdsProvider(storyTypeStateController.state),
