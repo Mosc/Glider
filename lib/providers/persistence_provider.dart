@@ -20,6 +20,11 @@ final AutoDisposeFutureProviderFamily<bool, int> visitedProvider =
       ref.read(storageRepositoryProvider).visited(id: id),
 );
 
+final FutureProviderFamily<bool, int> collapsedProvider = FutureProvider.family(
+  (ProviderReference ref, int id) =>
+      ref.read(storageRepositoryProvider).collapsed(id: id),
+);
+
 final AutoDisposeFutureProvider<bool> completedWalkthroughProvider =
     FutureProvider.autoDispose(
   (ProviderReference ref) =>

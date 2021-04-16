@@ -7,13 +7,11 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
-import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
-import 'package:glider/widgets/common/smooth_animated_switcher.dart';
+import 'package:glider/widgets/items/collapsible_item_tile.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
-import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -25,8 +23,6 @@ class ItemBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useMemoized(() => _refresh(context));
-
-    final ValueNotifier<Set<int>> collapsedState = useState(<int>{});
 
     return RefreshableBody<ItemTree>(
       provider: itemTreeStreamProvider(id),
@@ -47,9 +43,19 @@ class ItemBody extends HookWidget {
             SliverToBoxAdapter(child: _buildOpenParent(context, parent)),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (_, int index) => _loaded(items, index)
-                  ? _buildItem(items, index, collapsedState)
-                  : _buildItemLoading(index),
+              (_, int index) {
+                if (_loaded(items, index)) {
+                  final Item item = items.elementAt(index);
+                  return CollapsibleItemTile(
+                    id: item.id,
+                    ancestors: item.ancestors,
+                    root: items.first,
+                    loading: () => _buildItemLoading(index),
+                  );
+                } else {
+                  return _buildItemLoading(index);
+                }
+              },
               childCount: itemTree.done ? items.length : null,
             ),
           ),
@@ -67,38 +73,6 @@ class ItemBody extends HookWidget {
 
   Widget _buildItemLoading(int index) {
     return index == 0 ? const StoryTileLoading() : const CommentTileLoading();
-  }
-
-  Widget _buildItem(
-      Iterable<Item> items, int index, ValueNotifier<Set<int>> collapsedState) {
-    final Item item = items.elementAt(index);
-
-    return SmoothAnimatedSwitcher.vertical(
-      condition: !_collapsedAncestors(collapsedState, item.ancestors),
-      child: ItemTile(
-        id: item.id,
-        ancestors: item.ancestors,
-        root: items.first,
-        onTap: (BuildContext context) {
-          final ScrollableState? scrollableState = Scrollable.of(context);
-          final RenderObject? renderObject = context.findRenderObject();
-
-          if (renderObject != null) {
-            scrollableState?.position.ensureVisible(
-              renderObject,
-              duration: AnimationUtil.defaultDuration,
-              curve: Curves.easeInOut,
-              alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
-            );
-          }
-
-          _collapse(collapsedState, item.id);
-        },
-        dense: _collapsed(collapsedState, item.id),
-        interactive: true,
-        loading: () => _buildItemLoading(index),
-      ),
-    );
   }
 
   Widget _buildOpenParent(BuildContext context, int parentId) {
@@ -134,23 +108,4 @@ class ItemBody extends HookWidget {
       ),
     );
   }
-
-  void _collapse(ValueNotifier<Set<int>> collapsedState, int id) {
-    if (collapsedState.value.contains(id)) {
-      collapsedState.value.remove(id);
-    } else {
-      collapsedState.value.add(id);
-    }
-
-    collapsedState.value = <int>{...collapsedState.value};
-  }
-
-  bool _collapsed(ValueNotifier<Set<int>> collapsedState, int id) =>
-      collapsedState.value.contains(id);
-
-  bool _collapsedAncestors(
-          ValueNotifier<Set<int>> collapsedState, Iterable<int> ids) =>
-      collapsedState.value.isNotEmpty &&
-      ids.any((int ancestor) =>
-          id != ancestor && _collapsed(collapsedState, ancestor));
 }

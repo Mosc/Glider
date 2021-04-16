@@ -16,6 +16,7 @@ class StorageRepository {
   static const String _favoritedKey = 'favorited';
   static const String _upvotedKey = 'upvoted';
   static const String _visitedKey = 'visited';
+  static const String _collapsedKey = 'collapsed';
 
   final FlutterSecureStorage _secureStorage;
   final Future<SharedPreferences> _sharedPreferences;
@@ -127,4 +128,17 @@ class StorageRepository {
 
   Future<void> setVisited({required int id}) async =>
       (await _sharedPreferences).addElement(_visitedKey, id.toString());
+
+  Future<bool> collapsed({required int id}) async =>
+      (await _sharedPreferences).containsElement(_collapsedKey, id.toString());
+
+  Future<void> setCollapsed({required int id, required bool collapsed}) async {
+    final SharedPreferences sharedPreferences = await _sharedPreferences;
+
+    if (collapsed) {
+      await sharedPreferences.addElement(_collapsedKey, id.toString());
+    } else {
+      await sharedPreferences.removeElement(_collapsedKey, id.toString());
+    }
+  }
 }
