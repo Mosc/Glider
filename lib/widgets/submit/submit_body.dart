@@ -16,7 +16,6 @@ import 'package:glider/utils/validators.dart';
 import 'package:glider/widgets/common/experimental.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:string_validator/string_validator.dart';
 
 class SubmitBody extends HookWidget {
   const SubmitBody({Key? key}) : super(key: key);
@@ -180,8 +179,7 @@ class SubmitBody extends HookWidget {
     );
   }
 
-  bool _isUrl(String url) =>
-      isURL(url, <String, Object>{'requireProtocol': true});
+  bool _isUrl(String? url) => Validators.url(url) != null;
 
   Future<void> _autofillTitle(
       BuildContext context, TextEditingController titleController,
@@ -240,7 +238,7 @@ class SubmitBody extends HookWidget {
         text: text?.isNotEmpty ?? false
             ? FormattingUtil.convertHackerNewsToHtml(text!)
             : null,
-        url: url != null && _isUrl(url) ? url : null,
+        url: _isUrl(url) ? url : null,
         title: title?.isNotEmpty ?? false ? title : null,
         score: 1,
         descendants: 0,
