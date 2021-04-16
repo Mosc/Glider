@@ -35,6 +35,7 @@ class UserBottomSheet extends StatelessWidget {
                   'user',
                   <String, String>{'id': user.id},
                 ).toString(),
+                subject: user.id,
               );
               Navigator.of(context).pop();
             },

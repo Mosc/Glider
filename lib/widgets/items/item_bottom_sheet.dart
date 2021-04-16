@@ -54,7 +54,10 @@ class ItemBottomSheet extends StatelessWidget {
             ListTile(
               title: const Text('Share link'),
               onTap: () async {
-                await Share.share(item.url!);
+                await Share.share(
+                  item.url!,
+                  subject: item.title,
+                );
                 Navigator.of(context).pop();
               },
             ),
@@ -67,6 +70,7 @@ class ItemBottomSheet extends StatelessWidget {
                   'item',
                   <String, String>{'id': item.id.toString()},
                 ).toString(),
+                subject: item.title,
               );
               Navigator.of(context).pop();
             },
