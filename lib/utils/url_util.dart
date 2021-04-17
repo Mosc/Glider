@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:native_launcher/native_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -9,9 +10,17 @@ class UrlUtil {
   UrlUtil._();
 
   static Future<bool> tryLaunch(BuildContext context, String urlString) async {
-    return await _tryLaunchNonBrowser(urlString) ||
+    final bool success = await _tryLaunchNonBrowser(urlString) ||
         await _tryLaunchCustomTab(context, urlString) ||
         await _tryLaunchPlatform(urlString);
+
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBarQuickly(
+        const SnackBar(content: Text('Could not open URL')),
+      );
+    }
+
+    return success;
   }
 
   static Future<bool> _tryLaunchNonBrowser(String urlString) async {
@@ -24,24 +33,27 @@ class UrlUtil {
 
   static Future<bool> _tryLaunchCustomTab(
       BuildContext context, String urlString) async {
+    final AppBarTheme appBarTheme = Theme.of(context).appBarTheme;
+
     try {
       await FlutterWebBrowser.openWebPage(
         url: urlString,
         customTabsOptions: CustomTabsOptions(
-          toolbarColor: Theme.of(context).appBarTheme.color,
+          toolbarColor: appBarTheme.color,
           addDefaultShareMenuItem: true,
           showTitle: true,
         ),
         safariVCOptions: SafariViewControllerOptions(
           barCollapsingEnabled: true,
-          preferredBarTintColor: Theme.of(context).appBarTheme.color,
-          preferredControlTintColor:
-              Theme.of(context).appBarTheme.iconTheme?.color,
+          preferredBarTintColor: appBarTheme.color,
+          preferredControlTintColor: appBarTheme.iconTheme?.color,
           dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
         ),
       );
       return true;
     } on MissingPluginException {
+      return false;
+    } on PlatformException {
       return false;
     }
   }
