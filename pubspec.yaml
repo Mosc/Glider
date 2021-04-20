@@ -9,7 +9,7 @@ environment:
 dependencies:
   cached_network_image: ^3.0.0
   dio: ^4.0.0
-  fluentui_system_icons: ^1.1.116
+  fluentui_system_icons: ^1.1.117
   flutter:
     sdk: flutter
   flutter_secure_storage: ^4.1.0
@@ -18,15 +18,15 @@ dependencies:
       url: https://github.com/darioielardi/flutter_speed_dial
       ref: new
   flutter_web_browser: ^0.14.0
-  flutter_widget_from_html_core: ^0.6.0-rc.2021031201
-  hooks_riverpod: ^0.14.0
+  flutter_widget_from_html_core: ^0.6.0
+  hooks_riverpod: ^0.14.0+1
   html_unescape: ^2.0.0
   jiffy: ^4.1.0
   native_launcher:
     path: packages/native_launcher
   share: ^2.0.0
   shared_preferences: ^2.0.5
-  shimmer: ^2.0.0-nullsafety.0
+  shimmer: ^2.0.0
   string_validator: ^0.3.0
   uni_links2: ^0.6.0+2
   url_launcher: ^6.0.3
