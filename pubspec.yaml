@@ -24,7 +24,7 @@ dependencies:
   jiffy: ^4.1.0
   native_launcher:
     path: packages/native_launcher
-  share: ^2.0.0
+  share_plus: ^2.0.1
   shared_preferences: ^2.0.5
   shimmer: ^2.0.0
   string_validator: ^0.3.0
