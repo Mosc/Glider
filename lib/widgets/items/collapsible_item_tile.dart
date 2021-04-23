@@ -30,7 +30,8 @@ class CollapsibleItemTile extends HookWidget {
     final bool collapsed = _collapsed(id);
 
     return SmoothAnimatedSwitcher.vertical(
-      condition: !ancestors.any(_collapsed),
+      condition: !ancestors
+          .any((int ancestor) => ancestor != root?.id && _collapsed(ancestor)),
       child: ItemTile(
         id: id,
         ancestors: ancestors,
