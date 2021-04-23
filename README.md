@@ -15,11 +15,11 @@ Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
 - Sensible defaults
 
 <p>
-  <img width="164px" src="./promotional/mockup-1.png">
-  <img width="164px" src="./promotional/mockup-2.png">
-  <img width="164px" src="./promotional/mockup-3.png">
-  <img width="164px" src="./promotional/mockup-4.png">
-  <img width="164px" src="./promotional/mockup-5.png">
+  <img width="164px" src="./fastlane/metadata/android/en-US/images/phoneScreenshots/1.png">
+  <img width="164px" src="./fastlane/metadata/android/en-US/images/phoneScreenshots/2.png">
+  <img width="164px" src="./fastlane/metadata/android/en-US/images/phoneScreenshots/3.png">
+  <img width="164px" src="./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png">
+  <img width="164px" src="./fastlane/metadata/android/en-US/images/phoneScreenshots/5.png">
 </p>
 
 ## Development

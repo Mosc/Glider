@@ -1,0 +1,13 @@
+Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
+
+• Browse stories, comments and user profiles
+• Catch up on and search stories from any period
+• Log in using an existing or new Hacker News account
+• Vote on and favorite stories and comments
+• Write replies and submit new stories (experimental)
+• Collapse comment trees
+• No ads, no telemetry
+• Extensive theming
+• Sensible defaults
+
+Source code is available at https://github.com/Mosc/Glider. Don't hesitate to submit an issue if you'd like to see anything improved.

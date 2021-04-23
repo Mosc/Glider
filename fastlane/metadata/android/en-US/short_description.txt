@@ -1,0 +1,1 @@
+Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
