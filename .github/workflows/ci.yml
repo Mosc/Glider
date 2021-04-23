@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+      - name: Cache packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+      - name: Get packages
+        run: flutter pub get
+      - name: Generate code
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Check formatting
+        run: flutter format -n --set-exit-if-changed .
+      - name: Analyze code
+        run: flutter analyze
