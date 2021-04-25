@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glider/models/item_type.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:jiffy/jiffy.dart';
 
 part 'item.freezed.dart';
@@ -35,10 +36,12 @@ class Item with _$Item {
   static final RegExp _pdfRegExp = RegExp(r'\s+\[pdf\]$');
   static final RegExp _yearRegExp = RegExp(r'\s+\((\d+)\)');
 
-  late final String? taglessTitle = title
-      ?.replaceAll(_videoRegExp, '')
-      .replaceAll(_pdfRegExp, '')
-      .replaceAll(_yearRegExp, '');
+  late final String? formattedTitle = title != null
+      ? HtmlUnescape().convert(title!
+          .replaceAll(_videoRegExp, '')
+          .replaceAll(_pdfRegExp, '')
+          .replaceAll(_yearRegExp, ''))
+      : null;
 
   late final String? urlHost = url != null ? Uri.parse(url!).host : null;
 

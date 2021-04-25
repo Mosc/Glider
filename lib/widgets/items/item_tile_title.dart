@@ -43,7 +43,7 @@ class ItemTileTitle extends HookWidget {
           if (item.hasPdf)
             ..._buildIconSpans(context, FluentIcons.document_24_regular),
           TextSpan(
-            text: item.taglessTitle,
+            text: item.formattedTitle,
             style: textTheme.subtitle1,
           ),
           if (item.url != null) ...<InlineSpan>[
