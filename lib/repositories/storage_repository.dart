@@ -61,9 +61,12 @@ class StorageRepository {
     await _secureStorage.delete(key: _passwordKey);
   }
 
-  Future<Iterable<int>> get favoriteIds async =>
-      (await _sharedPreferences).getStringList(_favoritedKey)?.map(int.parse) ??
-      <int>[];
+  Future<Iterable<int>> get favoriteIds async => ((await _sharedPreferences)
+          .getStringList(_favoritedKey)
+          ?.map(int.parse)
+          .toList() ??
+      <int>[])
+    ..sort((int a, int b) => b.compareTo(a));
 
   Future<bool> favorited({required int id}) async =>
       (await _sharedPreferences).containsElement(_favoritedKey, id.toString());
