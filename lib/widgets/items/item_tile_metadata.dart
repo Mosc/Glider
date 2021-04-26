@@ -74,9 +74,7 @@ class ItemTileMetadata extends HookWidget {
             ),
           ] else if (item.by != null &&
               item.type != ItemType.pollopt) ...<Widget>[
-            if (item.by == root?.by && item.parent != null)
-              const MetadataItem(icon: FluentIcons.person_circle_20_regular),
-            _buildUsername(context, textTheme, by: item.by!),
+            _buildUsername(context, textTheme, by: item.by!, rootBy: root?.by),
             const SizedBox(width: 8),
           ],
           if (item.hasOriginalYear)
@@ -104,32 +102,40 @@ class ItemTileMetadata extends HookWidget {
   }
 
   Widget _buildUsername(BuildContext context, TextTheme textTheme,
-      {required String by}) {
+      {required String by, String? rootBy}) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final bool byLoggedInUser =
+        item.by == useProvider(usernameProvider).data?.value;
+    final bool byRoot = item.by == rootBy;
+
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => UserPage(id: by),
         ),
       ),
-      child: item.by == useProvider(usernameProvider).data?.value
+      child: byLoggedInUser || byRoot
           ? Container(
-              padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 3),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
+                color: byLoggedInUser ? colorScheme.primary : null,
+                border: Border.all(color: colorScheme.primary),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
                 by,
-                style: textTheme.caption
-                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                style: textTheme.caption?.copyWith(
+                  color: byLoggedInUser
+                      ? colorScheme.onPrimary
+                      : colorScheme.primary,
+                ),
               ),
             )
           : Padding(
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: Text(
                 by,
-                style: textTheme.caption
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: textTheme.caption?.copyWith(color: colorScheme.primary),
               ),
             ),
     );
