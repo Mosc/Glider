@@ -1,0 +1,4 @@
+• Sorted favorites from new to old
+• Tweaked look of story usernames
+• Unescaped HTML in story titles
+• Fixed collapsing behaviour regression
