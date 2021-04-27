@@ -175,7 +175,7 @@ packages:
       name: dart_style
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   dio:
     dependency: "direct main"
     description:
@@ -210,7 +210,7 @@ packages:
       name: fluentui_system_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.119"
+    version: "1.1.120"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -259,13 +259,13 @@ packages:
       name: flutter_secure_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.2.0"
   flutter_speed_dial:
     dependency: "direct main"
     description:
       path: "."
       ref: new
-      resolved-ref: "206f9fc96230b2a3f0e267d91e23ac6e153cbe9d"
+      resolved-ref: e25863d4c518ed33bac49014d71bc4c0ef7b6993
       url: "https://github.com/darioielardi/flutter_speed_dial"
     source: git
     version: "3.0.5"
@@ -574,7 +574,7 @@ packages:
       name: share_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   share_plus_linux:
     dependency: transitive
     description:
@@ -658,7 +658,7 @@ packages:
       name: shelf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   shelf_web_socket:
     dependency: transitive
     description:

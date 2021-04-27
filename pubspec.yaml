@@ -9,10 +9,10 @@ environment:
 dependencies:
   cached_network_image: ^3.0.0
   dio: ^4.0.0
-  fluentui_system_icons: ^1.1.119
+  fluentui_system_icons: ^1.1.120
   flutter:
     sdk: flutter
-  flutter_secure_storage: ^4.1.0
+  flutter_secure_storage: ^4.2.0
   flutter_speed_dial:
     git:
       url: https://github.com/darioielardi/flutter_speed_dial
@@ -24,7 +24,7 @@ dependencies:
   jiffy: ^4.1.0
   native_launcher:
     path: packages/native_launcher
-  share_plus: ^2.0.1
+  share_plus: ^2.0.2
   shared_preferences: ^2.0.5
   shimmer: ^2.0.0
   string_validator: ^0.3.0
