@@ -35,7 +35,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.0"
   build:
     dependency: transitive
     description:
@@ -210,7 +210,7 @@ packages:
       name: fluentui_system_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.120"
+    version: "1.1.121"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -252,7 +252,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+2"
+    version: "0.14.0+3"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -287,7 +287,7 @@ packages:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.6.1"
   freezed:
     dependency: "direct dev"
     description:
@@ -322,7 +322,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+2"
+    version: "0.14.0+3"
   html:
     dependency: transitive
     description:
@@ -343,7 +343,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1"
+    version: "0.13.2"
   http_multi_server:
     dependency: transitive
     description:
@@ -560,7 +560,7 @@ packages:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+1"
+    version: "0.14.0+3"
   rxdart:
     dependency: transitive
     description:
@@ -574,42 +574,42 @@ packages:
       name: share_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   share_plus_linux:
     dependency: transitive
     description:
       name: share_plus_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   share_plus_macos:
     dependency: transitive
     description:
       name: share_plus_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   share_plus_platform_interface:
     dependency: transitive
     description:
       name: share_plus_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   share_plus_web:
     dependency: transitive
     description:
       name: share_plus_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   share_plus_windows:
     dependency: transitive
     description:
       name: share_plus_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -776,27 +776,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  uni_links2:
+  uni_links:
     dependency: "direct main"
     description:
-      name: uni_links2
+      name: uni_links
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0+2"
-  uni_links2_platform_interface:
+    version: "0.5.1"
+  uni_links_platform_interface:
     dependency: transitive
     description:
-      name: uni_links2_platform_interface
+      name: uni_links_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0+2"
-  uni_links_web2:
+    version: "1.0.0"
+  uni_links_web:
     dependency: transitive
     description:
-      name: uni_links_web2
+      name: uni_links_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0+2"
+    version: "0.1.0"
   url_launcher:
     dependency: "direct main"
     description:
@@ -897,4 +897,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=2.0.1"
+  flutter: ">=2.0.0"

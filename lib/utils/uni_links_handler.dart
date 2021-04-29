@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/user_page.dart';
-import 'package:uni_links2/uni_links.dart';
+import 'package:uni_links/uni_links.dart';
 
 class UniLinksHandler {
   UniLinksHandler._();
