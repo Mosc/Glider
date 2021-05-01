@@ -179,7 +179,7 @@ class SubmitBody extends HookWidget {
     );
   }
 
-  bool _isUrl(String? url) => Validators.url(url) != null;
+  bool _isUrl(String? url) => Validators.url(url) == null;
 
   Future<void> _autofillTitle(
       BuildContext context, TextEditingController titleController,
