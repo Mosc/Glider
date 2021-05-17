@@ -116,7 +116,8 @@ class WebsiteRepository {
       return false;
     }
 
-    final String? cookie = formResponse.headers.value('set-cookie');
+    final String? cookie =
+        formResponse.headers.value(HttpHeaders.setCookieHeader);
 
     final Uri uri = Uri.https(authority, 'r');
     final PostData data = SubmitPostData(
@@ -173,7 +174,8 @@ class WebsiteRepository {
     // small page that returns the cookie we need for the next call.
     final Response<void> formResponse =
         await _getSubmitFormResponse(username: username, password: password);
-    final String? cookie = formResponse.headers.value('set-cookie');
+    final String? cookie =
+        formResponse.headers.value(HttpHeaders.setCookieHeader);
 
     final Uri uri = Uri.https(
       authority,
