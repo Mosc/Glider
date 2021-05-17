@@ -26,6 +26,7 @@ class Item with _$Item {
     @Default(<int>[]) Iterable<int> parts,
     int? descendants,
     @Default(<int>[]) Iterable<int> ancestors,
+    @Default(false) bool cache,
   }) = _Item;
 
   Item._();

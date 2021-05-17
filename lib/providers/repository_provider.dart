@@ -7,6 +7,7 @@ import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/repositories/storage_repository.dart';
 import 'package:glider/repositories/web_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
+import 'package:glider/utils/cache_interceptor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +24,9 @@ final AutoDisposeFutureProvider<bool> connectedProvider =
   },
 );
 
-final Provider<Dio> _dioProvider = Provider<Dio>((_) => Dio());
+final Provider<Dio> _dioProvider = Provider<Dio>(
+  (_) => Dio()..interceptors.add(CacheInterceptor()),
+);
 
 final Provider<WebsiteRepository> _websiteRepositoryProvider =
     Provider<WebsiteRepository>(

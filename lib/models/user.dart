@@ -13,6 +13,7 @@ class User with _$User {
     required int karma,
     String? about,
     @Default(<int>[]) Iterable<int> submitted,
+    @Default(false) bool cache,
   }) = _User;
 
   User._();

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/models/user.dart';
+import 'package:glider/utils/response_extension.dart';
 import 'package:glider/utils/service_exception.dart';
 
 class ApiRepository {
@@ -35,7 +36,7 @@ class ApiRepository {
         throw ServiceException();
       }
 
-      return Item.fromJson(response.data!);
+      return Item.fromJson(response.data!).copyWith(cache: response.isCache);
     } on DioError catch (e) {
       throw ServiceException(e.message);
     }
@@ -52,7 +53,7 @@ class ApiRepository {
         throw ServiceException();
       }
 
-      return User.fromJson(response.data!);
+      return User.fromJson(response.data!).copyWith(cache: response.isCache);
     } on DioError catch (e) {
       throw ServiceException(e.message);
     }

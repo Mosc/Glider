@@ -82,6 +82,11 @@ class ItemTileMetadata extends HookWidget {
               icon: FluentIcons.shifts_activity_24_regular,
               text: 'from ${item.originalYear}',
             ),
+          SmoothAnimatedSwitcher.horizontal(
+            condition: item.cache,
+            child:
+                const MetadataItem(icon: FluentIcons.cloud_offline_24_regular),
+          ),
           if (interactive) _buildCollapsedIndicator(),
           if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
             const Spacer(),
