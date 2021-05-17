@@ -95,13 +95,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "nl.viter" "\0"
-            VALUE "FileDescription", "A new Flutter project." "\0"
+            VALUE "CompanyName", "Viter Apps" "\0"
+            VALUE "FileDescription", "Glider" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "glider" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 nl.viter. All rights reserved." "\0"
+            VALUE "InternalName", "Glider" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2021 Viter Apps. All rights reserved." "\0"
             VALUE "OriginalFilename", "glider.exe" "\0"
-            VALUE "ProductName", "glider" "\0"
+            VALUE "ProductName", "Glider" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
