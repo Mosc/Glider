@@ -42,32 +42,24 @@ class RefreshableBody<T> extends HookWidget {
     return RefreshIndicator(
       onRefresh: onRefresh ?? () async => context.refresh(provider),
       child: CustomScrollView(
-        slivers: useProvider(provider)
-            .when(
-              loading: () => <Widget>[
-                _buildSliverOffline(),
-                ...loadingBuilder(),
-                _buildSliverEnd(padding),
-              ],
-              data: (T data) => <Widget>[
-                _buildSliverOffline(),
-                ...dataBuilder(data),
-                _buildSliverEnd(padding),
-              ],
-              error: (_, __) => <Widget>[
-                _buildSliverOffline(),
-                const SliverFillRemaining(
-                  child: Error(),
-                ),
-              ],
-            )
-            .map(
-              (Widget sliver) => SliverPadding(
-                padding: padding.copyWith(top: 0, bottom: 0),
-                sliver: sliver,
-              ),
-            )
-            .toList(growable: false),
+        slivers: useProvider(provider).when(
+          loading: () => <Widget>[
+            _buildSliverOffline(),
+            ...loadingBuilder(),
+            _buildSliverEnd(padding),
+          ],
+          data: (T data) => <Widget>[
+            _buildSliverOffline(),
+            ...dataBuilder(data),
+            _buildSliverEnd(padding),
+          ],
+          error: (_, __) => <Widget>[
+            _buildSliverOffline(),
+            const SliverFillRemaining(
+              child: Error(),
+            ),
+          ],
+        ),
       ),
     );
   }

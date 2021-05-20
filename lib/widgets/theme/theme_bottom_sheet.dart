@@ -22,15 +22,17 @@ class ThemeDialog extends HookWidget {
         child: Wrap(
           children: <Widget>[
             _buildHorizontalScrollable(
-              children: ThemeBase.values
-                  .map((ThemeBase base) => _ThemeBaseButton(base))
-                  .toList(growable: false),
+              children: <Widget>[
+                for (ThemeBase themeBase in ThemeBase.values)
+                  _ThemeBaseButton(themeBase),
+              ],
             ),
             const SizedBox(width: double.infinity, height: 12),
             _buildHorizontalScrollable(
-              children: AppTheme.themeColors
-                  .map((Color color) => _ThemeColorButton(color))
-                  .toList(growable: false),
+              children: <Widget>[
+                for (Color color in AppTheme.themeColors)
+                  _ThemeColorButton(color),
+              ],
             ),
           ],
         ),
