@@ -1,6 +1,6 @@
 # Glider for Hacker News
 
-[<img src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg" alt="Get it on Google Play" height="80">][play store]
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="80">][play store]
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">][f-droid]
 
 Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
