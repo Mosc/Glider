@@ -47,7 +47,6 @@ class AppTheme {
       brightness: brightness,
       visualDensity: VisualDensity.standard,
       primaryColor: color,
-      accentColor: color,
       scaffoldBackgroundColor: backgroundColor,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       buttonTheme: const ButtonThemeData(

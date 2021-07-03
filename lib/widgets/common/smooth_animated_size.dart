@@ -18,7 +18,6 @@ class SmoothAnimatedSize extends HookWidget {
       duration: duration ?? AnimationUtil.defaultDuration,
       curve: Curves.easeInOut,
       alignment: AlignmentDirectional.topStart,
-      vsync: useSingleTickerProvider(),
       child: child,
     );
   }
