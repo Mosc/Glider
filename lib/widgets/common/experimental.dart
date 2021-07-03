@@ -1,7 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:glider/widgets/common/block.dart';
 import 'package:glider/utils/text_style_extension.dart';
+import 'package:glider/widgets/common/block.dart';
 
 class Experimental extends StatelessWidget {
   const Experimental({Key? key}) : super(key: key);

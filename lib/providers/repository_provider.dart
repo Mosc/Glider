@@ -1,9 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:glider/repositories/search_api_repository.dart';
 import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/repositories/auth_repository.dart';
+import 'package:glider/repositories/search_api_repository.dart';
 import 'package:glider/repositories/storage_repository.dart';
 import 'package:glider/repositories/web_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
