@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/repositories/website_repository.dart';
+import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -19,7 +20,11 @@ class UserBottomSheet extends StatelessWidget {
             ListTile(
               title: const Text('Copy text'),
               onTap: () async {
-                await Clipboard.setData(ClipboardData(text: user.about));
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: FormattingUtil.convertHtmlToHackerNews(user.about!),
+                  ),
+                );
                 ScaffoldMessenger.of(context).showSnackBarQuickly(
                   const SnackBar(content: Text('Text has been copied')),
                 );

@@ -5,6 +5,7 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/website_repository.dart';
+import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -43,7 +44,11 @@ class ItemBottomSheet extends StatelessWidget {
             ListTile(
               title: const Text('Copy text'),
               onTap: () async {
-                await Clipboard.setData(ClipboardData(text: item.text));
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: FormattingUtil.convertHtmlToHackerNews(item.text!),
+                  ),
+                );
                 ScaffoldMessenger.of(context).showSnackBarQuickly(
                   const SnackBar(content: Text('Text has been copied')),
                 );
