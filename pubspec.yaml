@@ -8,7 +8,6 @@ environment:
 
 dependencies:
   cached_network_image: ^3.0.0
-  connectivity_plus: ^1.0.3
   dio: ^4.0.0
   fluentui_system_icons: ^1.1.134
   flutter:

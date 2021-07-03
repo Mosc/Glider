@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:glider/repositories/api_repository.dart';
@@ -10,19 +9,6 @@ import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/cache_interceptor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-final Provider<Connectivity> connectivityProvider = Provider<Connectivity>(
-  (_) => Connectivity(),
-);
-
-final AutoDisposeFutureProvider<bool> connectedProvider =
-    FutureProvider.autoDispose<bool>(
-  (ProviderReference ref) async {
-    final ConnectivityResult result =
-        await ref.read(connectivityProvider).checkConnectivity();
-    return result != ConnectivityResult.none;
-  },
-);
 
 final Provider<Dio> _dioProvider = Provider<Dio>(
   (_) => Dio()..interceptors.add(CacheInterceptor()),
