@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/formatting_util.dart';
-import 'package:glider/utils/scaffold_messenger_state_extension.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:glider/widgets/common/options_dialog.dart';
 
 class UserBottomSheet extends StatelessWidget {
   const UserBottomSheet(this.user, {Key? key}) : super(key: key);
@@ -13,34 +11,44 @@ class UserBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<OptionsDialogOption> copyShareOptions = <OptionsDialogOption>[
+      if (user.about != null)
+        OptionsDialogOption(
+          title: 'Text',
+          text: FormattingUtil.convertHtmlToHackerNews(user.about!),
+        ),
+      OptionsDialogOption(
+        title: 'User link',
+        text: Uri.https(
+          WebsiteRepository.authority,
+          'user',
+          <String, String>{'id': user.id},
+        ).toString(),
+      ),
+    ];
+
     return SafeArea(
       child: Wrap(
         children: <Widget>[
-          if (user.about != null)
-            ListTile(
-              title: const Text('Copy text'),
-              onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(
-                    text: FormattingUtil.convertHtmlToHackerNews(user.about!),
-                  ),
-                );
-                ScaffoldMessenger.of(context).showSnackBarQuickly(
-                  const SnackBar(content: Text('Text has been copied')),
-                );
-                Navigator.of(context).pop();
-              },
-            ),
           ListTile(
-            title: const Text('Share user link'),
+            title: const Text('Copy...'),
             onTap: () async {
-              await Share.share(
-                Uri.https(
-                  WebsiteRepository.authority,
-                  'user',
-                  <String, String>{'id': user.id},
-                ).toString(),
-                subject: user.id,
+              await showDialog<void>(
+                context: context,
+                builder: (_) => OptionsDialog.copy(options: copyShareOptions),
+              );
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            title: const Text('Share...'),
+            onTap: () async {
+              await showDialog<void>(
+                context: context,
+                builder: (_) => OptionsDialog.share(
+                  options: copyShareOptions,
+                  subject: user.id,
+                ),
               );
               Navigator.of(context).pop();
             },

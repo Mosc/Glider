@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/formatting_util.dart';
-import 'package:glider/utils/scaffold_messenger_state_extension.dart';
+import 'package:glider/widgets/common/options_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ItemBottomSheet extends StatelessWidget {
   const ItemBottomSheet(this.item, {Key? key}) : super(key: key);
@@ -19,6 +17,28 @@ class ItemBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final AsyncData<bool>? favorited =
         context.read(favoritedProvider(item.id)).data;
+
+    final List<OptionsDialogOption> optionsDialogOptions =
+        <OptionsDialogOption>[
+      if (item.text != null)
+        OptionsDialogOption(
+          title: 'Text',
+          text: FormattingUtil.convertHtmlToHackerNews(item.text!),
+        ),
+      if (item.url != null)
+        OptionsDialogOption(
+          title: 'Link',
+          text: item.url!,
+        ),
+      OptionsDialogOption(
+        title: 'Thread link',
+        text: Uri.https(
+          WebsiteRepository.authority,
+          'item',
+          <String, String>{'id': item.id.toString()},
+        ).toString(),
+      ),
+    ];
 
     return SafeArea(
       child: Wrap(
@@ -40,42 +60,27 @@ class ItemBottomSheet extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
               ),
-          if (item.text != null)
-            ListTile(
-              title: const Text('Copy text'),
-              onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(
-                    text: FormattingUtil.convertHtmlToHackerNews(item.text!),
-                  ),
-                );
-                ScaffoldMessenger.of(context).showSnackBarQuickly(
-                  const SnackBar(content: Text('Text has been copied')),
-                );
-                Navigator.of(context).pop();
-              },
-            ),
-          if (item.url != null)
-            ListTile(
-              title: const Text('Share link'),
-              onTap: () async {
-                await Share.share(
-                  item.url!,
-                  subject: item.title,
-                );
-                Navigator.of(context).pop();
-              },
-            ),
           ListTile(
-            title: const Text('Share thread link'),
+            title: const Text('Copy...'),
             onTap: () async {
-              await Share.share(
-                Uri.https(
-                  WebsiteRepository.authority,
-                  'item',
-                  <String, String>{'id': item.id.toString()},
-                ).toString(),
-                subject: item.title,
+              await showDialog<void>(
+                context: context,
+                builder: (_) => OptionsDialog.copy(
+                  options: optionsDialogOptions,
+                ),
+              );
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            title: const Text('Share...'),
+            onTap: () async {
+              await showDialog<void>(
+                context: context,
+                builder: (_) => OptionsDialog.share(
+                  options: optionsDialogOptions,
+                  subject: item.title,
+                ),
               );
               Navigator.of(context).pop();
             },
