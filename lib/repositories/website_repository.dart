@@ -136,10 +136,48 @@ class WebsiteRepository {
     );
   }
 
-  Future<Iterable<int>> getFavorited({
+  Future<Iterable<int>> getFavorited({required String username}) async {
+    return <int>[
+      ...await _getFavorited(
+        username: username,
+        comments: false,
+      ),
+      ...await _getFavorited(
+        username: username,
+        comments: true,
+      ),
+    ];
+  }
+
+  Future<Iterable<int>> getUpvoted(
+      {required String username, required String password}) async {
+    // We're not interested in the submit form specifically, but it's a rather
+    // small page that returns the cookie we need for the next call.
+    final Response<void> formResponse =
+        await _getSubmitFormResponse(username: username, password: password);
+    final String? cookie =
+        formResponse.headers.value(HttpHeaders.setCookieHeader);
+
+    return <int>[
+      ...await _getUpvoted(
+        username: username,
+        password: password,
+        comments: false,
+        cookie: cookie,
+      ),
+      ...await _getUpvoted(
+        username: username,
+        password: password,
+        comments: true,
+        cookie: cookie,
+      ),
+    ];
+  }
+
+  Future<Iterable<int>> _getFavorited({
     required String username,
     int page = 1,
-    bool comments = false,
+    required bool comments,
   }) async {
     final Uri uri = Uri.https(
       authority,
@@ -156,7 +194,7 @@ class WebsiteRepository {
     return <int>[
       ...?HtmlUtil.getIds(body, selector: _itemSelector)?.map(int.parse),
       if (HtmlUtil.hasMatch(body, selector: _moreSelector))
-        ...await getFavorited(
+        ...await _getFavorited(
           username: username,
           comments: comments,
           page: page + 1,
@@ -164,19 +202,13 @@ class WebsiteRepository {
     ];
   }
 
-  Future<Iterable<int>> getUpvoted({
+  Future<Iterable<int>> _getUpvoted({
     required String username,
     required String password,
     int page = 1,
-    bool comments = false,
+    required bool comments,
+    String? cookie,
   }) async {
-    // We're not interested in the submit form specifically, but it's a rather
-    // small page that returns the cookie we need for the next call.
-    final Response<void> formResponse =
-        await _getSubmitFormResponse(username: username, password: password);
-    final String? cookie =
-        formResponse.headers.value(HttpHeaders.setCookieHeader);
-
     final Uri uri = Uri.https(
       authority,
       'upvoted',
@@ -195,11 +227,12 @@ class WebsiteRepository {
     return <int>[
       ...?HtmlUtil.getIds(body, selector: _itemSelector)?.map(int.parse),
       if (HtmlUtil.hasMatch(body, selector: _moreSelector))
-        ...await getUpvoted(
+        ...await _getUpvoted(
           username: username,
           password: password,
-          comments: comments,
           page: page + 1,
+          comments: comments,
+          cookie: cookie,
         ),
     ];
   }

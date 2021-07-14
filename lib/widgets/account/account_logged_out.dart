@@ -176,11 +176,11 @@ class AccountLoggedOut extends HookWidget {
 
   Future<void> _synchronize(BuildContext context) async {
     final AuthRepository authRepository = context.read(authRepositoryProvider);
-    final bool success = await authRepository.fetchFavorited(
-          onUpdate: (int id) => context.refresh(favoritedProvider(id)),
-        ) &&
-        await authRepository.fetchUpvoted(
+    final bool success = await authRepository.fetchUpvoted(
           onUpdate: (int id) => context.refresh(upvotedProvider(id)),
+        ) &&
+        await authRepository.fetchFavorited(
+          onUpdate: (int id) => context.refresh(favoritedProvider(id)),
         );
 
     if (success != true) {

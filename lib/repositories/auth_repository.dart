@@ -49,19 +49,12 @@ class AuthRepository {
 
   Future<bool> fetchFavorited({void Function(int)? onUpdate}) async {
     final String? username = await _storageRepository.username;
-    final String? password = await _storageRepository.password;
 
-    if (username != null && password != null) {
+    if (username != null) {
       try {
-        final List<int> ids = <int>[
-          ...await _websiteRepository.getFavorited(
-            username: username,
-          ),
-          ...await _websiteRepository.getFavorited(
-            username: username,
-            comments: true,
-          ),
-        ];
+        final Iterable<int> ids = await _websiteRepository.getFavorited(
+          username: username,
+        );
         await _storageRepository.clearFavorited();
         await _storageRepository.setFavoriteds(ids: ids, favorite: true);
 
@@ -84,17 +77,10 @@ class AuthRepository {
 
     if (username != null && password != null) {
       try {
-        final List<int> ids = <int>[
-          ...await _websiteRepository.getUpvoted(
-            username: username,
-            password: password,
-          ),
-          ...await _websiteRepository.getUpvoted(
-            username: username,
-            password: password,
-            comments: true,
-          ),
-        ];
+        final Iterable<int> ids = await _websiteRepository.getUpvoted(
+          username: username,
+          password: password,
+        );
         await _storageRepository.clearUpvoted();
         await _storageRepository.setUpvoteds(ids: ids, up: true);
 
