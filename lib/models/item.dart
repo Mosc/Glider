@@ -34,12 +34,14 @@ class Item with _$Item {
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
   static final RegExp _videoRegExp = RegExp(r'\s+\[video\]$');
+  static final RegExp _audioRegExp = RegExp(r'\s+\[audio\]$');
   static final RegExp _pdfRegExp = RegExp(r'\s+\[pdf\]$');
   static final RegExp _yearRegExp = RegExp(r'\s+\((\d+)\)');
 
   late final String? formattedTitle = title != null
       ? HtmlUnescape().convert(title!
           .replaceAll(_videoRegExp, '')
+          .replaceAll(_audioRegExp, '')
           .replaceAll(_pdfRegExp, '')
           .replaceAll(_yearRegExp, ''))
       : null;
@@ -55,6 +57,8 @@ class Item with _$Item {
   late final bool localOnly = id < 0;
 
   late final bool hasVideo = title != null && _videoRegExp.hasMatch(title!);
+
+  late final bool hasAudio = title != null && _audioRegExp.hasMatch(title!);
 
   late final bool hasPdf = title != null && _pdfRegExp.hasMatch(title!);
 

@@ -40,6 +40,8 @@ class ItemTileTitle extends HookWidget {
             ..._buildIconSpans(context, FluentIcons.poll_24_regular),
           if (item.hasVideo)
             ..._buildIconSpans(context, FluentIcons.video_clip_24_regular),
+          if (item.hasAudio)
+            ..._buildIconSpans(context, FluentIcons.headphones_24_regular),
           if (item.hasPdf)
             ..._buildIconSpans(context, FluentIcons.document_24_regular),
           TextSpan(
