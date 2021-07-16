@@ -12,8 +12,8 @@ import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ThemeDialog extends HookWidget {
-  const ThemeDialog({Key? key}) : super(key: key);
+class AppearanceBottomSheet extends HookWidget {
+  const AppearanceBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

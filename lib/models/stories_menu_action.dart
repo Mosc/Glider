@@ -2,7 +2,7 @@ enum StoriesMenuAction {
   catchUp,
   favorites,
   submit,
-  theme,
+  appearance,
   account,
 }
 
@@ -15,8 +15,8 @@ extension StoriesMenuActionExtension on StoriesMenuAction {
         return 'Favorites';
       case StoriesMenuAction.submit:
         return 'Submit';
-      case StoriesMenuAction.theme:
-        return 'Theme';
+      case StoriesMenuAction.appearance:
+        return 'Appearance';
       case StoriesMenuAction.account:
         return 'Account';
     }

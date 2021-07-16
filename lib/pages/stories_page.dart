@@ -15,9 +15,9 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/uni_links_handler.dart';
+import 'package:glider/widgets/appearance/appearance_bottom_sheet.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_body.dart';
-import 'package:glider/widgets/theme/theme_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeStateProvider<StoryType> storyTypeStateProvider =
@@ -79,8 +79,8 @@ class StoriesPage extends HookWidget {
                   return _favoritesSelected(context);
                 case StoriesMenuAction.submit:
                   return _submitSelected(context);
-                case StoriesMenuAction.theme:
-                  return _themeSelected(context);
+                case StoriesMenuAction.appearance:
+                  return _appearanceSelected(context);
                 case StoriesMenuAction.account:
                   return _accountSelected(context);
               }
@@ -194,11 +194,11 @@ class StoriesPage extends HookWidget {
     }
   }
 
-  Future<void> _themeSelected(BuildContext context) async {
+  Future<void> _appearanceSelected(BuildContext context) async {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => const ThemeDialog(),
+      builder: (_) => const AppearanceBottomSheet(),
     );
   }
 
