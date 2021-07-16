@@ -7,6 +7,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
+import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -145,17 +146,20 @@ class WalkthoughItem extends HookWidget {
       StateController<bool> demoFavoritedStateController) async {
     return showModalBottomSheet<void>(
       context: context,
-      builder: (_) => SafeArea(
-        child: ListTile(
-          title: demoFavoritedStateController.state
-              ? const Text('Unfavorite')
-              : const Text('Favorite'),
-          onTap: () {
-            demoFavoritedStateController.state =
-                !demoFavoritedStateController.state;
-            Navigator.of(context).pop();
-          },
-        ),
+      isScrollControlled: true,
+      builder: (_) => ScrollableBottomSheet(
+        children: <Widget>[
+          ListTile(
+            title: demoFavoritedStateController.state
+                ? const Text('Unfavorite')
+                : const Text('Favorite'),
+            onTap: () {
+              demoFavoritedStateController.state =
+                  !demoFavoritedStateController.state;
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
     );
   }

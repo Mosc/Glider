@@ -7,6 +7,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
+import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,27 +17,23 @@ class ThemeDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Wrap(
+    return ScrollableBottomSheet(
+      children: <Widget>[
+        const SizedBox(height: 4),
+        _buildHorizontalScrollable(
           children: <Widget>[
-            _buildHorizontalScrollable(
-              children: <Widget>[
-                for (ThemeBase themeBase in ThemeBase.values)
-                  _ThemeBaseButton(themeBase),
-              ],
-            ),
-            const SizedBox(width: double.infinity, height: 12),
-            _buildHorizontalScrollable(
-              children: <Widget>[
-                for (Color color in AppTheme.themeColors)
-                  _ThemeColorButton(color),
-              ],
-            ),
+            for (ThemeBase themeBase in ThemeBase.values)
+              _ThemeBaseButton(themeBase),
           ],
         ),
-      ),
+        const SizedBox(height: 8),
+        _buildHorizontalScrollable(
+          children: <Widget>[
+            for (Color color in AppTheme.themeColors) _ThemeColorButton(color),
+          ],
+        ),
+        const SizedBox(height: 4),
+      ],
     );
   }
 
@@ -44,7 +41,7 @@ class ThemeDialog extends HookWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(children: children),
       ),
     );

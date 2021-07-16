@@ -197,6 +197,7 @@ class StoriesPage extends HookWidget {
   Future<void> _themeSelected(BuildContext context) async {
     return showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (_) => const ThemeDialog(),
     );
   }

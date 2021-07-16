@@ -213,6 +213,7 @@ class ItemTileData extends HookWidget {
   Future<void> _buildModalBottomSheet(BuildContext context) async {
     return showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (_) => ItemBottomSheet(item),
     );
   }
