@@ -1,13 +1,10 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
-import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/utils/validators.dart';
-import 'package:glider/widgets/common/block.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -23,52 +20,48 @@ class AccountLoggedOut extends HookWidget {
     final ValueNotifier<bool> synchronizeState = useState(false);
 
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildSynchronizationInfo(context),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: usernameController,
-                decoration: const InputDecoration(labelText: 'Username'),
-                validator: Validators.notEmpty,
-                autofocus: true,
-                enabled: !loadingState.value,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password'),
-                validator: Validators.notEmpty,
-                enabled: !loadingState.value,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisSize: MainAxisSize.min,
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
                 children: <Widget>[
-                  Checkbox(
-                    value: synchronizeState.value,
-                    onChanged: loadingState.value
-                        ? null
-                        : (_) =>
-                            synchronizeState.value = !synchronizeState.value,
+                  TextFormField(
+                    controller: usernameController,
+                    decoration: const InputDecoration(labelText: 'Username'),
+                    validator: Validators.notEmpty,
+                    autofocus: true,
+                    enabled: !loadingState.value,
                   ),
-                  GestureDetector(
-                    onTap: loadingState.value
-                        ? null
-                        : () =>
-                            synchronizeState.value = !synchronizeState.value,
-                    child: const Text('Synchronize'),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(labelText: 'Password'),
+                    validator: Validators.notEmpty,
+                    enabled: !loadingState.value,
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              Row(
+            ),
+            SwitchListTile(
+              title: const Text('Synchronize'),
+              subtitle: const Text(
+                'Fetches all your favorites and upvotes from the Hacker News '
+                'server. Any favorites added in the app before logging in will '
+                'be lost.',
+              ),
+              dense: true,
+              value: synchronizeState.value,
+              onChanged: loadingState.value
+                  ? null
+                  : (_) => synchronizeState.value = !synchronizeState.value,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   OutlinedButton(
@@ -107,31 +100,9 @@ class AccountLoggedOut extends HookWidget {
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Block _buildSynchronizationInfo(BuildContext context) {
-    return Block(
-      child: Row(
-        children: <Widget>[
-          Icon(
-            FluentIcons.info_24_regular,
-            size:
-                Theme.of(context).textTheme.bodyText2?.scaledFontSize(context),
-          ),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Text(
-              'Synchronize fetches all your favorites and upvotes from '
-              'the Hacker News server. '
-              'Any favorites added in the app before logging in will be lost.',
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
