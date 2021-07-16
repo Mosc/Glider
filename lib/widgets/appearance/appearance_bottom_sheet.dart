@@ -7,6 +7,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
+import 'package:glider/widgets/common/provider_switch_list_tile.dart';
 import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -19,6 +20,26 @@ class AppearanceBottomSheet extends HookWidget {
   Widget build(BuildContext context) {
     return ScrollableBottomSheet(
       children: <Widget>[
+        ProviderSwitchListTile(
+          title: 'Show URL',
+          provider: showUrlProvider,
+          onSave: (bool value) =>
+              context.read(storageRepositoryProvider).setShowUrl(value: value),
+        ),
+        ProviderSwitchListTile(
+          title: 'Show thumbnail',
+          provider: showThumbnailProvider,
+          onSave: (bool value) => context
+              .read(storageRepositoryProvider)
+              .setShowThumbnail(value: value),
+        ),
+        ProviderSwitchListTile(
+          title: 'Show metadata',
+          provider: showMetadataProvider,
+          onSave: (bool value) => context
+              .read(storageRepositoryProvider)
+              .setShowMetadata(value: value),
+        ),
         const SizedBox(height: 4),
         _buildHorizontalScrollable(
           children: <Widget>[

@@ -10,6 +10,9 @@ class StorageRepository {
 
   static const String _themeBaseKey = 'theme_base';
   static const String _themeColorKey = 'theme_color';
+  static const String _showUrlKey = 'show_url';
+  static const String _showThumbnailKey = 'show_thumbnail';
+  static const String _showMetadataKey = 'show_metadata';
   static const String _completedWalkthroughKey = 'completed_walkthrough';
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
@@ -37,6 +40,24 @@ class StorageRepository {
 
   Future<void> setThemeColor(Color color) async =>
       (await _sharedPreferences).setInt(_themeColorKey, color.value);
+
+  Future<bool> get showUrl async =>
+      (await _sharedPreferences).getBool(_showUrlKey) ?? true;
+
+  Future<void> setShowUrl({required bool value}) async =>
+      (await _sharedPreferences).setBool(_showUrlKey, value);
+
+  Future<bool> get showThumbnail async =>
+      (await _sharedPreferences).getBool(_showThumbnailKey) ?? true;
+
+  Future<void> setShowThumbnail({required bool value}) async =>
+      (await _sharedPreferences).setBool(_showThumbnailKey, value);
+
+  Future<bool> get showMetadata async =>
+      (await _sharedPreferences).getBool(_showMetadataKey) ?? true;
+
+  Future<void> setShowMetadata({required bool value}) async =>
+      (await _sharedPreferences).setBool(_showMetadataKey, value);
 
   Future<bool> get completedWalkthrough async =>
       (await _sharedPreferences).getBool(_completedWalkthroughKey) ?? false;

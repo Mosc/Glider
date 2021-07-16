@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemTileTitle extends HookWidget {
-  const ItemTileTitle(this.item, {Key? key, this.dense = false})
-      : super(key: key);
+  const ItemTileTitle(
+    this.item, {
+    Key? key,
+    this.dense = false,
+    this.interactive = false,
+  }) : super(key: key);
 
   final Item item;
   final bool dense;
+  final bool interactive;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +37,8 @@ class ItemTileTitle extends HookWidget {
 
   Widget _buildTitleText(BuildContext context, {required bool dense}) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final bool showUrl =
+        interactive || (useProvider(showUrlProvider).data?.value ?? true);
 
     return Text.rich(
       TextSpan(
@@ -48,7 +57,7 @@ class ItemTileTitle extends HookWidget {
             text: item.formattedTitle,
             style: textTheme.subtitle1,
           ),
-          if (item.url != null) ...<InlineSpan>[
+          if (item.url != null && showUrl) ...<InlineSpan>[
             TextSpan(
               text: '​ ',
               style: textTheme.subtitle1,

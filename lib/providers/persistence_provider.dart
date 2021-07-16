@@ -14,6 +14,27 @@ final AutoDisposeFutureProvider<Color?> themeColorProvider =
   (ProviderReference ref) => ref.read(storageRepositoryProvider).themeColor,
 );
 
+final AutoDisposeFutureProvider<bool> showUrlProvider =
+    FutureProvider.autoDispose(
+  (ProviderReference ref) => ref.read(storageRepositoryProvider).showUrl,
+);
+
+final AutoDisposeFutureProvider<bool> showThumbnailProvider =
+    FutureProvider.autoDispose(
+  (ProviderReference ref) => ref.read(storageRepositoryProvider).showThumbnail,
+);
+
+final AutoDisposeFutureProvider<bool> showMetadataProvider =
+    FutureProvider.autoDispose(
+  (ProviderReference ref) => ref.read(storageRepositoryProvider).showMetadata,
+);
+
+final AutoDisposeFutureProvider<bool> completedWalkthroughProvider =
+    FutureProvider.autoDispose(
+  (ProviderReference ref) =>
+      ref.read(storageRepositoryProvider).completedWalkthrough,
+);
+
 final AutoDisposeFutureProviderFamily<bool, int> visitedProvider =
     FutureProvider.autoDispose.family(
   (ProviderReference ref, int id) =>
@@ -23,12 +44,6 @@ final AutoDisposeFutureProviderFamily<bool, int> visitedProvider =
 final FutureProviderFamily<bool, int> collapsedProvider = FutureProvider.family(
   (ProviderReference ref, int id) =>
       ref.read(storageRepositoryProvider).collapsed(id: id),
-);
-
-final AutoDisposeFutureProvider<bool> completedWalkthroughProvider =
-    FutureProvider.autoDispose(
-  (ProviderReference ref) =>
-      ref.read(storageRepositoryProvider).completedWalkthrough,
 );
 
 final AutoDisposeFutureProvider<bool> loggedInProvider =

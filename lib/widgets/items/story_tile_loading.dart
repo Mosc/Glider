@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/items/item_tile_header.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class StoryTileLoading extends StatelessWidget {
+class StoryTileLoading extends HookWidget {
   const StoryTileLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final double? thumbnailSize = ItemTileHeader.calculateHeight(context);
+    final bool showThumbnail =
+        useProvider(showThumbnailProvider).data?.value ?? true;
+    final bool showMetadata =
+        useProvider(showMetadataProvider).data?.value ?? true;
 
     return TileLoading(
       child: Padding(
@@ -37,29 +44,33 @@ class StoryTileLoading extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 12),
-                TileLoadingBlock(
-                  width: thumbnailSize,
-                  height: thumbnailSize,
-                ),
+                if (showThumbnail) ...<Widget>[
+                  const SizedBox(width: 12),
+                  TileLoadingBlock(
+                    width: thumbnailSize,
+                    height: thumbnailSize,
+                  ),
+                ],
               ],
             ),
-            const SizedBox(height: 15),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                TileLoadingBlock(
-                  width: 160,
-                  height: textTheme.caption?.scaledFontSize(context),
-                ),
-                const Spacer(),
-                TileLoadingBlock(
-                  width: 80,
-                  height: textTheme.caption?.scaledFontSize(context),
-                ),
-              ],
-            ),
-            const SizedBox(height: 1),
+            if (showMetadata) ...<Widget>[
+              const SizedBox(height: 15),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  TileLoadingBlock(
+                    width: 160,
+                    height: textTheme.caption?.scaledFontSize(context),
+                  ),
+                  const Spacer(),
+                  TileLoadingBlock(
+                    width: 80,
+                    height: textTheme.caption?.scaledFontSize(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 1),
+            ],
           ],
         ),
       ),

@@ -1,13 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/item_tile_header.dart';
 import 'package:glider/widgets/items/item_tile_metadata.dart';
 import 'package:glider/widgets/items/item_tile_preview.dart';
 import 'package:glider/widgets/items/item_tile_text.dart';
 import 'package:glider/widgets/items/item_tile_url.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTileContent extends StatelessWidget {
+class ItemTileContent extends HookWidget {
   const ItemTileContent(
     this.item, {
     Key? key,
@@ -23,6 +26,9 @@ class ItemTileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool showMetadata =
+        interactive || (useProvider(showMetadataProvider).data?.value ?? true);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Column(
@@ -32,15 +38,25 @@ class ItemTileContent extends StatelessWidget {
             const ItemTilePreview(),
             const SizedBox(height: 12),
           ],
-          if (item.title != null) ...<Widget>[
-            ItemTileHeader(item, dense: dense),
-            const SizedBox(height: 12),
-          ],
-          ItemTileMetadata(
-            item,
-            root: root,
-            dense: dense,
-            interactive: interactive,
+          if (item.title != null)
+            ItemTileHeader(
+              item,
+              dense: dense,
+              interactive: interactive,
+            ),
+          SmoothAnimatedSwitcher.vertical(
+            condition: showMetadata,
+            child: Column(
+              children: <Widget>[
+                if (item.title != null) const SizedBox(height: 12),
+                ItemTileMetadata(
+                  item,
+                  root: root,
+                  dense: dense,
+                  interactive: interactive,
+                ),
+              ],
+            ),
           ),
           if (item.text != null || item.url != null)
             SmoothAnimatedSwitcher.vertical(

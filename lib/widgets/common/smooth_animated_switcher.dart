@@ -26,6 +26,14 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
   })  : transitionBuilder = AnimationUtil.horizontalFadeTransitionBuilder,
         super(key: key);
 
+  const SmoothAnimatedSwitcher.all({
+    Key? key,
+    required this.condition,
+    required this.child,
+    this.duration,
+  })  : transitionBuilder = AnimationUtil.allFadeTransitionBuilder,
+        super(key: key);
+
   final bool condition;
   final Widget child;
   final Duration? duration;

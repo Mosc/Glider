@@ -12,15 +12,32 @@ class AnimationUtil {
 
   static Widget horizontalFadeTransitionBuilder(
       Widget child, Animation<double> animation) {
-    return _sizeFadeTransitionBuilder(child, animation, Axis.horizontal);
+    return _sizeTransitionBuilder(
+      fadeTransitionBuilder(child, animation),
+      animation,
+      Axis.horizontal,
+    );
   }
 
   static Widget verticalFadeTransitionBuilder(
       Widget child, Animation<double> animation) {
-    return _sizeFadeTransitionBuilder(child, animation, Axis.vertical);
+    return _sizeTransitionBuilder(
+      fadeTransitionBuilder(child, animation),
+      animation,
+      Axis.vertical,
+    );
   }
 
-  static Widget _sizeFadeTransitionBuilder(
+  static Widget allFadeTransitionBuilder(
+      Widget child, Animation<double> animation) {
+    return _sizeTransitionBuilder(
+      verticalFadeTransitionBuilder(child, animation),
+      animation,
+      Axis.horizontal,
+    );
+  }
+
+  static Widget _sizeTransitionBuilder(
       Widget child, Animation<double> animation, Axis axis) {
     return SizeTransition(
       axis: axis,
