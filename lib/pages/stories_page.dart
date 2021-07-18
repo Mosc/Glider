@@ -105,6 +105,7 @@ class StoriesPage extends HookWidget {
             foregroundColor: theme.colorScheme.onPrimary,
             useRotationAnimation: false,
             animationSpeed: 100,
+            spacing: 4,
           ),
         ),
       ),
