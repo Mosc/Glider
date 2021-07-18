@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:glider/l10n/app_localizations.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';

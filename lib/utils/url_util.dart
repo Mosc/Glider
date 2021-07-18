@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
-import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:native_launcher/native_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
