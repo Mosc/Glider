@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/block.dart';
 
@@ -8,6 +9,8 @@ class Experimental extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return Block(
       child: Row(
         children: <Widget>[
@@ -17,7 +20,9 @@ class Experimental extends StatelessWidget {
                 Theme.of(context).textTheme.bodyText2?.scaledFontSize(context),
           ),
           const SizedBox(width: 12),
-          const Text('This feature is experimental. Things may go wrong.'),
+          Expanded(
+            child: Text(appLocalizations.experimentalDescription),
+          ),
         ],
       ),
     );

@@ -14,6 +14,8 @@ dependencies:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
   flutter_hooks: ^0.17.0
+  flutter_localizations:
+    sdk: flutter
   flutter_secure_storage: ^4.2.0
   flutter_speed_dial: ^4.1.0
   flutter_web_browser: ^0.14.0
@@ -22,7 +24,11 @@ dependencies:
   hooks_riverpod: ^0.14.0+4
   html: ^0.15.0
   html_unescape: ^2.0.0
-  jiffy: ^4.1.0
+  intl: ^0.17.0
+  jiffy:
+    git:
+      url: https://github.com/jama5262/jiffy
+      ref: develop
   native_launcher:
     path: packages/native_launcher
   octo_image: ^1.0.0+1
@@ -44,6 +50,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
 flutter_icons:
   android: true

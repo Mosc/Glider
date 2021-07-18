@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:glider/app_theme.dart';
+import 'package:glider/l10n/app_localizations.dart';
 
 enum ThemeBase {
   system,
@@ -11,18 +11,20 @@ enum ThemeBase {
 }
 
 extension ThemeBaseExtension on ThemeBase {
-  String get title {
+  String title(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     switch (this) {
       case ThemeBase.system:
-        return 'System';
+        return appLocalizations.system;
       case ThemeBase.light:
-        return 'Light';
+        return appLocalizations.light;
       case ThemeBase.dark:
-        return 'Dark';
+        return appLocalizations.dark;
       case ThemeBase.black:
-        return 'Black';
+        return appLocalizations.black;
       case ThemeBase.space:
-        return 'Space';
+        return appLocalizations.space;
     }
   }
 

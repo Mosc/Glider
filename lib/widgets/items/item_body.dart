@@ -3,6 +3,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/pages/item_page.dart';
@@ -76,6 +77,8 @@ class ItemBody extends HookWidget {
   }
 
   Widget _buildOpenParent(BuildContext context, int parentId) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: InkWell(
@@ -97,7 +100,7 @@ class ItemBody extends HookWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Open the parent of this single thread',
+                    appLocalizations.openParent,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),

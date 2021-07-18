@@ -20,5 +20,5 @@ class User with _$User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-  late final String createdDate = Jiffy.unix(created).yMMMMd;
+  late final DateTime createdDate = Jiffy.unix(created).dateTime;
 }

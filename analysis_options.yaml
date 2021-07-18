@@ -6,9 +6,10 @@ analyzer:
     missing_required_param: warning
     missing_return: warning
   exclude:
-    - lib/**.g.dart
-    - lib/**.freezed.dart
     - lib/generated_plugin_registrant.dart
+    - lib/**.freezed.dart
+    - lib/**.g.dart
+    - lib/l10n/**.dart
 
 linter:
   rules:

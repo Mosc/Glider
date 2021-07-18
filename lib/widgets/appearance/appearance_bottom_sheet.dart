@@ -2,6 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/app_theme.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/theme_base.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
@@ -18,23 +19,25 @@ class AppearanceBottomSheet extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return ScrollableBottomSheet(
       children: <Widget>[
         ProviderSwitchListTile(
-          title: 'Show URL',
+          title: appLocalizations.showUrl,
           provider: showUrlProvider,
           onSave: (bool value) =>
               context.read(storageRepositoryProvider).setShowUrl(value: value),
         ),
         ProviderSwitchListTile(
-          title: 'Show thumbnail',
+          title: appLocalizations.showThumbnail,
           provider: showThumbnailProvider,
           onSave: (bool value) => context
               .read(storageRepositoryProvider)
               .setShowThumbnail(value: value),
         ),
         ProviderSwitchListTile(
-          title: 'Show metadata',
+          title: appLocalizations.showMetadata,
           provider: showMetadataProvider,
           onSave: (bool value) => context
               .read(storageRepositoryProvider)
@@ -110,7 +113,7 @@ class _ThemeBaseButton extends HookWidget {
           },
           label: Row(
             children: <Widget>[
-              Text(base.title),
+              Text(base.title(context)),
               const SizedBox(width: 4),
             ],
           ),

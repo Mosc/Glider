@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -23,6 +24,8 @@ class ReplyBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final ValueNotifier<bool> parentCollapsedState = useState(true);
@@ -45,12 +48,14 @@ class ReplyBody extends HookWidget {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: commentController,
-                  decoration: const InputDecoration(labelText: 'Comment'),
+                  decoration:
+                      InputDecoration(labelText: appLocalizations.comment),
                   keyboardType: TextInputType.multiline,
                   textCapitalization: TextCapitalization.sentences,
                   autofocus: true,
                   maxLines: null,
-                  validator: Validators.notEmpty,
+                  validator: (String? value) =>
+                      Validators.notEmpty(context, value),
                   enabled: !loadingState.value,
                 ),
                 const SizedBox(height: 16),
@@ -62,7 +67,7 @@ class ReplyBody extends HookWidget {
                         onPressed: loadingState.value
                             ? null
                             : () => _quoteParent(commentController),
-                        child: const Text('Insert parent quote'),
+                        child: Text(appLocalizations.quoteParent),
                       ),
                       const SizedBox(width: 16),
                     ],
@@ -77,7 +82,7 @@ class ReplyBody extends HookWidget {
                                 loadingState.value = false;
                               }
                             },
-                      child: const Text('Reply'),
+                      child: Text(appLocalizations.reply),
                     ),
                   ],
                 ),
@@ -88,7 +93,7 @@ class ReplyBody extends HookWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'Preview',
+            appLocalizations.preview,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -121,6 +126,8 @@ class ReplyBody extends HookWidget {
   }
 
   Future<void> _reply(BuildContext context, {required String text}) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success = await authRepository.reply(
       parentId: parent.id,
@@ -155,7 +162,7 @@ class ReplyBody extends HookWidget {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        const SnackBar(content: Text('Something went wrong')),
+        SnackBar(content: Text(appLocalizations.genericError)),
       );
     }
   }

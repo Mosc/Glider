@@ -260,6 +260,11 @@ packages:
       url: "https://github.com/dirkbo/flutter_launcher_icons"
     source: git
     version: "0.9.1"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_riverpod:
     dependency: transitive
     description:
@@ -313,7 +318,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.2"
+    version: "0.14.3"
   frontend_server_client:
     dependency: transitive
     description:
@@ -385,7 +390,7 @@ packages:
     source: hosted
     version: "3.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.dartlang.org"
@@ -401,9 +406,11 @@ packages:
   jiffy:
     dependency: "direct main"
     description:
-      name: jiffy
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: develop
+      resolved-ref: "2ded0e4daad9a960c146f6536bb49ca7f0824849"
+      url: "https://github.com/jama5262/jiffy"
+    source: git
     version: "4.1.0"
   js:
     dependency: transitive

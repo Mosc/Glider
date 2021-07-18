@@ -1,0 +1,164 @@
+{
+  "@@locale": "en",
+
+  "appName": "Glider",
+  "dateRange": "{startDate} to {endDate}",
+  "dateRangeSingle": "{date}",
+  "sinceDate": "since {date}",
+  "fromYear": "from {year}",
+  "deleted": "deleted",
+  "left": "left",
+  "right": "right",
+  "walkthroughTitle": "Walkthrough step {currentStep} of {totalSteps}",
+  "walkthroughStep1": "Most important actions in {appName} are performed using gestures. That includes upvoting, replying and opening links. For instance, try swiping this walkthrough {startToEnd}.\n\nOr dismiss this walkthrough at any point by swiping {endToStart}.",
+  "walkthroughStep2": "You've cast an upvote!\n\nLess frequently used actions, such as sharing and favoriting, are performed with long-presses. Use this method to simulate adding this walkthrough to your favorites. When logged in, favorites are added to your Hacker News account as well.",
+  "walkthroughStep3": "Great! Keep in mind that both upvotes and favorites can be undone using the mentioned interactions as well.\n\nComplete this walkthrough by swiping {endToStart}.",
+  "topStories": "Top stories",
+  "newTopStories": "New top stories",
+  "newStories": "New stories",
+  "bestStories": "Best stories",
+  "askHn": "Ask HN",
+  "showHn": "Show HN",
+  "search": "Search",
+  "searchHint": "Search...",
+  "catchUp": "Catch up",
+  "custom": "Custom",
+  "pastDay": "Past day",
+  "pastWeek": "Past week",
+  "pastMonth": "Past month",
+  "pastYear": "Past year",
+  "favorites": "Favorites",
+  "submit": "Submit",
+  "submitNotLoggedIn": "Log in to submit",
+  "reply": "Reply",
+  "replyNotLoggedIn": "Log in to reply",
+  "storyTypeDescription": "Select the type of content to submit",
+  "title": "Title",
+  "comment": "Comment",
+  "autofillTitle": "Autofill title",
+  "autofillTitleError": "Could not autofill title",
+  "quoteParent": "Quote parent",
+  "preview": "Preview",
+  "previewDescription": "Note: The following is a preview. It may not accurately depict what the result will look like once it has been processed.",
+  "refresh": "Refresh",
+  "processingInfo": "Processing may take a moment, consider refreshing for an updated view",
+  "appearance": "Appearance",
+  "showUrl": "Show URL",
+  "showThumbnail": "Show thumbnail",
+  "showMetadata": "Show metadata",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+  "black": "Black",
+  "space": "Space",
+  "account": "Account",
+  "register": "Register",
+  "registerError": "Registering failed",
+  "logIn": "Log in",
+  "logInError": "Logging in failed",
+  "logOut": "Log out",
+  "username": "Username",
+  "password": "Password",
+  "synchronize": "Synchronize",
+  "synchronizeDescription": "Fetches all your favorites and upvotes from the Hacker News server. Any favorites added in the app before logging in will be lost.",
+  "synchronizeDescriptionLong": "{appName} sends favorites and upvotes to your Hacker News account, but it is not aware of actions performed outside of the app, such as on the official website or in alternative apps.\n\nSynchronize fetches this data from the Hacker News server and overwrites locally stored data. Any favorites added in the app before logging in will be lost.\n\nDo you want to synchronize now?",
+  "synchronizeSuccess": "Favorites and upvotes have been synchronized",
+  "synchronizeError": "Synchronizing failed",
+  "voteNotLoggedIn": "Log in to vote",
+  "openLinkError": "Could not open link",
+  "favorite": "Favorite",
+  "unfavorite": "Unfavorite",
+  "copy": "Copy",
+  "share": "Share",
+  "text": "Text",
+  "link": "Link",
+  "threadLink": "Thread link",
+  "userLink": "User link",
+  "openParent": "Open the parent of this single thread",
+  "experimentalDescription": "This feature is experimental. Things may go wrong.",
+  "notEmptyError": "This field cannot be empty.",
+  "maxLengthError": "Value must have a length less than or equal to {maxLength}.",
+  "urlError": "This field requires a valid URL address.",
+  "genericError": "Something went wrong",
+  "wittyError": "It doesn't look like anything to me",
+
+  "@dateRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      },
+      "endDate": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "@dateRangeSingle": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "@sinceDate": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMMd"
+      }
+    }
+  },
+  "@fromYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "@walkthroughTitle": {
+    "placeholders": {
+      "currentStep": {
+        "type": "int"
+      },
+      "totalSteps": {
+        "type": "int"
+      }
+    }
+  },
+  "@walkthroughStep1": {
+    "placeholders": {
+      "startToEnd": {
+        "type": "String"
+      },
+      "endToStart": {
+        "type": "String"
+      },
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "@walkthroughStep3": {
+    "placeholders": {
+      "endToStart": {
+        "type": "String"
+      }
+    }
+  },
+  "@synchronizeDescriptionLong": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "@maxLengthError": {
+    "placeholders": {
+      "maxLength": {
+        "type": "int"
+      }
+    }
+  }
+}

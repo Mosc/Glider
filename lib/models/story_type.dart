@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/widgets.dart';
+import 'package:glider/l10n/app_localizations.dart';
 
 enum StoryType {
   topStories,
@@ -11,20 +12,22 @@ enum StoryType {
 }
 
 extension StoryTypeExtension on StoryType {
-  String get title {
+  String title(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     switch (this) {
       case StoryType.topStories:
-        return 'Top stories';
+        return appLocalizations.topStories;
       case StoryType.newTopStories:
-        return 'New top stories';
+        return appLocalizations.newTopStories;
       case StoryType.newStories:
-        return 'New stories';
+        return appLocalizations.newStories;
       case StoryType.bestStories:
-        return 'Best stories';
+        return appLocalizations.bestStories;
       case StoryType.askStories:
-        return 'Ask HN';
+        return appLocalizations.askHn;
       case StoryType.showStories:
-        return 'Show HN';
+        return appLocalizations.showHn;
     }
   }
 

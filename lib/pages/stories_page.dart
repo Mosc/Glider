@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/models/stories_menu_action.dart';
 import 'package:glider/models/story_type.dart';
@@ -14,7 +15,6 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
-import 'package:glider/utils/uni_links_handler.dart';
 import 'package:glider/widgets/appearance/appearance_bottom_sheet.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_body.dart';
@@ -29,11 +29,9 @@ class StoriesPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useMemoized(() => UniLinksHandler.init(context));
-    useEffect(
-      () => UniLinksHandler.dispose,
-      <Object?>[UniLinksHandler.uriSubscription],
-    );
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
+    final ThemeData theme = Theme.of(context);
 
     final ValueNotifier<bool> speedDialVisibleState = useState(true);
     final ScrollController scrollController = useScrollController();
@@ -51,16 +49,14 @@ class StoriesPage extends HookWidget {
     final StateController<StoryType> storyTypeStateController =
         useProvider(storyTypeStateProvider);
 
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       body: FloatingAppBarScrollView(
         controller: scrollController,
-        title: const Text('Glider'),
+        title: Text(appLocalizations.appName),
         actions: <Widget>[
           IconButton(
             icon: const Icon(FluentIcons.search_24_regular),
-            tooltip: 'Search',
+            tooltip: appLocalizations.search,
             onPressed: () => _searchSelected(context),
           ),
           PopupMenuButton<StoriesMenuAction>(
@@ -68,7 +64,7 @@ class StoriesPage extends HookWidget {
               for (StoriesMenuAction menuAction in StoriesMenuAction.values)
                 PopupMenuItem<StoriesMenuAction>(
                   value: menuAction,
-                  child: Text(menuAction.title),
+                  child: Text(menuAction.title(context)),
                 ),
             ],
             onSelected: (StoriesMenuAction menuAction) async {
@@ -98,7 +94,7 @@ class StoriesPage extends HookWidget {
             children: <SpeedDialChild>[
               for (StoryType storyType in StoryType.values)
                 SpeedDialChild(
-                  label: storyType.title,
+                  label: storyType.title(context),
                   child: Icon(storyType.icon),
                   onTap: () => storyTypeStateController.state = storyType,
                 ),
@@ -149,6 +145,8 @@ class StoriesPage extends HookWidget {
   }
 
   Future<void> _submitSelected(BuildContext context) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -165,12 +163,9 @@ class StoriesPage extends HookWidget {
         context.read(storyTypeStateProvider).state = StoryType.newStories;
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(
-            content: const Text(
-              'Processing may take a moment, '
-              'consider refreshing for an updated view',
-            ),
+            content: Text(appLocalizations.processingInfo),
             action: SnackBarAction(
-              label: 'Refresh',
+              label: appLocalizations.refresh,
               onPressed: () =>
                   context.refresh(storyIdsProvider(StoryType.newStories)),
             ),
@@ -180,9 +175,9 @@ class StoriesPage extends HookWidget {
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
         SnackBar(
-          content: const Text('Log in to submit'),
+          content: Text(appLocalizations.submitNotLoggedIn),
           action: SnackBarAction(
-            label: 'Log in',
+            label: appLocalizations.logIn,
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

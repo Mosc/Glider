@@ -48,3 +48,6 @@ app.*.map.json
 # build_runner generated files
 *.freezed.dart
 *.g.dart
+
+# Flutter generate generated files
+**/l10n/*.dart

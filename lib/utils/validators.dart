@@ -1,28 +1,36 @@
+import 'package:flutter/widgets.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:string_validator/string_validator.dart';
 
 class Validators {
   Validators._();
 
-  static String? notEmpty(String? value) {
+  static String? notEmpty(BuildContext context, String? value) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     if (value == null || value.isEmpty) {
-      return 'This field cannot be empty.';
+      return appLocalizations.notEmptyError;
     }
 
     return null;
   }
 
-  static String? maxLength(String? value, int maxLength) {
+  static String? maxLength(BuildContext context, String? value, int maxLength) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     if (value != null && value.length > maxLength) {
-      return 'Value must have a length less than or equal to $maxLength.';
+      return appLocalizations.maxLengthError(maxLength);
     }
 
     return null;
   }
 
-  static String? url(String? value) {
+  static String? url(BuildContext context, String? value) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     if (value != null &&
         !isURL(value, <String, Object>{'requireProtocol': true})) {
-      return 'This field requires a valid URL address.';
+      return appLocalizations.urlError;
     }
 
     return null;

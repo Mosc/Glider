@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
@@ -16,6 +17,8 @@ class ItemBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AsyncData<bool>? favorited =
         context.read(favoritedProvider(item.id)).data;
 
@@ -23,16 +26,16 @@ class ItemBottomSheet extends StatelessWidget {
         <OptionsDialogOption>[
       if (item.text != null)
         OptionsDialogOption(
-          title: 'Text',
+          title: appLocalizations.text,
           text: FormattingUtil.convertHtmlToHackerNews(item.text!),
         ),
       if (item.url != null)
         OptionsDialogOption(
-          title: 'Link',
+          title: appLocalizations.link,
           text: item.url!,
         ),
       OptionsDialogOption(
-        title: 'Thread link',
+        title: appLocalizations.threadLink,
         text: Uri.https(
           WebsiteRepository.authority,
           'item',
@@ -46,7 +49,7 @@ class ItemBottomSheet extends StatelessWidget {
         if (favorited != null)
           if (favorited.value)
             ListTile(
-              title: const Text('Unfavorite'),
+              title: Text(appLocalizations.unfavorite),
               onTap: () {
                 _favorite(context, favorite: false);
                 Navigator.of(context).pop();
@@ -54,14 +57,21 @@ class ItemBottomSheet extends StatelessWidget {
             )
           else
             ListTile(
-              title: const Text('Favorite'),
+              title: Text(appLocalizations.favorite),
               onTap: () {
                 _favorite(context, favorite: true);
                 Navigator.of(context).pop();
               },
             ),
         ListTile(
-          title: const Text('Copy...'),
+          title: Text.rich(
+            TextSpan(
+              children: <InlineSpan>[
+                TextSpan(text: appLocalizations.copy),
+                const TextSpan(text: '...'),
+              ],
+            ),
+          ),
           onTap: () async {
             await showDialog<void>(
               context: context,
@@ -73,7 +83,14 @@ class ItemBottomSheet extends StatelessWidget {
           },
         ),
         ListTile(
-          title: const Text('Share...'),
+          title: Text.rich(
+            TextSpan(
+              children: <InlineSpan>[
+                TextSpan(text: appLocalizations.share),
+                const TextSpan(text: '...'),
+              ],
+            ),
+          ),
           onTap: () async {
             await showDialog<void>(
               context: context,

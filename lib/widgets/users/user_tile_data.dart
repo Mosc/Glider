@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
@@ -12,6 +13,8 @@ class UserTileData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
@@ -42,7 +45,7 @@ class UserTileData extends StatelessWidget {
                 const SizedBox(width: 8),
                 const Spacer(),
                 Text(
-                  'since ${user.createdDate}',
+                  appLocalizations.sinceDate(user.createdDate),
                   style: textTheme.caption,
                 ),
               ],

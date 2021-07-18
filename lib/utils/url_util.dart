@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:native_launcher/native_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,13 +11,15 @@ class UrlUtil {
   UrlUtil._();
 
   static Future<bool> tryLaunch(BuildContext context, String urlString) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final bool success = await _tryLaunchNonBrowser(urlString) ||
         await _tryLaunchCustomTab(context, urlString) ||
         await _tryLaunchPlatform(urlString);
 
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        const SnackBar(content: Text('Could not open URL')),
+        SnackBar(content: Text(appLocalizations.openLinkError)),
       );
     }
 

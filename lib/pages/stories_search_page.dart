@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
@@ -34,6 +35,11 @@ class StoriesSearchPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
+    final ThemeData theme = Theme.of(context);
+    final bool dark = theme.colorScheme.brightness == Brightness.dark;
+
     final ValueNotifier<bool> speedDialVisibleState = useState(true);
     final ScrollController scrollController = useScrollController();
     useEffect(
@@ -71,9 +77,6 @@ class StoriesSearchPage extends HookWidget {
     );
     useMemoized(animationController.forward);
 
-    final ThemeData theme = Theme.of(context);
-    final bool dark = theme.colorScheme.brightness == Brightness.dark;
-
     return Theme(
       data: theme.copyWith(
         appBarTheme: theme.appBarTheme.copyWith(
@@ -92,13 +95,14 @@ class StoriesSearchPage extends HookWidget {
           title: enableSearch
               ? TextField(
                   controller: queryController,
-                  decoration: const InputDecoration(hintText: 'Search...'),
+                  decoration:
+                      InputDecoration(hintText: appLocalizations.searchHint),
                   textInputAction: TextInputAction.search,
                   autofocus: true,
                   onChanged: (String value) =>
                       storySearchQueryStateController.state = value,
                 )
-              : const Text('Catch up'),
+              : Text(appLocalizations.catchUp),
           actions: <Widget>[
             if (storySearchQueryStateController.state.isNotEmpty)
               IconButton(
@@ -126,7 +130,7 @@ class StoriesSearchPage extends HookWidget {
                 for (StoryType storyType in StoryType.values
                     .where((StoryType storyType) => storyType.searchable))
                   SpeedDialChild(
-                    label: storyType.title,
+                    label: storyType.title(context),
                     child: Icon(storyType.icon),
                     onTap: () =>
                         searchStoryTypeStateController.state = storyType,
@@ -190,8 +194,8 @@ class _SearchRangeChip extends HookWidget {
         useProvider(storySearchCustomDateTimeRangeStateProvider);
 
     return ChoiceChip(
-      label: Text(searchRange
-          .title(storySearchCustomDateTimeRangeStateController.state)),
+      label: Text(searchRange.title(
+          context, storySearchCustomDateTimeRangeStateController.state)),
       selected: storySearchRangeStateController.state == searchRange,
       onSelected: (bool selected) async {
         final StateController<DateTimeRange?>

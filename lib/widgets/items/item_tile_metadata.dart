@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/user_page.dart';
@@ -27,7 +28,10 @@ class ItemTileMetadata extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final TextTheme textTheme = Theme.of(context).textTheme;
+
     final AsyncData<bool>? favorited =
         useProvider(favoritedProvider(item.id)).data;
     final AsyncData<bool>? upvoted = useProvider(upvotedProvider(item.id)).data;
@@ -68,7 +72,7 @@ class ItemTileMetadata extends HookWidget {
           if (item.deleted ?? false) ...<Widget>[
             const MetadataItem(icon: FluentIcons.delete_24_regular),
             Text(
-              '[deleted]',
+              '[${appLocalizations.deleted}]',
               style: textTheme.bodyText2
                   ?.copyWith(fontSize: textTheme.caption?.fontSize),
             ),
@@ -80,7 +84,7 @@ class ItemTileMetadata extends HookWidget {
           if (item.hasOriginalYear)
             MetadataItem(
               icon: FluentIcons.shifts_activity_24_regular,
-              text: 'from ${item.originalYear}',
+              text: appLocalizations.fromYear(item.originalYear!),
             ),
           SmoothAnimatedSwitcher.horizontal(
             condition: item.cache,

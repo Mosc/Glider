@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/formatting_util.dart';
@@ -12,14 +13,16 @@ class UserBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final List<OptionsDialogOption> copyShareOptions = <OptionsDialogOption>[
       if (user.about != null)
         OptionsDialogOption(
-          title: 'Text',
+          title: appLocalizations.text,
           text: FormattingUtil.convertHtmlToHackerNews(user.about!),
         ),
       OptionsDialogOption(
-        title: 'User link',
+        title: appLocalizations.userLink,
         text: Uri.https(
           WebsiteRepository.authority,
           'user',
@@ -31,7 +34,14 @@ class UserBottomSheet extends StatelessWidget {
     return ScrollableBottomSheet(
       children: <Widget>[
         ListTile(
-          title: const Text('Copy...'),
+          title: Text.rich(
+            TextSpan(
+              children: <InlineSpan>[
+                TextSpan(text: appLocalizations.copy),
+                const TextSpan(text: '...'),
+              ],
+            ),
+          ),
           onTap: () async {
             await showDialog<void>(
               context: context,
@@ -41,7 +51,14 @@ class UserBottomSheet extends StatelessWidget {
           },
         ),
         ListTile(
-          title: const Text('Share...'),
+          title: Text.rich(
+            TextSpan(
+              children: <InlineSpan>[
+                TextSpan(text: appLocalizations.share),
+                const TextSpan(text: '...'),
+              ],
+            ),
+          ),
           onTap: () async {
             await showDialog<void>(
               context: context,

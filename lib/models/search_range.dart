@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:jiffy/jiffy.dart';
 
 enum SearchRange {
@@ -10,25 +11,27 @@ enum SearchRange {
 }
 
 extension SearchRangeExtension on SearchRange {
-  String title(DateTimeRange? customDateTimeRange) {
-    String formatDate(DateTime dateTime) => Jiffy(dateTime).yMMMd;
+  String title(BuildContext context, DateTimeRange? customDateTimeRange) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     switch (this) {
       case SearchRange.custom:
         return customDateTimeRange != null
             ? customDateTimeRange.duration != Duration.zero
-                ? '${formatDate(customDateTimeRange.start)} to '
-                    '${formatDate(customDateTimeRange.end)}'
-                : formatDate(customDateTimeRange.start)
-            : 'Custom';
+                ? appLocalizations.dateRange(
+                    customDateTimeRange.start,
+                    customDateTimeRange.end,
+                  )
+                : appLocalizations.dateRangeSingle(customDateTimeRange.start)
+            : appLocalizations.custom;
       case SearchRange.pastDay:
-        return 'Past day';
+        return appLocalizations.pastDay;
       case SearchRange.pastWeek:
-        return 'Past week';
+        return appLocalizations.pastWeek;
       case SearchRange.pastMonth:
-        return 'Past month';
+        return appLocalizations.pastMonth;
       case SearchRange.pastYear:
-        return 'Past year';
+        return appLocalizations.pastYear;
     }
   }
 

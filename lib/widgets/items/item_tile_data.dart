@@ -2,6 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/app_theme.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
@@ -219,6 +220,8 @@ class ItemTileData extends HookWidget {
   }
 
   Future<void> _vote(BuildContext context, {required bool up}) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -236,15 +239,15 @@ class ItemTileData extends HookWidget {
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBarQuickly(
-          const SnackBar(content: Text('Something went wrong')),
+          SnackBar(content: Text(appLocalizations.genericError)),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
         SnackBar(
-          content: const Text('Log in to vote'),
+          content: Text(appLocalizations.voteNotLoggedIn),
           action: SnackBarAction(
-            label: 'Log in',
+            label: appLocalizations.logIn,
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),
@@ -257,6 +260,8 @@ class ItemTileData extends HookWidget {
   }
 
   Future<void> _reply(BuildContext context) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -274,12 +279,9 @@ class ItemTileData extends HookWidget {
         context.refresh(itemTreeStreamProvider(rootId));
         ScaffoldMessenger.of(context).showSnackBarQuickly(
           SnackBar(
-            content: const Text(
-              'Processing may take a moment, '
-              'consider refreshing for an updated view',
-            ),
+            content: Text(appLocalizations.processingInfo),
             action: SnackBarAction(
-              label: 'Refresh',
+              label: appLocalizations.refresh,
               onPressed: () async {
                 await reloadItemTree(context.refresh, id: rootId);
                 return context.refresh(itemTreeStreamProvider(rootId));
@@ -291,9 +293,9 @@ class ItemTileData extends HookWidget {
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
         SnackBar(
-          content: const Text('Log in to reply'),
+          content: Text(appLocalizations.replyNotLoggedIn),
           action: SnackBarAction(
-            label: 'Log in',
+            label: appLocalizations.logIn,
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

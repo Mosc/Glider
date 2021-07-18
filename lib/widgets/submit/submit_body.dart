@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/submit_type.dart';
@@ -24,9 +25,11 @@ class SubmitBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
-    final ValueNotifier<SubmitType> submitTypeState = useState(SubmitType.url);
+    final ValueNotifier<SubmitType> submitTypeState = useState(SubmitType.link);
     final TextEditingController titleController = useTextEditingController();
     final TextEditingValue titleListenable =
         useValueListenable(titleController);
@@ -36,8 +39,8 @@ class SubmitBody extends HookWidget {
     final TextEditingValue textListenable = useValueListenable(textController);
     final String? username = useProvider(usernameProvider).data?.value;
 
-    String? url() =>
-        submitTypeState.value == SubmitType.url ? urlListenable.text : null;
+    String? link() =>
+        submitTypeState.value == SubmitType.link ? urlListenable.text : null;
 
     String? text() =>
         submitTypeState.value == SubmitType.text ? textListenable.text : null;
@@ -55,7 +58,7 @@ class SubmitBody extends HookWidget {
                 const Experimental(),
                 const SizedBox(height: 16),
                 Text(
-                  'Select the type of content to submit.',
+                  appLocalizations.storyTypeDescription,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Wrap(
@@ -75,7 +78,7 @@ class SubmitBody extends HookWidget {
                             onTap: loadingState.value
                                 ? null
                                 : () => submitTypeState.value = submitType,
-                            child: Text(submitType.title),
+                            child: Text(submitType.title(context)),
                           ),
                         ],
                       ),
@@ -83,7 +86,8 @@ class SubmitBody extends HookWidget {
                 ),
                 TextFormField(
                   controller: titleController,
-                  decoration: const InputDecoration(labelText: 'Title'),
+                  decoration:
+                      InputDecoration(labelText: appLocalizations.title),
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   autofocus: true,
@@ -91,46 +95,50 @@ class SubmitBody extends HookWidget {
                   maxLength: _maxTitleLength,
                   maxLengthEnforcement: MaxLengthEnforcement.none,
                   validator: (String? value) =>
-                      Validators.notEmpty(value) ??
-                      Validators.maxLength(value, _maxTitleLength),
+                      Validators.notEmpty(context, value) ??
+                      Validators.maxLength(context, value, _maxTitleLength),
                   enabled: !loadingState.value,
                 ),
-                if (submitTypeState.value == SubmitType.url)
+                if (submitTypeState.value == SubmitType.link)
                   TextFormField(
                     controller: urlController,
-                    decoration: const InputDecoration(labelText: 'URL'),
+                    decoration:
+                        InputDecoration(labelText: appLocalizations.link),
                     keyboardType: TextInputType.url,
                     maxLines: null,
                     validator: (String? value) =>
-                        Validators.notEmpty(value) ?? Validators.url(value),
+                        Validators.notEmpty(context, value) ??
+                        Validators.url(context, value),
                     enabled: !loadingState.value,
                   ),
                 if (submitTypeState.value == SubmitType.text)
                   TextFormField(
                     controller: textController,
-                    decoration: const InputDecoration(labelText: 'Text'),
+                    decoration:
+                        InputDecoration(labelText: appLocalizations.text),
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
                     maxLines: null,
-                    validator: Validators.notEmpty,
+                    validator: (String? value) =>
+                        Validators.notEmpty(context, value),
                     enabled: !loadingState.value,
                   ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    if (submitTypeState.value == SubmitType.url) ...<Widget>[
+                    if (submitTypeState.value == SubmitType.link) ...<Widget>[
                       OutlinedButton(
                         onPressed: loadingState.value
                             ? null
-                            : _isUrl(urlController.text)
+                            : _isUrl(context, urlController.text)
                                 ? () => _autofillTitle(
                                       context,
                                       titleController,
                                       url: urlController.text,
                                     )
                                 : null,
-                        child: const Text('Autofill title'),
+                        child: Text(appLocalizations.autofillTitle),
                       ),
                       const SizedBox(width: 16),
                     ],
@@ -143,13 +151,13 @@ class SubmitBody extends HookWidget {
                                 await _submit(
                                   context,
                                   title: titleListenable.text,
-                                  url: url(),
+                                  url: link(),
                                   text: text(),
                                 );
                                 loadingState.value = false;
                               }
                             },
-                      child: const Text('Submit'),
+                      child: Text(appLocalizations.submit),
                     ),
                   ],
                 ),
@@ -160,17 +168,18 @@ class SubmitBody extends HookWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'Preview',
+            appLocalizations.preview,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
         if (username != null)
           ItemTileData(
             _buildItem(
+              context,
               id: useProvider(previewIdStateProvider).state,
               username: username,
               title: titleListenable.text,
-              url: url(),
+              url: link(),
               text: text(),
             ),
           ),
@@ -179,11 +188,14 @@ class SubmitBody extends HookWidget {
     );
   }
 
-  bool _isUrl(String? url) => Validators.url(url) == null;
+  bool _isUrl(BuildContext context, String? url) =>
+      Validators.url(context, url) == null;
 
   Future<void> _autofillTitle(
       BuildContext context, TextEditingController titleController,
       {required String url}) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final WebRepository webRepository = context.read(webRepositoryProvider);
 
     try {
@@ -194,13 +206,15 @@ class SubmitBody extends HookWidget {
       }
     } on Exception {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        const SnackBar(content: Text('Could not autofill title')),
+        SnackBar(content: Text(appLocalizations.autofillTitleError)),
       );
     }
   }
 
   Future<void> _submit(BuildContext context,
       {required String title, String? url, String? text}) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success = await authRepository.submit(
       title: title,
@@ -218,12 +232,13 @@ class SubmitBody extends HookWidget {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        const SnackBar(content: Text('Something went wrong')),
+        SnackBar(content: Text(appLocalizations.genericError)),
       );
     }
   }
 
-  Item _buildItem({
+  Item _buildItem(
+    BuildContext context, {
     required int id,
     required String username,
     String? title,
@@ -238,7 +253,7 @@ class SubmitBody extends HookWidget {
         text: text?.isNotEmpty ?? false
             ? FormattingUtil.convertHackerNewsToHtml(text!)
             : null,
-        url: _isUrl(url) ? url : null,
+        url: _isUrl(context, url) ? url : null,
         title: title?.isNotEmpty ?? false ? title : null,
         score: 1,
         descendants: 0,

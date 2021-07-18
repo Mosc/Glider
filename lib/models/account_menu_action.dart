@@ -1,15 +1,20 @@
+import 'package:flutter/widgets.dart';
+import 'package:glider/l10n/app_localizations.dart';
+
 enum AccountMenuAction {
   synchronize,
   logOut,
 }
 
 extension StoriesMenuActionExtension on AccountMenuAction {
-  String get title {
+  String title(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     switch (this) {
       case AccountMenuAction.synchronize:
-        return 'Synchronize';
+        return appLocalizations.synchronize;
       case AccountMenuAction.logOut:
-        return 'Log out';
+        return appLocalizations.logOut;
     }
   }
 }

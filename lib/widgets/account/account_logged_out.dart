@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/l10n/app_localizations.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
@@ -13,6 +14,8 @@ class AccountLoggedOut extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final TextEditingController usernameController = useTextEditingController();
@@ -30,8 +33,10 @@ class AccountLoggedOut extends HookWidget {
                 children: <Widget>[
                   TextFormField(
                     controller: usernameController,
-                    decoration: const InputDecoration(labelText: 'Username'),
-                    validator: Validators.notEmpty,
+                    decoration:
+                        InputDecoration(labelText: appLocalizations.username),
+                    validator: (String? value) =>
+                        Validators.notEmpty(context, value),
                     autofocus: true,
                     enabled: !loadingState.value,
                   ),
@@ -39,20 +44,18 @@ class AccountLoggedOut extends HookWidget {
                   TextFormField(
                     controller: passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    validator: Validators.notEmpty,
+                    decoration:
+                        InputDecoration(labelText: appLocalizations.password),
+                    validator: (String? value) =>
+                        Validators.notEmpty(context, value),
                     enabled: !loadingState.value,
                   ),
                 ],
               ),
             ),
             SwitchListTile(
-              title: const Text('Synchronize'),
-              subtitle: const Text(
-                'Fetches all your favorites and upvotes from the Hacker News '
-                'server. Any favorites added in the app before logging in will '
-                'be lost.',
-              ),
+              title: Text(appLocalizations.synchronize),
+              subtitle: Text(appLocalizations.synchronizeDescription),
               dense: true,
               value: synchronizeState.value,
               onChanged: loadingState.value
@@ -78,7 +81,7 @@ class AccountLoggedOut extends HookWidget {
                               loadingState.value = false;
                             }
                           },
-                    child: const Text('Register'),
+                    child: Text(appLocalizations.register),
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
@@ -96,7 +99,7 @@ class AccountLoggedOut extends HookWidget {
                               loadingState.value = false;
                             }
                           },
-                    child: const Text('Login'),
+                    child: Text(appLocalizations.logIn),
                   ),
                 ],
               ),
@@ -109,6 +112,8 @@ class AccountLoggedOut extends HookWidget {
 
   Future<void> _register(BuildContext context,
       {required String username, required String password}) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success =
         await authRepository.register(username: username, password: password);
@@ -118,7 +123,7 @@ class AccountLoggedOut extends HookWidget {
       unawaited(context.refresh(loggedInProvider));
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        const SnackBar(content: Text('Registering failed')),
+        SnackBar(content: Text(appLocalizations.registerError)),
       );
     }
   }
@@ -127,6 +132,8 @@ class AccountLoggedOut extends HookWidget {
       {required String username,
       required String password,
       required bool synchronize}) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success =
         await authRepository.login(username: username, password: password);
@@ -140,12 +147,14 @@ class AccountLoggedOut extends HookWidget {
       unawaited(context.refresh(loggedInProvider));
     } else {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        const SnackBar(content: Text('Logging in failed')),
+        SnackBar(content: Text(appLocalizations.logInError)),
       );
     }
   }
 
   Future<void> _synchronize(BuildContext context) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     final AuthRepository authRepository = context.read(authRepositoryProvider);
     final bool success = await authRepository.fetchUpvoted(
           onUpdate: (int id) => context.refresh(upvotedProvider(id)),
@@ -154,10 +163,10 @@ class AccountLoggedOut extends HookWidget {
           onUpdate: (int id) => context.refresh(favoritedProvider(id)),
         );
 
-    if (success != true) {
+    if (!success) {
       ScaffoldMessenger.of(context).showSnackBarQuickly(
-        const SnackBar(
-          content: Text('Synchronization failed'),
+        SnackBar(
+          content: Text(appLocalizations.synchronizeError),
         ),
       );
     }
