@@ -49,7 +49,7 @@ class ItemTileMetadata extends HookWidget {
                 highlight: true,
               ),
             ),
-          if (item.score != null)
+          if (item.score != null && item.type != ItemType.job)
             SmoothAnimatedCrossFade(
               condition: upvoted?.value ?? false,
               trueChild: _buildUpvotedMetadata(upvoted: true),
