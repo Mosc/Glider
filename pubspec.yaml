@@ -1,7 +1,7 @@
 name: glider
 description: An opinionated Hacker News client.
 publish_to: "none"
-version: 1.7.1+24
+version: 1.8.0+25
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

@@ -1,0 +1,4 @@
+• Added customization of main stories listing under Appearance menu option
+• Made application fully localizable (contribute your translations on GitHub!)
+• Fixed synchronization issues
+• Made lots of minor tweaks
