@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,7 +10,6 @@ import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
 
 class AccountLoggedOut extends HookWidget {
   const AccountLoggedOut({Key? key}) : super(key: key);

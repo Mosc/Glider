@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -10,7 +12,6 @@ import 'package:glider/widgets/account/account_body.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/synchronize/synchronize_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
 
 class AccountPage extends HookWidget {
   const AccountPage({Key? key}) : super(key: key);

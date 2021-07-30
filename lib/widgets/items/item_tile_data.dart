@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -21,7 +23,6 @@ import 'package:glider/widgets/items/item_bottom_sheet.dart';
 import 'package:glider/widgets/items/item_tile_content.dart';
 import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
 
 AutoDisposeStateProviderFamily<bool?, int> delayedUpvoteStateProvider =
     StateProvider.family.autoDispose((ProviderReference ref, int id) => null);

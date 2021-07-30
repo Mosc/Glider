@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -5,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:glider/utils/response_extension.dart';
-import 'package:pedantic/pedantic.dart';
 
 class CacheInterceptor extends Interceptor {
   final CacheManager _cacheManager = CacheManager(

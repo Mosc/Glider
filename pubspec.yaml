@@ -32,7 +32,6 @@ dependencies:
   native_launcher:
     path: packages/native_launcher
   octo_image: ^1.0.0+1
-  pedantic: ^1.11.1
   share_plus: ^2.1.4
   shared_preferences: ^2.0.6
   shimmer: ^2.0.0

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/search_parameters.dart';
@@ -6,7 +8,6 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
 
 final StateProvider<int> previewIdStateProvider =
     StateProvider<int>((ProviderReference ref) => -1);

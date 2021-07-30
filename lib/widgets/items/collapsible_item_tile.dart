@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
@@ -7,7 +9,6 @@ import 'package:glider/utils/animation_util.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
 
 class CollapsibleItemTile extends HookWidget {
   const CollapsibleItemTile({
