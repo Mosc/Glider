@@ -89,25 +89,22 @@ class StoriesPage extends HookWidget {
       ),
       floatingActionButton: Hero(
         tag: 'fab',
-        child: MediaQuery(
-          data: MediaQueryData(platformBrightness: theme.brightness),
-          child: SpeedDial(
-            children: <SpeedDialChild>[
-              for (StoryType storyType in StoryType.values)
-                SpeedDialChild(
-                  label: storyType.title(context),
-                  child: Icon(storyType.icon),
-                  onTap: () => storyTypeStateController.state = storyType,
-                ),
-            ],
-            visible: speedDialVisibleState.value,
-            icon: storyTypeStateController.state.icon,
-            backgroundColor: theme.colorScheme.primary,
-            foregroundColor: theme.colorScheme.onPrimary,
-            useRotationAnimation: false,
-            animationSpeed: 100,
-            spacing: 4,
-          ),
+        child: SpeedDial(
+          children: <SpeedDialChild>[
+            for (StoryType storyType in StoryType.values)
+              SpeedDialChild(
+                label: storyType.title(context),
+                child: Icon(storyType.icon),
+                onTap: () => storyTypeStateController.state = storyType,
+              ),
+          ],
+          visible: speedDialVisibleState.value,
+          icon: storyTypeStateController.state.icon,
+          backgroundColor: theme.colorScheme.primary,
+          foregroundColor: theme.colorScheme.onPrimary,
+          useRotationAnimation: false,
+          animationSpeed: 100,
+          spacing: 4,
         ),
       ),
     );

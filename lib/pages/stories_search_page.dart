@@ -124,27 +124,23 @@ class StoriesSearchPage extends HookWidget {
         ),
         floatingActionButton: Hero(
           tag: 'fab',
-          child: MediaQuery(
-            data: MediaQueryData(platformBrightness: theme.brightness),
-            child: SpeedDial(
-              children: <SpeedDialChild>[
-                for (StoryType storyType in StoryType.values
-                    .where((StoryType storyType) => storyType.searchable))
-                  SpeedDialChild(
-                    label: storyType.title(context),
-                    child: Icon(storyType.icon),
-                    onTap: () =>
-                        searchStoryTypeStateController.state = storyType,
-                  ),
-              ],
-              visible: speedDialVisibleState.value,
-              icon: searchStoryTypeStateController.state.icon,
-              backgroundColor: theme.colorScheme.primary,
-              foregroundColor: theme.colorScheme.onPrimary,
-              useRotationAnimation: false,
-              animationSpeed: 100,
-              spacing: 4,
-            ),
+          child: SpeedDial(
+            children: <SpeedDialChild>[
+              for (StoryType storyType in StoryType.values
+                  .where((StoryType storyType) => storyType.searchable))
+                SpeedDialChild(
+                  label: storyType.title(context),
+                  child: Icon(storyType.icon),
+                  onTap: () => searchStoryTypeStateController.state = storyType,
+                ),
+            ],
+            visible: speedDialVisibleState.value,
+            icon: searchStoryTypeStateController.state.icon,
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
+            useRotationAnimation: false,
+            animationSpeed: 100,
+            spacing: 4,
           ),
         ),
       ),
