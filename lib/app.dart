@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -14,6 +15,10 @@ class App extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useMemoized(
+      () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
+    );
+
     final ThemeBase themeBase =
         useProvider(themeBaseProvider).data?.value ?? ThemeBase.system;
     final Color themeColor =
