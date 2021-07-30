@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,6 +17,8 @@ class App extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useMemoized(FlutterDisplayMode.setHighRefreshRate);
+
     useMemoized(
       () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
     );

@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
+  flutter_displaymode: ^0.3.2
   flutter_hooks: ^0.17.0
   flutter_localizations:
     sdk: flutter
