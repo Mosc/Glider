@@ -66,14 +66,14 @@ class WebsiteRepository {
     required String username,
     required String password,
     required int id,
-    required bool up,
+    required bool upvote,
   }) async {
     final Uri uri = Uri.https(authority, 'vote');
     final PostData data = VotePostData(
       acct: username,
       pw: password,
       id: id,
-      how: up ? 'up' : 'un',
+      how: upvote ? 'up' : 'un',
     );
 
     return _performDefaultPost(uri, data);

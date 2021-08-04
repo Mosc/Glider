@@ -121,10 +121,10 @@ class StorageRepository {
   Future<bool> upvoted({required int id}) async =>
       (await _sharedPreferences).containsElement(_upvotedKey, id.toString());
 
-  Future<void> setUpvoted({required int id, required bool up}) async {
+  Future<void> setUpvoted({required int id, required bool upvote}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
-    if (up) {
+    if (upvote) {
       await sharedPreferences.addElement(_upvotedKey, id.toString());
     } else {
       await sharedPreferences.removeElement(_upvotedKey, id.toString());
@@ -132,10 +132,10 @@ class StorageRepository {
   }
 
   Future<void> setUpvoteds(
-      {required Iterable<int> ids, required bool up}) async {
+      {required Iterable<int> ids, required bool upvote}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
-    if (up) {
+    if (upvote) {
       await sharedPreferences.addElements(
           _upvotedKey, ids.map((int id) => id.toString()));
     } else {

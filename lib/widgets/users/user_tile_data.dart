@@ -65,7 +65,7 @@ class UserTileData extends StatelessWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => UserBottomSheet(user),
+      builder: (_) => UserBottomSheet(id: user.id),
     );
   }
 }

@@ -82,7 +82,7 @@ class AuthRepository {
           password: password,
         );
         await _storageRepository.clearUpvoted();
-        await _storageRepository.setUpvoteds(ids: ids, up: true);
+        await _storageRepository.setUpvoteds(ids: ids, upvote: true);
 
         if (onUpdate != null) {
           ids.forEach(onUpdate.call);
@@ -97,10 +97,11 @@ class AuthRepository {
     return false;
   }
 
-  Future<bool> favorite(
-      {required int id,
-      required bool favorite,
-      void Function()? onUpdate}) async {
+  Future<bool> favorite({
+    required int id,
+    required bool favorite,
+    void Function()? onUpdate,
+  }) async {
     await _storageRepository.setFavorited(id: id, favorite: favorite);
     onUpdate?.call();
 
@@ -119,10 +120,13 @@ class AuthRepository {
     return false;
   }
 
-  Future<bool> vote(
-      {required int id, required bool up, void Function()? onUpdate}) async {
-    final bool oldUp = await _storageRepository.upvoted(id: id);
-    await _storageRepository.setUpvoted(id: id, up: up);
+  Future<bool> vote({
+    required int id,
+    required bool upvote,
+    void Function()? onUpdate,
+  }) async {
+    final bool oldUpvoted = await _storageRepository.upvoted(id: id);
+    await _storageRepository.setUpvoted(id: id, upvote: upvote);
     onUpdate?.call();
 
     final String? username = await _storageRepository.username;
@@ -133,11 +137,11 @@ class AuthRepository {
         username: username,
         password: password,
         id: id,
-        up: up,
+        upvote: upvote,
       );
 
       if (!success) {
-        await _storageRepository.setUpvoted(id: id, up: oldUp);
+        await _storageRepository.setUpvoted(id: id, upvote: oldUpvoted);
         onUpdate?.call();
       }
 

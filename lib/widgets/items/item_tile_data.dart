@@ -3,20 +3,15 @@ import 'dart:async';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/app_theme.dart';
+import 'package:glider/commands/reply_command.dart';
+import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
-import 'package:glider/pages/account_page.dart';
-import 'package:glider/pages/reply_page.dart';
-import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/providers/repository_provider.dart';
-import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/animation_util.dart';
-import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/items/item_bottom_sheet.dart';
@@ -80,11 +75,6 @@ class ItemTileData extends HookWidget {
       }
     }
 
-    Future<void> vote({required bool up}) async {
-      await _vote(context, up: up);
-      unawaited(updateDelayedUpvoted());
-    }
-
     useMemoized(updateDelayedUpvoted);
 
     return Slidable(
@@ -93,7 +83,9 @@ class ItemTileData extends HookWidget {
           ? delayedUpvotedController.state != true
               ? SlidableAction(
                   action: () async {
-                    unawaited(vote(up: true));
+                    await VoteCommand(context, id: item.id, upvote: true)
+                        .execute();
+                    unawaited(updateDelayedUpvoted());
                   },
                   icon: FluentIcons.arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.primary,
@@ -101,7 +93,9 @@ class ItemTileData extends HookWidget {
                 )
               : SlidableAction(
                   action: () async {
-                    unawaited(vote(up: false));
+                    await VoteCommand(context, id: item.id, upvote: false)
+                        .execute();
+                    unawaited(updateDelayedUpvoted());
                   },
                   icon: FluentIcons.arrow_undo_24_regular,
                 )
@@ -120,7 +114,10 @@ class ItemTileData extends HookWidget {
           : canReply
               ? SlidableAction(
                   action: () async {
-                    unawaited(_reply(context));
+                    unawaited(
+                      ReplyCommand(context, id: item.id, rootId: root?.id)
+                          .execute(),
+                    );
                   },
                   icon: FluentIcons.arrow_reply_24_regular,
                   color: Theme.of(context).colorScheme.surface,
@@ -171,13 +168,14 @@ class ItemTileData extends HookWidget {
   Widget _buildTappable(BuildContext context, {required Widget child}) {
     return InkWell(
       onTap: item.type == ItemType.pollopt && interactive
-          ? () => _vote(
+          ? () => VoteCommand(
                 context,
-                up: !context.read(upvotedProvider(item.id)).maybeWhen(
+                id: item.id,
+                upvote: !context.read(upvotedProvider(item.id)).maybeWhen(
                       data: (bool upvoted) => upvoted,
                       orElse: () => false,
                     ),
-              )
+              ).execute()
           : onTap,
       onLongPress: () => _buildModalBottomSheet(context),
       child: child,
@@ -201,7 +199,6 @@ class ItemTileData extends HookWidget {
         item,
         root: root,
         interactive: interactive,
-        vote: _vote,
       );
     } else {
       return ItemTileContent(
@@ -217,95 +214,7 @@ class ItemTileData extends HookWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => ItemBottomSheet(item),
+      builder: (_) => ItemBottomSheet(id: item.id),
     );
-  }
-
-  Future<void> _vote(BuildContext context, {required bool up}) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
-
-    if (await authRepository.loggedIn) {
-      final bool success = await authRepository.vote(
-        id: item.id,
-        up: up,
-        onUpdate: () => context.refresh(upvotedProvider(item.id)),
-      );
-
-      if (success) {
-        final int? score = item.score;
-        if (score != null) {
-          context.read(itemCacheStateProvider(item.id)).state =
-              item.copyWith(score: score + (up ? 1 : -1));
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBarQuickly(
-          SnackBar(content: Text(appLocalizations.genericError)),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
-        SnackBar(
-          content: Text(appLocalizations.voteNotLoggedIn),
-          action: SnackBarAction(
-            label: appLocalizations.logIn,
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute<void>(
-                builder: (_) => const AccountPage(),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> _reply(BuildContext context) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
-
-    if (await authRepository.loggedIn) {
-      final bool success = await Navigator.of(context).push<bool>(
-            MaterialPageRoute<bool>(
-              builder: (_) => ReplyPage(parent: item, root: root),
-              fullscreenDialog: true,
-            ),
-          ) ??
-          false;
-
-      final int? rootId = root?.id;
-
-      if (success && rootId != null) {
-        context.refresh(itemTreeStreamProvider(rootId));
-        ScaffoldMessenger.of(context).showSnackBarQuickly(
-          SnackBar(
-            content: Text(appLocalizations.processingInfo),
-            action: SnackBarAction(
-              label: appLocalizations.refresh,
-              onPressed: () async {
-                await reloadItemTree(context.refresh, id: rootId);
-                return context.refresh(itemTreeStreamProvider(rootId));
-              },
-            ),
-          ),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
-        SnackBar(
-          content: Text(appLocalizations.replyNotLoggedIn),
-          action: SnackBarAction(
-            label: appLocalizations.logIn,
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute<void>(
-                builder: (_) => const AccountPage(),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
   }
 }

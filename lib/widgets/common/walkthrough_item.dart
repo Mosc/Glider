@@ -93,7 +93,11 @@ class WalkthoughItem extends HookWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: InkWell(
           onLongPress: stepStateController.state.canLongPress
-              ? () => _buildModalBottomSheet(context, favoritedStateController)
+              ? () => _buildModalBottomSheet(
+                    context,
+                    upvotedStateController: upvotedStateController,
+                    favoritedStateController: favoritedStateController,
+                  )
               : null,
           child: Block(
             child: Column(
@@ -147,8 +151,11 @@ class WalkthoughItem extends HookWidget {
     );
   }
 
-  Future<void> _buildModalBottomSheet(BuildContext context,
-      StateController<bool> demoFavoritedStateController) async {
+  Future<void> _buildModalBottomSheet(
+    BuildContext context, {
+    required StateController<bool> upvotedStateController,
+    required StateController<bool> favoritedStateController,
+  }) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return showModalBottomSheet<void>(
@@ -157,13 +164,21 @@ class WalkthoughItem extends HookWidget {
       builder: (_) => ScrollableBottomSheet(
         children: <Widget>[
           ListTile(
-            title: demoFavoritedStateController.state
+            title: upvotedStateController.state
+                ? Text(appLocalizations.unvote)
+                : Text(appLocalizations.upvote),
+            onTap: () {
+              Navigator.of(context).pop();
+              upvotedStateController.state = !upvotedStateController.state;
+            },
+          ),
+          ListTile(
+            title: favoritedStateController.state
                 ? Text(appLocalizations.unfavorite)
                 : Text(appLocalizations.favorite),
             onTap: () {
-              demoFavoritedStateController.state =
-                  !demoFavoritedStateController.state;
               Navigator.of(context).pop();
+              favoritedStateController.state = !favoritedStateController.state;
             },
           ),
         ],

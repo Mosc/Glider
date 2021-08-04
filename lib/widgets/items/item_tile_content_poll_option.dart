@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/items/item_tile_metadata.dart';
@@ -12,13 +13,11 @@ class ItemTileContentPollOption extends HookWidget {
     Key? key,
     this.root,
     this.interactive = false,
-    required this.vote,
   }) : super(key: key);
 
   final Item item;
   final Item? root;
   final bool interactive;
-  final Future<void> Function(BuildContext, {required bool up}) vote;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,9 @@ class ItemTileContentPollOption extends HookWidget {
               orElse: () => false,
             ),
             onChanged: interactive
-                ? (bool? up) => vote(context, up: up ?? false)
+                ? (bool? upvote) =>
+                    VoteCommand(context, id: item.id, upvote: upvote ?? false)
+                        .execute()
                 : null,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),

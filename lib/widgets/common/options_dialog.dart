@@ -35,7 +35,7 @@ class OptionsDialog extends StatelessWidget {
             _shareAction(context, option, subject)),
         super(key: key);
 
-  final List<OptionsDialogOption> options;
+  final Iterable<OptionsDialogOption> options;
   final Future<void> Function(BuildContext, OptionsDialogOption) action;
 
   @override
