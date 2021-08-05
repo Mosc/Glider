@@ -162,7 +162,7 @@ class ReplyBody extends HookWidget {
 
       Navigator.of(context).pop(true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.genericError)),
       );
     }

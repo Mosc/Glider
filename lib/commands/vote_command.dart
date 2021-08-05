@@ -41,12 +41,12 @@ class VoteCommand implements Command {
               item.copyWith(score: score + (upvote ? 1 : -1));
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBarQuickly(
+        ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(content: Text(appLocalizations.genericError)),
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.voteNotLoggedIn),
           action: SnackBarAction(

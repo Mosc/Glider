@@ -42,7 +42,7 @@ class ReplyCommand implements Command {
 
       if (success && rootId != null) {
         context.refresh(itemTreeStreamProvider(rootId!));
-        ScaffoldMessenger.of(context).showSnackBarQuickly(
+        ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(appLocalizations.processingInfo),
             action: SnackBarAction(
@@ -56,7 +56,7 @@ class ReplyCommand implements Command {
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.replyNotLoggedIn),
           action: SnackBarAction(

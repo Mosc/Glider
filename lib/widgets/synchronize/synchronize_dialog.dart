@@ -78,13 +78,13 @@ class SynchronizeDialog extends HookWidget {
         );
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.synchronizeSuccess),
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.synchronizeError),
         ),

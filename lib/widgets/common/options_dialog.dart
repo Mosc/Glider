@@ -6,7 +6,7 @@ import 'package:share_plus/share_plus.dart';
 Future<void> _copyAction(
     BuildContext context, OptionsDialogOption option) async {
   await Clipboard.setData(ClipboardData(text: option.text));
-  ScaffoldMessenger.of(context).showSnackBarQuickly(
+  ScaffoldMessenger.of(context).replaceSnackBar(
     SnackBar(
       content: Text('${option.title} has been copied'),
     ),

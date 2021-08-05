@@ -206,7 +206,7 @@ class SubmitBody extends HookWidget {
         titleController.text = title.trim();
       }
     } on Exception {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.autofillTitleError)),
       );
     }
@@ -232,7 +232,7 @@ class SubmitBody extends HookWidget {
 
       Navigator.of(context).pop(true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.genericError)),
       );
     }

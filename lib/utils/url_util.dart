@@ -19,7 +19,7 @@ class UrlUtil {
         await _tryLaunchPlatform(urlString);
 
     if (!success) {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.openLinkError)),
       );
     }

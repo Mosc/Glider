@@ -160,7 +160,7 @@ class StoriesPage extends HookWidget {
       if (success) {
         await context.refresh(storyIdsProvider(StoryType.newStories));
         context.read(storyTypeStateProvider).state = StoryType.newStories;
-        ScaffoldMessenger.of(context).showSnackBarQuickly(
+        ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(appLocalizations.processingInfo),
             action: SnackBarAction(
@@ -172,7 +172,7 @@ class StoriesPage extends HookWidget {
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.submitNotLoggedIn),
           action: SnackBarAction(

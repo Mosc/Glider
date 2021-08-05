@@ -124,7 +124,7 @@ class AccountLoggedOut extends HookWidget {
       unawaited(context.refresh(usernameProvider));
       unawaited(context.refresh(loggedInProvider));
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.registerError)),
       );
     }
@@ -148,7 +148,7 @@ class AccountLoggedOut extends HookWidget {
       unawaited(context.refresh(usernameProvider));
       unawaited(context.refresh(loggedInProvider));
     } else {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.logInError)),
       );
     }
@@ -166,7 +166,7 @@ class AccountLoggedOut extends HookWidget {
         );
 
     if (!success) {
-      ScaffoldMessenger.of(context).showSnackBarQuickly(
+      ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.synchronizeError),
         ),
