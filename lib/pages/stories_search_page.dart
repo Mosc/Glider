@@ -199,7 +199,7 @@ class _SearchRangeChip extends HookWidget {
         final StateController<DateTimeRange?>
             customDateTimeRangeStateController = context
                 .read(storySearchCustomDateTimeRangeStateProvider)
-                  ..state = null;
+              ..state = null;
 
         if (searchRange == SearchRange.custom && selected) {
           customDateTimeRangeStateController.state = await showDateRangePicker(
