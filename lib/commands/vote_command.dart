@@ -36,9 +36,10 @@ class VoteCommand implements Command {
       if (success) {
         final Item item = await context.read(itemProvider(id).future);
         final int? score = item.score;
+
         if (score != null) {
           context.read(itemCacheStateProvider(id)).state =
-              item.copyWith(score: score + (upvote ? 1 : -1));
+              item.copyWith(score: score + (upvote ? 1 : 0));
         }
       } else {
         ScaffoldMessenger.of(context).replaceSnackBar(
