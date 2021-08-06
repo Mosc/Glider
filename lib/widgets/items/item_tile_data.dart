@@ -75,6 +75,11 @@ class ItemTileData extends HookWidget {
       }
     }
 
+    Future<void> vote({required bool upvote}) async {
+      await VoteCommand(context, id: item.id, upvote: upvote).execute();
+      unawaited(updateDelayedUpvoted());
+    }
+
     useMemoized(updateDelayedUpvoted);
 
     return Slidable(
@@ -83,9 +88,7 @@ class ItemTileData extends HookWidget {
           ? delayedUpvotedController.state != true
               ? SlidableAction(
                   action: () async {
-                    await VoteCommand(context, id: item.id, upvote: true)
-                        .execute();
-                    unawaited(updateDelayedUpvoted());
+                    unawaited(vote(upvote: true));
                   },
                   icon: FluentIcons.arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.primary,
@@ -93,9 +96,7 @@ class ItemTileData extends HookWidget {
                 )
               : SlidableAction(
                   action: () async {
-                    await VoteCommand(context, id: item.id, upvote: false)
-                        .execute();
-                    unawaited(updateDelayedUpvoted());
+                    unawaited(vote(upvote: false));
                   },
                   icon: FluentIcons.arrow_undo_24_regular,
                 )
