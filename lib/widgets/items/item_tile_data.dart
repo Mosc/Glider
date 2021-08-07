@@ -20,9 +20,11 @@ import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 AutoDisposeStateProviderFamily<bool?, int> delayedUpvoteStateProvider =
-    StateProvider.family.autoDispose((ProviderReference ref, int id) => null);
+    StateProvider.family.autoDispose(
+  (AutoDisposeStateProviderRef<bool?> ref, int id) => null,
+);
 
-class ItemTileData extends HookWidget {
+class ItemTileData extends HookConsumerWidget {
   const ItemTileData(
     this.item, {
     Key? key,
@@ -41,22 +43,24 @@ class ItemTileData extends HookWidget {
   final bool fadeable;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final bool active = item.deleted != true && item.localOnly != true;
     final Widget content = fadeable
-        ? _buildFadeable(child: _buildContent(context))
+        ? _buildFadeable(ref, child: _buildContent(context))
         : _buildContent(context);
 
     return _buildSlidable(
       context,
+      ref,
       active: active,
       child: _buildIndented(
-        child: active ? _buildTappable(context, child: content) : content,
+        ref,
+        child: active ? _buildTappable(context, ref, child: content) : content,
       ),
     );
   }
 
-  Widget _buildSlidable(BuildContext context,
+  Widget _buildSlidable(BuildContext context, WidgetRef ref,
       {required Widget child, required bool active}) {
     final bool canVote =
         active && item.type != ItemType.job && item.type != ItemType.pollopt;
@@ -65,10 +69,10 @@ class ItemTileData extends HookWidget {
     // We don't want the slidable to update while being slided, so we delay any
     // upvote state until after the call has actually finished.
     final StateController<bool?> delayedUpvotedController =
-        useProvider(delayedUpvoteStateProvider(item.id));
+        ref.watch(delayedUpvoteStateProvider(item.id));
 
     Future<void> updateDelayedUpvoted() async {
-      final bool upvoted = await context.read(upvotedProvider(item.id).future);
+      final bool upvoted = await ref.read(upvotedProvider(item.id).future);
 
       if (delayedUpvotedController.mounted) {
         delayedUpvotedController.state = upvoted;
@@ -76,7 +80,7 @@ class ItemTileData extends HookWidget {
     }
 
     Future<void> vote({required bool upvote}) async {
-      await VoteCommand(context, id: item.id, upvote: upvote).execute();
+      await VoteCommand(context, ref, id: item.id, upvote: upvote).execute();
       unawaited(updateDelayedUpvoted());
     }
 
@@ -116,7 +120,7 @@ class ItemTileData extends HookWidget {
               ? SlidableAction(
                   action: () async {
                     unawaited(
-                      ReplyCommand(context, id: item.id, rootId: root?.id)
+                      ReplyCommand(context, ref, id: item.id, rootId: root?.id)
                           .execute(),
                     );
                   },
@@ -129,14 +133,14 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Widget _buildIndented({required Widget child}) {
+  Widget _buildIndented(WidgetRef ref, {required Widget child}) {
     final int indentation =
         item.type != ItemType.pollopt ? item.ancestors.length : 0;
     final double indentationPadding = indentation.toDouble() * 8;
 
-    Color _determineDividerColor() {
+    Color _determineDividerColor(WidgetRef ref) {
       final List<Color> colors = AppTheme.themeColors.toList(growable: false);
-      final Color? themeColor = useProvider(themeColorProvider).data?.value;
+      final Color? themeColor = ref.watch(themeColorProvider).data?.value;
       final int initialOffset =
           themeColor != null ? colors.indexOf(themeColor) : 0;
       final int offset =
@@ -158,7 +162,7 @@ class ItemTileData extends HookWidget {
                 child: VerticalDivider(
                   width: 1,
                   thickness: 1,
-                  color: _determineDividerColor(),
+                  color: _determineDividerColor(ref),
                 ),
               ),
             ],
@@ -166,13 +170,15 @@ class ItemTileData extends HookWidget {
         : child;
   }
 
-  Widget _buildTappable(BuildContext context, {required Widget child}) {
+  Widget _buildTappable(BuildContext context, WidgetRef ref,
+      {required Widget child}) {
     return InkWell(
       onTap: item.type == ItemType.pollopt && interactive
           ? () => VoteCommand(
                 context,
+                ref,
                 id: item.id,
-                upvote: !context.read(upvotedProvider(item.id)).maybeWhen(
+                upvote: !ref.read(upvotedProvider(item.id)).maybeWhen(
                       data: (bool upvoted) => upvoted,
                       orElse: () => false,
                     ),
@@ -183,9 +189,9 @@ class ItemTileData extends HookWidget {
     );
   }
 
-  Widget _buildFadeable({required Widget child}) {
+  Widget _buildFadeable(WidgetRef ref, {required Widget child}) {
     final bool visibility =
-        useProvider(visitedProvider(item.id)).data?.value ?? false;
+        ref.watch(visitedProvider(item.id)).data?.value ?? false;
 
     return AnimatedOpacity(
       duration: AnimationUtil.defaultDuration,

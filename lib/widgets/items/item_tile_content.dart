@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -10,7 +9,7 @@ import 'package:glider/widgets/items/item_tile_text.dart';
 import 'package:glider/widgets/items/item_tile_url.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTileContent extends HookWidget {
+class ItemTileContent extends HookConsumerWidget {
   const ItemTileContent(
     this.item, {
     Key? key,
@@ -25,9 +24,9 @@ class ItemTileContent extends HookWidget {
   final bool interactive;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final bool showMetadata =
-        interactive || (useProvider(showMetadataProvider).data?.value ?? true);
+        interactive || (ref.watch(showMetadataProvider).data?.value ?? true);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

@@ -1,6 +1,5 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/providers/persistence_provider.dart';
@@ -8,7 +7,7 @@ import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTileTitle extends HookWidget {
+class ItemTileTitle extends HookConsumerWidget {
   const ItemTileTitle(
     this.item, {
     Key? key,
@@ -21,24 +20,25 @@ class ItemTileTitle extends HookWidget {
   final bool interactive;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Hero(
       tag: 'item_title_${item.id}',
       child: Material(
         type: MaterialType.transparency,
         child: SmoothAnimatedCrossFade(
           condition: dense,
-          trueChild: _buildTitleText(context, dense: true),
-          falseChild: _buildTitleText(context, dense: false),
+          trueChild: _buildTitleText(context, ref, dense: true),
+          falseChild: _buildTitleText(context, ref, dense: false),
         ),
       ),
     );
   }
 
-  Widget _buildTitleText(BuildContext context, {required bool dense}) {
+  Widget _buildTitleText(BuildContext context, WidgetRef ref,
+      {required bool dense}) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final bool showUrl =
-        interactive || (useProvider(showUrlProvider).data?.value ?? true);
+        interactive || (ref.watch(showUrlProvider).data?.value ?? true);
 
     return Text.rich(
       TextSpan(

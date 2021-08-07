@@ -11,18 +11,18 @@ import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/item_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemPage extends HookWidget {
+class ItemPage extends HookConsumerWidget {
   const ItemPage({Key? key, required this.id}) : super(key: key);
 
   final int id;
 
   @override
-  Widget build(BuildContext context) {
-    useMemoized(() => _setVisited(context));
+  Widget build(BuildContext context, WidgetRef ref) {
+    useMemoized(() => _setVisited(ref));
 
-    final bool upvoted = useProvider(upvotedProvider(id)).data?.value ?? false;
+    final bool upvoted = ref.watch(upvotedProvider(id)).data?.value ?? false;
     final bool favorited =
-        useProvider(favoritedProvider(id)).data?.value ?? false;
+        ref.watch(favoritedProvider(id)).data?.value ?? false;
 
     return Scaffold(
       body: FloatingAppBarScrollView(
@@ -40,7 +40,7 @@ class ItemPage extends HookWidget {
                 ),
             ],
             onSelected: (ItemMenuAction menuAction) => menuAction
-                .command(context,
+                .command(context, ref,
                     id: id, upvoted: upvoted, favorited: favorited)
                 .execute(),
             icon: const Icon(FluentIcons.more_vertical_24_regular),
@@ -51,8 +51,8 @@ class ItemPage extends HookWidget {
     );
   }
 
-  Future<void> _setVisited(BuildContext context) async {
-    await context.read(storageRepositoryProvider).setVisited(id: id);
-    unawaited(context.refresh(visitedProvider(id)));
+  Future<void> _setVisited(WidgetRef ref) async {
+    await ref.read(storageRepositoryProvider).setVisited(id: id);
+    ref.refresh(visitedProvider(id));
   }
 }

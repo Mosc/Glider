@@ -257,7 +257,7 @@ packages:
       name: flutter_hooks
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -276,7 +276,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+3"
+    version: "1.0.0-dev.6"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -316,7 +316,7 @@ packages:
       name: freezed
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.3"
+    version: "0.14.4"
   freezed_annotation:
     dependency: "direct main"
     description:
@@ -351,7 +351,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+4"
+    version: "1.0.0-dev.6"
   html:
     dependency: "direct main"
     description:
@@ -591,7 +591,7 @@ packages:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+3"
+    version: "1.0.0-dev.6"
   rxdart:
     dependency: transitive
     description:

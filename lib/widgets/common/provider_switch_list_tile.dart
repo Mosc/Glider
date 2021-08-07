@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProviderSwitchListTile extends HookWidget {
+class ProviderSwitchListTile extends HookConsumerWidget {
   const ProviderSwitchListTile({
     Key? key,
     required this.title,
@@ -11,17 +10,17 @@ class ProviderSwitchListTile extends HookWidget {
   }) : super(key: key);
 
   final String title;
-  final RootProvider<Object, AsyncValue<bool>> provider;
+  final ProviderBase<AsyncValue<bool>> provider;
   final Future<void> Function(bool value) onSave;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile(
       title: Text(title),
-      value: useProvider(provider).data?.value ?? true,
+      value: ref.watch(provider).data?.value ?? true,
       onChanged: (bool newValue) async {
         await onSave(newValue);
-        context.refresh(provider);
+        ref.refresh(provider);
       },
     );
   }

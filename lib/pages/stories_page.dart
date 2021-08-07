@@ -23,13 +23,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeStateProvider<StoryType> storyTypeStateProvider =
     StateProvider.autoDispose<StoryType>(
-        (ProviderReference ref) => StoryType.topStories);
+  (AutoDisposeStateProviderRef<StoryType> ref) => StoryType.topStories,
+);
 
-class StoriesPage extends HookWidget {
+class StoriesPage extends HookConsumerWidget {
   const StoriesPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final ThemeData theme = Theme.of(context);
@@ -48,7 +49,7 @@ class StoriesPage extends HookWidget {
     );
 
     final StateController<StoryType> storyTypeStateController =
-        useProvider(storyTypeStateProvider);
+        ref.watch(storyTypeStateProvider);
 
     return Scaffold(
       body: FloatingAppBarScrollView(
@@ -58,7 +59,7 @@ class StoriesPage extends HookWidget {
           IconButton(
             icon: const Icon(FluentIcons.search_24_regular),
             tooltip: appLocalizations.search,
-            onPressed: () => _searchSelected(context),
+            onPressed: () => _searchSelected(context, ref),
           ),
           PopupMenuButton<StoriesMenuAction>(
             itemBuilder: (_) => <PopupMenuEntry<StoriesMenuAction>>[
@@ -75,7 +76,7 @@ class StoriesPage extends HookWidget {
                 case StoriesMenuAction.favorites:
                   return _favoritesSelected(context);
                 case StoriesMenuAction.submit:
-                  return _submitSelected(context);
+                  return _submitSelected(context, ref);
                 case StoriesMenuAction.appearance:
                   return _appearanceSelected(context);
                 case StoriesMenuAction.account:
@@ -110,8 +111,8 @@ class StoriesPage extends HookWidget {
     );
   }
 
-  Future<void> _searchSelected(BuildContext context) {
-    context.read(storySearchRangeStateProvider).state = SearchRange.pastYear;
+  Future<void> _searchSelected(BuildContext context, WidgetRef ref) {
+    ref.read(storySearchRangeStateProvider).state = SearchRange.pastYear;
     return Navigator.of(context).push<void>(
       PageRouteBuilder<void>(
         pageBuilder: (_, __, ___) => const StoriesSearchPage(
@@ -143,10 +144,10 @@ class StoriesPage extends HookWidget {
     );
   }
 
-  Future<void> _submitSelected(BuildContext context) async {
+  Future<void> _submitSelected(BuildContext context, WidgetRef ref) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
       final bool success = await Navigator.of(context).push<bool>(
@@ -158,15 +159,15 @@ class StoriesPage extends HookWidget {
           false;
 
       if (success) {
-        await context.refresh(storyIdsProvider(StoryType.newStories));
-        context.read(storyTypeStateProvider).state = StoryType.newStories;
+        ref.refresh(storyIdsProvider(StoryType.newStories));
+        ref.read(storyTypeStateProvider).state = StoryType.newStories;
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(appLocalizations.processingInfo),
             action: SnackBarAction(
               label: appLocalizations.refresh,
               onPressed: () =>
-                  context.refresh(storyIdsProvider(StoryType.newStories)),
+                  ref.refresh(storyIdsProvider(StoryType.newStories)),
             ),
           ),
         );

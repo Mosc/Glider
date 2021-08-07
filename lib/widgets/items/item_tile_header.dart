@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/text_style_extension.dart';
@@ -8,7 +7,7 @@ import 'package:glider/widgets/items/item_tile_thumbnail.dart';
 import 'package:glider/widgets/items/item_tile_title.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTileHeader extends HookWidget {
+class ItemTileHeader extends HookConsumerWidget {
   const ItemTileHeader(
     this.item, {
     Key? key,
@@ -21,9 +20,9 @@ class ItemTileHeader extends HookWidget {
   final bool interactive;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final bool showThumbnail =
-        interactive || (useProvider(showThumbnailProvider).data?.value ?? true);
+        interactive || (ref.watch(showThumbnailProvider).data?.value ?? true);
 
     return ConstrainedBox(
       constraints: showThumbnail

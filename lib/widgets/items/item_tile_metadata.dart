@@ -2,7 +2,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/user_page.dart';
@@ -13,7 +12,7 @@ import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTileMetadata extends HookWidget {
+class ItemTileMetadata extends HookConsumerWidget {
   const ItemTileMetadata(
     this.item, {
     Key? key,
@@ -28,14 +27,14 @@ class ItemTileMetadata extends HookWidget {
   final bool interactive;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     final AsyncData<bool>? favorited =
-        useProvider(favoritedProvider(item.id)).data;
-    final AsyncData<bool>? upvoted = useProvider(upvotedProvider(item.id)).data;
+        ref.watch(favoritedProvider(item.id)).data;
+    final AsyncData<bool>? upvoted = ref.watch(upvotedProvider(item.id)).data;
 
     return Hero(
       tag: 'item_metadata_${item.id}',
@@ -79,7 +78,8 @@ class ItemTileMetadata extends HookWidget {
             ),
           ] else if (item.by != null &&
               item.type != ItemType.pollopt) ...<Widget>[
-            _buildUsername(context, textTheme, by: item.by!, rootBy: root?.by),
+            _buildUsername(context, ref, textTheme,
+                by: item.by!, rootBy: root?.by),
             const SizedBox(width: 8),
           ],
           if (item.hasOriginalYear)
@@ -111,11 +111,12 @@ class ItemTileMetadata extends HookWidget {
     );
   }
 
-  Widget _buildUsername(BuildContext context, TextTheme textTheme,
+  Widget _buildUsername(
+      BuildContext context, WidgetRef ref, TextTheme textTheme,
       {required String by, String? rootBy}) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final bool byLoggedInUser =
-        item.by == useProvider(usernameProvider).data?.value;
+        item.by == ref.watch(usernameProvider).data?.value;
     final bool byRoot = item.by == rootBy;
 
     return GestureDetector(

@@ -12,11 +12,11 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/uni_links_handler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class App extends HookWidget {
+class App extends HookConsumerWidget {
   const App({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     useMemoized(FlutterDisplayMode.setHighRefreshRate);
 
     useMemoized(
@@ -30,9 +30,9 @@ class App extends HookWidget {
     );
 
     final ThemeBase themeBase =
-        useProvider(themeBaseProvider).data?.value ?? ThemeBase.system;
+        ref.watch(themeBaseProvider).data?.value ?? ThemeBase.system;
     final Color themeColor =
-        useProvider(themeColorProvider).data?.value ?? AppTheme.defaultColor;
+        ref.watch(themeColorProvider).data?.value ?? AppTheme.defaultColor;
 
     return MaterialApp(
       home: const Home(),

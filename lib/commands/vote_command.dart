@@ -14,9 +14,11 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class VoteCommand implements Command {
-  const VoteCommand(this.context, {required this.id, required this.upvote});
+  const VoteCommand(this.context, this.ref,
+      {required this.id, required this.upvote});
 
   final BuildContext context;
+  final WidgetRef ref;
   final int id;
   final bool upvote;
 
@@ -24,22 +26,24 @@ class VoteCommand implements Command {
   Future<void> execute() async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
       final bool success = await authRepository.vote(
         id: id,
         upvote: upvote,
-        onUpdate: () => context.refresh(upvotedProvider(id)),
+        onUpdate: () => ref.refresh(upvotedProvider(id)),
       );
 
       if (success) {
-        final Item item = await context.read(itemProvider(id).future);
+        final Item item =
+            await ref.read(itemNotifierProvider(id).notifier).load();
         final int? score = item.score;
 
         if (score != null) {
-          context.read(itemCacheStateProvider(id)).state =
-              item.copyWith(score: score + (upvote ? 1 : 0));
+          ref
+              .read(itemNotifierProvider(id).notifier)
+              .setData(item.copyWith(score: score + (upvote ? 1 : 0)));
         }
       } else {
         ScaffoldMessenger.of(context).replaceSnackBar(

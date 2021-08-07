@@ -9,11 +9,11 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SynchronizeDialog extends HookWidget {
+class SynchronizeDialog extends HookConsumerWidget {
   const SynchronizeDialog({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final ValueNotifier<bool> loadingState = useState(false);
@@ -53,7 +53,7 @@ class SynchronizeDialog extends HookWidget {
               ? null
               : () async {
                   loadingState.value = true;
-                  await _synchronize(context);
+                  await _synchronize(context, ref);
                   loadingState.value = false;
                 },
           child: Text(
@@ -66,15 +66,15 @@ class SynchronizeDialog extends HookWidget {
     );
   }
 
-  Future<void> _synchronize(BuildContext context) async {
+  Future<void> _synchronize(BuildContext context, WidgetRef ref) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.fetchUpvoted(
-          onUpdate: (int id) => context.refresh(upvotedProvider(id)),
+          onUpdate: (int id) => ref.refresh(upvotedProvider(id)),
         ) &&
         await authRepository.fetchFavorited(
-          onUpdate: (int id) => context.refresh(favoritedProvider(id)),
+          onUpdate: (int id) => ref.refresh(favoritedProvider(id)),
         );
 
     if (success) {

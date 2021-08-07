@@ -3,9 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html/dom.dart' as dom;
 
-class DecoratedHtml extends StatelessWidget {
+class DecoratedHtml extends HookConsumerWidget {
   const DecoratedHtml(String html, {Key? key, bool prependParagraphTag = true})
       // Hacker News prefixes every paragraph with a tag except the first one.
       : _html = prependParagraphTag ? '<p>$html' : html,
@@ -16,7 +17,7 @@ class DecoratedHtml extends StatelessWidget {
   static const String _quoteCharacter = '&gt;';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return HtmlWidget(
       _html,
       buildAsync: false,

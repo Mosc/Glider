@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:glider/widgets/items/item_tile_header.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
-class ItemTileThumbnail extends HookWidget {
+class ItemTileThumbnail extends HookConsumerWidget {
   const ItemTileThumbnail(this.item, {Key? key}) : super(key: key);
 
   final Item item;
@@ -16,7 +16,7 @@ class ItemTileThumbnail extends HookWidget {
   static final BorderRadius _borderRadius = BorderRadius.circular(4);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final double? size = ItemTileHeader.calculateHeight(context);
 
     return GestureDetector(

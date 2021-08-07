@@ -5,7 +5,7 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTile extends HookWidget {
+class ItemTile extends HookConsumerWidget {
   const ItemTile({
     Key? key,
     required this.id,
@@ -28,28 +28,29 @@ class ItemTile extends HookWidget {
   final Widget Function() loading;
 
   @override
-  Widget build(BuildContext context) {
-    final Item? cachedItem = useProvider(itemCacheStateProvider(id)).state;
-    final AsyncData<Item?>? itemData = cachedItem != null
-        ? AsyncData<Item?>(cachedItem)
-        : useProvider(itemProvider(id)).data;
+  Widget build(BuildContext context, WidgetRef ref) {
+    useMemoized(() => ref.read(itemNotifierProvider(id).notifier).forceLoad());
 
-    if (itemData == null) {
-      return loading();
-    }
+    final AsyncValue<Item> itemData = ref.watch(itemNotifierProvider(id));
 
-    if (itemData.value?.time == null) {
-      return const SizedBox.shrink();
-    }
+    return itemData.when(
+      data: (Item value) {
+        if (value.time == null) {
+          return const SizedBox.shrink();
+        }
 
-    return ItemTileData(
-      itemData.value!.copyWith(ancestors: ancestors),
-      key: ValueKey<int>(id),
-      root: root,
-      onTap: () => onTap?.call(context),
-      dense: dense,
-      interactive: interactive,
-      fadeable: fadeable,
+        return ItemTileData(
+          value.copyWith(ancestors: ancestors),
+          key: ValueKey<int>(id),
+          root: root,
+          onTap: () => onTap?.call(context),
+          dense: dense,
+          interactive: interactive,
+          fadeable: fadeable,
+        );
+      },
+      loading: loading,
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

@@ -15,11 +15,11 @@ import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AppearanceBottomSheet extends HookWidget {
+class AppearanceBottomSheet extends HookConsumerWidget {
   const AppearanceBottomSheet({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return ScrollableBottomSheet(
@@ -28,21 +28,20 @@ class AppearanceBottomSheet extends HookWidget {
           title: appLocalizations.showUrl,
           provider: showUrlProvider,
           onSave: (bool value) =>
-              context.read(storageRepositoryProvider).setShowUrl(value: value),
+              ref.read(storageRepositoryProvider).setShowUrl(value: value),
         ),
         ProviderSwitchListTile(
           title: appLocalizations.showThumbnail,
           provider: showThumbnailProvider,
-          onSave: (bool value) => context
+          onSave: (bool value) => ref
               .read(storageRepositoryProvider)
               .setShowThumbnail(value: value),
         ),
         ProviderSwitchListTile(
           title: appLocalizations.showMetadata,
           provider: showMetadataProvider,
-          onSave: (bool value) => context
-              .read(storageRepositoryProvider)
-              .setShowMetadata(value: value),
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setShowMetadata(value: value),
         ),
         const SizedBox(height: 4),
         _buildHorizontalScrollable(
@@ -73,15 +72,15 @@ class AppearanceBottomSheet extends HookWidget {
   }
 }
 
-class _ThemeBaseButton extends HookWidget {
+class _ThemeBaseButton extends HookConsumerWidget {
   const _ThemeBaseButton(this.base, {Key? key}) : super(key: key);
 
   final ThemeBase base;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeBase themeBase =
-        useProvider(themeBaseProvider).data?.value ?? ThemeBase.system;
+        ref.watch(themeBaseProvider).data?.value ?? ThemeBase.system;
 
     useMemoized(
       () => Future<void>.microtask(() {
@@ -109,8 +108,8 @@ class _ThemeBaseButton extends HookWidget {
         ),
         child: ElevatedButton.icon(
           onPressed: () async {
-            await context.read(storageRepositoryProvider).setThemeBase(base);
-            await context.refresh(themeBaseProvider);
+            await ref.read(storageRepositoryProvider).setThemeBase(base);
+            ref.refresh(themeBaseProvider);
           },
           label: Row(
             children: <Widget>[
@@ -129,15 +128,15 @@ class _ThemeBaseButton extends HookWidget {
   }
 }
 
-class _ThemeColorButton extends HookWidget {
+class _ThemeColorButton extends HookConsumerWidget {
   const _ThemeColorButton(this.color, {Key? key}) : super(key: key);
 
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final Color themeColor =
-        useProvider(themeColorProvider).data?.value ?? AppTheme.defaultColor;
+        ref.watch(themeColorProvider).data?.value ?? AppTheme.defaultColor;
 
     useMemoized(
       () => Future<void>.microtask(() {
@@ -163,8 +162,8 @@ class _ThemeColorButton extends HookWidget {
       ),
       child: ElevatedButton(
         onPressed: () async {
-          await context.read(storageRepositoryProvider).setThemeColor(color);
-          await context.refresh(themeColorProvider);
+          await ref.read(storageRepositoryProvider).setThemeColor(color);
+          ref.refresh(themeColorProvider);
         },
         child: SmoothAnimatedSwitcher(
           duration: kThemeChangeDuration,

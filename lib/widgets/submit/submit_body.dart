@@ -19,13 +19,13 @@ import 'package:glider/widgets/common/experimental.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SubmitBody extends HookWidget {
+class SubmitBody extends HookConsumerWidget {
   const SubmitBody({Key? key}) : super(key: key);
 
   static const int _maxTitleLength = 80;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final ValueNotifier<bool> loadingState = useState(false);
@@ -38,7 +38,7 @@ class SubmitBody extends HookWidget {
     final TextEditingValue urlListenable = useValueListenable(urlController);
     final TextEditingController textController = useTextEditingController();
     final TextEditingValue textListenable = useValueListenable(textController);
-    final String? username = useProvider(usernameProvider).data?.value;
+    final String? username = ref.watch(usernameProvider).data?.value;
 
     String? link() =>
         submitTypeState.value == SubmitType.link ? urlListenable.text : null;
@@ -135,6 +135,7 @@ class SubmitBody extends HookWidget {
                             : _isUrl(context, urlController.text)
                                 ? () => _autofillTitle(
                                       context,
+                                      ref,
                                       titleController,
                                       url: urlController.text,
                                     )
@@ -151,6 +152,7 @@ class SubmitBody extends HookWidget {
                                 loadingState.value = true;
                                 await _submit(
                                   context,
+                                  ref,
                                   title: titleListenable.text,
                                   url: link(),
                                   text: text(),
@@ -177,7 +179,7 @@ class SubmitBody extends HookWidget {
           ItemTileData(
             _buildItem(
               context,
-              id: useProvider(previewIdStateProvider).state,
+              id: ref.watch(previewIdStateProvider).state,
               username: username,
               title: titleListenable.text,
               url: link(),
@@ -192,12 +194,12 @@ class SubmitBody extends HookWidget {
   bool _isUrl(BuildContext context, String? url) =>
       Validators.url(context, url) == null;
 
-  Future<void> _autofillTitle(
-      BuildContext context, TextEditingController titleController,
+  Future<void> _autofillTitle(BuildContext context, WidgetRef ref,
+      TextEditingController titleController,
       {required String url}) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final WebRepository webRepository = context.read(webRepositoryProvider);
+    final WebRepository webRepository = ref.read(webRepositoryProvider);
 
     try {
       final String? title = await webRepository.extractTitle(url: url);
@@ -212,11 +214,11 @@ class SubmitBody extends HookWidget {
     }
   }
 
-  Future<void> _submit(BuildContext context,
+  Future<void> _submit(BuildContext context, WidgetRef ref,
       {required String title, String? url, String? text}) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.submit(
       title: title,
       url: url,
@@ -225,7 +227,7 @@ class SubmitBody extends HookWidget {
 
     if (success) {
       final StateController<int> previewIdStateController =
-          context.read(previewIdStateProvider);
+          ref.read(previewIdStateProvider);
 
       // Decrement preview ID to prevent duplicates.
       previewIdStateController.state--;

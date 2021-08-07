@@ -1,7 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FloatingAppBarScrollView extends StatelessWidget {
+class FloatingAppBarScrollView extends HookConsumerWidget {
   const FloatingAppBarScrollView({
     Key? key,
     this.controller,
@@ -18,7 +19,7 @@ class FloatingAppBarScrollView extends StatelessWidget {
   final Widget body;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return NestedScrollView(
       controller: controller,
       headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[

@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TileLoadingBlock extends StatelessWidget {
+class TileLoadingBlock extends HookConsumerWidget {
   const TileLoadingBlock({Key? key, this.width, this.height, this.color})
       : super(key: key);
 
@@ -10,7 +11,7 @@ class TileLoadingBlock extends StatelessWidget {
   final Color? color;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: width,
       height: height,

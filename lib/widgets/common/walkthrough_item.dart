@@ -2,7 +2,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/slidable_action.dart';
 import 'package:glider/models/walkthrough_step.dart';
 import 'package:glider/providers/persistence_provider.dart';
@@ -17,27 +16,32 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeStateProvider<WalkthroughStep> _walkthroughStepStateProvider =
     StateProvider.autoDispose<WalkthroughStep>(
-        (ProviderReference ref) => WalkthroughStep.step1);
+  (AutoDisposeStateProviderRef<WalkthroughStep> ref) => WalkthroughStep.step1,
+);
 
 final AutoDisposeStateProvider<bool> _walkthroughUpvotedStateProvider =
-    StateProvider.autoDispose<bool>((ProviderReference ref) => false);
+    StateProvider.autoDispose<bool>(
+  (AutoDisposeStateProviderRef<bool> ref) => false,
+);
 
 final AutoDisposeStateProvider<bool> _walkthroughFavoritedStateProvider =
-    StateProvider.autoDispose<bool>((ProviderReference ref) => false);
+    StateProvider.autoDispose<bool>(
+  (AutoDisposeStateProviderRef<bool> ref) => false,
+);
 
-class WalkthoughItem extends HookWidget {
+class WalkthoughItem extends HookConsumerWidget {
   const WalkthoughItem({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final StateController<WalkthroughStep> stepStateController =
-        useProvider(_walkthroughStepStateProvider);
+        ref.watch(_walkthroughStepStateProvider);
     final StateController<bool> upvotedStateController =
-        useProvider(_walkthroughUpvotedStateProvider);
+        ref.watch(_walkthroughUpvotedStateProvider);
     final StateController<bool> favoritedStateController =
-        useProvider(_walkthroughFavoritedStateProvider);
+        ref.watch(_walkthroughFavoritedStateProvider);
 
     Future<void>.microtask(() {
       switch (stepStateController.state) {
@@ -85,9 +89,9 @@ class WalkthoughItem extends HookWidget {
         color: Theme.of(context).colorScheme.error,
         iconColor: Theme.of(context).colorScheme.onError,
       ),
-      onDismiss: (_) {
-        context.read(storageRepositoryProvider).setCompletedWalkthrough();
-        context.refresh(completedWalkthroughProvider);
+      onDismiss: (_) async {
+        await ref.read(storageRepositoryProvider).setCompletedWalkthrough();
+        ref.refresh(completedWalkthroughProvider);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

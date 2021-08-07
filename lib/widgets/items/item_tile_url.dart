@@ -1,18 +1,18 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/block.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTileUrl extends HookWidget {
+class ItemTileUrl extends HookConsumerWidget {
   const ItemTileUrl(this.item, {Key? key}) : super(key: key);
 
   final Item item;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(

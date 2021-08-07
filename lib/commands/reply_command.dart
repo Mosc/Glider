@@ -14,9 +14,10 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReplyCommand implements Command {
-  const ReplyCommand(this.context, {required this.id, this.rootId});
+  const ReplyCommand(this.context, this.ref, {required this.id, this.rootId});
 
   final BuildContext context;
+  final WidgetRef ref;
   final int id;
   final int? rootId;
 
@@ -24,12 +25,13 @@ class ReplyCommand implements Command {
   Future<void> execute() async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final Item item = await context.read(itemProvider(id).future);
+      final Item item =
+          await ref.read(itemNotifierProvider(id).notifier).load();
       final Item? root = rootId != null
-          ? await context.read(itemProvider(rootId!).future)
+          ? await ref.read(itemNotifierProvider(rootId!).notifier).load()
           : null;
 
       final bool success = await Navigator.of(context).push<bool>(
@@ -41,15 +43,15 @@ class ReplyCommand implements Command {
           false;
 
       if (success && rootId != null) {
-        context.refresh(itemTreeStreamProvider(rootId!));
+        ref.refresh(itemTreeStreamProvider(rootId!));
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(appLocalizations.processingInfo),
             action: SnackBarAction(
               label: appLocalizations.refresh,
               onPressed: () async {
-                await reloadItemTree(context.refresh, id: rootId!);
-                return context.refresh(itemTreeStreamProvider(rootId!));
+                await reloadItemTree(ref.read, id: rootId!);
+                return ref.refresh(itemTreeStreamProvider(rootId!));
               },
             ),
           ),

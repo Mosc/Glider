@@ -1,14 +1,15 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
-class TileLoading extends StatelessWidget {
+class TileLoading extends HookConsumerWidget {
   const TileLoading({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (kIsWeb) {
       return child;
     } else {

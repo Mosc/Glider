@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 Future<void> _copyAction(
@@ -25,7 +26,7 @@ class OptionsDialogOption {
   final String text;
 }
 
-class OptionsDialog extends StatelessWidget {
+class OptionsDialog extends HookConsumerWidget {
   const OptionsDialog.copy({Key? key, required this.options})
       : action = _copyAction,
         super(key: key);
@@ -39,7 +40,7 @@ class OptionsDialog extends StatelessWidget {
   final Future<void> Function(BuildContext, OptionsDialogOption) action;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SimpleDialog(
       contentPadding: const EdgeInsets.symmetric(vertical: 16),
       children: <Widget>[

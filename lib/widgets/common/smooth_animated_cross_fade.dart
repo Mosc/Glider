@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:glider/utils/animation_util.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SmoothAnimatedCrossFade extends StatelessWidget {
+class SmoothAnimatedCrossFade extends HookConsumerWidget {
   const SmoothAnimatedCrossFade({
     Key? key,
     required this.condition,
@@ -16,7 +17,7 @@ class SmoothAnimatedCrossFade extends StatelessWidget {
   final Duration? duration;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AnimatedCrossFade(
       duration: duration ?? AnimationUtil.defaultDuration,
       firstCurve: Curves.easeIn,

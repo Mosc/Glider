@@ -11,11 +11,11 @@ import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AccountLoggedOut extends HookWidget {
+class AccountLoggedOut extends HookConsumerWidget {
   const AccountLoggedOut({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final ValueNotifier<bool> loadingState = useState(false);
@@ -77,6 +77,7 @@ class AccountLoggedOut extends HookWidget {
                               loadingState.value = true;
                               await _register(
                                 context,
+                                ref,
                                 username: usernameController.text,
                                 password: passwordController.text,
                               );
@@ -94,6 +95,7 @@ class AccountLoggedOut extends HookWidget {
                               loadingState.value = true;
                               await _login(
                                 context,
+                                ref,
                                 username: usernameController.text,
                                 password: passwordController.text,
                                 synchronize: synchronizeState.value,
@@ -112,17 +114,18 @@ class AccountLoggedOut extends HookWidget {
     );
   }
 
-  Future<void> _register(BuildContext context,
+  Future<void> _register(BuildContext context, WidgetRef ref,
       {required String username, required String password}) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success =
         await authRepository.register(username: username, password: password);
 
     if (success) {
-      unawaited(context.refresh(usernameProvider));
-      unawaited(context.refresh(loggedInProvider));
+      ref
+        ..refresh(usernameProvider)
+        ..refresh(loggedInProvider);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.registerError)),
@@ -130,23 +133,24 @@ class AccountLoggedOut extends HookWidget {
     }
   }
 
-  Future<void> _login(BuildContext context,
+  Future<void> _login(BuildContext context, WidgetRef ref,
       {required String username,
       required String password,
       required bool synchronize}) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success =
         await authRepository.login(username: username, password: password);
 
     if (success) {
       if (synchronize) {
-        await _synchronize(context);
+        await _synchronize(context, ref);
       }
 
-      unawaited(context.refresh(usernameProvider));
-      unawaited(context.refresh(loggedInProvider));
+      ref
+        ..refresh(usernameProvider)
+        ..refresh(loggedInProvider);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(content: Text(appLocalizations.logInError)),
@@ -154,15 +158,15 @@ class AccountLoggedOut extends HookWidget {
     }
   }
 
-  Future<void> _synchronize(BuildContext context) async {
+  Future<void> _synchronize(BuildContext context, WidgetRef ref) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.fetchUpvoted(
-          onUpdate: (int id) => context.refresh(upvotedProvider(id)),
+          onUpdate: (int id) => ref.refresh(upvotedProvider(id)),
         ) &&
         await authRepository.fetchFavorited(
-          onUpdate: (int id) => context.refresh(favoritedProvider(id)),
+          onUpdate: (int id) => ref.refresh(favoritedProvider(id)),
         );
 
     if (!success) {

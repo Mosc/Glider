@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/user_provider.dart';
@@ -9,16 +8,17 @@ import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:glider/widgets/users/user_tile_data.dart';
 import 'package:glider/widgets/users/user_tile_loading.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserBody extends HookWidget {
+class UserBody extends HookConsumerWidget {
   const UserBody({Key? key, required this.id}) : super(key: key);
 
   final String id;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return RefreshableBody<User>(
-      provider: userProvider(id),
+      provider: userNotifierProvider(id),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

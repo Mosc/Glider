@@ -12,15 +12,16 @@ import 'package:glider/widgets/common/options_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UserOptionsCommand implements Command {
-  UserOptionsCommand.copy(this.context, {required this.id})
+  UserOptionsCommand.copy(this.context, this.ref, {required this.id})
       : optionsDialogBuilder = ((Iterable<OptionsDialogOption> options) =>
             OptionsDialog.copy(options: options));
 
-  UserOptionsCommand.share(this.context, {required this.id})
+  UserOptionsCommand.share(this.context, this.ref, {required this.id})
       : optionsDialogBuilder = ((Iterable<OptionsDialogOption> options) =>
             OptionsDialog.share(options: options));
 
   final BuildContext context;
+  final WidgetRef ref;
   final String id;
   final Widget Function(Iterable<OptionsDialogOption>) optionsDialogBuilder;
 
@@ -28,7 +29,7 @@ class UserOptionsCommand implements Command {
   Future<void> execute() async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final User user = await context.read(userProvider(id).future);
+    final User user = await ref.read(userNotifierProvider(id).notifier).load();
 
     final List<OptionsDialogOption> optionsDialogOptions =
         <OptionsDialogOption>[

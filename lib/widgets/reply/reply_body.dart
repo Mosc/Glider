@@ -16,7 +16,7 @@ import 'package:glider/widgets/common/experimental.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ReplyBody extends HookWidget {
+class ReplyBody extends HookConsumerWidget {
   const ReplyBody({Key? key, required this.parent, this.root})
       : super(key: key);
 
@@ -24,7 +24,7 @@ class ReplyBody extends HookWidget {
   final Item? root;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final ValueNotifier<bool> loadingState = useState(false);
@@ -33,7 +33,7 @@ class ReplyBody extends HookWidget {
     final TextEditingController commentController = useTextEditingController();
     final TextEditingValue commentListenable =
         useValueListenable(commentController);
-    final String? username = useProvider(usernameProvider).data?.value;
+    final String? username = ref.watch(usernameProvider).data?.value;
 
     return ListView(
       padding: MediaQuery.of(context).padding.copyWith(top: 0),
@@ -78,7 +78,7 @@ class ReplyBody extends HookWidget {
                           : () async {
                               if (formKey.currentState?.validate() ?? false) {
                                 loadingState.value = true;
-                                await _reply(context,
+                                await _reply(context, ref,
                                     text: commentController.text);
                                 loadingState.value = false;
                               }
@@ -107,7 +107,7 @@ class ReplyBody extends HookWidget {
         if (username != null)
           ItemTileData(
             _buildItem(
-              id: useProvider(previewIdStateProvider).state,
+              id: ref.watch(previewIdStateProvider).state,
               username: username,
               text: commentListenable.text,
             ),
@@ -126,10 +126,11 @@ class ReplyBody extends HookWidget {
     commentController.text = '$quotedParent\n\n${commentController.text}';
   }
 
-  Future<void> _reply(BuildContext context, {required String text}) async {
+  Future<void> _reply(BuildContext context, WidgetRef ref,
+      {required String text}) async {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    final AuthRepository authRepository = context.read(authRepositoryProvider);
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.reply(
       parentId: parent.id,
       text: text,
@@ -137,24 +138,28 @@ class ReplyBody extends HookWidget {
 
     if (success) {
       final StateController<int> previewIdStateController =
-          context.read(previewIdStateProvider);
+          ref.read(previewIdStateProvider);
       final int previewId = previewIdStateController.state;
 
       // Make comment preview available.
-      context.read(itemCacheStateProvider(previewId)).state = _buildItem(
-        id: previewId,
-        username: await authRepository.username,
-        text: text,
-      );
+      ref.read(itemNotifierProvider(previewId).notifier).setData(
+            _buildItem(
+              id: previewId,
+              username: await authRepository.username,
+              text: text,
+            ),
+          );
 
       // Add comment preview to parent's list of children.
-      context.read(itemCacheStateProvider(parent.id)).state =
-          parent.incrementDescendants().addKid(previewId);
+      ref.read(itemNotifierProvider(parent.id).notifier).setData(
+            parent.incrementDescendants().addKid(previewId),
+          );
 
       // Increment root's number of descendants.
       if (root != null && parent != root) {
-        context.read(itemCacheStateProvider(root!.id)).state =
-            root!.incrementDescendants();
+        ref.read(itemNotifierProvider(root!.id).notifier).setData(
+              root!.incrementDescendants(),
+            );
       }
 
       // Decrement preview ID to prevent duplicates.

@@ -18,18 +18,18 @@ import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemBody extends HookWidget {
+class ItemBody extends HookConsumerWidget {
   const ItemBody({Key? key, required this.id}) : super(key: key);
 
   final int id;
 
   @override
-  Widget build(BuildContext context) {
-    useMemoized(() => _refresh(context));
+  Widget build(BuildContext context, WidgetRef ref) {
+    useMemoized(() => _refresh(ref));
 
     return RefreshableBody<ItemTree>(
       provider: itemTreeStreamProvider(id),
-      onRefresh: () => _refresh(context),
+      onRefresh: () => _refresh(ref),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -67,9 +67,9 @@ class ItemBody extends HookWidget {
     );
   }
 
-  Future<void> _refresh(BuildContext context) async {
-    await reloadItemTree(context.refresh, id: id);
-    return context.refresh(itemTreeStreamProvider(id));
+  Future<void> _refresh(WidgetRef ref) async {
+    await reloadItemTree(ref.read, id: id);
+    ref.refresh(itemTreeStreamProvider(id));
   }
 
   bool _loaded(Iterable<Item> items, int index) => index < items.length;

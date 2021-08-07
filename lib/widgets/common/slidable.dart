@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:glider/models/slidable_action.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Slidable extends StatelessWidget {
+class Slidable extends HookConsumerWidget {
   const Slidable({
     required Key key,
     this.startToEndAction,
@@ -18,7 +19,7 @@ class Slidable extends StatelessWidget {
   final DismissDirectionCallback? onDismiss;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (startToEndAction == null && endToStartAction == null) {
       return child;
     }

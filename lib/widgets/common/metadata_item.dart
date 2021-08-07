@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:glider/utils/text_style_extension.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MetadataItem extends StatelessWidget {
+class MetadataItem extends HookConsumerWidget {
   const MetadataItem(
       {Key? key, required this.icon, this.text, this.highlight = false})
       : super(key: key);
@@ -11,7 +12,7 @@ class MetadataItem extends StatelessWidget {
   final bool highlight;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final Color? color =
         highlight ? Theme.of(context).colorScheme.primary : null;

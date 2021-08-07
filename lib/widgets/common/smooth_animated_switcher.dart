@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:glider/utils/animation_util.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SmoothAnimatedSwitcher extends StatelessWidget {
+class SmoothAnimatedSwitcher extends HookConsumerWidget {
   const SmoothAnimatedSwitcher({
     Key? key,
     required this.condition,
@@ -50,7 +51,7 @@ class SmoothAnimatedSwitcher extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AnimatedSwitcher(
       duration: duration ?? AnimationUtil.defaultDuration,
       switchInCurve: Curves.easeInOut,

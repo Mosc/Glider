@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
@@ -10,7 +9,7 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CollapsibleItemTile extends HookWidget {
+class CollapsibleItemTile extends HookConsumerWidget {
   const CollapsibleItemTile({
     Key? key,
     required this.id,
@@ -27,18 +26,22 @@ class CollapsibleItemTile extends HookWidget {
   final Widget Function() loading;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool _collapsed(int id) =>
+        ref.watch(collapsedProvider(id)).data?.value ?? false;
+
     final bool collapsed = _collapsed(id);
 
     return SmoothAnimatedSwitcher.vertical(
-      condition: !ancestors
-          .any((int ancestor) => ancestor != root?.id && _collapsed(ancestor)),
+      condition: !ancestors.any(
+        (int ancestor) => ancestor != root?.id && _collapsed(ancestor),
+      ),
       child: ItemTile(
         id: id,
         ancestors: ancestors,
         root: root,
         onTap: (BuildContext context) async {
-          unawaited(_setCollapsed(context, collapsed: !collapsed));
+          unawaited(_setCollapsed(ref, collapsed: !collapsed));
           unawaited(_scrollToTop(context));
         },
         dense: collapsed,
@@ -49,15 +52,11 @@ class CollapsibleItemTile extends HookWidget {
     );
   }
 
-  bool _collapsed(int id) =>
-      useProvider(collapsedProvider(id)).data?.value ?? false;
-
-  Future<void> _setCollapsed(BuildContext context,
-      {required bool collapsed}) async {
-    await context
+  Future<void> _setCollapsed(WidgetRef ref, {required bool collapsed}) async {
+    await ref
         .read(storageRepositoryProvider)
         .setCollapsed(id: id, collapsed: collapsed);
-    return context.refresh(collapsedProvider(id));
+    ref.refresh(collapsedProvider(id));
   }
 
   Future<void> _scrollToTop(BuildContext context) async {

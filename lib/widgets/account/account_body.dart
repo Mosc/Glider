@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/account/account_logged_in.dart';
 import 'package:glider/widgets/account/account_logged_out.dart';
@@ -7,16 +6,16 @@ import 'package:glider/widgets/common/error.dart';
 import 'package:glider/widgets/common/loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AccountBody extends HookWidget {
+class AccountBody extends HookConsumerWidget {
   const AccountBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return useProvider(loggedInProvider).when(
-      loading: () => const Loading(),
-      error: (_, __) => const Error(),
-      data: (bool loggedIn) =>
-          loggedIn ? const AccountLoggedIn() : const AccountLoggedOut(),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(loggedInProvider).when(
+          data: (bool loggedIn) =>
+              loggedIn ? const AccountLoggedIn() : const AccountLoggedOut(),
+          loading: () => const Loading(),
+          error: (_, __) => const Error(),
+        );
   }
 }

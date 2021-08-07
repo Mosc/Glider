@@ -6,6 +6,7 @@ import 'package:glider/commands/favorite_command.dart';
 import 'package:glider/commands/item_options_command.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/vote_command.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum ItemMenuAction {
   vote,
@@ -36,19 +37,19 @@ extension ItemMenuActionExtension on ItemMenuAction {
     }
   }
 
-  Command command(BuildContext context,
+  Command command(BuildContext context, WidgetRef ref,
       {required int id, required bool upvoted, required bool favorited}) {
     switch (this) {
       case ItemMenuAction.vote:
-        return VoteCommand(context, id: id, upvote: !upvoted);
+        return VoteCommand(context, ref, id: id, upvote: !upvoted);
       case ItemMenuAction.reply:
-        return ReplyCommand(context, id: id);
+        return ReplyCommand(context, ref, id: id);
       case ItemMenuAction.favorite:
-        return FavoriteCommand(context, id: id, favorite: !favorited);
+        return FavoriteCommand(context, ref, id: id, favorite: !favorited);
       case ItemMenuAction.copy:
-        return ItemOptionsCommand.copy(context, id: id);
+        return ItemOptionsCommand.copy(context, ref, id: id);
       case ItemMenuAction.share:
-        return ItemOptionsCommand.share(context, id: id);
+        return ItemOptionsCommand.share(context, ref, id: id);
     }
   }
 }

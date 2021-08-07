@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/commands/command.dart';
 import 'package:glider/commands/user_options_command.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum UserMenuAction {
   copy,
@@ -21,12 +22,12 @@ extension UserMenuActionExtension on UserMenuAction {
     }
   }
 
-  Command command(BuildContext context, {required String id}) {
+  Command command(BuildContext context, WidgetRef ref, {required String id}) {
     switch (this) {
       case UserMenuAction.copy:
-        return UserOptionsCommand.copy(context, id: id);
+        return UserOptionsCommand.copy(context, ref, id: id);
       case UserMenuAction.share:
-        return UserOptionsCommand.share(context, id: id);
+        return UserOptionsCommand.share(context, ref, id: id);
     }
   }
 }

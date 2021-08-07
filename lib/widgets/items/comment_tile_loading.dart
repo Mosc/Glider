@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/tile_loading.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CommentTileLoading extends StatelessWidget {
+class CommentTileLoading extends HookConsumerWidget {
   const CommentTileLoading({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return TileLoading(

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/utils/animation_util.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SmoothAnimatedSize extends HookWidget {
+class SmoothAnimatedSize extends HookConsumerWidget {
   const SmoothAnimatedSize({
     Key? key,
     required this.child,
@@ -13,7 +13,7 @@ class SmoothAnimatedSize extends HookWidget {
   final Duration? duration;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AnimatedSize(
       duration: duration ?? AnimationUtil.defaultDuration,
       curve: Curves.easeInOut,

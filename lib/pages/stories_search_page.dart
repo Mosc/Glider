@@ -13,20 +13,27 @@ import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeStateProvider<String> storySearchQueryStateProvider =
-    StateProvider.autoDispose<String>((ProviderReference ref) => '');
+    StateProvider.autoDispose<String>(
+  (AutoDisposeStateProviderRef<String> ref) => '',
+);
 
 final AutoDisposeStateProvider<SearchRange?> storySearchRangeStateProvider =
-    StateProvider.autoDispose<SearchRange?>((ProviderReference ref) => null);
+    StateProvider.autoDispose<SearchRange?>(
+  (AutoDisposeStateProviderRef<SearchRange?> ref) => null,
+);
 
 final AutoDisposeStateProvider<DateTimeRange?>
     storySearchCustomDateTimeRangeStateProvider =
-    StateProvider.autoDispose<DateTimeRange?>((ProviderReference ref) => null);
+    StateProvider.autoDispose<DateTimeRange?>(
+  (AutoDisposeStateProviderRef<DateTimeRange?> ref) => null,
+);
 
 final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
     StateProvider.autoDispose<StoryType>(
-        (ProviderReference ref) => StoryType.bestStories);
+  (AutoDisposeStateProviderRef<StoryType> ref) => StoryType.bestStories,
+);
 
-class StoriesSearchPage extends HookWidget {
+class StoriesSearchPage extends HookConsumerWidget {
   const StoriesSearchPage(
       {Key? key, this.initialSearchRange, this.enableSearch = true})
       : super(key: key);
@@ -35,7 +42,7 @@ class StoriesSearchPage extends HookWidget {
   final bool enableSearch;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final ThemeData theme = Theme.of(context);
@@ -56,11 +63,11 @@ class StoriesSearchPage extends HookWidget {
 
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> storySearchQueryStateController =
-        useProvider(storySearchQueryStateProvider);
+        ref.watch(storySearchQueryStateProvider);
     final StateController<SearchRange?> storySearchRangeStateController =
-        useProvider(storySearchRangeStateProvider);
+        ref.watch(storySearchRangeStateProvider);
     final StateController<StoryType> searchStoryTypeStateController =
-        useProvider(storySearchTypeStateProvider);
+        ref.watch(storySearchTypeStateProvider);
     useMemoized(
       () => Future<void>.microtask(
         () => storySearchRangeStateController.state = initialSearchRange,
@@ -177,19 +184,19 @@ class StoriesSearchPage extends HookWidget {
   }
 }
 
-class _SearchRangeChip extends HookWidget {
+class _SearchRangeChip extends HookConsumerWidget {
   const _SearchRangeChip({Key? key, required this.searchRange})
       : super(key: key);
 
   final SearchRange searchRange;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final StateController<SearchRange?> storySearchRangeStateController =
-        useProvider(storySearchRangeStateProvider);
+        ref.watch(storySearchRangeStateProvider);
     final StateController<DateTimeRange?>
         storySearchCustomDateTimeRangeStateController =
-        useProvider(storySearchCustomDateTimeRangeStateProvider);
+        ref.watch(storySearchCustomDateTimeRangeStateProvider);
 
     return ChoiceChip(
       label: Text(searchRange.title(
@@ -197,9 +204,8 @@ class _SearchRangeChip extends HookWidget {
       selected: storySearchRangeStateController.state == searchRange,
       onSelected: (bool selected) async {
         final StateController<DateTimeRange?>
-            customDateTimeRangeStateController = context
-                .read(storySearchCustomDateTimeRangeStateProvider)
-              ..state = null;
+            customDateTimeRangeStateController =
+            ref.read(storySearchCustomDateTimeRangeStateProvider)..state = null;
 
         if (searchRange == SearchRange.custom && selected) {
           customDateTimeRangeStateController.state = await showDateRangePicker(

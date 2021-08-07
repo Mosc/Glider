@@ -16,7 +16,7 @@ final Provider<Dio> _dioProvider = Provider<Dio>(
 
 final Provider<WebsiteRepository> _websiteRepositoryProvider =
     Provider<WebsiteRepository>(
-  (ProviderReference ref) => WebsiteRepository(
+  (ProviderRef<WebsiteRepository> ref) => WebsiteRepository(
     ref.read(_dioProvider),
   ),
 );
@@ -33,7 +33,7 @@ final Provider<FlutterSecureStorage> _secureStorageProvider =
 
 final Provider<StorageRepository> storageRepositoryProvider =
     Provider<StorageRepository>(
-  (ProviderReference ref) => StorageRepository(
+  (ProviderRef<StorageRepository> ref) => StorageRepository(
     ref.read(_secureStorageProvider),
     ref.read(_sharedPreferences.future),
   ),
@@ -41,27 +41,27 @@ final Provider<StorageRepository> storageRepositoryProvider =
 
 final Provider<AuthRepository> authRepositoryProvider =
     Provider<AuthRepository>(
-  (ProviderReference ref) => AuthRepository(
+  (ProviderRef<AuthRepository> ref) => AuthRepository(
     ref.read(_websiteRepositoryProvider),
     ref.read(storageRepositoryProvider),
   ),
 );
 
 final Provider<ApiRepository> apiRepositoryProvider = Provider<ApiRepository>(
-  (ProviderReference ref) => ApiRepository(
+  (ProviderRef<ApiRepository> ref) => ApiRepository(
     ref.read(_dioProvider),
   ),
 );
 
 final Provider<SearchApiRepository> searchApiRepositoryProvider =
     Provider<SearchApiRepository>(
-  (ProviderReference ref) => SearchApiRepository(
+  (ProviderRef<SearchApiRepository> ref) => SearchApiRepository(
     ref.read(_dioProvider),
   ),
 );
 
 final Provider<WebRepository> webRepositoryProvider = Provider<WebRepository>(
-  (ProviderReference ref) => WebRepository(
+  (ProviderRef<WebRepository> ref) => WebRepository(
     ref.read(_dioProvider),
   ),
 );

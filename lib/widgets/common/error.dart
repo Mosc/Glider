@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/utils/text_style_extension.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Error extends StatelessWidget {
+class Error extends HookConsumerWidget {
   const Error({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final double? fontSize =

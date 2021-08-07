@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/search_parameters.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/stories_search_page.dart';
@@ -10,19 +9,19 @@ import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class StoriesSearchBody extends HookWidget {
+class StoriesSearchBody extends HookConsumerWidget {
   const StoriesSearchBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return RefreshableBody<Iterable<int>>(
       provider: storyIdsSearchProvider(
         SearchParameters(
-          query: useProvider(storySearchQueryStateProvider).state,
-          searchRange: useProvider(storySearchRangeStateProvider).state,
+          query: ref.watch(storySearchQueryStateProvider).state,
+          searchRange: ref.watch(storySearchRangeStateProvider).state,
           customDateTimeRange:
-              useProvider(storySearchCustomDateTimeRangeStateProvider).state,
-          storyType: useProvider(storySearchTypeStateProvider).state,
+              ref.watch(storySearchCustomDateTimeRangeStateProvider).state,
+          storyType: ref.watch(storySearchTypeStateProvider).state,
         ),
       ),
       loadingBuilder: () => <Widget>[

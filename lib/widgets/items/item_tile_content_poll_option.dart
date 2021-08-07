@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/persistence_provider.dart';
@@ -7,7 +6,7 @@ import 'package:glider/widgets/items/item_tile_metadata.dart';
 import 'package:glider/widgets/items/item_tile_text.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemTileContentPollOption extends HookWidget {
+class ItemTileContentPollOption extends HookConsumerWidget {
   const ItemTileContentPollOption(
     this.item, {
     Key? key,
@@ -20,20 +19,20 @@ class ItemTileContentPollOption extends HookWidget {
   final bool interactive;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: <Widget>[
           Checkbox(
-            value: useProvider(upvotedProvider(item.id)).maybeWhen(
-              data: (bool upvoted) => upvoted,
-              orElse: () => false,
-            ),
+            value: ref.watch(upvotedProvider(item.id)).maybeWhen(
+                  data: (bool upvoted) => upvoted,
+                  orElse: () => false,
+                ),
             onChanged: interactive
-                ? (bool? upvote) =>
-                    VoteCommand(context, id: item.id, upvote: upvote ?? false)
-                        .execute()
+                ? (bool? upvote) => VoteCommand(context, ref,
+                        id: item.id, upvote: upvote ?? false)
+                    .execute()
                 : null,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),

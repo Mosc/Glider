@@ -6,14 +6,15 @@ import 'package:glider/models/user.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
 import 'package:glider/widgets/users/user_bottom_sheet.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserTileData extends StatelessWidget {
+class UserTileData extends HookConsumerWidget {
   const UserTileData(this.user, {Key? key}) : super(key: key);
 
   final User user;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final TextTheme textTheme = Theme.of(context).textTheme;

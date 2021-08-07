@@ -10,16 +10,18 @@ import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final StateProvider<int> previewIdStateProvider =
-    StateProvider<int>((ProviderReference ref) => -1);
+    StateProvider<int>((StateProviderRef<int> ref) => -1);
 
 final AutoDisposeFutureProvider<Iterable<int>> favoriteIdsProvider =
-    FutureProvider.autoDispose(
-  (ProviderReference ref) => ref.read(storageRepositoryProvider).favoriteIds,
+    FutureProvider.autoDispose<Iterable<int>>(
+  (AutoDisposeFutureProviderRef<Iterable<int>> ref) =>
+      ref.read(storageRepositoryProvider).favoriteIds,
 );
 
 final AutoDisposeFutureProviderFamily<Iterable<int>, StoryType>
-    storyIdsProvider = FutureProvider.autoDispose
-        .family((ProviderReference ref, StoryType storyType) async {
+    storyIdsProvider = FutureProvider.autoDispose.family(
+        (AutoDisposeFutureProviderRef<Iterable<int>> ref,
+            StoryType storyType) async {
   final ApiRepository apiRepository = ref.read(apiRepositoryProvider);
 
   if (storyType == StoryType.newTopStories) {
@@ -35,25 +37,47 @@ final AutoDisposeFutureProviderFamily<Iterable<int>, StoryType>
 
 final AutoDisposeFutureProviderFamily<Iterable<int>, SearchParameters>
     storyIdsSearchProvider = FutureProvider.autoDispose.family(
-  (ProviderReference ref, SearchParameters searchParameters) =>
+  (AutoDisposeFutureProviderRef<Iterable<int>> ref,
+          SearchParameters searchParameters) =>
       ref.read(searchApiRepositoryProvider).searchStoryIds(searchParameters),
 );
 
-final StateProviderFamily<Item?, int> itemCacheStateProvider =
-    StateProvider.family((ProviderReference ref, int id) => null);
+final StateNotifierProviderFamily<ItemNotifier, AsyncValue<Item>, int>
+    itemNotifierProvider = StateNotifierProvider.family(
+  (StateNotifierProviderRef ref, int id) => ItemNotifier(ref.read, id: id),
+);
 
-final FutureProviderFamily<Item, int> itemProvider =
-    FutureProvider.family((ProviderReference ref, int id) async {
-  final Item item = await ref.read(apiRepositoryProvider).getItem(id);
-  ref.read(itemCacheStateProvider(id)).state = item;
-  return item;
-});
+class ItemNotifier extends StateNotifier<AsyncValue<Item>> {
+  ItemNotifier(this.read, {required this.id})
+      : super(const AsyncValue<Item>.loading()) {
+    load();
+  }
+
+  final Reader read;
+  final int id;
+
+  void setData(Item item) => state = AsyncValue<Item>.data(item);
+
+  Future<Item> load() async {
+    return state.maybeWhen(
+      data: (Item state) => state,
+      orElse: forceLoad,
+    );
+  }
+
+  Future<Item> forceLoad() async {
+    final Item item = await read(apiRepositoryProvider).getItem(id);
+    setData(item);
+    return item;
+  }
+}
 
 final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
-    StreamProvider.autoDispose.family((ProviderReference ref, int id) async* {
-  unawaited(_preloadItemTree(ref, id: id));
+    StreamProvider.autoDispose
+        .family((AutoDisposeStreamProviderRef<ItemTree> ref, int id) async* {
+  unawaited(loadItemTree(ref.read, id: id));
 
-  final Stream<Item> itemStream = _itemStream(ref, id: id);
+  final Stream<Item> itemStream = _itemStream(ref.read, id: id);
   final List<Item> items = <Item>[];
 
   await for (final Item item in itemStream) {
@@ -64,34 +88,36 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
   yield ItemTree(items: items, done: true);
 });
 
-Stream<Item> _itemStream(ProviderReference ref,
+Stream<Item> _itemStream(Reader read,
     {required int id, Iterable<int> ancestors = const <int>[]}) async* {
   try {
-    final Item item = await _readItem(ref, id: id);
+    final Item item = await read(itemNotifierProvider(id).notifier).load();
 
     yield item.copyWith(ancestors: ancestors);
 
     final Iterable<int> childAncestors = <int>[id, ...ancestors];
 
     for (final int partId in item.parts) {
-      yield* _itemStream(ref, id: partId, ancestors: childAncestors);
+      yield* _itemStream(read, id: partId, ancestors: childAncestors);
     }
 
     for (final int kidId in item.kids) {
-      yield* _itemStream(ref, id: kidId, ancestors: childAncestors);
+      yield* _itemStream(read, id: kidId, ancestors: childAncestors);
     }
   } on ServiceException {
     // Fail silently.
   }
 }
 
-Future<void> _preloadItemTree(ProviderReference ref, {required int id}) =>
-    _loadItemTree((int id) => _readItem(ref, id: id), id: id);
+Future<void> loadItemTree(Reader read, {required int id}) => _loadItemTree(
+      (int id) => read(itemNotifierProvider(id).notifier).load(),
+      id: id,
+    );
 
-Future<void> reloadItemTree(
-        Item Function<Item>(RootProvider<Item, Object>) refresh,
-        {required int id}) =>
-    _loadItemTree((int id) => refresh(itemProvider(id)), id: id);
+Future<void> reloadItemTree(Reader read, {required int id}) => _loadItemTree(
+      (int id) => read(itemNotifierProvider(id).notifier).forceLoad(),
+      id: id,
+    );
 
 Future<void> _loadItemTree(Future<Item> Function(int) getItem,
     {required int id}) async {
@@ -109,7 +135,3 @@ Future<void> _loadItemTree(Future<Item> Function(int) getItem,
     // Fail silently.
   }
 }
-
-Future<Item> _readItem(ProviderReference ref, {required int id}) async =>
-    ref.read(itemCacheStateProvider(id)).state ??
-    await ref.read(itemProvider(id).future);
