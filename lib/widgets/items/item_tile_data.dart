@@ -80,8 +80,10 @@ class ItemTileData extends HookConsumerWidget {
     }
 
     Future<void> vote({required bool upvote}) async {
-      await VoteCommand(context, ref, id: item.id, upvote: upvote).execute();
-      unawaited(updateDelayedUpvoted());
+      unawaited(
+        VoteCommand(context, ref, id: item.id, upvote: upvote).execute(),
+      );
+      Future<void>.delayed(Slidable.movementDuration, updateDelayedUpvoted);
     }
 
     useMemoized(updateDelayedUpvoted);
