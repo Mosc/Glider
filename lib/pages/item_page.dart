@@ -20,10 +20,6 @@ class ItemPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     useMemoized(() => _setVisited(ref));
 
-    final bool upvoted = ref.watch(upvotedProvider(id)).data?.value ?? false;
-    final bool favorited =
-        ref.watch(favoritedProvider(id)).data?.value ?? false;
-
     return Scaffold(
       body: FloatingAppBarScrollView(
         actions: <Widget>[
@@ -31,18 +27,14 @@ class ItemPage extends HookConsumerWidget {
             itemBuilder: (BuildContext context) =>
                 <PopupMenuEntry<ItemMenuAction>>[
               for (ItemMenuAction menuAction in ItemMenuAction.values)
-                PopupMenuItem<ItemMenuAction>(
-                  value: menuAction,
-                  child: Text(
-                    menuAction.title(context,
-                        upvoted: upvoted, favorited: favorited),
+                if (menuAction.visible(context, ref, id: id))
+                  PopupMenuItem<ItemMenuAction>(
+                    value: menuAction,
+                    child: Text(menuAction.title(context, ref, id: id)),
                   ),
-                ),
             ],
-            onSelected: (ItemMenuAction menuAction) => menuAction
-                .command(context, ref,
-                    id: id, upvoted: upvoted, favorited: favorited)
-                .execute(),
+            onSelected: (ItemMenuAction menuAction) =>
+                menuAction.command(context, ref, id: id, rootId: id).execute(),
             icon: const Icon(FluentIcons.more_vertical_24_regular),
           ),
         ],

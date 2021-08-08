@@ -51,7 +51,7 @@ class ReplyCommand implements Command {
               label: appLocalizations.refresh,
               onPressed: () async {
                 await reloadItemTree(ref.read, id: rootId!);
-                return ref.refresh(itemTreeStreamProvider(rootId!));
+                ref.refresh(itemTreeStreamProvider(rootId!));
               },
             ),
           ),

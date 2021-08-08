@@ -62,10 +62,6 @@ class ItemTileData extends HookConsumerWidget {
 
   Widget _buildSlidable(BuildContext context, WidgetRef ref,
       {required Widget child, required bool active}) {
-    final bool canVote =
-        active && item.type != ItemType.job && item.type != ItemType.pollopt;
-    final bool canReply = canVote && root?.id != null;
-
     // We don't want the slidable to update while being slided, so we delay any
     // upvote state until after the call has actually finished.
     final StateController<bool?> delayedUpvotedController =
@@ -90,7 +86,9 @@ class ItemTileData extends HookConsumerWidget {
 
     return Slidable(
       key: ValueKey<int>(item.id),
-      startToEndAction: canVote && delayedUpvotedController.state != null
+      startToEndAction: active &&
+              item.type != ItemType.job &&
+              delayedUpvotedController.state != null
           ? delayedUpvotedController.state != true
               ? SlidableAction(
                   action: () async {
@@ -118,7 +116,7 @@ class ItemTileData extends HookConsumerWidget {
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )
               : null
-          : canReply
+          : active && item.type != ItemType.job && item.type != ItemType.pollopt
               ? SlidableAction(
                   action: () async {
                     unawaited(
@@ -223,7 +221,7 @@ class ItemTileData extends HookConsumerWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => ItemBottomSheet(id: item.id),
+      builder: (_) => ItemBottomSheet(id: item.id, rootId: root?.id),
     );
   }
 }

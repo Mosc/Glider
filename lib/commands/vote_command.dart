@@ -43,7 +43,7 @@ class VoteCommand implements Command {
         if (score != null) {
           ref
               .read(itemNotifierProvider(id).notifier)
-              .setData(item.copyWith(score: score + (upvote ? 1 : 0)));
+              .setData(item.copyWith(score: score + (upvote ? 1 : -1)));
         }
       } else {
         ScaffoldMessenger.of(context).replaceSnackBar(
