@@ -18,14 +18,12 @@ class FavoriteCommand implements Command {
 
   @override
   Future<void> execute() async {
-    unawaited(
-      ref.read(authRepositoryProvider).favorite(
-            id: id,
-            favorite: favorite,
-            onUpdate: () => ref
-              ..refresh(favoritedProvider(id))
-              ..refresh(favoriteIdsProvider),
-          ),
-    );
+    await ref.read(authRepositoryProvider).favorite(
+          id: id,
+          favorite: favorite,
+          onUpdate: () => ref
+            ..refresh(favoritedProvider(id))
+            ..refresh(favoriteIdsProvider),
+        );
   }
 }

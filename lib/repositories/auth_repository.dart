@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:glider/repositories/storage_repository.dart';
 import 'package:glider/repositories/website_repository.dart';
 import 'package:glider/utils/service_exception.dart';
@@ -97,7 +99,7 @@ class AuthRepository {
     return false;
   }
 
-  Future<bool> favorite({
+  Future<void> favorite({
     required int id,
     required bool favorite,
     void Function()? onUpdate,
@@ -109,15 +111,15 @@ class AuthRepository {
     final String? password = await _storageRepository.password;
 
     if (username != null && password != null) {
-      return _websiteRepository.favorite(
-        username: username,
-        password: password,
-        id: id,
-        favorite: favorite,
+      unawaited(
+        _websiteRepository.favorite(
+          username: username,
+          password: password,
+          id: id,
+          favorite: favorite,
+        ),
       );
     }
-
-    return false;
   }
 
   Future<bool> vote({

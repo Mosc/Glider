@@ -20,10 +20,10 @@ class ItemBottomSheet extends HookConsumerWidget {
             ListTile(
               title: Text(menuAction.title(context, ref, id: id)),
               onTap: () async {
-                Navigator.of(context).pop();
                 await menuAction
                     .command(context, ref, id: id, rootId: rootId)
                     .execute();
+                Navigator.of(context).pop();
               },
             ),
       ],

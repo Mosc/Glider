@@ -29,27 +29,10 @@ class VoteCommand implements Command {
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final bool success = await authRepository.vote(
-        id: id,
-        upvote: upvote,
-        onUpdate: () => ref.refresh(upvotedProvider(id)),
-      );
+      final ItemNotifier itemNotifier =
+          ref.read(itemNotifierProvider(id).notifier);
 
-      if (success) {
-        final Item item =
-            await ref.read(itemNotifierProvider(id).notifier).load();
-        final int? score = item.score;
-
-        if (score != null) {
-          ref
-              .read(itemNotifierProvider(id).notifier)
-              .setData(item.copyWith(score: score + (upvote ? 1 : -1)));
-        }
-      } else {
-        ScaffoldMessenger.of(context).replaceSnackBar(
-          SnackBar(content: Text(appLocalizations.genericError)),
-        );
-      }
+      unawaited(_vote(authRepository, itemNotifier));
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
@@ -63,6 +46,30 @@ class VoteCommand implements Command {
             ),
           ),
         ),
+      );
+    }
+  }
+
+  Future<void> _vote(
+      AuthRepository authRepository, ItemNotifier itemNotifier) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
+    final bool success = await authRepository.vote(
+      id: id,
+      upvote: upvote,
+      onUpdate: () => ref.refresh(upvotedProvider(id)),
+    );
+
+    if (success) {
+      final Item item = await itemNotifier.forceLoad();
+      final int? score = item.score;
+
+      if (score != null) {
+        itemNotifier.setData(item.copyWith(score: score + (upvote ? 1 : -1)));
+      }
+    } else {
+      ScaffoldMessenger.of(context).replaceSnackBar(
+        SnackBar(content: Text(appLocalizations.genericError)),
       );
     }
   }

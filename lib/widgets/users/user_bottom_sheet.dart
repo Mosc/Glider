@@ -17,8 +17,8 @@ class UserBottomSheet extends HookConsumerWidget {
           ListTile(
             title: Text(menuAction.title(context)),
             onTap: () async {
-              Navigator.of(context).pop();
               await menuAction.command(context, ref, id: id).execute();
+              Navigator.of(context).pop();
             },
           ),
       ],
