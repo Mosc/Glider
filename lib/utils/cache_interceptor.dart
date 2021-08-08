@@ -16,16 +16,7 @@ class CacheInterceptor extends Interceptor {
   Future<void> onResponse(
       Response<dynamic> response, ResponseInterceptorHandler handler) async {
     if (response.isSuccess && response.requestOptions.method == 'GET') {
-      final RequestOptions requestOptions = response.requestOptions;
-      final Uint8List bytes =
-          await _serialize(requestOptions.responseType, response.data);
-      unawaited(
-        _cacheManager.putFile(
-          requestOptions.path,
-          bytes,
-          fileExtension: describeEnum(requestOptions.responseType),
-        ),
-      );
+      unawaited(_cacheFile(response));
     }
 
     handler.next(response);
@@ -46,6 +37,17 @@ class CacheInterceptor extends Interceptor {
     } else {
       handler.next(err);
     }
+  }
+
+  Future<void> _cacheFile(Response<dynamic> response) async {
+    final RequestOptions requestOptions = response.requestOptions;
+    final Uint8List bytes =
+        await _serialize(requestOptions.responseType, response.data);
+    await _cacheManager.putFile(
+      requestOptions.path,
+      bytes,
+      fileExtension: describeEnum(requestOptions.responseType),
+    );
   }
 
   Future<Uint8List> _serialize(ResponseType responseType, dynamic data) async {
