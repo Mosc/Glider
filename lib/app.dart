@@ -9,7 +9,6 @@ import 'package:glider/app_theme.dart';
 import 'package:glider/home.dart';
 import 'package:glider/models/theme_base.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/utils/uni_links_handler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class App extends HookConsumerWidget {
@@ -21,12 +20,6 @@ class App extends HookConsumerWidget {
 
     useMemoized(
       () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
-    );
-
-    useMemoized(() => UniLinksHandler.init(context));
-    useEffect(
-      () => UniLinksHandler.dispose,
-      <Object?>[UniLinksHandler.uriSubscription],
     );
 
     final ThemeBase themeBase =

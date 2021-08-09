@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/pages/stories_page.dart';
+import 'package:glider/utils/uni_links_handler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -22,6 +23,12 @@ class Home extends HookConsumerWidget {
         }
       },
       <Object?>[Localizations.localeOf(context)],
+    );
+
+    useMemoized(() => UniLinksHandler.init(context));
+    useEffect(
+      () => UniLinksHandler.dispose,
+      <Object?>[UniLinksHandler.uriSubscription],
     );
 
     return const StoriesPage();
