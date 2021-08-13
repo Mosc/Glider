@@ -43,13 +43,13 @@ class UrlUtil {
       await FlutterWebBrowser.openWebPage(
         url: urlString,
         customTabsOptions: CustomTabsOptions(
-          toolbarColor: appBarTheme.color,
+          toolbarColor: appBarTheme.backgroundColor,
           addDefaultShareMenuItem: true,
           showTitle: true,
         ),
         safariVCOptions: SafariViewControllerOptions(
           barCollapsingEnabled: true,
-          preferredBarTintColor: appBarTheme.color,
+          preferredBarTintColor: appBarTheme.backgroundColor,
           preferredControlTintColor: appBarTheme.iconTheme?.color,
           dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
         ),
