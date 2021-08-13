@@ -22,7 +22,7 @@ class StoriesBody extends HookConsumerWidget {
         ref.watch(completedWalkthroughProvider).data?.value ?? true;
 
     return RefreshableBody<Iterable<int>>(
-      provider: storyIdsProvider(storyTypeStateController.state),
+      provider: storyIdsNotifierProvider(storyTypeStateController.state),
       loadingBuilder: () => <Widget>[
         if (!completedWalkthrough)
           const SliverToBoxAdapter(

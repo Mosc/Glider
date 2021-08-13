@@ -15,7 +15,7 @@ class StoriesSearchBody extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return RefreshableBody<Iterable<int>>(
-      provider: storyIdsSearchProvider(
+      provider: storyIdsSearchNotifierProvider(
         SearchParameters(
           query: ref.watch(storySearchQueryStateProvider).state,
           searchRange: ref.watch(storySearchRangeStateProvider).state,

@@ -159,15 +159,18 @@ class StoriesPage extends HookConsumerWidget {
           false;
 
       if (success) {
-        ref.refresh(storyIdsProvider(StoryType.newStories));
+        await ref
+            .read(storyIdsNotifierProvider(StoryType.newStories).notifier)
+            .forceLoad();
         ref.read(storyTypeStateProvider).state = StoryType.newStories;
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(appLocalizations.processingInfo),
             action: SnackBarAction(
               label: appLocalizations.refresh,
-              onPressed: () =>
-                  ref.refresh(storyIdsProvider(StoryType.newStories)),
+              onPressed: () => ref
+                  .read(storyIdsNotifierProvider(StoryType.newStories).notifier)
+                  .forceLoad(),
             ),
           ),
         );

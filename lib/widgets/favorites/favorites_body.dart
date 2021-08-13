@@ -13,7 +13,7 @@ class FavoritesBody extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return RefreshableBody<Iterable<int>>(
-      provider: favoriteIdsProvider,
+      provider: favoriteIdsNotifierProvider,
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
