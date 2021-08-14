@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class NativeLauncher {
+  NativeLauncher._();
+
   static const MethodChannel _channel = MethodChannel('native_launcher');
 
   static Future<bool?> launchNonBrowser(String url) async {

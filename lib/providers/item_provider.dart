@@ -16,7 +16,9 @@ final StateProvider<int> previewIdStateProvider =
 final AutoDisposeStateNotifierProvider<FavoriteIdsNotifier,
         AsyncValue<Iterable<int>>> favoriteIdsNotifierProvider =
     StateNotifierProvider.autoDispose(
-  (StateNotifierProviderRef ref) => FavoriteIdsNotifier(ref.read),
+  (StateNotifierProviderRef<FavoriteIdsNotifier, AsyncValue<Iterable<int>>>
+          ref) =>
+      FavoriteIdsNotifier(ref.read),
 );
 
 class FavoriteIdsNotifier extends BaseNotifier<Iterable<int>> {
@@ -30,7 +32,8 @@ class FavoriteIdsNotifier extends BaseNotifier<Iterable<int>> {
 final AutoDisposeStateNotifierProviderFamily<StoryIdsNotifier,
         AsyncValue<Iterable<int>>, StoryType> storyIdsNotifierProvider =
     StateNotifierProvider.autoDispose.family(
-  (StateNotifierProviderRef ref, StoryType storyType) =>
+  (StateNotifierProviderRef<FavoriteIdsNotifier, AsyncValue<Iterable<int>>> ref,
+          StoryType storyType) =>
       StoryIdsNotifier(ref.read, storyType),
 );
 
@@ -58,7 +61,9 @@ class StoryIdsNotifier extends BaseNotifier<Iterable<int>> {
 final AutoDisposeStateNotifierProviderFamily<StoryIdsSearchNotifier,
         AsyncValue<Iterable<int>>, SearchParameters>
     storyIdsSearchNotifierProvider = StateNotifierProvider.autoDispose.family(
-  (StateNotifierProviderRef ref, SearchParameters searchParameters) =>
+  (StateNotifierProviderRef<StoryIdsSearchNotifier, AsyncValue<Iterable<int>>>
+              ref,
+          SearchParameters searchParameters) =>
       StoryIdsSearchNotifier(ref.read, searchParameters),
 );
 
@@ -74,7 +79,8 @@ class StoryIdsSearchNotifier extends BaseNotifier<Iterable<int>> {
 
 final StateNotifierProviderFamily<ItemNotifier, AsyncValue<Item>, int>
     itemNotifierProvider = StateNotifierProvider.family(
-  (StateNotifierProviderRef ref, int id) => ItemNotifier(ref.read, id: id),
+  (StateNotifierProviderRef<ItemNotifier, AsyncValue<Item>> ref, int id) =>
+      ItemNotifier(ref.read, id: id),
 );
 
 class ItemNotifier extends BaseNotifier<Item> {

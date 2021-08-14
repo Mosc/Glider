@@ -4,7 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final StateNotifierProviderFamily<UserNotifier, AsyncValue<User>, String>
     userNotifierProvider = StateNotifierProvider.family(
-  (StateNotifierProviderRef ref, String id) => UserNotifier(ref.read, id: id),
+  (StateNotifierProviderRef<UserNotifier, AsyncValue<User>> ref, String id) =>
+      UserNotifier(ref.read, id: id),
 );
 
 class UserNotifier extends StateNotifier<AsyncValue<User>> {
