@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/utils/color_extension.dart';
+import 'package:glider/utils/swipeable_page_route.dart';
 
 class AppTheme {
   AppTheme._();
@@ -69,6 +70,12 @@ class AppTheme {
         backgroundColor: backgroundColor,
         side: StateBorderSide(selectedColor: color, defaultColor: surfaceColor),
       ),
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          for (TargetPlatform targetPlatform in TargetPlatform.values)
+            targetPlatform: const SwipeablePageTransitionsBuilder(),
+        },
+      ),
       colorScheme: brightness == Brightness.dark
           ? ColorScheme.dark(
               primary: color,
@@ -107,5 +114,21 @@ class StateBorderSide extends MaterialStateBorderSide {
           ? selectedColor
           : defaultColor,
     );
+  }
+}
+
+class SwipeablePageTransitionsBuilder extends PageTransitionsBuilder {
+  const SwipeablePageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return SwipeablePageRouteMixin.buildPageTransitions<T>(
+        route, context, animation, secondaryAnimation, child);
   }
 }
