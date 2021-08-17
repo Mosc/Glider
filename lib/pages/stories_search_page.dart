@@ -8,6 +8,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/models/story_type.dart';
+import 'package:glider/utils/animation_util.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -80,7 +81,7 @@ class StoriesSearchPage extends HookConsumerWidget {
     final double bottomHeightFactor = useAnimation(
       CurvedAnimation(
         parent: animationController,
-        curve: Curves.easeInOut,
+        curve: AnimationUtil.defaultCurve,
       ),
     );
     useMemoized(animationController.forward);

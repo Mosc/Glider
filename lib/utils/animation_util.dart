@@ -5,6 +5,8 @@ class AnimationUtil {
 
   static const Duration defaultDuration = Duration(milliseconds: 400);
 
+  static const Curve defaultCurve = Curves.easeInOut;
+
   static Widget fadeTransitionBuilder(
       Widget child, Animation<double> animation) {
     return FadeTransition(opacity: animation, child: child);

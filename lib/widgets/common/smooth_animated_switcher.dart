@@ -54,8 +54,8 @@ class SmoothAnimatedSwitcher extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AnimatedSwitcher(
       duration: duration ?? AnimationUtil.defaultDuration,
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
+      switchInCurve: AnimationUtil.defaultCurve,
+      switchOutCurve: AnimationUtil.defaultCurve,
       transitionBuilder: transitionBuilder,
       layoutBuilder: _defaultLayoutBuilder,
       child: condition ? child : const SizedBox.shrink(),

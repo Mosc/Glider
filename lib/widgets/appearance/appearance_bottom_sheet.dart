@@ -88,7 +88,7 @@ class _ThemeBaseButton extends HookConsumerWidget {
           Scrollable.ensureVisible(
             context,
             duration: AnimationUtil.defaultDuration,
-            curve: Curves.easeInOut,
+            curve: AnimationUtil.defaultCurve,
             alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
           );
         }
@@ -144,7 +144,7 @@ class _ThemeColorButton extends HookConsumerWidget {
           Scrollable.ensureVisible(
             context,
             duration: AnimationUtil.defaultDuration,
-            curve: Curves.easeInOut,
+            curve: AnimationUtil.defaultCurve,
             alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
           );
         }

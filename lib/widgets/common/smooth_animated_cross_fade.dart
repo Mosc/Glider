@@ -22,7 +22,7 @@ class SmoothAnimatedCrossFade extends HookConsumerWidget {
       duration: duration ?? AnimationUtil.defaultDuration,
       firstCurve: Curves.easeIn,
       secondCurve: Curves.easeOut,
-      sizeCurve: Curves.easeInOut,
+      sizeCurve: AnimationUtil.defaultCurve,
       alignment: AlignmentDirectional.topStart,
       crossFadeState:
           condition ? CrossFadeState.showFirst : CrossFadeState.showSecond,

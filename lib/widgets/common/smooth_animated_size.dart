@@ -16,7 +16,7 @@ class SmoothAnimatedSize extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AnimatedSize(
       duration: duration ?? AnimationUtil.defaultDuration,
-      curve: Curves.easeInOut,
+      curve: AnimationUtil.defaultCurve,
       alignment: AlignmentDirectional.topStart,
       child: child,
     );
