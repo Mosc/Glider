@@ -9,6 +9,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/utils/animation_util.dart';
+import 'package:glider/utils/color_extension.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -47,7 +48,7 @@ class StoriesSearchPage extends HookConsumerWidget {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     final ThemeData theme = Theme.of(context);
-    final bool dark = theme.colorScheme.brightness == Brightness.dark;
+    final bool isDark = theme.colorScheme.brightness.isDark;
 
     final ValueNotifier<bool> speedDialVisibleState = useState(true);
     final ScrollController scrollController = useScrollController();
@@ -89,11 +90,9 @@ class StoriesSearchPage extends HookConsumerWidget {
     return Theme(
       data: theme.copyWith(
         appBarTheme: theme.appBarTheme.copyWith(
-          backgroundColor: dark ? null : theme.scaffoldBackgroundColor,
+          backgroundColor: isDark ? null : theme.scaffoldBackgroundColor,
           iconTheme: theme.iconTheme,
           titleTextStyle: theme.textTheme.headline6,
-          systemOverlayStyle:
-              dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         ),
         inputDecorationTheme:
             theme.inputDecorationTheme.copyWith(border: InputBorder.none),

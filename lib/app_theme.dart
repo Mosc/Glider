@@ -54,12 +54,10 @@ class AppTheme {
         textTheme: ButtonTextTheme.primary,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor:
-            brightness == Brightness.dark ? backgroundColor : color,
+        backgroundColor: brightness.isDark ? backgroundColor : color,
         iconTheme: IconThemeData(
-          color: brightness == Brightness.dark ? Colors.white : onColor,
+          color: brightness.isDark ? Colors.white : onColor,
         ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       toggleableActiveColor: color,
       chipTheme: ChipThemeData.fromDefaults(
@@ -76,7 +74,7 @@ class AppTheme {
             targetPlatform: const SwipeablePageTransitionsBuilder(),
         },
       ),
-      colorScheme: brightness == Brightness.dark
+      colorScheme: brightness.isDark
           ? ColorScheme.dark(
               primary: color,
               secondary: color,
