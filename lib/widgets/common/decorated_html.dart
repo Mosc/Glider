@@ -7,12 +7,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html/dom.dart' as dom;
 
 class DecoratedHtml extends HookConsumerWidget {
-  const DecoratedHtml(String html, {Key? key, bool prependParagraphTag = true})
-      // Hacker News prefixes every paragraph with a tag except the first one.
-      : _html = prependParagraphTag ? '<p>$html' : html,
+  const DecoratedHtml(
+    String html, {
+    Key? key,
+    this.textStyle,
+    bool prependParagraphTag = true,
+  })  
+  // Hacker News prefixes every paragraph with a tag except the first one.
+  : _html = prependParagraphTag ? '<p>$html' : html,
         super(key: key);
 
   final String _html;
+  final TextStyle? textStyle;
 
   static const String _quoteCharacter = '&gt;';
 
@@ -59,7 +65,7 @@ class DecoratedHtml extends HookConsumerWidget {
         return null;
       },
       onTapUrl: (String url) => UrlUtil.tryLaunch(context, url),
-      textStyle: Theme.of(context).textTheme.bodyText2,
+      textStyle: textStyle ?? Theme.of(context).textTheme.bodyText2,
     );
   }
 

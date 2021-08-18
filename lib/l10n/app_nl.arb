@@ -59,6 +59,7 @@
   "logOut": "Uitloggen",
   "username": "Gebruikersnaam",
   "password": "Wachtwoord",
+  "legalHtml": "Door te registeren erken je dat je Y&#160;Combinator's <a href=\"https://www.ycombinator.com/legal/#privacy\">Privacy&#160;Policy</a> hebt gelezen en akkoord bent met hun <a href=\"https://www.ycombinator.com/legal/#tou\">Terms&#160;of&#160;Use</a>.",
   "synchronize": "Synchroniseren",
   "synchronizeDescription": "Haalt al je favorieten en stemmen op van de Hacker News-server. Favorieten die in de app voor het inloggen zijn toegevoegd zullen verloren gaan.",
   "synchronizeDescriptionLong": "{appName} stuurt favorieten en stemmen naar je Hacker News-account, maar is niet op de hoogte van wat er zich buiten de app afspeelt, zoals op de officiële website of in alternatieve apps.\n\nSynchronisatie haalt deze gegevens op van de Hacker News-server en overschrijft lokaal opgeslagen gegevens. Favorieten die in de app voor het inloggen zijn toegevoegd zullen verloren gaan.\n\nWil je nu synchroniseren?",

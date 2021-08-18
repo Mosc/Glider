@@ -59,6 +59,7 @@
   "logOut": "Log out",
   "username": "Username",
   "password": "Password",
+  "legalHtml": "By registering, you acknowledge that you have read Y&#160;Combinator's <a href=\"https://www.ycombinator.com/legal/#privacy\">Privacy&#160;Policy</a> and agree to their <a href=\"https://www.ycombinator.com/legal/#tou\">Terms&#160;of&#160;Use</a>.",
   "synchronize": "Synchronize",
   "synchronizeDescription": "Fetches all your favorites and upvotes from the Hacker News server. Any favorites added in the app before logging in will be lost.",
   "synchronizeDescriptionLong": "{appName} sends favorites and upvotes to your Hacker News account, but it is not aware of actions performed outside of the app, such as on the official website or in alternative apps.\n\nSynchronize fetches this data from the Hacker News server and overwrites locally stored data. Any favorites added in the app before logging in will be lost.\n\nDo you want to synchronize now?",

@@ -9,6 +9,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/validators.dart';
+import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedOut extends HookConsumerWidget {
@@ -28,6 +29,7 @@ class AccountLoggedOut extends HookConsumerWidget {
       child: Form(
         key: formKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16),
@@ -66,44 +68,53 @@ class AccountLoggedOut extends HookConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              child: Column(
                 children: <Widget>[
-                  OutlinedButton(
-                    onPressed: loadingState.value
-                        ? null
-                        : () async {
-                            if (formKey.currentState?.validate() ?? false) {
-                              loadingState.value = true;
-                              await _register(
-                                context,
-                                ref,
-                                username: usernameController.text,
-                                password: passwordController.text,
-                              );
-                              loadingState.value = false;
-                            }
-                          },
-                    child: Text(appLocalizations.register),
+                  DecoratedHtml(
+                    appLocalizations.legalHtml,
+                    textStyle: Theme.of(context).textTheme.caption,
                   ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: loadingState.value
-                        ? null
-                        : () async {
-                            if (formKey.currentState?.validate() ?? false) {
-                              loadingState.value = true;
-                              await _login(
-                                context,
-                                ref,
-                                username: usernameController.text,
-                                password: passwordController.text,
-                                synchronize: synchronizeState.value,
-                              );
-                              loadingState.value = false;
-                            }
-                          },
-                    child: Text(appLocalizations.logIn),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      OutlinedButton(
+                        onPressed: loadingState.value
+                            ? null
+                            : () async {
+                                if (formKey.currentState?.validate() ?? false) {
+                                  loadingState.value = true;
+                                  await _register(
+                                    context,
+                                    ref,
+                                    username: usernameController.text,
+                                    password: passwordController.text,
+                                  );
+                                  loadingState.value = false;
+                                }
+                              },
+                        child: Text(appLocalizations.register),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: loadingState.value
+                            ? null
+                            : () async {
+                                if (formKey.currentState?.validate() ?? false) {
+                                  loadingState.value = true;
+                                  await _login(
+                                    context,
+                                    ref,
+                                    username: usernameController.text,
+                                    password: passwordController.text,
+                                    synchronize: synchronizeState.value,
+                                  );
+                                  loadingState.value = false;
+                                }
+                              },
+                        child: Text(appLocalizations.logIn),
+                      ),
+                    ],
                   ),
                 ],
               ),
