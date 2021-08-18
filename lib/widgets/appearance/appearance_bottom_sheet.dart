@@ -53,7 +53,8 @@ class AppearanceBottomSheet extends HookConsumerWidget {
         const SizedBox(height: 8),
         _buildHorizontalScrollable(
           children: <Widget>[
-            for (Color color in AppTheme.themeColors) _ThemeColorButton(color),
+            for (Color themeColor in AppTheme.themeColors)
+              _ThemeColorButton(themeColor),
           ],
         ),
         const SizedBox(height: 4),
@@ -96,32 +97,30 @@ class _ThemeBaseButton extends HookConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.all(4),
-      child: ElevatedButtonTheme(
-        data: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: base.color(context),
-            onPrimary: base.color(context).isDark ? Colors.white : Colors.black,
-            shape: const StadiumBorder(),
-            minimumSize: const Size(40, 40),
-          ),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: ElevatedButton(
+        onPressed: () async {
+          await ref.read(storageRepositoryProvider).setThemeBase(base);
+          ref.refresh(themeBaseProvider);
+        },
+        style: ElevatedButton.styleFrom(
+          primary: base.color(context),
+          onPrimary: base.color(context).isDark ? Colors.white : Colors.black,
+          shape: const StadiumBorder(),
+          minimumSize: const Size(40, 40),
         ),
-        child: ElevatedButton.icon(
-          onPressed: () async {
-            await ref.read(storageRepositoryProvider).setThemeBase(base);
-            ref.refresh(themeBaseProvider);
-          },
-          label: Row(
-            children: <Widget>[
-              Text(base.title(context)),
-              const SizedBox(width: 4),
-            ],
-          ),
-          icon: SmoothAnimatedCrossFade(
-            duration: kThemeChangeDuration,
-            condition: base == themeBase,
-            trueChild: const Icon(FluentIcons.checkmark_24_regular),
-          ),
+        child: Row(
+          children: <Widget>[
+            SmoothAnimatedCrossFade(
+              duration: kThemeChangeDuration,
+              condition: base == themeBase,
+              trueChild: const Icon(FluentIcons.checkmark_24_regular),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(base.title(context)),
+            ),
+          ],
         ),
       ),
     );
@@ -151,25 +150,21 @@ class _ThemeColorButton extends HookConsumerWidget {
       }),
     );
 
-    return ElevatedButtonTheme(
-      data: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          primary: color,
-          shape: const CircleBorder(),
-          minimumSize: const Size(40, 40),
-          padding: EdgeInsets.zero,
-        ),
+    return ElevatedButton(
+      onPressed: () async {
+        await ref.read(storageRepositoryProvider).setThemeColor(color);
+        ref.refresh(themeColorProvider);
+      },
+      style: ElevatedButton.styleFrom(
+        primary: color,
+        shape: const CircleBorder(),
+        minimumSize: const Size(40, 40),
+        padding: EdgeInsets.zero,
       ),
-      child: ElevatedButton(
-        onPressed: () async {
-          await ref.read(storageRepositoryProvider).setThemeColor(color);
-          ref.refresh(themeColorProvider);
-        },
-        child: SmoothAnimatedSwitcher(
-          duration: kThemeChangeDuration,
-          condition: color == themeColor,
-          child: const Icon(FluentIcons.checkmark_24_regular),
-        ),
+      child: SmoothAnimatedSwitcher(
+        duration: kThemeChangeDuration,
+        condition: color == themeColor,
+        child: const Icon(FluentIcons.checkmark_24_regular),
       ),
     );
   }
