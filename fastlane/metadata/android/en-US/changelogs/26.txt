@@ -1,0 +1,5 @@
+• Added swipe to go back on edge of pages
+• Duplicated slide actions (such as voting) in the long-press menu and action bar overflow menu for improved discoverability
+• Signaled preference for high refresh rates to Android OS
+• Set navigation bar to translucent on Android 10+ and black on lower versions
+• Made various minor tweaks
