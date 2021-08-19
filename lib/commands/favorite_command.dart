@@ -8,7 +8,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FavoriteCommand implements Command {
+class FavoriteCommand with CommandMixin {
   const FavoriteCommand(BuildContext _, this.ref,
       {required this.id, required this.favorite});
 

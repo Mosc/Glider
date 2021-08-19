@@ -21,7 +21,7 @@ class WebsiteRepository {
     required String password,
   }) async {
     final Uri uri = Uri.https(authority, 'login');
-    final PostData data = RegisterPostData(
+    final PostDataMixin data = RegisterPostData(
       acct: username,
       pw: password,
       creating: 't',
@@ -36,7 +36,7 @@ class WebsiteRepository {
     required String password,
   }) async {
     final Uri uri = Uri.https(authority, 'login');
-    final PostData data = LoginPostData(
+    final PostDataMixin data = LoginPostData(
       acct: username,
       pw: password,
       goto: 'news',
@@ -52,7 +52,7 @@ class WebsiteRepository {
     required bool favorite,
   }) async {
     final Uri uri = Uri.https(authority, 'fave');
-    final PostData data = FavoritePostData(
+    final PostDataMixin data = FavoritePostData(
       acct: username,
       pw: password,
       id: id,
@@ -69,7 +69,7 @@ class WebsiteRepository {
     required bool upvote,
   }) async {
     final Uri uri = Uri.https(authority, 'vote');
-    final PostData data = VotePostData(
+    final PostDataMixin data = VotePostData(
       acct: username,
       pw: password,
       id: id,
@@ -86,7 +86,7 @@ class WebsiteRepository {
     required String text,
   }) async {
     final Uri uri = Uri.https(authority, 'comment');
-    final PostData data = CommentPostData(
+    final PostDataMixin data = CommentPostData(
       acct: username,
       pw: password,
       parent: parentId,
@@ -120,7 +120,7 @@ class WebsiteRepository {
         formResponse.headers.value(HttpHeaders.setCookieHeader);
 
     final Uri uri = Uri.https(authority, 'r');
-    final PostData data = SubmitPostData(
+    final PostDataMixin data = SubmitPostData(
       fnid: formValues['fnid']!,
       fnop: formValues['fnop']!,
       title: title,
@@ -242,7 +242,7 @@ class WebsiteRepository {
     required String password,
   }) async {
     final Uri uri = Uri.https(authority, 'submitlink');
-    final PostData data = SubmitFormPostData(
+    final PostDataMixin data = SubmitFormPostData(
       acct: username,
       pw: password,
     );
@@ -270,7 +270,7 @@ class WebsiteRepository {
 
   Future<bool> _performDefaultPost(
     Uri uri,
-    PostData data, {
+    PostDataMixin data, {
     String? cookie,
     bool Function(String?)? validateLocation,
   }) async {
@@ -294,7 +294,7 @@ class WebsiteRepository {
 
   Future<Response<T>> _performPost<T>(
     Uri uri,
-    PostData data, {
+    PostDataMixin data, {
     String? cookie,
     ResponseType? responseType,
     bool Function(int?)? validateStatus,

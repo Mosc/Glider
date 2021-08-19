@@ -24,22 +24,16 @@ extension ItemMenuActionExtension on ItemMenuAction {
   bool visible(BuildContext context, WidgetRef ref, {required int id}) {
     switch (this) {
       case ItemMenuAction.vote:
-        if (ref.watch(upvotedProvider(id)).data == null) {
-          return false;
-        } else {
-          final Item? item = ref.watch(itemNotifierProvider(id)).data?.value;
-          return item?.type != ItemType.job;
-        }
+        return ref.watch(upvotedProvider(id)).data != null &&
+            ItemType.job !=
+                ref.watch(itemNotifierProvider(id)).data?.value.type;
       case ItemMenuAction.reply:
-        final Item? item = ref.watch(itemNotifierProvider(id)).data?.value;
-        return item?.type != ItemType.job && item?.type != ItemType.pollopt;
+        return !<ItemType>[ItemType.job, ItemType.pollopt]
+            .contains(ref.watch(itemNotifierProvider(id)).data?.value.type);
       case ItemMenuAction.favorite:
-        if (ref.watch(favoritedProvider(id)).data == null) {
-          return false;
-        } else {
-          final Item? item = ref.watch(itemNotifierProvider(id)).data?.value;
-          return item?.type != ItemType.job && item?.type != ItemType.pollopt;
-        }
+        return ref.watch(favoritedProvider(id)).data != null &&
+            !<ItemType>[ItemType.job, ItemType.pollopt]
+                .contains(ref.watch(itemNotifierProvider(id)).data?.value.type);
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
         return true;

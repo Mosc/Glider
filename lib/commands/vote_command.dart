@@ -13,7 +13,7 @@ import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class VoteCommand implements Command {
+class VoteCommand with CommandMixin {
   const VoteCommand(this.context, this.ref,
       {required this.id, required this.upvote});
 
@@ -31,15 +31,15 @@ class VoteCommand implements Command {
     if (await authRepository.loggedIn) {
       final ItemNotifier itemNotifier =
           ref.read(itemNotifierProvider(id).notifier);
-
       unawaited(_vote(authRepository, itemNotifier));
     } else {
+      final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.voteNotLoggedIn),
           action: SnackBarAction(
             label: appLocalizations.logIn,
-            onPressed: () => Navigator.of(context).push<void>(
+            onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),
               ),

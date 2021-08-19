@@ -22,7 +22,8 @@ extension UserMenuActionExtension on UserMenuAction {
     }
   }
 
-  Command command(BuildContext context, WidgetRef ref, {required String id}) {
+  CommandMixin command(BuildContext context, WidgetRef ref,
+      {required String id}) {
     switch (this) {
       case UserMenuAction.copy:
         return UserOptionsCommand.copy(context, ref, id: id);

@@ -13,7 +13,7 @@ import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ReplyCommand implements Command {
+class ReplyCommand with CommandMixin {
   const ReplyCommand(this.context, this.ref, {required this.id, this.rootId});
 
   final BuildContext context;
@@ -58,12 +58,13 @@ class ReplyCommand implements Command {
         );
       }
     } else {
+      final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
           content: Text(appLocalizations.replyNotLoggedIn),
           action: SnackBarAction(
             label: appLocalizations.logIn,
-            onPressed: () => Navigator.of(context).push<void>(
+            onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),
               ),

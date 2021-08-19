@@ -1,4 +1,3 @@
-// ignore: one_member_abstracts
-abstract class Command {
+mixin CommandMixin {
   Future<void> execute();
 }

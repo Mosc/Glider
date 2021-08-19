@@ -11,7 +11,7 @@ import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/widgets/common/options_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ItemOptionsCommand implements Command {
+class ItemOptionsCommand with CommandMixin {
   ItemOptionsCommand.copy(this.context, this.ref, {required this.id})
       : optionsDialogBuilder = ((Iterable<OptionsDialogOption> options) =>
             OptionsDialog.copy(options: options));

@@ -4,13 +4,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'post_data.freezed.dart';
 part 'post_data.g.dart';
 
-// ignore: one_member_abstracts
-abstract class PostData {
+mixin PostDataMixin {
   Map<String, dynamic> toJson();
 }
 
 @freezed
-class RegisterPostData with _$RegisterPostData implements PostData {
+class RegisterPostData with _$RegisterPostData, PostDataMixin {
   factory RegisterPostData({
     required String acct,
     required String pw,
@@ -23,7 +22,7 @@ class RegisterPostData with _$RegisterPostData implements PostData {
 }
 
 @freezed
-class LoginPostData with _$LoginPostData implements PostData {
+class LoginPostData with _$LoginPostData, PostDataMixin {
   factory LoginPostData({
     required String acct,
     required String pw,
@@ -35,7 +34,7 @@ class LoginPostData with _$LoginPostData implements PostData {
 }
 
 @freezed
-class FavoritePostData with _$FavoritePostData implements PostData {
+class FavoritePostData with _$FavoritePostData, PostDataMixin {
   factory FavoritePostData({
     required String acct,
     required String pw,
@@ -48,7 +47,7 @@ class FavoritePostData with _$FavoritePostData implements PostData {
 }
 
 @freezed
-class VotePostData with _$VotePostData implements PostData {
+class VotePostData with _$VotePostData, PostDataMixin {
   factory VotePostData({
     required String acct,
     required String pw,
@@ -61,7 +60,7 @@ class VotePostData with _$VotePostData implements PostData {
 }
 
 @freezed
-class CommentPostData with _$CommentPostData implements PostData {
+class CommentPostData with _$CommentPostData, PostDataMixin {
   factory CommentPostData({
     required String acct,
     required String pw,
@@ -74,7 +73,7 @@ class CommentPostData with _$CommentPostData implements PostData {
 }
 
 @freezed
-class SubmitFormPostData with _$SubmitFormPostData implements PostData {
+class SubmitFormPostData with _$SubmitFormPostData, PostDataMixin {
   factory SubmitFormPostData({
     required String acct,
     required String pw,
@@ -85,7 +84,7 @@ class SubmitFormPostData with _$SubmitFormPostData implements PostData {
 }
 
 @freezed
-class SubmitPostData with _$SubmitPostData implements PostData {
+class SubmitPostData with _$SubmitPostData, PostDataMixin {
   factory SubmitPostData({
     required String fnid,
     required String fnop,
