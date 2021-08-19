@@ -153,6 +153,25 @@ class AuthRepository {
     return false;
   }
 
+  Future<void> flag({
+    required int id,
+    required bool flag,
+  }) async {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
+      unawaited(
+        _websiteRepository.flag(
+          username: username,
+          password: password,
+          id: id,
+          flag: flag,
+        ),
+      );
+    }
+  }
+
   Future<bool> reply({required int parentId, required String text}) async {
     final String? username = await _storageRepository.username;
     final String? password = await _storageRepository.password;

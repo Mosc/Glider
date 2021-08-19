@@ -79,6 +79,23 @@ class WebsiteRepository {
     return _performDefaultPost(uri, data);
   }
 
+  Future<bool> flag({
+    required String username,
+    required String password,
+    required int id,
+    required bool flag,
+  }) async {
+    final Uri uri = Uri.https(authority, 'flag');
+    final PostDataMixin data = FlagPostData(
+      acct: username,
+      pw: password,
+      id: id,
+      un: flag ? null : 't',
+    );
+
+    return _performDefaultPost(uri, data);
+  }
+
   Future<bool> comment({
     required String username,
     required String password,

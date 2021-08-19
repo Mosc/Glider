@@ -3,10 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/commands/command.dart';
 import 'package:glider/commands/favorite_command.dart';
+import 'package:glider/commands/flag_command.dart';
 import 'package:glider/commands/item_options_command.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/vote_command.dart';
-import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
@@ -16,6 +16,7 @@ enum ItemMenuAction {
   vote,
   reply,
   favorite,
+  flag,
   copy,
   share,
 }
@@ -34,6 +35,9 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return ref.watch(favoritedProvider(id)).data != null &&
             !<ItemType>[ItemType.job, ItemType.pollopt]
                 .contains(ref.watch(itemNotifierProvider(id)).data?.value.type);
+      case ItemMenuAction.flag:
+        return !<ItemType>[ItemType.job, ItemType.pollopt]
+            .contains(ref.watch(itemNotifierProvider(id)).data?.value.type);
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
         return true;
@@ -56,6 +60,10 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return favorited
             ? appLocalizations.unfavorite
             : appLocalizations.favorite;
+      case ItemMenuAction.flag:
+        final bool flagged =
+            ref.read(itemNotifierProvider(id)).data?.value.dead ?? false;
+        return flagged ? appLocalizations.unflag : appLocalizations.flag;
       case ItemMenuAction.copy:
         return appLocalizations.copy;
       case ItemMenuAction.share:
@@ -63,7 +71,7 @@ extension ItemMenuActionExtension on ItemMenuAction {
     }
   }
 
-  Command command(BuildContext context, WidgetRef ref,
+  CommandMixin command(BuildContext context, WidgetRef ref,
       {required int id, int? rootId}) {
     switch (this) {
       case ItemMenuAction.vote:
@@ -75,6 +83,10 @@ extension ItemMenuActionExtension on ItemMenuAction {
         final bool favorited =
             ref.read(favoritedProvider(id)).data?.value ?? false;
         return FavoriteCommand(context, ref, id: id, favorite: !favorited);
+      case ItemMenuAction.flag:
+        final bool flagged =
+            ref.read(itemNotifierProvider(id)).data?.value.dead ?? false;
+        return FlagCommand(context, ref, id: id, flag: !flagged);
       case ItemMenuAction.copy:
         return ItemOptionsCommand.copy(context, ref, id: id);
       case ItemMenuAction.share:

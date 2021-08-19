@@ -67,8 +67,10 @@ class ItemTileMetadata extends HookConsumerWidget {
                 text: item.descendants.toString(),
               ),
             ),
-          if (item.dead ?? false)
-            const MetadataItem(icon: FluentIcons.flag_24_regular),
+          SmoothAnimatedSwitcher.horizontal(
+            condition: item.dead ?? false,
+            child: const MetadataItem(icon: FluentIcons.flag_24_regular),
+          ),
           if (item.deleted ?? false) ...<Widget>[
             const MetadataItem(icon: FluentIcons.delete_24_regular),
             Text(

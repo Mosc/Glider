@@ -60,6 +60,19 @@ class VotePostData with _$VotePostData, PostDataMixin {
 }
 
 @freezed
+class FlagPostData with _$FlagPostData, PostDataMixin {
+  factory FlagPostData({
+    required String acct,
+    required String pw,
+    required int id,
+    String? un,
+  }) = _FlagPostData;
+
+  factory FlagPostData.fromJson(Map<String, dynamic> json) =>
+      _$FlagPostDataFromJson(json);
+}
+
+@freezed
 class CommentPostData with _$CommentPostData, PostDataMixin {
   factory CommentPostData({
     required String acct,
