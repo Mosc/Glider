@@ -114,13 +114,10 @@ class StoriesPage extends HookConsumerWidget {
   Future<void> _searchSelected(BuildContext context, WidgetRef ref) {
     ref.read(storySearchRangeStateProvider).state = SearchRange.pastYear;
     return Navigator.of(context).push<void>(
-      PageRouteBuilder<void>(
-        pageBuilder: (_, __, ___) => const StoriesSearchPage(
+      MaterialPageRoute<void>(
+        builder: (_) => const StoriesSearchPage(
           initialSearchRange: SearchRange.pastYear,
         ),
-        transitionsBuilder:
-            (_, Animation<double> animation, __, Widget child) =>
-                FadeTransition(opacity: animation, child: child),
       ),
     );
   }
