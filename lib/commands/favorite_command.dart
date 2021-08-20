@@ -18,13 +18,15 @@ class FavoriteCommand with CommandMixin {
 
   @override
   Future<void> execute() async {
-    await ref.read(authRepositoryProvider).favorite(
-          id: id,
-          favorite: favorite,
-          onUpdate: () {
-            ref.refresh(favoritedProvider(id));
-            ref.read(favoriteIdsNotifierProvider.notifier).forceLoad();
-          },
-        );
+    unawaited(
+      ref.read(authRepositoryProvider).favorite(
+            id: id,
+            favorite: favorite,
+            onUpdate: () {
+              ref.refresh(favoritedProvider(id));
+              ref.read(favoriteIdsNotifierProvider.notifier).forceLoad();
+            },
+          ),
+    );
   }
 }

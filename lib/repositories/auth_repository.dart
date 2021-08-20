@@ -99,7 +99,7 @@ class AuthRepository {
     return false;
   }
 
-  Future<void> favorite({
+  Future<bool> favorite({
     required int id,
     required bool favorite,
     void Function()? onUpdate,
@@ -111,15 +111,15 @@ class AuthRepository {
     final String? password = await _storageRepository.password;
 
     if (username != null && password != null) {
-      unawaited(
-        _websiteRepository.favorite(
-          username: username,
-          password: password,
-          id: id,
-          favorite: favorite,
-        ),
+      return _websiteRepository.favorite(
+        username: username,
+        password: password,
+        id: id,
+        favorite: favorite,
       );
     }
+
+    return false;
   }
 
   Future<bool> vote({
@@ -153,7 +153,7 @@ class AuthRepository {
     return false;
   }
 
-  Future<void> flag({
+  Future<bool> flag({
     required int id,
     required bool flag,
   }) async {
@@ -161,15 +161,15 @@ class AuthRepository {
     final String? password = await _storageRepository.password;
 
     if (username != null && password != null) {
-      unawaited(
-        _websiteRepository.flag(
-          username: username,
-          password: password,
-          id: id,
-          flag: flag,
-        ),
+      return _websiteRepository.flag(
+        username: username,
+        password: password,
+        id: id,
+        flag: flag,
       );
     }
+
+    return false;
   }
 
   Future<bool> reply({required int parentId, required String text}) async {
