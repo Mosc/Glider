@@ -17,12 +17,12 @@ dependencies:
   flutter_hooks: ^0.18.0
   flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^5.0.0-beta.4
   flutter_speed_dial: ^4.2.0
   flutter_web_browser: ^0.15.0
   flutter_widget_from_html_core: ^0.6.2
   freezed_annotation: ^0.14.2
-  hooks_riverpod: ^1.0.0-dev.6
+  hooks_riverpod: ^1.0.0-dev.7
   html: ^0.15.0
   html_unescape: ^2.0.0
   intl: ^0.17.0
