@@ -21,8 +21,8 @@ final Provider<WebsiteRepository> _websiteRepositoryProvider =
   ),
 );
 
-final AutoDisposeFutureProvider<SharedPreferences> _sharedPreferences =
-    FutureProvider.autoDispose<SharedPreferences>(
+final FutureProvider<SharedPreferences> _sharedPreferences =
+    FutureProvider<SharedPreferences>(
   (_) => SharedPreferences.getInstance(),
 );
 
