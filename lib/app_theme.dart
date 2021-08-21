@@ -43,12 +43,15 @@ class AppTheme {
         ThemeData.estimateBrightnessForColor(color) == Brightness.dark
             ? Colors.white
             : Colors.black;
+    final Color canvasColor = backgroundColor.lighten(0.05);
 
     return ThemeData(
       brightness: brightness,
       visualDensity: VisualDensity.standard,
       primaryColor: color,
+      canvasColor: canvasColor,
       scaffoldBackgroundColor: backgroundColor,
+      cardColor: canvasColor,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       buttonTheme: const ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
