@@ -35,7 +35,7 @@ class Home extends HookConsumerWidget {
     );
 
     final Color overlayColor =
-        Theme.of(context).brightness.isDark ? Colors.black54 : Colors.black38;
+        Theme.of(context).brightness.isDark ? Colors.black54 : Colors.black26;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
