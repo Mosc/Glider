@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/providers/persistence_provider.dart';
+import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/text_style_extension.dart';
+import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -13,18 +15,21 @@ class ItemTileTitle extends HookConsumerWidget {
     Key? key,
     this.dense = false,
     this.interactive = false,
+    this.opacity = 1,
   }) : super(key: key);
 
   final Item item;
   final bool dense;
   final bool interactive;
+  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Hero(
+    return FadeHero(
       tag: 'item_title_${item.id}',
-      child: Material(
-        type: MaterialType.transparency,
+      child: AnimatedOpacity(
+        duration: AnimationUtil.defaultDuration,
+        opacity: opacity,
         child: SmoothAnimatedCrossFade(
           condition: dense,
           trueChild: _buildTitleText(context, ref, dense: true),

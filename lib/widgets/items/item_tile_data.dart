@@ -11,7 +11,6 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/items/item_bottom_sheet.dart';
@@ -45,9 +44,7 @@ class ItemTileData extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool active = item.deleted != true && item.localOnly != true;
-    final Widget content = fadeable
-        ? _buildFadeable(ref, child: _buildContent(context))
-        : _buildContent(context);
+    final Widget content = _buildContent(context, ref);
 
     return _buildSlidable(
       context,
@@ -189,23 +186,18 @@ class ItemTileData extends HookConsumerWidget {
     );
   }
 
-  Widget _buildFadeable(WidgetRef ref, {required Widget child}) {
-    final bool visibility =
-        ref.watch(visitedProvider(item.id)).data?.value ?? false;
+  Widget _buildContent(BuildContext context, WidgetRef ref) {
+    final double opacity =
+        fadeable && (ref.watch(visitedProvider(item.id)).data?.value ?? false)
+            ? 2 / 3
+            : 1;
 
-    return AnimatedOpacity(
-      duration: AnimationUtil.defaultDuration,
-      opacity: visibility ? 2 / 3 : 1,
-      child: child,
-    );
-  }
-
-  Widget _buildContent(BuildContext context) {
     if (item.type == ItemType.pollopt) {
       return ItemTileContentPollOption(
         item,
         root: root,
         interactive: interactive,
+        opacity: opacity,
       );
     } else {
       return ItemTileContent(
@@ -213,6 +205,7 @@ class ItemTileData extends HookConsumerWidget {
         root: root,
         dense: dense,
         interactive: interactive,
+        opacity: opacity,
       );
     }
   }

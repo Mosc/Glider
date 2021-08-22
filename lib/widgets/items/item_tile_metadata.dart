@@ -6,6 +6,8 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
+import 'package:glider/utils/animation_util.dart';
+import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_size.dart';
@@ -19,12 +21,14 @@ class ItemTileMetadata extends HookConsumerWidget {
     this.root,
     this.dense = false,
     this.interactive = false,
+    this.opacity = 1,
   }) : super(key: key);
 
   final Item item;
   final Item? root;
   final bool dense;
   final bool interactive;
+  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,70 +40,74 @@ class ItemTileMetadata extends HookConsumerWidget {
         ref.watch(favoritedProvider(item.id)).data;
     final AsyncData<bool>? upvoted = ref.watch(upvotedProvider(item.id)).data;
 
-    return Hero(
+    return FadeHero(
       tag: 'item_metadata_${item.id}',
-      child: Row(
-        children: <Widget>[
-          if (favorited != null)
+      child: AnimatedOpacity(
+        opacity: opacity,
+        duration: AnimationUtil.defaultDuration,
+        child: Row(
+          children: <Widget>[
+            if (favorited != null)
+              SmoothAnimatedSwitcher.horizontal(
+                condition: favorited.value,
+                child: const MetadataItem(
+                  icon: FluentIcons.star_24_regular,
+                  highlight: true,
+                ),
+              ),
+            if (item.score != null && item.type != ItemType.job)
+              SmoothAnimatedCrossFade(
+                condition: upvoted?.value ?? false,
+                trueChild: _buildUpvotedMetadata(upvoted: true),
+                falseChild: _buildUpvotedMetadata(upvoted: false),
+              )
+            else if (upvoted != null)
+              SmoothAnimatedSwitcher.horizontal(
+                condition: upvoted.value,
+                child: _buildUpvotedMetadata(upvoted: true),
+              ),
+            if (item.descendants != null)
+              SmoothAnimatedSize(
+                child: MetadataItem(
+                  key: ValueKey<int?>(item.descendants),
+                  icon: FluentIcons.comment_24_regular,
+                  text: item.descendants.toString(),
+                ),
+              ),
             SmoothAnimatedSwitcher.horizontal(
-              condition: favorited.value,
+              condition: item.dead ?? false,
+              child: const MetadataItem(icon: FluentIcons.flag_24_regular),
+            ),
+            if (item.deleted ?? false) ...<Widget>[
+              const MetadataItem(icon: FluentIcons.delete_24_regular),
+              Text(
+                '[${appLocalizations.deleted}]',
+                style: textTheme.bodyText2
+                    ?.copyWith(fontSize: textTheme.caption?.fontSize),
+              ),
+            ] else if (item.by != null &&
+                item.type != ItemType.pollopt) ...<Widget>[
+              _buildUsername(context, ref, textTheme,
+                  by: item.by!, rootBy: root?.by),
+              const SizedBox(width: 8),
+            ],
+            if (item.hasOriginalYear)
+              MetadataItem(
+                icon: FluentIcons.shifts_activity_24_regular,
+                text: appLocalizations.fromYear(item.originalYear!),
+              ),
+            SmoothAnimatedSwitcher.horizontal(
+              condition: item.cache,
               child: const MetadataItem(
-                icon: FluentIcons.star_24_regular,
-                highlight: true,
-              ),
+                  icon: FluentIcons.cloud_offline_24_regular),
             ),
-          if (item.score != null && item.type != ItemType.job)
-            SmoothAnimatedCrossFade(
-              condition: upvoted?.value ?? false,
-              trueChild: _buildUpvotedMetadata(upvoted: true),
-              falseChild: _buildUpvotedMetadata(upvoted: false),
-            )
-          else if (upvoted != null)
-            SmoothAnimatedSwitcher.horizontal(
-              condition: upvoted.value,
-              child: _buildUpvotedMetadata(upvoted: true),
-            ),
-          if (item.descendants != null)
-            SmoothAnimatedSize(
-              child: MetadataItem(
-                key: ValueKey<int?>(item.descendants),
-                icon: FluentIcons.comment_24_regular,
-                text: item.descendants.toString(),
-              ),
-            ),
-          SmoothAnimatedSwitcher.horizontal(
-            condition: item.dead ?? false,
-            child: const MetadataItem(icon: FluentIcons.flag_24_regular),
-          ),
-          if (item.deleted ?? false) ...<Widget>[
-            const MetadataItem(icon: FluentIcons.delete_24_regular),
-            Text(
-              '[${appLocalizations.deleted}]',
-              style: textTheme.bodyText2
-                  ?.copyWith(fontSize: textTheme.caption?.fontSize),
-            ),
-          ] else if (item.by != null &&
-              item.type != ItemType.pollopt) ...<Widget>[
-            _buildUsername(context, ref, textTheme,
-                by: item.by!, rootBy: root?.by),
-            const SizedBox(width: 8),
+            if (interactive) _buildCollapsedIndicator(),
+            if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
+              const Spacer(),
+              Text(item.timeAgo!, style: textTheme.caption),
+            ],
           ],
-          if (item.hasOriginalYear)
-            MetadataItem(
-              icon: FluentIcons.shifts_activity_24_regular,
-              text: appLocalizations.fromYear(item.originalYear!),
-            ),
-          SmoothAnimatedSwitcher.horizontal(
-            condition: item.cache,
-            child:
-                const MetadataItem(icon: FluentIcons.cloud_offline_24_regular),
-          ),
-          if (interactive) _buildCollapsedIndicator(),
-          if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
-            const Spacer(),
-            Text(item.timeAgo!, style: textTheme.caption),
-          ],
-        ],
+        ),
       ),
     );
   }

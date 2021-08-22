@@ -12,11 +12,13 @@ class ItemTileContentPollOption extends HookConsumerWidget {
     Key? key,
     this.root,
     this.interactive = false,
+    this.opacity = 1,
   }) : super(key: key);
 
   final Item item;
   final Item? root;
   final bool interactive;
+  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
