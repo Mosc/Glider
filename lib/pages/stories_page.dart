@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/models/stories_menu_action.dart';
 import 'package:glider/models/story_type.dart';
@@ -17,6 +16,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/appearance/appearance_bottom_sheet.dart';
+import 'package:glider/widgets/common/decorated_speed_dial.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,8 +32,6 @@ class StoriesPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
-    final ThemeData theme = Theme.of(context);
 
     final ValueNotifier<bool> speedDialVisibleState = useState(true);
     final ScrollController scrollController = useScrollController();
@@ -88,25 +86,17 @@ class StoriesPage extends HookConsumerWidget {
         ],
         body: const StoriesBody(),
       ),
-      floatingActionButton: Hero(
-        tag: 'fab',
-        child: SpeedDial(
-          children: <SpeedDialChild>[
-            for (StoryType storyType in StoryType.values)
-              SpeedDialChild(
-                label: storyType.title(context),
-                child: Icon(storyType.icon),
-                onTap: () => storyTypeStateController.state = storyType,
-              ),
-          ],
-          visible: speedDialVisibleState.value,
-          icon: storyTypeStateController.state.icon,
-          backgroundColor: theme.colorScheme.primary,
-          foregroundColor: theme.colorScheme.onPrimary,
-          useRotationAnimation: false,
-          animationSpeed: 100,
-          spacing: 4,
-        ),
+      floatingActionButton: DecoratedSpeedDial(
+        visible: speedDialVisibleState.value,
+        icon: storyTypeStateController.state.icon,
+        children: <DecoratedSpeedDialChild>[
+          for (StoryType storyType in StoryType.values)
+            DecoratedSpeedDialChild(
+              onTap: () => storyTypeStateController.state = storyType,
+              label: storyType.title(context),
+              child: Icon(storyType.icon),
+            ),
+        ],
       ),
     );
   }

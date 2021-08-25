@@ -43,21 +43,24 @@ class AppearanceBottomSheet extends HookConsumerWidget {
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowMetadata(value: value),
         ),
-        const SizedBox(height: 4),
-        _buildHorizontalScrollable(
-          children: <Widget>[
-            for (ThemeBase themeBase in ThemeBase.values)
-              _ThemeBaseButton(themeBase),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: _buildHorizontalScrollable(
+            children: <Widget>[
+              for (ThemeBase themeBase in ThemeBase.values)
+                _ThemeBaseButton(themeBase),
+            ],
+          ),
         ),
-        const SizedBox(height: 8),
-        _buildHorizontalScrollable(
-          children: <Widget>[
-            for (Color themeColor in AppTheme.themeColors)
-              _ThemeColorButton(themeColor),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: _buildHorizontalScrollable(
+            children: <Widget>[
+              for (Color themeColor in AppTheme.themeColors)
+                _ThemeColorButton(themeColor),
+            ],
+          ),
         ),
-        const SizedBox(height: 4),
       ],
     );
   }

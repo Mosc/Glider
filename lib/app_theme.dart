@@ -56,12 +56,7 @@ class AppTheme {
       buttonTheme: const ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
       ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: brightness.isDark ? backgroundColor : color,
-        iconTheme: IconThemeData(
-          color: brightness.isDark ? Colors.white : onColor,
-        ),
-      ),
+      dialogBackgroundColor: canvasColor,
       toggleableActiveColor: color,
       chipTheme: ChipThemeData.fromDefaults(
         brightness: brightness,
@@ -76,6 +71,12 @@ class AppTheme {
           for (TargetPlatform targetPlatform in TargetPlatform.values)
             targetPlatform: const SwipeablePageTransitionsBuilder(),
         },
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: brightness.isDark ? backgroundColor : color,
+        iconTheme: IconThemeData(
+          color: brightness.isDark ? Colors.white : onColor,
+        ),
       ),
       colorScheme: brightness.isDark
           ? ColorScheme.dark(
