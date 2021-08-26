@@ -50,9 +50,7 @@ class UserOptionsCommand with CommandMixin {
 
     await showDialog<void>(
       context: context,
-      builder: (_) => OptionsDialog.copy(
-        options: optionsDialogOptions,
-      ),
+      builder: (_) => optionsDialogBuilder(optionsDialogOptions),
     );
   }
 }
