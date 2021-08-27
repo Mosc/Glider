@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/painting.dart';
 import 'package:glider/models/theme_base.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -73,4 +75,9 @@ final AutoDisposeFutureProviderFamily<bool, int> upvotedProvider =
     FutureProvider.autoDispose.family(
   (AutoDisposeFutureProviderRef<bool> ref, int id) =>
       ref.read(storageRepositoryProvider).upvoted(id: id),
+);
+
+final AutoDisposeProviderFamily<ImageProvider, String> imageProvider =
+    Provider.autoDispose.family<ImageProvider, String>(
+  (_, String url) => CachedNetworkImageProvider(url),
 );

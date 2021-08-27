@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:glider/models/item.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/fade_hero.dart';
@@ -36,7 +36,7 @@ class ItemTileThumbnail extends HookConsumerWidget {
           child: item.localOnly
               ? _placeholderBuilder(context, size: size)
               : OctoImage(
-                  image: CachedNetworkImageProvider(item.thumbnailUrl!),
+                  image: ref.read(imageProvider(item.thumbnailUrl!)),
                   imageBuilder: (_, Widget child) => ClipRRect(
                     borderRadius: _borderRadius,
                     child: child,

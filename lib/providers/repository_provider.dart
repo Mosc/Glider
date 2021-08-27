@@ -14,13 +14,6 @@ final Provider<Dio> _dioProvider = Provider<Dio>(
   (_) => Dio()..interceptors.add(CacheInterceptor()),
 );
 
-final Provider<WebsiteRepository> _websiteRepositoryProvider =
-    Provider<WebsiteRepository>(
-  (ProviderRef<WebsiteRepository> ref) => WebsiteRepository(
-    ref.read(_dioProvider),
-  ),
-);
-
 final FutureProvider<SharedPreferences> _sharedPreferences =
     FutureProvider<SharedPreferences>(
   (_) => SharedPreferences.getInstance(),
@@ -31,25 +24,17 @@ final Provider<FlutterSecureStorage> _secureStorageProvider =
   (_) => const FlutterSecureStorage(),
 );
 
-final Provider<StorageRepository> storageRepositoryProvider =
-    Provider<StorageRepository>(
-  (ProviderRef<StorageRepository> ref) => StorageRepository(
-    ref.read(_secureStorageProvider),
-    ref.read(_sharedPreferences.future),
+final Provider<ApiRepository> apiRepositoryProvider = Provider<ApiRepository>(
+  (ProviderRef<ApiRepository> ref) => ApiRepository(
+    ref.read(_dioProvider),
   ),
 );
 
 final Provider<AuthRepository> authRepositoryProvider =
     Provider<AuthRepository>(
   (ProviderRef<AuthRepository> ref) => AuthRepository(
-    ref.read(_websiteRepositoryProvider),
+    ref.read(websiteRepositoryProvider),
     ref.read(storageRepositoryProvider),
-  ),
-);
-
-final Provider<ApiRepository> apiRepositoryProvider = Provider<ApiRepository>(
-  (ProviderRef<ApiRepository> ref) => ApiRepository(
-    ref.read(_dioProvider),
   ),
 );
 
@@ -60,8 +45,23 @@ final Provider<SearchApiRepository> searchApiRepositoryProvider =
   ),
 );
 
+final Provider<StorageRepository> storageRepositoryProvider =
+    Provider<StorageRepository>(
+  (ProviderRef<StorageRepository> ref) => StorageRepository(
+    ref.read(_secureStorageProvider),
+    ref.read(_sharedPreferences.future),
+  ),
+);
+
 final Provider<WebRepository> webRepositoryProvider = Provider<WebRepository>(
   (ProviderRef<WebRepository> ref) => WebRepository(
+    ref.read(_dioProvider),
+  ),
+);
+
+final Provider<WebsiteRepository> websiteRepositoryProvider =
+    Provider<WebsiteRepository>(
+  (ProviderRef<WebsiteRepository> ref) => WebsiteRepository(
     ref.read(_dioProvider),
   ),
 );
