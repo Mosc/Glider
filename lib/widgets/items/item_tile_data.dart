@@ -82,7 +82,7 @@ class ItemTileData extends HookConsumerWidget {
     useMemoized(updateDelayedUpvoted);
 
     return Slidable(
-      key: ValueKey<int>(item.id),
+      key: ValueKey<String>('item_${item.id}_slidable'),
       startToEndAction: active &&
               item.type != ItemType.job &&
               delayedUpvotedController.state != null

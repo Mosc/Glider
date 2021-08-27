@@ -41,7 +41,7 @@ class ItemTileMetadata extends HookConsumerWidget {
     final AsyncData<bool>? upvoted = ref.watch(upvotedProvider(item.id)).data;
 
     return FadeHero(
-      tag: 'item_metadata_${item.id}',
+      tag: 'item_${item.id}_metadata',
       child: AnimatedOpacity(
         opacity: opacity,
         duration: AnimationUtil.defaultDuration,
@@ -69,7 +69,8 @@ class ItemTileMetadata extends HookConsumerWidget {
             if (item.descendants != null)
               SmoothAnimatedSize(
                 child: MetadataItem(
-                  key: ValueKey<int?>(item.descendants),
+                  key: ValueKey<String>(
+                      'item_${item.id}_descendants_${item.descendants}'),
                   icon: FluentIcons.comment_24_regular,
                   text: item.descendants.toString(),
                 ),
@@ -114,7 +115,7 @@ class ItemTileMetadata extends HookConsumerWidget {
 
   Widget _buildUpvotedMetadata({required bool upvoted}) {
     return MetadataItem(
-      key: ValueKey<int?>(item.score),
+      key: ValueKey<String>('item_${item.id}_score_${item.score}'),
       icon: FluentIcons.arrow_up_24_regular,
       text: item.score?.toString(),
       highlight: upvoted,

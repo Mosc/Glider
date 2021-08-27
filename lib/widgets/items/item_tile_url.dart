@@ -25,7 +25,7 @@ class ItemTileUrl extends HookConsumerWidget {
     return InkWell(
       onTap: () => UrlUtil.tryLaunch(context, item.url!),
       child: FadeHero(
-        tag: 'item_url_${item.id}',
+        tag: 'item_${item.id}_url',
         child: AnimatedOpacity(
           opacity: opacity,
           duration: AnimationUtil.defaultDuration,

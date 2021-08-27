@@ -18,7 +18,7 @@ class ItemTileText extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FadeHero(
-      tag: 'item_text_${item.id}',
+      tag: 'item_${item.id}_text',
       child: AnimatedOpacity(
         opacity: opacity,
         duration: AnimationUtil.defaultDuration,

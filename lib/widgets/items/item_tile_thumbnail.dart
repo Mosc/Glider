@@ -29,7 +29,7 @@ class ItemTileThumbnail extends HookConsumerWidget {
     return GestureDetector(
       onTap: () => UrlUtil.tryLaunch(context, item.url!),
       child: FadeHero(
-        tag: 'item_thumbnail_${item.id}',
+        tag: 'item_${item.id}_thumbnail',
         child: AnimatedOpacity(
           opacity: opacity,
           duration: AnimationUtil.defaultDuration,

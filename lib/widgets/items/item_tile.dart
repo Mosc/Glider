@@ -41,7 +41,7 @@ class ItemTile extends HookConsumerWidget {
 
         return ItemTileData(
           value.copyWith(ancestors: ancestors),
-          key: ValueKey<int>(id),
+          key: ValueKey<String>('item_$id'),
           root: root,
           onTap: () => onTap?.call(context),
           dense: dense,

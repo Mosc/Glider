@@ -26,7 +26,7 @@ class ItemTileTitle extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FadeHero(
-      tag: 'item_title_${item.id}',
+      tag: 'item_${item.id}_title',
       child: AnimatedOpacity(
         duration: AnimationUtil.defaultDuration,
         opacity: opacity,
@@ -79,7 +79,7 @@ class ItemTileTitle extends HookConsumerWidget {
           ],
         ],
       ),
-      key: ValueKey<bool>(dense),
+      key: ValueKey<String>('item_${item.id}_dense_$dense'),
       maxLines: dense ? 2 : null,
       overflow: dense ? TextOverflow.ellipsis : null,
     );
