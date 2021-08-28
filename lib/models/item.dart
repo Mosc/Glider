@@ -33,9 +33,9 @@ class Item with _$Item {
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
-  static final RegExp _videoRegExp = RegExp(r'\s+\[video\]$');
-  static final RegExp _audioRegExp = RegExp(r'\s+\[audio\]$');
-  static final RegExp _pdfRegExp = RegExp(r'\s+\[pdf\]$');
+  static final RegExp _videoRegExp = RegExp(r'\s+\[video\]');
+  static final RegExp _audioRegExp = RegExp(r'\s+\[audio\]');
+  static final RegExp _pdfRegExp = RegExp(r'\s+\[pdf\]');
   static final RegExp _yearRegExp = RegExp(r'\s+\((\d+)\)');
 
   late final String? formattedTitle = title != null
