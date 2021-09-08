@@ -27,6 +27,7 @@ class Item with _$Item {
     int? descendants,
     @Default(<int>[]) Iterable<int> ancestors,
     @Default(false) bool cache,
+    @Default(false) bool preview,
   }) = _Item;
 
   Item._();
@@ -52,9 +53,7 @@ class Item with _$Item {
       time != null ? Jiffy.unix(time!).fromNow() : null;
 
   late final String? thumbnailUrl =
-      localOnly ? null : 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
-
-  late final bool localOnly = id < 0;
+      preview ? null : 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
 
   late final bool hasVideo = title != null && _videoRegExp.hasMatch(title!);
 

@@ -43,7 +43,7 @@ class ItemTileData extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool active = item.deleted != true && item.localOnly != true;
+    final bool active = item.deleted != true && item.preview != true;
     final Widget content = _buildContent(context, ref);
 
     return _buildSlidable(

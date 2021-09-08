@@ -260,5 +260,6 @@ class SubmitBody extends HookConsumerWidget {
         title: title?.isNotEmpty ?? false ? title : null,
         score: 1,
         descendants: 0,
+        preview: true,
       );
 }

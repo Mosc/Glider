@@ -187,5 +187,6 @@ class ReplyBody extends HookConsumerWidget {
             ? FormattingUtil.convertHackerNewsToHtml(text)
             : null,
         ancestors: <int>[parent.id],
+        preview: true,
       );
 }

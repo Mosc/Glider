@@ -35,7 +35,7 @@ class ItemTileContent extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (item.localOnly) ...<Widget>[
+          if (item.preview) ...<Widget>[
             const ItemTilePreview(),
             const SizedBox(height: 12),
           ],

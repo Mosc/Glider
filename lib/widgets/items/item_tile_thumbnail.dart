@@ -33,7 +33,7 @@ class ItemTileThumbnail extends HookConsumerWidget {
         child: AnimatedOpacity(
           opacity: opacity,
           duration: AnimationUtil.defaultDuration,
-          child: item.localOnly
+          child: item.preview
               ? _placeholderBuilder(context, size: size)
               : OctoImage(
                   image: ref.read(imageProvider(item.thumbnailUrl!)),
