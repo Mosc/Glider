@@ -49,6 +49,8 @@ class AppTheme {
       brightness: brightness,
       visualDensity: VisualDensity.standard,
       primaryColor: color,
+      // ignore: deprecated_member_use
+      accentColor: color,
       canvasColor: canvasColor,
       scaffoldBackgroundColor: backgroundColor,
       cardColor: canvasColor,

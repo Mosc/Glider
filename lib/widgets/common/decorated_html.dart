@@ -27,7 +27,6 @@ class DecoratedHtml extends HookConsumerWidget {
     return HtmlWidget(
       _html,
       buildAsync: false,
-      hyperlinkColor: Theme.of(context).primaryColor,
       customStylesBuilder: (dom.Element element) {
         if (element.localName == 'pre') {
           return <String, String>{
