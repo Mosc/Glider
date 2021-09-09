@@ -10,8 +10,8 @@ import 'package:glider/widgets/items/item_tile_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
-class ItemTileThumbnail extends HookConsumerWidget {
-  const ItemTileThumbnail(
+class ItemTileFavicon extends HookConsumerWidget {
+  const ItemTileFavicon(
     this.item, {
     Key? key,
     this.opacity = 1,
@@ -29,22 +29,28 @@ class ItemTileThumbnail extends HookConsumerWidget {
     return GestureDetector(
       onTap: () => UrlUtil.tryLaunch(context, item.url!),
       child: FadeHero(
-        tag: 'item_${item.id}_thumbnail',
+        tag: 'item_${item.id}_favicon',
         child: AnimatedOpacity(
           opacity: opacity,
           duration: AnimationUtil.defaultDuration,
           child: item.preview
               ? _placeholderBuilder(context, size: size)
               : OctoImage(
-                  image: ref.read(imageProvider(item.thumbnailUrl!)),
+                  image: ref.read(imageProvider(item.faviconUrl(48)!)),
                   imageBuilder: (_, Widget child) => ClipRRect(
                     borderRadius: _borderRadius,
-                    child: child,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      color: Theme.of(context).colorScheme.surface,
+                      child: child,
+                    ),
                   ),
                   placeholderBuilder: (BuildContext context) =>
                       _placeholderBuilder(context, size: size),
-                  errorBuilder:
-                      OctoError.icon(icon: FluentIcons.error_circle_24_regular),
+                  errorBuilder: (_, __, ___) => Icon(
+                    FluentIcons.chevron_right_24_regular,
+                    size: size,
+                  ),
                   width: size,
                   height: size,
                 ),

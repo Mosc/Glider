@@ -3,7 +3,7 @@ import 'package:glider/models/item.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
-import 'package:glider/widgets/items/item_tile_thumbnail.dart';
+import 'package:glider/widgets/items/item_tile_favicon.dart';
 import 'package:glider/widgets/items/item_tile_title.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -23,11 +23,11 @@ class ItemTileHeader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool showThumbnail =
-        interactive || (ref.watch(showThumbnailProvider).data?.value ?? true);
+    final bool showFavicon =
+        interactive || (ref.watch(showFaviconProvider).data?.value ?? true);
 
     return ConstrainedBox(
-      constraints: showThumbnail
+      constraints: showFavicon
           ? BoxConstraints(minHeight: calculateHeight(context) ?? 0)
           : const BoxConstraints(),
       child: Row(
@@ -43,11 +43,11 @@ class ItemTileHeader extends HookConsumerWidget {
           ),
           if (item.url != null)
             SmoothAnimatedSwitcher.all(
-              condition: showThumbnail,
+              condition: showFavicon,
               child: Row(
                 children: <Widget>[
                   const SizedBox(width: 12),
-                  ItemTileThumbnail(
+                  ItemTileFavicon(
                     item,
                     opacity: opacity,
                   ),

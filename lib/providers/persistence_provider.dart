@@ -24,10 +24,10 @@ final AutoDisposeFutureProvider<bool> showUrlProvider =
       ref.read(storageRepositoryProvider).showUrl,
 );
 
-final AutoDisposeFutureProvider<bool> showThumbnailProvider =
+final AutoDisposeFutureProvider<bool> showFaviconProvider =
     FutureProvider.autoDispose<bool>(
   (AutoDisposeFutureProviderRef<bool> ref) =>
-      ref.read(storageRepositoryProvider).showThumbnail,
+      ref.read(storageRepositoryProvider).showFavicon,
 );
 
 final AutoDisposeFutureProvider<bool> showMetadataProvider =

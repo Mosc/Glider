@@ -31,11 +31,10 @@ class AppearanceBottomSheet extends HookConsumerWidget {
               ref.read(storageRepositoryProvider).setShowUrl(value: value),
         ),
         ProviderSwitchListTile(
-          title: appLocalizations.showThumbnail,
-          provider: showThumbnailProvider,
-          onSave: (bool value) => ref
-              .read(storageRepositoryProvider)
-              .setShowThumbnail(value: value),
+          title: appLocalizations.showFavicon,
+          provider: showFaviconProvider,
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setShowFavicon(value: value),
         ),
         ProviderSwitchListTile(
           title: appLocalizations.showMetadata,

@@ -52,8 +52,9 @@ class Item with _$Item {
   late final String? timeAgo =
       time != null ? Jiffy.unix(time!).fromNow() : null;
 
-  late final String? thumbnailUrl =
-      preview ? null : 'https://drcs9k8uelb9s.cloudfront.net/$id.png';
+  String? faviconUrl(int? size) => urlHost != null
+      ? 'https://api.faviconkit.com/$urlHost${size != null ? '/$size' : ''}'
+      : null;
 
   late final bool hasVideo = title != null && _videoRegExp.hasMatch(title!);
 

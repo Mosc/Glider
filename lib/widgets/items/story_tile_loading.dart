@@ -12,9 +12,8 @@ class StoryTileLoading extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final double? thumbnailSize = ItemTileHeader.calculateHeight(context);
-    final bool showThumbnail =
-        ref.watch(showThumbnailProvider).data?.value ?? true;
+    final double? faviconSize = ItemTileHeader.calculateHeight(context);
+    final bool showFavicon = ref.watch(showFaviconProvider).data?.value ?? true;
     final bool showMetadata =
         ref.watch(showMetadataProvider).data?.value ?? true;
 
@@ -43,11 +42,11 @@ class StoryTileLoading extends HookConsumerWidget {
                     ],
                   ),
                 ),
-                if (showThumbnail) ...<Widget>[
+                if (showFavicon) ...<Widget>[
                   const SizedBox(width: 12),
                   TileLoadingBlock(
-                    width: thumbnailSize,
-                    height: thumbnailSize,
+                    width: faviconSize,
+                    height: faviconSize,
                   ),
                 ],
               ],

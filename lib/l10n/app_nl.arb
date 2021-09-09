@@ -44,7 +44,7 @@
   "processingInfo": "De verwerking kan even duren, overweeg te verversen voor een bijgewerkt overzicht",
   "appearance": "Uiterlijk",
   "showUrl": "Toon URL",
-  "showThumbnail": "Toon miniatuur",
+  "showFavicon": "Toon favicon",
   "showMetadata": "Toon metadata",
   "system": "Systeem",
   "light": "Licht",

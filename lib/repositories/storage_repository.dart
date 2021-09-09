@@ -11,7 +11,7 @@ class StorageRepository {
   static const String _themeBaseKey = 'theme_base';
   static const String _themeColorKey = 'theme_color';
   static const String _showUrlKey = 'show_url';
-  static const String _showThumbnailKey = 'show_thumbnail';
+  static const String _showFaviconKey = 'show_favicon';
   static const String _showMetadataKey = 'show_metadata';
   static const String _completedWalkthroughKey = 'completed_walkthrough';
   static const String _usernameKey = 'username';
@@ -47,11 +47,11 @@ class StorageRepository {
   Future<void> setShowUrl({required bool value}) async =>
       (await _sharedPreferences).setBool(_showUrlKey, value);
 
-  Future<bool> get showThumbnail async =>
-      (await _sharedPreferences).getBool(_showThumbnailKey) ?? true;
+  Future<bool> get showFavicon async =>
+      (await _sharedPreferences).getBool(_showFaviconKey) ?? true;
 
-  Future<void> setShowThumbnail({required bool value}) async =>
-      (await _sharedPreferences).setBool(_showThumbnailKey, value);
+  Future<void> setShowFavicon({required bool value}) async =>
+      (await _sharedPreferences).setBool(_showFaviconKey, value);
 
   Future<bool> get showMetadata async =>
       (await _sharedPreferences).getBool(_showMetadataKey) ?? true;

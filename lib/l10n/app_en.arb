@@ -44,7 +44,7 @@
   "processingInfo": "Processing may take a moment, consider refreshing for an updated view",
   "appearance": "Appearance",
   "showUrl": "Show URL",
-  "showThumbnail": "Show thumbnail",
+  "showFavicon": "Show favicon",
   "showMetadata": "Show metadata",
   "system": "System",
   "light": "Light",
