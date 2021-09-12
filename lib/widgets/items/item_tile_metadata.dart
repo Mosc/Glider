@@ -36,9 +36,10 @@ class ItemTileMetadata extends HookConsumerWidget {
 
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    final AsyncData<bool>? favorited =
+    final AsyncData<bool>? favoritedData =
         ref.watch(favoritedProvider(item.id)).data;
-    final AsyncData<bool>? upvoted = ref.watch(upvotedProvider(item.id)).data;
+    final AsyncData<bool>? upvotedData =
+        ref.watch(upvotedProvider(item.id)).data;
 
     return FadeHero(
       tag: 'item_${item.id}_metadata',
@@ -47,9 +48,9 @@ class ItemTileMetadata extends HookConsumerWidget {
         duration: AnimationUtil.defaultDuration,
         child: Row(
           children: <Widget>[
-            if (favorited != null)
+            if (favoritedData != null)
               SmoothAnimatedSwitcher.horizontal(
-                condition: favorited.value,
+                condition: favoritedData.value,
                 child: const MetadataItem(
                   icon: FluentIcons.star_24_regular,
                   highlight: true,
@@ -57,13 +58,13 @@ class ItemTileMetadata extends HookConsumerWidget {
               ),
             if (item.score != null && item.type != ItemType.job)
               SmoothAnimatedCrossFade(
-                condition: upvoted?.value ?? false,
+                condition: upvotedData?.value ?? false,
                 trueChild: _buildUpvotedMetadata(upvoted: true),
                 falseChild: _buildUpvotedMetadata(upvoted: false),
               )
-            else if (upvoted != null)
+            else if (upvotedData != null)
               SmoothAnimatedSwitcher.horizontal(
-                condition: upvoted.value,
+                condition: upvotedData.value,
                 child: _buildUpvotedMetadata(upvoted: true),
               ),
             if (item.descendants != null)

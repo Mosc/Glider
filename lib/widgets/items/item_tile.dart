@@ -31,9 +31,9 @@ class ItemTile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     useMemoized(() => ref.read(itemNotifierProvider(id).notifier).forceLoad());
 
-    final AsyncValue<Item> itemData = ref.watch(itemNotifierProvider(id));
+    final AsyncValue<Item> itemValue = ref.watch(itemNotifierProvider(id));
 
-    return itemData.when(
+    return itemValue.when(
       data: (Item value) {
         if (value.time == null) {
           return const SizedBox.shrink();
