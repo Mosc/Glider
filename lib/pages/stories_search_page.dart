@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_range.dart';
-import 'package:glider/models/story_type.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/widgets/common/decorated_speed_dial.dart';
@@ -30,9 +30,9 @@ final AutoDisposeStateProvider<DateTimeRange?>
   (AutoDisposeStateProviderRef<DateTimeRange?> ref) => null,
 );
 
-final AutoDisposeStateProvider<StoryType> storySearchTypeStateProvider =
-    StateProvider.autoDispose<StoryType>(
-  (AutoDisposeStateProviderRef<StoryType> ref) => StoryType.bestStories,
+final AutoDisposeStateProvider<SearchOrder> storySearchOrderStateProvider =
+    StateProvider.autoDispose<SearchOrder>(
+  (AutoDisposeStateProviderRef<SearchOrder> ref) => SearchOrder.byRelevance,
 );
 
 class StoriesSearchPage extends HookConsumerWidget {
@@ -68,8 +68,8 @@ class StoriesSearchPage extends HookConsumerWidget {
         ref.watch(storySearchQueryStateProvider);
     final StateController<SearchRange?> storySearchRangeStateController =
         ref.watch(storySearchRangeStateProvider);
-    final StateController<StoryType> searchStoryTypeStateController =
-        ref.watch(storySearchTypeStateProvider);
+    final StateController<SearchOrder> searchStoryTypeStateController =
+        ref.watch(storySearchOrderStateProvider);
     useMemoized(
       () => Future<void>.microtask(
         () => storySearchRangeStateController.state = initialSearchRange,
@@ -133,12 +133,11 @@ class StoriesSearchPage extends HookConsumerWidget {
           visible: speedDialVisibleState.value,
           icon: searchStoryTypeStateController.state.icon,
           children: <DecoratedSpeedDialChild>[
-            for (StoryType storyType in StoryType.values
-                .where((StoryType storyType) => storyType.searchable))
+            for (SearchOrder searchOrder in SearchOrder.values)
               DecoratedSpeedDialChild(
-                onTap: () => searchStoryTypeStateController.state = storyType,
-                label: storyType.title(context),
-                child: Icon(storyType.icon),
+                onTap: () => searchStoryTypeStateController.state = searchOrder,
+                label: searchOrder.title(context),
+                child: Icon(searchOrder.icon),
               ),
           ],
         ),

@@ -27,6 +27,8 @@
   "pastWeek": "Past week",
   "pastMonth": "Past month",
   "pastYear": "Past year",
+  "byDate": "By date",
+  "byRelevance": "By relevance",
   "favorites": "Favorites",
   "submit": "Submit",
   "submitNotLoggedIn": "Log in to submit",

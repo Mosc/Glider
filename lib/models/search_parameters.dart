@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_range.dart';
-import 'package:glider/models/story_type.dart';
 
 part 'search_parameters.freezed.dart';
 
@@ -10,8 +10,10 @@ part 'search_parameters.freezed.dart';
 class SearchParameters with _$SearchParameters {
   factory SearchParameters({
     required String query,
-    SearchRange? searchRange,
+    SearchRange? range,
     DateTimeRange? customDateTimeRange,
-    @Default(StoryType.bestStories) StoryType storyType,
+    @Default(SearchOrder.byRelevance) SearchOrder order,
+    int? parentStoryId,
+    int? maxResults,
   }) = _SearchParameters;
 }

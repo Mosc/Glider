@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_parameters.dart';
 import 'package:glider/models/search_range.dart';
-import 'package:glider/models/story_type.dart';
 import 'package:glider/utils/date_time_extension.dart';
 import 'package:glider/utils/service_exception.dart';
 
@@ -16,14 +16,29 @@ class SearchApiRepository {
 
   Future<Iterable<int>> searchStoryIds(
       SearchParameters searchParameters) async {
-    final DateTimeRange? dateTimeRange = searchParameters.searchRange
+    return _searchIds(
+      searchParameters,
+      tags: '(story,poll)',
+    );
+  }
+
+  Future<Iterable<int>> searchItemIds(SearchParameters searchParameters) async {
+    return _searchIds(
+      searchParameters,
+      tags: 'story_${searchParameters.parentStoryId!}',
+    );
+  }
+
+  Future<Iterable<int>> _searchIds(SearchParameters searchParameters,
+      {String? tags}) async {
+    final DateTimeRange? dateTimeRange = searchParameters.range
         ?.dateTimeRange(searchParameters.customDateTimeRange);
     final Uri uri = Uri.https(
       authority,
-      '$basePath/${searchParameters.storyType.searchApiPath}',
+      '$basePath/${searchParameters.order.apiPath}',
       <String, String>{
         'query': searchParameters.query,
-        'tags': '(story,poll)',
+        if (tags != null) 'tags': tags,
         if (dateTimeRange != null)
           'numericFilters':
               'created_at_i>=${dateTimeRange.start.secondsSinceEpoch},'

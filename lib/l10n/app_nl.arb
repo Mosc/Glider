@@ -27,6 +27,8 @@
   "pastWeek": "Afg. week",
   "pastMonth": "Afg. maand",
   "pastYear": "Afg. jaar",
+  "byDate": "Op datum",
+  "byRelevance": "Op relevantie",
   "favorites": "Favorieten",
   "submit": "Indienen",
   "submitNotLoggedIn": "Log in om in te dienen",
