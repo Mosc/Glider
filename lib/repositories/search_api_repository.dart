@@ -43,6 +43,10 @@ class SearchApiRepository {
           'numericFilters':
               'created_at_i>=${dateTimeRange.start.secondsSinceEpoch},'
                   'created_at_i<${dateTimeRange.end.secondsSinceEpoch}',
+        'attributesToRetrieve': '',
+        'attributesToHighlight': '',
+        'typoTolerance': 'false',
+        'analytics': 'false',
       },
     );
 
