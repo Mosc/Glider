@@ -37,7 +37,7 @@ class SearchApiRepository {
       authority,
       '$basePath/${searchParameters.order.apiPath}',
       <String, String>{
-        'query': searchParameters.query,
+        if (searchParameters.query.isNotEmpty) 'query': searchParameters.query,
         if (tags != null) 'tags': tags,
         if (dateTimeRange != null)
           'numericFilters':
@@ -45,6 +45,8 @@ class SearchApiRepository {
                   'created_at_i<${dateTimeRange.end.secondsSinceEpoch}',
         'attributesToRetrieve': '',
         'attributesToHighlight': '',
+        if (searchParameters.maxResults != null)
+          'hitsPerPage': searchParameters.maxResults.toString(),
         'typoTolerance': 'false',
         'analytics': 'false',
       },
