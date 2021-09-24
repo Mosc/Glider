@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
+import 'package:glider/utils/url_util.dart';
 import 'package:glider/utils/validators.dart';
-import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedOut extends HookConsumerWidget {
@@ -69,9 +70,11 @@ class AccountLoggedOut extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  DecoratedHtml(
+                  HtmlWidget(
                     appLocalizations.legalHtml,
+                    onTapUrl: (String url) => UrlUtil.tryLaunch(context, url),
                     textStyle: Theme.of(context).textTheme.caption,
                   ),
                   const SizedBox(height: 16),
