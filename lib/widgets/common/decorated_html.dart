@@ -20,7 +20,7 @@ class DecoratedHtml extends HookConsumerWidget {
   final String _html;
   final TextStyle? textStyle;
 
-  static const String _quoteCharacter = '&gt;';
+  static final RegExp _quoteRegex = RegExp(r'^\s?(&gt;)+');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,15 +44,12 @@ class DecoratedHtml extends HookConsumerWidget {
       },
       customWidgetBuilder: (dom.Element element) {
         if (_isQuote(element)) {
-          final String unquotedInnerHtml =
-              _trimQuoteCharacters(element.innerHtml).trimLeft();
+          element.innerHtml = _trimQuote(element).trimLeft();
 
-          if (unquotedInnerHtml.isNotEmpty) {
-            final String unquotedOuterHtml = element.outerHtml
-                .replaceFirst(element.innerHtml, unquotedInnerHtml);
+          if (element.innerHtml.isNotEmpty) {
             return Block(
               child: DecoratedHtml(
-                unquotedOuterHtml,
+                element.outerHtml,
                 prependParagraphTag: false,
               ),
             );
@@ -69,8 +66,8 @@ class DecoratedHtml extends HookConsumerWidget {
   }
 
   static bool _isQuote(dom.Element element) =>
-      element.innerHtml.startsWith(_quoteCharacter);
+      element.innerHtml.startsWith(_quoteRegex);
 
-  static String _trimQuoteCharacters(String from) =>
-      from.replaceFirst(RegExp('^($_quoteCharacter)+'), '');
+  static String _trimQuote(dom.Element element) =>
+      element.innerHtml.replaceFirst(_quoteRegex, '');
 }
