@@ -11,18 +11,18 @@ class AppTheme {
             .map((int shade) => materialColor[shade]!)
             .firstWhere(
               (Color color) => color.isDark,
-              orElse: () => materialColor[700]!,
+              orElse: () => materialColor.shade700,
             ),
       );
 
   static final Color defaultColor = themeColors.first;
   static final Color surfaceColor = Colors.grey.withOpacity(0.15);
-  static final Color errorColor = Colors.red[400]!;
+  static final Color errorColor = Colors.red.shade400;
   static const Color onErrorColor = Colors.white;
-  static final Color lightBackgroundColor = Colors.grey[50]!;
-  static final Color darkBackgroundColor = Colors.grey[900]!;
+  static final Color lightBackgroundColor = Colors.grey.shade50;
+  static final Color darkBackgroundColor = Colors.grey.shade900;
   static const Color blackBackgroundColor = Colors.black;
-  static final Color spaceBackgroundColor = Colors.blueGrey[900]!;
+  static const Color spaceBackgroundColor = Color(0xff242933);
 
   static ThemeData lightTheme(Color color) =>
       _buildTheme(color, backgroundColor: lightBackgroundColor);
