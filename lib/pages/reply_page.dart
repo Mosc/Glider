@@ -15,11 +15,9 @@ class ReplyPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(appLocalizations.reply),
+        title: Text(AppLocalizations.of(context)!.reply),
         body: ReplyBody(parent: parent, root: root),
       ),
     );

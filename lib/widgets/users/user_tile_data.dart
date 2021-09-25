@@ -15,8 +15,6 @@ class UserTileData extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
@@ -47,7 +45,7 @@ class UserTileData extends HookConsumerWidget {
                 const SizedBox(width: 8),
                 const Spacer(),
                 Text(
-                  appLocalizations.sinceDate(user.createdDate),
+                  AppLocalizations.of(context)!.sinceDate(user.createdDate),
                   style: textTheme.caption,
                 ),
               ],

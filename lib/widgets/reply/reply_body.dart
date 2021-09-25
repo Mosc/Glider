@@ -25,8 +25,6 @@ class ReplyBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final ValueNotifier<bool> parentCollapsedState = useState(true);
@@ -49,8 +47,9 @@ class ReplyBody extends HookConsumerWidget {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: commentController,
-                  decoration:
-                      InputDecoration(labelText: appLocalizations.comment),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.comment,
+                  ),
                   keyboardType: TextInputType.multiline,
                   textCapitalization: TextCapitalization.sentences,
                   autofocus: true,
@@ -68,7 +67,9 @@ class ReplyBody extends HookConsumerWidget {
                         onPressed: loadingState.value
                             ? null
                             : () => _quoteParent(commentController),
-                        child: Text(appLocalizations.quoteParent),
+                        child: Text(
+                          AppLocalizations.of(context)!.quoteParent,
+                        ),
                       ),
                       const SizedBox(width: 16),
                     ],
@@ -83,7 +84,7 @@ class ReplyBody extends HookConsumerWidget {
                                 loadingState.value = false;
                               }
                             },
-                      child: Text(appLocalizations.reply),
+                      child: Text(AppLocalizations.of(context)!.reply),
                     ),
                   ],
                 ),
@@ -94,7 +95,7 @@ class ReplyBody extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            appLocalizations.preview,
+            AppLocalizations.of(context)!.preview,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -128,8 +129,6 @@ class ReplyBody extends HookConsumerWidget {
 
   Future<void> _reply(BuildContext context, WidgetRef ref,
       {required String text}) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.reply(
       parentId: parent.id,
@@ -168,7 +167,7 @@ class ReplyBody extends HookConsumerWidget {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(appLocalizations.genericError)),
+        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
       );
     }
   }

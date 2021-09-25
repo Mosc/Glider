@@ -34,8 +34,6 @@ class WalkthoughItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final StateController<WalkthroughStep> stepStateController =
         ref.watch(_walkthroughStepStateProvider);
     final StateController<bool> upvotedStateController =
@@ -117,7 +115,7 @@ class WalkthoughItem extends HookConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 1),
                           child: Text(
-                            appLocalizations.walkthroughTitle(
+                            AppLocalizations.of(context)!.walkthroughTitle(
                               stepStateController.state.number,
                               WalkthroughStep.values.length,
                             ),
@@ -160,26 +158,28 @@ class WalkthoughItem extends HookConsumerWidget {
     required StateController<bool> upvotedStateController,
     required StateController<bool> favoritedStateController,
   }) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       builder: (_) => ScrollableBottomSheet(
         children: <Widget>[
           ListTile(
-            title: upvotedStateController.state
-                ? Text(appLocalizations.unvote)
-                : Text(appLocalizations.upvote),
+            title: Text(
+              upvotedStateController.state
+                  ? AppLocalizations.of(context)!.unvote
+                  : AppLocalizations.of(context)!.upvote,
+            ),
             onTap: () {
               Navigator.of(context).pop();
               upvotedStateController.state = !upvotedStateController.state;
             },
           ),
           ListTile(
-            title: favoritedStateController.state
-                ? Text(appLocalizations.unfavorite)
-                : Text(appLocalizations.favorite),
+            title: Text(
+              favoritedStateController.state
+                  ? AppLocalizations.of(context)!.unfavorite
+                  : AppLocalizations.of(context)!.favorite,
+            ),
             onTap: () {
               Navigator.of(context).pop();
               favoritedStateController.state = !favoritedStateController.state;

@@ -10,8 +10,6 @@ class Error extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final double? fontSize =
         Theme.of(context).textTheme.bodyText2?.scaledFontSize(context);
 
@@ -25,7 +23,7 @@ class Error extends HookConsumerWidget {
               size: fontSize != null ? fontSize * 2 : null,
             ),
             const SizedBox(height: 12),
-            Text(appLocalizations.wittyError),
+            Text(AppLocalizations.of(context)!.wittyError),
           ],
         ),
       ),

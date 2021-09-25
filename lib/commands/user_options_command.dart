@@ -27,19 +27,17 @@ class UserOptionsCommand with CommandMixin {
 
   @override
   Future<void> execute() async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final User user = await ref.read(userNotifierProvider(id).notifier).load();
 
     final List<OptionsDialogOption> optionsDialogOptions =
         <OptionsDialogOption>[
       if (user.about != null)
         OptionsDialogOption(
-          title: appLocalizations.text,
+          title: AppLocalizations.of(context)!.text,
           text: FormattingUtil.convertHtmlToHackerNews(user.about!),
         ),
       OptionsDialogOption(
-        title: appLocalizations.userLink,
+        title: AppLocalizations.of(context)!.userLink,
         text: Uri.https(
           WebsiteRepository.authority,
           'user',

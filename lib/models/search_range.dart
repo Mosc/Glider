@@ -13,26 +13,26 @@ enum SearchRange {
 
 extension SearchRangeExtension on SearchRange {
   String title(BuildContext context, DateTimeRange? customDateTimeRange) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case SearchRange.custom:
         return customDateTimeRange != null
             ? customDateTimeRange.duration != Duration.zero
-                ? appLocalizations.dateRange(
+                ? AppLocalizations.of(context)!.dateRange(
                     customDateTimeRange.start,
                     customDateTimeRange.end,
                   )
-                : appLocalizations.dateRangeSingle(customDateTimeRange.start)
-            : appLocalizations.custom;
+                : AppLocalizations.of(context)!.dateRangeSingle(
+                    customDateTimeRange.start,
+                  )
+            : AppLocalizations.of(context)!.custom;
       case SearchRange.pastDay:
-        return appLocalizations.pastDay;
+        return AppLocalizations.of(context)!.pastDay;
       case SearchRange.pastWeek:
-        return appLocalizations.pastWeek;
+        return AppLocalizations.of(context)!.pastWeek;
       case SearchRange.pastMonth:
-        return appLocalizations.pastMonth;
+        return AppLocalizations.of(context)!.pastMonth;
       case SearchRange.pastYear:
-        return appLocalizations.pastYear;
+        return AppLocalizations.of(context)!.pastYear;
     }
   }
 

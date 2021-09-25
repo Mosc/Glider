@@ -18,8 +18,6 @@ class AccountLoggedOut extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final TextEditingController usernameController = useTextEditingController();
@@ -38,8 +36,9 @@ class AccountLoggedOut extends HookConsumerWidget {
                 children: <Widget>[
                   TextFormField(
                     controller: usernameController,
-                    decoration:
-                        InputDecoration(labelText: appLocalizations.username),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.username,
+                    ),
                     validator: (String? value) =>
                         Validators.notEmpty(context, value),
                     autofocus: true,
@@ -49,8 +48,9 @@ class AccountLoggedOut extends HookConsumerWidget {
                   TextFormField(
                     controller: passwordController,
                     obscureText: true,
-                    decoration:
-                        InputDecoration(labelText: appLocalizations.password),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.password,
+                    ),
                     validator: (String? value) =>
                         Validators.notEmpty(context, value),
                     enabled: !loadingState.value,
@@ -59,8 +59,9 @@ class AccountLoggedOut extends HookConsumerWidget {
               ),
             ),
             SwitchListTile(
-              title: Text(appLocalizations.synchronize),
-              subtitle: Text(appLocalizations.synchronizeDescription),
+              title: Text(AppLocalizations.of(context)!.synchronize),
+              subtitle:
+                  Text(AppLocalizations.of(context)!.synchronizeDescription),
               dense: true,
               value: synchronizeState.value,
               onChanged: loadingState.value
@@ -73,7 +74,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   HtmlWidget(
-                    appLocalizations.legalHtml,
+                    AppLocalizations.of(context)!.legalHtml,
                     onTapUrl: (String url) => UrlUtil.tryLaunch(context, url),
                     textStyle: Theme.of(context).textTheme.caption,
                   ),
@@ -96,7 +97,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                                   loadingState.value = false;
                                 }
                               },
-                        child: Text(appLocalizations.register),
+                        child: Text(AppLocalizations.of(context)!.register),
                       ),
                       const SizedBox(width: 16),
                       ElevatedButton(
@@ -115,7 +116,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                                   loadingState.value = false;
                                 }
                               },
-                        child: Text(appLocalizations.logIn),
+                        child: Text(AppLocalizations.of(context)!.logIn),
                       ),
                     ],
                   ),
@@ -130,8 +131,6 @@ class AccountLoggedOut extends HookConsumerWidget {
 
   Future<void> _register(BuildContext context, WidgetRef ref,
       {required String username, required String password}) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success =
         await authRepository.register(username: username, password: password);
@@ -142,7 +141,7 @@ class AccountLoggedOut extends HookConsumerWidget {
         ..refresh(loggedInProvider);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(appLocalizations.registerError)),
+        SnackBar(content: Text(AppLocalizations.of(context)!.registerError)),
       );
     }
   }
@@ -151,8 +150,6 @@ class AccountLoggedOut extends HookConsumerWidget {
       {required String username,
       required String password,
       required bool synchronize}) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success =
         await authRepository.login(username: username, password: password);
@@ -167,14 +164,12 @@ class AccountLoggedOut extends HookConsumerWidget {
         ..refresh(loggedInProvider);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(appLocalizations.logInError)),
+        SnackBar(content: Text(AppLocalizations.of(context)!.logInError)),
       );
     }
   }
 
   Future<void> _synchronize(BuildContext context, WidgetRef ref) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.fetchUpvoted(
           onUpdate: (int id) => ref.refresh(upvotedProvider(id)),
@@ -186,7 +181,7 @@ class AccountLoggedOut extends HookConsumerWidget {
     if (!success) {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(appLocalizations.synchronizeError),
+          content: Text(AppLocalizations.of(context)!.synchronizeError),
         ),
       );
     }

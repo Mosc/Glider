@@ -32,8 +32,6 @@ class ItemTileMetadata extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     final AsyncData<bool>? favoritedData =
@@ -83,7 +81,7 @@ class ItemTileMetadata extends HookConsumerWidget {
             if (item.deleted ?? false) ...<Widget>[
               const MetadataItem(icon: FluentIcons.delete_24_regular),
               Text(
-                '[${appLocalizations.deleted}]',
+                '[${AppLocalizations.of(context)!.deleted}]',
                 style: textTheme.bodyText2
                     ?.copyWith(fontSize: textTheme.caption?.fontSize),
               ),
@@ -96,7 +94,8 @@ class ItemTileMetadata extends HookConsumerWidget {
             if (item.hasOriginalYear)
               MetadataItem(
                 icon: FluentIcons.shifts_activity_24_regular,
-                text: appLocalizations.fromYear(item.originalYear!),
+                text:
+                    AppLocalizations.of(context)!.fromYear(item.originalYear!),
               ),
             SmoothAnimatedSwitcher.horizontal(
               condition: item.cache,

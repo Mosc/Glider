@@ -14,8 +14,6 @@ class SynchronizeDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final ValueNotifier<bool> loadingState = useState(false);
     final double? titleHeight =
         Theme.of(context).textTheme.headline6?.scaledFontSize(context);
@@ -24,7 +22,7 @@ class SynchronizeDialog extends HookConsumerWidget {
       title: Row(
         children: <Widget>[
           Expanded(
-            child: Text(appLocalizations.synchronize),
+            child: Text(AppLocalizations.of(context)!.synchronize),
           ),
           if (loadingState.value)
             Center(
@@ -37,7 +35,9 @@ class SynchronizeDialog extends HookConsumerWidget {
         ],
       ),
       content: Text(
-        appLocalizations.synchronizeDescriptionLong(appLocalizations.appName),
+        AppLocalizations.of(context)!.synchronizeDescriptionLong(
+          AppLocalizations.of(context)!.appName,
+        ),
       ),
       actions: <Widget>[
         TextButton(
@@ -67,8 +67,6 @@ class SynchronizeDialog extends HookConsumerWidget {
   }
 
   Future<void> _synchronize(BuildContext context, WidgetRef ref) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.fetchUpvoted(
           onUpdate: (int id) => ref.refresh(upvotedProvider(id)),
@@ -80,13 +78,13 @@ class SynchronizeDialog extends HookConsumerWidget {
     if (success) {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(appLocalizations.synchronizeSuccess),
+          content: Text(AppLocalizations.of(context)!.synchronizeSuccess),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(appLocalizations.synchronizeError),
+          content: Text(AppLocalizations.of(context)!.synchronizeError),
         ),
       );
     }

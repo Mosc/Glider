@@ -45,29 +45,25 @@ extension ItemMenuActionExtension on ItemMenuAction {
   }
 
   String title(BuildContext context, WidgetRef ref, {required int id}) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case ItemMenuAction.vote:
-        final bool upvoted =
-            ref.watch(upvotedProvider(id)).data?.value ?? false;
-        return upvoted ? appLocalizations.unvote : appLocalizations.upvote;
+        return ref.watch(upvotedProvider(id)).data?.value ?? false
+            ? AppLocalizations.of(context)!.unvote
+            : AppLocalizations.of(context)!.upvote;
       case ItemMenuAction.reply:
-        return appLocalizations.reply;
+        return AppLocalizations.of(context)!.reply;
       case ItemMenuAction.favorite:
-        final bool favorited =
-            ref.watch(favoritedProvider(id)).data?.value ?? false;
-        return favorited
-            ? appLocalizations.unfavorite
-            : appLocalizations.favorite;
+        return ref.watch(favoritedProvider(id)).data?.value ?? false
+            ? AppLocalizations.of(context)!.unfavorite
+            : AppLocalizations.of(context)!.favorite;
       case ItemMenuAction.flag:
-        final bool flagged =
-            ref.read(itemNotifierProvider(id)).data?.value.dead ?? false;
-        return flagged ? appLocalizations.unflag : appLocalizations.flag;
+        return ref.read(itemNotifierProvider(id)).data?.value.dead ?? false
+            ? AppLocalizations.of(context)!.unflag
+            : AppLocalizations.of(context)!.flag;
       case ItemMenuAction.copy:
-        return appLocalizations.copy;
+        return AppLocalizations.of(context)!.copy;
       case ItemMenuAction.share:
-        return appLocalizations.share;
+        return AppLocalizations.of(context)!.share;
     }
   }
 

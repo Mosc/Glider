@@ -20,24 +20,22 @@ class AppearanceBottomSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     return ScrollableBottomSheet(
       children: <Widget>[
         ProviderSwitchListTile(
-          title: appLocalizations.showUrl,
+          title: AppLocalizations.of(context)!.showUrl,
           provider: showUrlProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowUrl(value: value),
         ),
         ProviderSwitchListTile(
-          title: appLocalizations.showFavicon,
+          title: AppLocalizations.of(context)!.showFavicon,
           provider: showFaviconProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowFavicon(value: value),
         ),
         ProviderSwitchListTile(
-          title: appLocalizations.showMetadata,
+          title: AppLocalizations.of(context)!.showMetadata,
           provider: showMetadataProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowMetadata(value: value),

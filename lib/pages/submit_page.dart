@@ -10,11 +10,9 @@ class SubmitPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(appLocalizations.submit),
+        title: Text(AppLocalizations.of(context)!.submit),
         body: const SubmitBody(),
       ),
     );

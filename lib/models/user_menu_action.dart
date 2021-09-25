@@ -12,13 +12,11 @@ enum UserMenuAction {
 
 extension UserMenuActionExtension on UserMenuAction {
   String title(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case UserMenuAction.copy:
-        return appLocalizations.copy;
+        return AppLocalizations.of(context)!.copy;
       case UserMenuAction.share:
-        return appLocalizations.share;
+        return AppLocalizations.of(context)!.share;
     }
   }
 

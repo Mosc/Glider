@@ -31,8 +31,6 @@ class StoriesPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final ValueNotifier<bool> speedDialVisibleState = useState(true);
     final ScrollController scrollController = useScrollController();
     useEffect(
@@ -52,11 +50,11 @@ class StoriesPage extends HookConsumerWidget {
     return Scaffold(
       body: FloatingAppBarScrollView(
         controller: scrollController,
-        title: Text(appLocalizations.appName),
+        title: Text(AppLocalizations.of(context)!.appName),
         actions: <Widget>[
           IconButton(
             icon: const Icon(FluentIcons.search_24_regular),
-            tooltip: appLocalizations.search,
+            tooltip: AppLocalizations.of(context)!.search,
             onPressed: () => _searchSelected(context, ref),
           ),
           PopupMenuButton<StoriesMenuAction>(
@@ -132,8 +130,6 @@ class StoriesPage extends HookConsumerWidget {
   }
 
   Future<void> _submitSelected(BuildContext context, WidgetRef ref) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -152,9 +148,9 @@ class StoriesPage extends HookConsumerWidget {
         ref.read(storyTypeStateProvider).state = StoryType.newStories;
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
-            content: Text(appLocalizations.processingInfo),
+            content: Text(AppLocalizations.of(context)!.processingInfo),
             action: SnackBarAction(
-              label: appLocalizations.refresh,
+              label: AppLocalizations.of(context)!.refresh,
               onPressed: () => ref
                   .read(storyIdsNotifierProvider(StoryType.newStories).notifier)
                   .forceLoad(),
@@ -165,9 +161,9 @@ class StoriesPage extends HookConsumerWidget {
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(appLocalizations.submitNotLoggedIn),
+          content: Text(AppLocalizations.of(context)!.submitNotLoggedIn),
           action: SnackBarAction(
-            label: appLocalizations.logIn,
+            label: AppLocalizations.of(context)!.logIn,
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

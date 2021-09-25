@@ -11,8 +11,6 @@ class Experimental extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     return Block(
       child: Row(
         children: <Widget>[
@@ -23,7 +21,7 @@ class Experimental extends HookConsumerWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(appLocalizations.experimentalDescription),
+            child: Text(AppLocalizations.of(context)!.experimentalDescription),
           ),
         ],
       ),

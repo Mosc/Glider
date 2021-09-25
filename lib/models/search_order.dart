@@ -10,13 +10,11 @@ enum SearchOrder {
 
 extension SearchOrderExtension on SearchOrder {
   String title(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case SearchOrder.byDate:
-        return appLocalizations.byDate;
+        return AppLocalizations.of(context)!.byDate;
       case SearchOrder.byRelevance:
-        return appLocalizations.byRelevance;
+        return AppLocalizations.of(context)!.byRelevance;
     }
   }
 

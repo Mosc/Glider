@@ -14,19 +14,17 @@ enum ThemeBase {
 
 extension ThemeBaseExtension on ThemeBase {
   String title(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case ThemeBase.system:
-        return appLocalizations.system;
+        return AppLocalizations.of(context)!.system;
       case ThemeBase.light:
-        return appLocalizations.light;
+        return AppLocalizations.of(context)!.light;
       case ThemeBase.dark:
-        return appLocalizations.dark;
+        return AppLocalizations.of(context)!.dark;
       case ThemeBase.black:
-        return appLocalizations.black;
+        return AppLocalizations.of(context)!.black;
       case ThemeBase.space:
-        return appLocalizations.space;
+        return AppLocalizations.of(context)!.space;
     }
   }
 

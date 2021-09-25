@@ -23,8 +23,6 @@ class ReplyCommand with CommandMixin {
 
   @override
   Future<void> execute() async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -46,9 +44,9 @@ class ReplyCommand with CommandMixin {
         ref.refresh(itemTreeStreamProvider(rootId!));
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
-            content: Text(appLocalizations.processingInfo),
+            content: Text(AppLocalizations.of(context)!.processingInfo),
             action: SnackBarAction(
-              label: appLocalizations.refresh,
+              label: AppLocalizations.of(context)!.refresh,
               onPressed: () async {
                 await reloadItemTree(ref.read, id: rootId!);
                 ref.refresh(itemTreeStreamProvider(rootId!));
@@ -61,9 +59,9 @@ class ReplyCommand with CommandMixin {
       final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(appLocalizations.replyNotLoggedIn),
+          content: Text(AppLocalizations.of(context)!.replyNotLoggedIn),
           action: SnackBarAction(
-            label: appLocalizations.logIn,
+            label: AppLocalizations.of(context)!.logIn,
             onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

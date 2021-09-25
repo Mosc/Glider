@@ -27,24 +27,22 @@ class ItemOptionsCommand with CommandMixin {
 
   @override
   Future<void> execute() async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final Item item = await ref.read(itemNotifierProvider(id).notifier).load();
 
     final List<OptionsDialogOption> optionsDialogOptions =
         <OptionsDialogOption>[
       if (item.text != null)
         OptionsDialogOption(
-          title: appLocalizations.text,
+          title: AppLocalizations.of(context)!.text,
           text: FormattingUtil.convertHtmlToHackerNews(item.text!),
         ),
       if (item.url != null)
         OptionsDialogOption(
-          title: appLocalizations.link,
+          title: AppLocalizations.of(context)!.link,
           text: item.url!,
         ),
       OptionsDialogOption(
-        title: appLocalizations.threadLink,
+        title: AppLocalizations.of(context)!.threadLink,
         text: Uri.https(
           WebsiteRepository.authority,
           'item',

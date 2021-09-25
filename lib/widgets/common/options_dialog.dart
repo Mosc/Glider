@@ -9,12 +9,9 @@ import 'package:share_plus/share_plus.dart';
 Future<void> _copyAction(
     BuildContext context, OptionsDialogOption option) async {
   await Clipboard.setData(ClipboardData(text: option.text));
-
-  final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
   ScaffoldMessenger.of(context).replaceSnackBar(
     SnackBar(
-      content: Text(appLocalizations.copySuccess(option.title)),
+      content: Text(AppLocalizations.of(context)!.copySuccess(option.title)),
     ),
   );
 }

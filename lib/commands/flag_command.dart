@@ -23,8 +23,6 @@ class FlagCommand implements CommandMixin {
 
   @override
   Future<void> execute() async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -35,7 +33,7 @@ class FlagCommand implements CommandMixin {
         await showDialog<void>(
           context: context,
           builder: (_) => AlertDialog(
-            content: Text(appLocalizations.flagConfirm),
+            content: Text(AppLocalizations.of(context)!.flagConfirm),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -62,9 +60,9 @@ class FlagCommand implements CommandMixin {
       final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(appLocalizations.flagNotLoggedIn),
+          content: Text(AppLocalizations.of(context)!.flagNotLoggedIn),
           action: SnackBarAction(
-            label: appLocalizations.logIn,
+            label: AppLocalizations.of(context)!.logIn,
             onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

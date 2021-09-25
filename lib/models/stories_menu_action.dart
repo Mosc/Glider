@@ -12,19 +12,17 @@ enum StoriesMenuAction {
 
 extension StoriesMenuActionExtension on StoriesMenuAction {
   String title(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case StoriesMenuAction.catchUp:
-        return appLocalizations.catchUp;
+        return AppLocalizations.of(context)!.catchUp;
       case StoriesMenuAction.favorites:
-        return appLocalizations.favorites;
+        return AppLocalizations.of(context)!.favorites;
       case StoriesMenuAction.submit:
-        return appLocalizations.submit;
+        return AppLocalizations.of(context)!.submit;
       case StoriesMenuAction.appearance:
-        return appLocalizations.appearance;
+        return AppLocalizations.of(context)!.appearance;
       case StoriesMenuAction.account:
-        return appLocalizations.account;
+        return AppLocalizations.of(context)!.account;
     }
   }
 }

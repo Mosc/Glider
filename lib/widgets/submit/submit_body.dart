@@ -26,8 +26,6 @@ class SubmitBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final ValueNotifier<SubmitType> submitTypeState = useState(SubmitType.link);
@@ -59,7 +57,7 @@ class SubmitBody extends HookConsumerWidget {
                 const Experimental(),
                 const SizedBox(height: 16),
                 Text(
-                  appLocalizations.storyTypeDescription,
+                  AppLocalizations.of(context)!.storyTypeDescription,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Wrap(
@@ -87,8 +85,9 @@ class SubmitBody extends HookConsumerWidget {
                 ),
                 TextFormField(
                   controller: titleController,
-                  decoration:
-                      InputDecoration(labelText: appLocalizations.title),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.title,
+                  ),
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   autofocus: true,
@@ -103,8 +102,9 @@ class SubmitBody extends HookConsumerWidget {
                 if (submitTypeState.value == SubmitType.link)
                   TextFormField(
                     controller: urlController,
-                    decoration:
-                        InputDecoration(labelText: appLocalizations.link),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.link,
+                    ),
                     keyboardType: TextInputType.url,
                     maxLines: null,
                     validator: (String? value) =>
@@ -115,8 +115,9 @@ class SubmitBody extends HookConsumerWidget {
                 if (submitTypeState.value == SubmitType.text)
                   TextFormField(
                     controller: textController,
-                    decoration:
-                        InputDecoration(labelText: appLocalizations.text),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.text,
+                    ),
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
                     maxLines: null,
@@ -140,7 +141,9 @@ class SubmitBody extends HookConsumerWidget {
                                       url: urlController.text,
                                     )
                                 : null,
-                        child: Text(appLocalizations.autofillTitle),
+                        child: Text(
+                          AppLocalizations.of(context)!.autofillTitle,
+                        ),
                       ),
                       const SizedBox(width: 16),
                     ],
@@ -160,7 +163,7 @@ class SubmitBody extends HookConsumerWidget {
                                 loadingState.value = false;
                               }
                             },
-                      child: Text(appLocalizations.submit),
+                      child: Text(AppLocalizations.of(context)!.submit),
                     ),
                   ],
                 ),
@@ -171,7 +174,7 @@ class SubmitBody extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            appLocalizations.preview,
+            AppLocalizations.of(context)!.preview,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -197,8 +200,6 @@ class SubmitBody extends HookConsumerWidget {
   Future<void> _autofillTitle(BuildContext context, WidgetRef ref,
       TextEditingController titleController,
       {required String url}) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final WebRepository webRepository = ref.read(webRepositoryProvider);
 
     try {
@@ -209,15 +210,15 @@ class SubmitBody extends HookConsumerWidget {
       }
     } on Exception {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(appLocalizations.autofillTitleError)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.autofillTitleError),
+        ),
       );
     }
   }
 
   Future<void> _submit(BuildContext context, WidgetRef ref,
       {required String title, String? url, String? text}) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.submit(
       title: title,
@@ -235,7 +236,7 @@ class SubmitBody extends HookConsumerWidget {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(appLocalizations.genericError)),
+        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
       );
     }
   }

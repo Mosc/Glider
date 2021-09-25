@@ -17,13 +17,11 @@ class AccountPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AsyncData<bool>? loggedInData = ref.watch(loggedInProvider).data;
 
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(appLocalizations.account),
+        title: Text(AppLocalizations.of(context)!.account),
         actions: loggedInData?.value ?? false
             ? <Widget>[
                 PopupMenuButton<AccountMenuAction>(

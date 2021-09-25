@@ -9,13 +9,11 @@ enum AccountMenuAction {
 
 extension StoriesMenuActionExtension on AccountMenuAction {
   String title(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case AccountMenuAction.synchronize:
-        return appLocalizations.synchronize;
+        return AppLocalizations.of(context)!.synchronize;
       case AccountMenuAction.logOut:
-        return appLocalizations.logOut;
+        return AppLocalizations.of(context)!.logOut;
     }
   }
 }

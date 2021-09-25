@@ -29,8 +29,6 @@ class ItemSearchPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.colorScheme.brightness.isDark;
 
@@ -68,7 +66,9 @@ class ItemSearchPage extends HookConsumerWidget {
           controller: scrollController,
           title: TextField(
             controller: queryController,
-            decoration: InputDecoration(hintText: appLocalizations.searchHint),
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.searchHint,
+            ),
             textInputAction: TextInputAction.search,
             autofocus: true,
             onChanged: (String value) =>

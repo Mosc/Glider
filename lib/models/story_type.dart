@@ -14,21 +14,19 @@ enum StoryType {
 
 extension StoryTypeExtension on StoryType {
   String title(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case StoryType.topStories:
-        return appLocalizations.topStories;
+        return AppLocalizations.of(context)!.topStories;
       case StoryType.newTopStories:
-        return appLocalizations.newTopStories;
+        return AppLocalizations.of(context)!.newTopStories;
       case StoryType.newStories:
-        return appLocalizations.newStories;
+        return AppLocalizations.of(context)!.newStories;
       case StoryType.bestStories:
-        return appLocalizations.bestStories;
+        return AppLocalizations.of(context)!.bestStories;
       case StoryType.askStories:
-        return appLocalizations.askHn;
+        return AppLocalizations.of(context)!.askHn;
       case StoryType.showStories:
-        return appLocalizations.showHn;
+        return AppLocalizations.of(context)!.showHn;
     }
   }
 

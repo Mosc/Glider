@@ -79,8 +79,6 @@ class ItemBody extends HookConsumerWidget {
   }
 
   Widget _buildOpenParent(BuildContext context, int parentId) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: InkWell(
@@ -102,7 +100,7 @@ class ItemBody extends HookConsumerWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    appLocalizations.openParent,
+                    AppLocalizations.of(context)!.openParent,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),

@@ -8,10 +8,8 @@ class ItemTilePreview extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     return Text(
-      appLocalizations.previewDescription,
+      AppLocalizations.of(context)!.previewDescription,
       style: Theme.of(context).textTheme.caption,
     );
   }

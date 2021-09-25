@@ -22,8 +22,6 @@ class ItemPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     useMemoized(() => _setVisited(ref));
 
     final AsyncData<Item>? itemData = ref.watch(itemNotifierProvider(id)).data;
@@ -34,7 +32,7 @@ class ItemPage extends HookConsumerWidget {
           if (itemData != null && itemData.value.parent == null)
             IconButton(
               icon: const Icon(FluentIcons.search_24_regular),
-              tooltip: appLocalizations.search,
+              tooltip: AppLocalizations.of(context)!.search,
               onPressed: () => _searchSelected(context, ref),
             ),
           PopupMenuButton<ItemMenuAction>(

@@ -9,13 +9,11 @@ enum SubmitType {
 
 extension SubmitTypeExtension on SubmitType {
   String title(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     switch (this) {
       case SubmitType.link:
-        return appLocalizations.link;
+        return AppLocalizations.of(context)!.link;
       case SubmitType.text:
-        return appLocalizations.text;
+        return AppLocalizations.of(context)!.text;
     }
   }
 }

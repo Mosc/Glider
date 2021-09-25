@@ -24,8 +24,6 @@ class VoteCommand with CommandMixin {
 
   @override
   Future<void> execute() async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -36,9 +34,9 @@ class VoteCommand with CommandMixin {
       final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(appLocalizations.voteNotLoggedIn),
+          content: Text(AppLocalizations.of(context)!.voteNotLoggedIn),
           action: SnackBarAction(
-            label: appLocalizations.logIn,
+            label: AppLocalizations.of(context)!.logIn,
             onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),
@@ -52,8 +50,6 @@ class VoteCommand with CommandMixin {
 
   Future<void> _vote(
       AuthRepository authRepository, ItemNotifier itemNotifier) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final bool success = await authRepository.vote(
       id: id,
       upvote: upvote,
@@ -69,7 +65,7 @@ class VoteCommand with CommandMixin {
       }
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(appLocalizations.genericError)),
+        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
       );
     }
   }

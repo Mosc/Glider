@@ -7,31 +7,25 @@ class Validators {
   Validators._();
 
   static String? notEmpty(BuildContext context, String? value) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     if (value == null || value.isEmpty) {
-      return appLocalizations.notEmptyError;
+      return AppLocalizations.of(context)!.notEmptyError;
     }
 
     return null;
   }
 
   static String? maxLength(BuildContext context, String? value, int maxLength) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     if (value != null && value.length > maxLength) {
-      return appLocalizations.maxLengthError(maxLength);
+      return AppLocalizations.of(context)!.maxLengthError(maxLength);
     }
 
     return null;
   }
 
   static String? url(BuildContext context, String? value) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     if (value != null &&
         !isURL(value, <String, Object>{'requireProtocol': true})) {
-      return appLocalizations.urlError;
+      return AppLocalizations.of(context)!.urlError;
     }
 
     return null;

@@ -12,15 +12,13 @@ class UrlUtil {
   UrlUtil._();
 
   static Future<bool> tryLaunch(BuildContext context, String urlString) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
     final bool success = await _tryLaunchNonBrowser(urlString) ||
         await _tryLaunchCustomTab(context, urlString) ||
         await _tryLaunchPlatform(urlString);
 
     if (!success) {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(appLocalizations.openLinkError)),
+        SnackBar(content: Text(AppLocalizations.of(context)!.openLinkError)),
       );
     }
 
