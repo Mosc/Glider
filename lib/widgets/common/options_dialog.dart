@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,9 +9,12 @@ import 'package:share_plus/share_plus.dart';
 Future<void> _copyAction(
     BuildContext context, OptionsDialogOption option) async {
   await Clipboard.setData(ClipboardData(text: option.text));
+
+  final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
   ScaffoldMessenger.of(context).replaceSnackBar(
     SnackBar(
-      content: Text('${option.title} has been copied'),
+      content: Text(appLocalizations.copySuccess(option.title)),
     ),
   );
 }

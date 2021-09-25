@@ -83,6 +83,7 @@
   "link": "Link",
   "threadLink": "Discussielink",
   "userLink": "Gebruikerslink",
+  "copySuccess": "{option} is gekopieerd",
   "openParent": "Open de bovenliggende discussie",
   "experimentalDescription": "Deze functie is experimenteel. Er kunnen dingen misgaan.",
   "notEmptyError": "Dit veld mag niet leeg zijn.",

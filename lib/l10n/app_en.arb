@@ -83,6 +83,7 @@
   "link": "Link",
   "threadLink": "Thread link",
   "userLink": "User link",
+  "copySuccess": "{option} has been copied",
   "openParent": "Open the parent of this single thread",
   "experimentalDescription": "This feature is experimental. Things may go wrong.",
   "notEmptyError": "This field cannot be empty.",
@@ -159,6 +160,13 @@
   "@synchronizeDescriptionLong": {
     "placeholders": {
       "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "@copySuccess": {
+    "placeholders": {
+      "option": {
         "type": "String"
       }
     }
