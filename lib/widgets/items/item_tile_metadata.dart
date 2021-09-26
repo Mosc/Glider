@@ -68,13 +68,12 @@ class ItemTileMetadata extends HookConsumerWidget {
             if (item.descendants != null)
               SmoothAnimatedSize(
                 child: MetadataItem(
-                  key: ValueKey<String>(
-                      'item_${item.id}_descendants_${item.descendants}'),
                   icon: FluentIcons.comment_24_regular,
-                  text: item.descendants.toString(),
+                  text: item.descendants?.toString(),
                 ),
               ),
             SmoothAnimatedSwitcher.horizontal(
+              key: ValueKey<String>('item_${item.id}_dead_${item.dead}'),
               condition: item.dead ?? false,
               child: const MetadataItem(icon: FluentIcons.flag_24_regular),
             ),

@@ -46,7 +46,7 @@ class SearchApiRepository {
         'attributesToRetrieve': '',
         'attributesToHighlight': '',
         if (searchParameters.maxResults != null)
-          'hitsPerPage': searchParameters.maxResults.toString(),
+          'hitsPerPage': searchParameters.maxResults!.toString(),
         'typoTolerance': 'false',
         'analytics': 'false',
       },
