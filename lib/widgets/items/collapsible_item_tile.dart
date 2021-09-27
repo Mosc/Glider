@@ -38,7 +38,7 @@ class CollapsibleItemTile extends HookConsumerWidget {
       ),
       child: ItemTile(
         id: id,
-        ancestors: ancestors,
+        indentation: ancestors.length,
         root: root,
         onTap: (BuildContext context) async {
           unawaited(_setCollapsed(ref, collapsed: !collapsed));

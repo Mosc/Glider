@@ -3,6 +3,7 @@ import 'package:glider/models/user.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/user_provider.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
+import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
@@ -28,20 +29,17 @@ class UserBody extends HookConsumerWidget {
       ],
       dataBuilder: (User user) => <Widget>[
         SliverToBoxAdapter(child: UserTileData(user)),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (_, int index) {
-              final int id = user.submitted.elementAt(index);
-              return ItemTile(
-                id: id,
-                onTap: (_) => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
-                ),
-                loading: () => _buildItemLoading(index + 1),
-              );
-            },
-            childCount: user.submitted.length,
-          ),
+        SliverSmoothAnimatedList<int>(
+          items: user.submitted,
+          builder: (_, int id, int index) {
+            return ItemTile(
+              id: id,
+              onTap: (_) => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
+              ),
+              loading: () => _buildItemLoading(index + 1),
+            );
+          },
         ),
       ],
     );

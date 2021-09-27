@@ -25,7 +25,7 @@ class Item with _$Item {
     String? title,
     @Default(<int>[]) Iterable<int> parts,
     int? descendants,
-    @Default(<int>[]) Iterable<int> ancestors,
+    @Default(0) int indentation,
     @Default(false) bool cache,
     @Default(false) bool preview,
   }) = _Item;

@@ -100,7 +100,7 @@ class ReplyBody extends HookConsumerWidget {
           ),
         ),
         ItemTileData(
-          parent.copyWith(kids: <int>[], ancestors: <int>[]),
+          parent.copyWith(kids: <int>[], indentation: 0),
           onTap: () => parentCollapsedState.value = !parentCollapsedState.value,
           dense: parentCollapsedState.value,
           interactive: true,
@@ -185,7 +185,7 @@ class ReplyBody extends HookConsumerWidget {
         text: text != null && text.isNotEmpty
             ? FormattingUtil.convertHackerNewsToHtml(text)
             : null,
-        ancestors: <int>[parent.id],
+        indentation: 1,
         preview: true,
       );
 }

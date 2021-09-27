@@ -32,7 +32,7 @@ class DecoratedSpeedDial extends HookConsumerWidget {
                 onTap: child.onTap,
               ),
             )
-            .toList(),
+            .toList(growable: false),
         visible: visible,
         icon: icon,
         backgroundColor: theme.colorScheme.primary,

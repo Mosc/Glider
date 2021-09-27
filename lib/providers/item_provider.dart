@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:glider/models/descendant_id.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/search_parameters.dart';
@@ -116,23 +117,23 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
         .family((AutoDisposeStreamProviderRef<ItemTree> ref, int id) async* {
   unawaited(loadItemTree(ref.read, id: id));
 
-  final Stream<Item> itemStream = _itemStream(ref.read, id: id);
-  final List<Item> items = <Item>[];
+  final Stream<DescendantId> descendantIdStream = _itemStream(ref.read, id: id);
+  final List<DescendantId> descendantIds = <DescendantId>[];
 
-  await for (final Item item in itemStream) {
-    items.add(item);
-    yield ItemTree(items: items, done: false);
+  await for (final DescendantId descendantId in descendantIdStream) {
+    descendantIds.add(descendantId);
+    yield ItemTree(descendantIds: descendantIds, done: false);
   }
 
-  yield ItemTree(items: items, done: true);
+  yield ItemTree(descendantIds: descendantIds, done: true);
 });
 
-Stream<Item> _itemStream(Reader read,
+Stream<DescendantId> _itemStream(Reader read,
     {required int id, Iterable<int> ancestors = const <int>[]}) async* {
   try {
-    final Item item = await read(itemNotifierProvider(id).notifier).load();
+    yield DescendantId(id: id, ancestors: ancestors);
 
-    yield item.copyWith(ancestors: ancestors);
+    final Item item = await read(itemNotifierProvider(id).notifier).load();
 
     final Iterable<int> childAncestors = <int>[id, ...ancestors];
 

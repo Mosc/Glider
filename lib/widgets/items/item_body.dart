@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glider/models/descendant_id.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/pages/item_page.dart';
@@ -13,6 +14,7 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
+import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';
 import 'package:glider/widgets/items/collapsible_item_tile.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
@@ -38,30 +40,36 @@ class ItemBody extends HookConsumerWidget {
         ),
       ],
       dataBuilder: (ItemTree itemTree) {
-        final Iterable<Item> items = itemTree.items;
-        final Item? firstItem = items.isNotEmpty ? items.first : null;
-        final int? parent = firstItem?.parent ?? firstItem?.poll;
+        Item? firstItem;
+        int? parentId;
+
+        if (itemTree.descendantIds.isNotEmpty) {
+          firstItem = ref
+              .watch(itemNotifierProvider(itemTree.descendantIds.first.id))
+              .data
+              ?.value;
+          parentId = firstItem?.parent ?? firstItem?.poll;
+        }
+
         return <Widget>[
-          if (parent != null)
-            SliverToBoxAdapter(child: _buildOpenParent(context, parent)),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, int index) {
-                if (_loaded(items, index)) {
-                  final Item item = items.elementAt(index);
-                  return CollapsibleItemTile(
-                    id: item.id,
-                    ancestors: item.ancestors,
-                    root: items.first,
-                    loading: () => _buildItemLoading(index),
-                  );
-                } else {
-                  return _buildItemLoading(index);
-                }
-              },
-              childCount: itemTree.done ? items.length : null,
+          if (parentId != null)
+            SliverToBoxAdapter(child: _buildOpenParent(context, parentId)),
+          SliverSmoothAnimatedList<DescendantId>(
+            items: itemTree.descendantIds,
+            builder: (_, DescendantId descendantId, int index) =>
+                CollapsibleItemTile(
+              id: descendantId.id,
+              ancestors: descendantId.ancestors,
+              root: firstItem,
+              loading: () => _buildItemLoading(index),
             ),
           ),
+          if (!itemTree.done)
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, int index) => _buildItemLoading(index),
+              ),
+            ),
         ];
       },
     );
@@ -71,8 +79,6 @@ class ItemBody extends HookConsumerWidget {
     await reloadItemTree(ref.read, id: id);
     ref.refresh(itemTreeStreamProvider(id));
   }
-
-  bool _loaded(Iterable<Item> items, int index) => index < items.length;
 
   Widget _buildItemLoading(int index) {
     return index == 0 ? const StoryTileLoading() : const CommentTileLoading();

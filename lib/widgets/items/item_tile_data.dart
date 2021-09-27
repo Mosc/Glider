@@ -132,7 +132,7 @@ class ItemTileData extends HookConsumerWidget {
 
   Widget _buildIndented(WidgetRef ref, {required Widget child}) {
     final int indentation =
-        item.type != ItemType.pollopt ? item.ancestors.length : 0;
+        item.type != ItemType.pollopt ? item.indentation : 0;
     final double indentationPadding = indentation.toDouble() * 8;
 
     Color _determineDividerColor(WidgetRef ref) {
