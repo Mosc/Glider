@@ -60,7 +60,6 @@ class DecoratedHtml extends HookConsumerWidget {
 
         return null;
       },
-      factoryBuilder: () => _DecoratedWidgetFactory(),
       onTapUrl: (String url) => UrlUtil.tryLaunch(context, url),
       textStyle: textStyle ?? Theme.of(context).textTheme.bodyText2,
     );
@@ -71,21 +70,4 @@ class DecoratedHtml extends HookConsumerWidget {
 
   static String _trimQuote(dom.Element element) =>
       element.innerHtml.replaceFirst(_quoteRegex, '');
-}
-
-class _DecoratedWidgetFactory extends WidgetFactory {
-  final BuildOp urlOp = BuildOp(
-    onTree: (BuildMetadata meta, BuildTree tree) =>
-        tree.replaceWith(TextBit(tree, meta.element.attributes['href']!)),
-  );
-
-  @override
-  void parse(BuildMetadata meta) {
-    final dom.Element element = meta.element;
-    if (element.localName == 'a' && element.attributes.containsKey('href')) {
-      meta.register(urlOp);
-    }
-
-    return super.parse(meta);
-  }
 }
