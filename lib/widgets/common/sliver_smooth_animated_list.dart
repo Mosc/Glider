@@ -18,12 +18,14 @@ class SliverSmoothAnimatedList<T extends Object> extends StatelessWidget {
       items: items.toList(growable: false),
       areItemsTheSame: (T a, T b) => a == b,
       itemBuilder: (BuildContext context, Animation<double> animation, T item,
-          int index) {
-        return AnimationUtil.verticalFadeTransitionBuilder(
-          builder(context, item, index),
-          animation,
-        );
-      },
+              int index) =>
+          AnimationUtil.verticalFadeTransitionBuilder(
+        builder(context, item, index),
+        CurvedAnimation(
+          parent: animation,
+          curve: AnimationUtil.defaultCurve,
+        ),
+      ),
       insertDuration: AnimationUtil.defaultDuration,
       removeDuration: AnimationUtil.defaultDuration,
       updateDuration: AnimationUtil.defaultDuration,
