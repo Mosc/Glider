@@ -21,9 +21,13 @@ class StoriesBody extends HookConsumerWidget {
         ref.watch(storyTypeStateProvider);
     final bool completedWalkthrough =
         ref.watch(completedWalkthroughProvider).data?.value ?? true;
+    final AutoDisposeStateNotifierProvider<StoryIdsNotifier,
+            AsyncValue<Iterable<int>>> provider =
+        storyIdsNotifierProvider(storyTypeStateController.state);
 
     return RefreshableBody<Iterable<int>>(
-      provider: storyIdsNotifierProvider(storyTypeStateController.state),
+      provider: provider,
+      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         if (!completedWalkthrough)
           const SliverToBoxAdapter(
@@ -42,17 +46,16 @@ class StoriesBody extends HookConsumerWidget {
           ),
         SliverSmoothAnimatedList<int>(
           items: ids,
-          builder: (_, int id, int index) {
-            return ItemTile(
-              id: id,
-              onTap: (_) => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
-              ),
-              dense: true,
-              fadeable: true,
-              loading: () => const StoryTileLoading(),
-            );
-          },
+          builder: (_, int id, __) => ItemTile(
+            id: id,
+            onTap: (BuildContext context) => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
+            ),
+            dense: true,
+            fadeable: true,
+            loading: () => const StoryTileLoading(),
+            refreshProvider: provider,
+          ),
         ),
       ],
     );

@@ -15,17 +15,21 @@ class StoriesSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return RefreshableBody<Iterable<int>>(
-      provider: storyIdsSearchNotifierProvider(
-        SearchParameters(
-          query: ref.watch(storySearchQueryStateProvider).state,
-          range: ref.watch(storySearchRangeStateProvider).state,
-          customDateTimeRange:
-              ref.watch(storySearchCustomDateTimeRangeStateProvider).state,
-          order: ref.watch(storySearchOrderStateProvider).state,
-          maxResults: 50,
-        ),
+    final AutoDisposeStateNotifierProvider<StoryIdsSearchNotifier,
+        AsyncValue<Iterable<int>>> provider = storyIdsSearchNotifierProvider(
+      SearchParameters(
+        query: ref.watch(storySearchQueryStateProvider).state,
+        range: ref.watch(storySearchRangeStateProvider).state,
+        customDateTimeRange:
+            ref.watch(storySearchCustomDateTimeRangeStateProvider).state,
+        order: ref.watch(storySearchOrderStateProvider).state,
+        maxResults: 50,
       ),
+    );
+
+    return RefreshableBody<Iterable<int>>(
+      provider: provider,
+      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -36,17 +40,16 @@ class StoriesSearchBody extends HookConsumerWidget {
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverSmoothAnimatedList<int>(
           items: ids,
-          builder: (_, int id, int index) {
-            return ItemTile(
-              id: id,
-              onTap: (_) => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
-              ),
-              dense: true,
-              fadeable: true,
-              loading: () => const StoryTileLoading(),
-            );
-          },
+          builder: (_, int id, __) => ItemTile(
+            id: id,
+            onTap: (BuildContext context) => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
+            ),
+            dense: true,
+            fadeable: true,
+            loading: () => const StoryTileLoading(),
+            refreshProvider: provider,
+          ),
         ),
       ],
     );

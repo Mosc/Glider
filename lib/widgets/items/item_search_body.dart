@@ -17,15 +17,19 @@ class ItemSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return RefreshableBody<Iterable<int>>(
-      provider: itemIdsSearchNotifierProvider(
-        SearchParameters(
-          query: ref.watch(itemSearchQueryStateProvider).state,
-          order: ref.watch(itemSearchOrderStateProvider).state,
-          parentStoryId: storyId,
-          maxResults: 50,
-        ),
+    final AutoDisposeStateNotifierProvider<ItemIdsSearchNotifier,
+        AsyncValue<Iterable<int>>> provider = itemIdsSearchNotifierProvider(
+      SearchParameters(
+        query: ref.watch(itemSearchQueryStateProvider).state,
+        order: ref.watch(itemSearchOrderStateProvider).state,
+        parentStoryId: storyId,
+        maxResults: 50,
       ),
+    );
+
+    return RefreshableBody<Iterable<int>>(
+      provider: provider,
+      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -36,15 +40,14 @@ class ItemSearchBody extends HookConsumerWidget {
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverSmoothAnimatedList<int>(
           items: ids,
-          builder: (_, int id, int index) {
-            return ItemTile(
-              id: id,
-              onTap: (_) => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
-              ),
-              loading: () => const CommentTileLoading(),
-            );
-          },
+          builder: (_, int id, int index) => ItemTile(
+            id: id,
+            onTap: (_) => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
+            ),
+            loading: () => const CommentTileLoading(),
+            refreshProvider: provider,
+          ),
         ),
       ],
     );

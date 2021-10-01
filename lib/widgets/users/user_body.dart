@@ -18,8 +18,12 @@ class UserBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final StateNotifierProvider<UserNotifier, AsyncValue<User>> provider =
+        userNotifierProvider(id);
+
     return RefreshableBody<User>(
-      provider: userNotifierProvider(id),
+      provider: provider,
+      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -31,15 +35,14 @@ class UserBody extends HookConsumerWidget {
         SliverToBoxAdapter(child: UserTileData(user)),
         SliverSmoothAnimatedList<int>(
           items: user.submitted,
-          builder: (_, int id, int index) {
-            return ItemTile(
-              id: id,
-              onTap: (_) => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
-              ),
-              loading: () => _buildItemLoading(index + 1),
-            );
-          },
+          builder: (_, int id, int index) => ItemTile(
+            id: id,
+            onTap: (BuildContext context) => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
+            ),
+            loading: () => _buildItemLoading(index + 1),
+            refreshProvider: provider,
+          ),
         ),
       ],
     );

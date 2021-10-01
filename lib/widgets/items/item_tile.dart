@@ -16,6 +16,7 @@ class ItemTile extends HookConsumerWidget {
     this.interactive = false,
     this.fadeable = false,
     required this.loading,
+    this.refreshProvider,
   }) : super(key: key);
 
   final int id;
@@ -26,10 +27,18 @@ class ItemTile extends HookConsumerWidget {
   final bool interactive;
   final bool fadeable;
   final Widget Function() loading;
+  final ProviderBase<Object?>? refreshProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useMemoized(() => ref.read(itemNotifierProvider(id).notifier).forceLoad());
+
+    if (refreshProvider != null) {
+      ref.listen(
+        refreshProvider!,
+        (_) => ref.read(itemNotifierProvider(id).notifier).forceLoad(),
+      );
+    }
 
     final AsyncValue<Item> itemValue = ref.watch(itemNotifierProvider(id));
 
