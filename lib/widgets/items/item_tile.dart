@@ -31,8 +31,6 @@ class ItemTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useMemoized(() => ref.read(itemNotifierProvider(id).notifier).forceLoad());
-
     if (refreshProvider != null) {
       ref.listen(
         refreshProvider!,
