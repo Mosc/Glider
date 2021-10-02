@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
