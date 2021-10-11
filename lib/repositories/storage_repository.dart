@@ -1,14 +1,16 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:glider/models/theme_base.dart';
+import 'package:glider/models/dark_theme.dart';
 import 'package:glider/utils/shared_preferences_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageRepository {
   const StorageRepository(this._secureStorage, this._sharedPreferences);
 
-  static const String _themeBaseKey = 'theme_base';
+  static const String _themeModeKey = 'theme_mode';
+  static const String _darkThemeKey = 'dark_theme';
   static const String _themeColorKey = 'theme_color';
   static const String _showUrlKey = 'show_url';
   static const String _showFaviconKey = 'show_favicon';
@@ -24,14 +26,23 @@ class StorageRepository {
   final FlutterSecureStorage _secureStorage;
   final Future<SharedPreferences> _sharedPreferences;
 
-  Future<ThemeBase?> get themeBase async {
-    final int? themeBaseValue =
-        (await _sharedPreferences).getInt(_themeBaseKey);
-    return themeBaseValue != null ? ThemeBase.values[themeBaseValue] : null;
+  Future<ThemeMode?> get themeMode async {
+    final int? themeModeValue =
+        (await _sharedPreferences).getInt(_themeModeKey);
+    return themeModeValue != null ? ThemeMode.values[themeModeValue] : null;
   }
 
-  Future<void> setThemeBase(ThemeBase themeBase) async =>
-      (await _sharedPreferences).setInt(_themeBaseKey, themeBase.index);
+  Future<void> setThemeMode(ThemeMode themeMode) async =>
+      (await _sharedPreferences).setInt(_themeModeKey, themeMode.index);
+
+  Future<DarkTheme?> get darkTheme async {
+    final int? darkThemeValue =
+        (await _sharedPreferences).getInt(_darkThemeKey);
+    return darkThemeValue != null ? DarkTheme.values[darkThemeValue] : null;
+  }
+
+  Future<void> setDarkTheme(DarkTheme darkTheme) async =>
+      (await _sharedPreferences).setInt(_darkThemeKey, darkTheme.index);
 
   Future<Color?> get themeColor async {
     final int? colorValue = (await _sharedPreferences).getInt(_themeColorKey);

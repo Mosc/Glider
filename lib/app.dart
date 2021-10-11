@@ -7,7 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:glider/app_theme.dart';
 import 'package:glider/home.dart';
-import 'package:glider/models/theme_base.dart';
+import 'package:glider/models/dark_theme.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,8 +22,9 @@ class App extends HookConsumerWidget {
       () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
     );
 
-    final ThemeBase themeBase =
-        ref.watch(themeBaseProvider).data?.value ?? ThemeBase.system;
+    final ThemeMode? themeMode = ref.watch(themeModeProvider).data?.value;
+    final DarkTheme darkTheme =
+        ref.watch(darkThemeProvider).data?.value ?? DarkTheme.grey;
     final Color themeColor =
         ref.watch(themeColorProvider).data?.value ?? AppTheme.defaultColor;
 
@@ -31,9 +32,9 @@ class App extends HookConsumerWidget {
       home: const Home(),
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appName,
-      theme: themeBase.lightTheme(themeColor),
-      darkTheme: themeBase.darkTheme(themeColor),
-      themeMode: themeBase.themeMode,
+      theme: AppTheme.lightTheme(themeColor),
+      darkTheme: darkTheme.theme(themeColor),
+      themeMode: themeMode,
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

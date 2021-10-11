@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/app_theme.dart';
-import 'package:glider/models/theme_base.dart';
+import 'package:glider/models/dark_theme.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
+import 'package:glider/utils/theme_mode_extension.dart';
 import 'package:glider/widgets/common/provider_switch_list_tile.dart';
 import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
 import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
@@ -40,32 +41,65 @@ class AppearanceBottomSheet extends HookConsumerWidget {
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowMetadata(value: value),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: _buildHorizontalScrollable(
+        _buildTitledButtons(
+          context,
+          title: AppLocalizations.of(context)!.themeMode,
+          children: <Widget>[
+            for (ThemeMode themeMode in ThemeMode.values)
+              _ThemeModeButton(themeMode),
+          ],
+        ),
+        SmoothAnimatedSwitcher.vertical(
+          condition:
+              ref.watch(themeModeProvider).asData?.value != ThemeMode.light,
+          child: _buildTitledButtons(
+            context,
+            title: AppLocalizations.of(context)!.darkTheme,
             children: <Widget>[
-              for (ThemeBase themeBase in ThemeBase.values)
-                _ThemeBaseButton(themeBase),
+              for (DarkTheme darkTheme in DarkTheme.values)
+                DarkThemeButton(darkTheme),
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: _buildHorizontalScrollable(
-            children: <Widget>[
-              for (Color themeColor in AppTheme.themeColors)
-                _ThemeColorButton(themeColor),
-            ],
-          ),
+        _buildHorizontalScrollable(
+          context,
+          children: <Widget>[
+            for (Color themeColor in AppTheme.themeColors)
+              _ThemeColorButton(themeColor),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildHorizontalScrollable({required List<Widget> children}) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Padding(
+  Widget _buildTitledButtons(BuildContext context,
+      {required String title, required List<Widget> children}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.subtitle1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Row(children: children),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHorizontalScrollable(BuildContext context,
+      {required List<Widget> children}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(children: children),
       ),
@@ -73,19 +107,20 @@ class AppearanceBottomSheet extends HookConsumerWidget {
   }
 }
 
-class _ThemeBaseButton extends HookConsumerWidget {
-  const _ThemeBaseButton(this.base, {Key? key}) : super(key: key);
+class _ThemeModeButton extends HookConsumerWidget {
+  const _ThemeModeButton(this.mode, {Key? key}) : super(key: key);
 
-  final ThemeBase base;
+  final ThemeMode mode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeBase themeBase =
-        ref.watch(themeBaseProvider).data?.value ?? ThemeBase.system;
+    final ThemeMode themeMode =
+        ref.watch(themeModeProvider).data?.value ?? ThemeMode.system;
+    final Color color = mode.color(context, ref);
 
     useMemoized(
       () => Future<void>.microtask(() {
-        if (base == themeBase) {
+        if (mode == themeMode) {
           Scrollable.ensureVisible(
             context,
             duration: AnimationUtil.defaultDuration,
@@ -100,20 +135,74 @@ class _ThemeBaseButton extends HookConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ElevatedButton(
         onPressed: () async {
-          await ref.read(storageRepositoryProvider).setThemeBase(base);
-          ref.refresh(themeBaseProvider);
+          await ref.read(storageRepositoryProvider).setThemeMode(mode);
+          ref.refresh(themeModeProvider);
         },
         style: ElevatedButton.styleFrom(
-          primary: base.color(context),
-          onPrimary: base.color(context).isDark ? Colors.white : Colors.black,
+          primary: color,
+          onPrimary: color.isDark ? Colors.white : Colors.black,
           shape: const StadiumBorder(),
           minimumSize: const Size(40, 40),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             SmoothAnimatedCrossFade(
-              duration: kThemeChangeDuration,
-              condition: base == themeBase,
+              condition: mode == themeMode,
+              trueChild: const Icon(FluentIcons.checkmark_24_regular),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(mode.title(context)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DarkThemeButton extends HookConsumerWidget {
+  const DarkThemeButton(this.base, {Key? key}) : super(key: key);
+
+  final DarkTheme base;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final DarkTheme darkTheme =
+        ref.watch(darkThemeProvider).data?.value ?? DarkTheme.grey;
+
+    useMemoized(
+      () => Future<void>.microtask(() {
+        if (base == darkTheme) {
+          Scrollable.ensureVisible(
+            context,
+            duration: AnimationUtil.defaultDuration,
+            curve: AnimationUtil.defaultCurve,
+            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+          );
+        }
+      }),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: ElevatedButton(
+        onPressed: () async {
+          await ref.read(storageRepositoryProvider).setDarkTheme(base);
+          ref.refresh(darkThemeProvider);
+        },
+        style: ElevatedButton.styleFrom(
+          primary: base.color,
+          onPrimary: base.color.isDark ? Colors.white : Colors.black,
+          shape: const StadiumBorder(),
+          minimumSize: const Size(40, 40),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SmoothAnimatedCrossFade(
+              condition: base == darkTheme,
               trueChild: const Icon(FluentIcons.checkmark_24_regular),
             ),
             Padding(
@@ -157,12 +246,11 @@ class _ThemeColorButton extends HookConsumerWidget {
       },
       style: ElevatedButton.styleFrom(
         primary: color,
-        shape: const CircleBorder(),
         minimumSize: const Size(40, 40),
+        shape: const CircleBorder(),
         padding: EdgeInsets.zero,
       ),
       child: SmoothAnimatedSwitcher(
-        duration: kThemeChangeDuration,
         condition: color == themeColor,
         child: const Icon(FluentIcons.checkmark_24_regular),
       ),
