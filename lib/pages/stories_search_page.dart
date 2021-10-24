@@ -1,7 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -70,7 +69,7 @@ class StoriesSearchPage extends HookConsumerWidget {
         ref.watch(storySearchOrderStateProvider);
     useMemoized(
       () => Future<void>.microtask(
-        () => storySearchRangeStateController.state = initialSearchRange,
+        () => storySearchRangeStateController.update((_) => initialSearchRange),
       ),
     );
 
@@ -107,7 +106,7 @@ class StoriesSearchPage extends HookConsumerWidget {
                   textInputAction: TextInputAction.search,
                   autofocus: true,
                   onChanged: (String value) =>
-                      storySearchQueryStateController.state = value,
+                      storySearchQueryStateController.update((_) => value),
                 )
               : Text(AppLocalizations.of(context)!.catchUp),
           actions: <Widget>[
@@ -117,7 +116,7 @@ class StoriesSearchPage extends HookConsumerWidget {
                 tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 onPressed: () {
                   queryController.clear();
-                  storySearchQueryStateController.state = '';
+                  storySearchQueryStateController.update((_) => '');
                 },
               ),
           ],
@@ -134,7 +133,8 @@ class StoriesSearchPage extends HookConsumerWidget {
           children: <DecoratedSpeedDialChild>[
             for (SearchOrder searchOrder in SearchOrder.values)
               DecoratedSpeedDialChild(
-                onTap: () => searchStoryTypeStateController.state = searchOrder,
+                onTap: () =>
+                    searchStoryTypeStateController.update((_) => searchOrder),
                 label: searchOrder.title(context),
                 child: Icon(searchOrder.icon),
               ),
@@ -194,22 +194,25 @@ class _SearchRangeChip extends HookConsumerWidget {
       selected: storySearchRangeStateController.state == searchRange,
       onSelected: (bool selected) async {
         final StateController<DateTimeRange?>
-            customDateTimeRangeStateController =
-            ref.read(storySearchCustomDateTimeRangeStateProvider)..state = null;
+            customDateTimeRangeStateController = ref
+                .read(storySearchCustomDateTimeRangeStateProvider)
+              ..update((_) => null);
 
         if (searchRange == SearchRange.custom && selected) {
-          customDateTimeRangeStateController.state = await showDateRangePicker(
+          final DateTimeRange? dateTimeRange = await showDateRangePicker(
             context: context,
             firstDate: DateTime.fromMillisecondsSinceEpoch(0),
             lastDate: DateTime.now(),
           );
+          customDateTimeRangeStateController.update((_) => dateTimeRange);
 
           if (customDateTimeRangeStateController.state == null) {
             return;
           }
         }
 
-        storySearchRangeStateController.state = selected ? searchRange : null;
+        storySearchRangeStateController
+            .update((_) => selected ? searchRange : null);
       },
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/utils/swipeable_page_route.dart';
 
@@ -49,8 +48,6 @@ class AppTheme {
       brightness: brightness,
       visualDensity: VisualDensity.standard,
       primaryColor: color,
-      // ignore: deprecated_member_use
-      accentColor: color,
       canvasColor: canvasColor,
       scaffoldBackgroundColor: backgroundColor,
       cardColor: canvasColor,

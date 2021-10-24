@@ -30,11 +30,14 @@ class RefreshableBody<T> extends HookConsumerWidget {
                 ...dataBuilder(data),
                 _buildSliverEnd(padding),
               ],
-              loading: () => <Widget>[
-                ...loadingBuilder(),
+              loading: (AsyncValue<T>? previousAsyncData) => <Widget>[
+                if (previousAsyncData != null)
+                  ...dataBuilder(previousAsyncData.value)
+                else
+                  ...loadingBuilder(),
                 _buildSliverEnd(padding),
               ],
-              error: (_, __) => <Widget>[
+              error: (_, __, ___) => <Widget>[
                 const SliverFillRemaining(
                   child: Error(),
                 ),

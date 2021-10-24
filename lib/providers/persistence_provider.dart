@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:glider/models/dark_theme.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

@@ -115,7 +115,7 @@ class _ThemeModeButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeMode themeMode =
-        ref.watch(themeModeProvider).data?.value ?? ThemeMode.system;
+        ref.watch(themeModeProvider).asData?.value ?? ThemeMode.system;
     final Color color = mode.color(context, ref);
 
     useMemoized(
@@ -170,7 +170,7 @@ class DarkThemeButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DarkTheme darkTheme =
-        ref.watch(darkThemeProvider).data?.value ?? DarkTheme.grey;
+        ref.watch(darkThemeProvider).asData?.value ?? DarkTheme.grey;
 
     useMemoized(
       () => Future<void>.microtask(() {
@@ -224,7 +224,7 @@ class _ThemeColorButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Color themeColor =
-        ref.watch(themeColorProvider).data?.value ?? AppTheme.defaultColor;
+        ref.watch(themeColorProvider).asData?.value ?? AppTheme.defaultColor;
 
     useMemoized(
       () => Future<void>.microtask(() {

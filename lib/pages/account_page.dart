@@ -17,7 +17,7 @@ class AccountPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncData<bool>? loggedInData = ref.watch(loggedInProvider).data;
+    final AsyncData<bool>? loggedInData = ref.watch(loggedInProvider).asData;
 
     return Scaffold(
       body: FloatingAppBarScrollView(

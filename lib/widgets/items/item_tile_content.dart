@@ -29,7 +29,7 @@ class ItemTileContent extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool showMetadata = !dense ||
         interactive ||
-        (ref.watch(showMetadataProvider).data?.value ?? true);
+        (ref.watch(showMetadataProvider).asData?.value ?? true);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

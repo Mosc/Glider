@@ -90,7 +90,7 @@ class StoriesPage extends HookConsumerWidget {
         children: <DecoratedSpeedDialChild>[
           for (StoryType storyType in StoryType.values)
             DecoratedSpeedDialChild(
-              onTap: () => storyTypeStateController.state = storyType,
+              onTap: () => storyTypeStateController.update((_) => storyType),
               label: storyType.title(context),
               child: Icon(storyType.icon),
             ),
@@ -100,7 +100,7 @@ class StoriesPage extends HookConsumerWidget {
   }
 
   Future<void> _searchSelected(BuildContext context, WidgetRef ref) {
-    ref.read(storySearchRangeStateProvider).state = SearchRange.pastYear;
+    ref.read(storySearchRangeStateProvider).update((_) => SearchRange.pastYear);
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => const StoriesSearchPage(
@@ -142,18 +142,15 @@ class StoriesPage extends HookConsumerWidget {
           false;
 
       if (success) {
-        await ref
-            .read(storyIdsNotifierProvider(StoryType.newStories).notifier)
-            .forceLoad();
-        ref.read(storyTypeStateProvider).state = StoryType.newStories;
+        ref.refresh(storyIdsProvider(StoryType.newStories));
+        ref.read(storyTypeStateProvider).update((_) => StoryType.newStories);
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.processingInfo),
             action: SnackBarAction(
               label: AppLocalizations.of(context)!.refresh,
-              onPressed: () => ref
-                  .read(storyIdsNotifierProvider(StoryType.newStories).notifier)
-                  .forceLoad(),
+              onPressed: () =>
+                  ref.refresh(storyIdsProvider(StoryType.newStories)),
             ),
           ),
         );

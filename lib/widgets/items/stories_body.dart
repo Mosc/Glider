@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/stories_page.dart';
@@ -20,14 +19,12 @@ class StoriesBody extends HookConsumerWidget {
     final StateController<StoryType> storyTypeStateController =
         ref.watch(storyTypeStateProvider);
     final bool completedWalkthrough =
-        ref.watch(completedWalkthroughProvider).data?.value ?? true;
-    final AutoDisposeStateNotifierProvider<StoryIdsNotifier,
-            AsyncValue<Iterable<int>>> provider =
-        storyIdsNotifierProvider(storyTypeStateController.state);
+        ref.watch(completedWalkthroughProvider).asData?.value ?? true;
+    final AutoDisposeFutureProvider<Iterable<int>> provider =
+        storyIdsProvider(storyTypeStateController.state);
 
     return RefreshableBody<Iterable<int>>(
       provider: provider,
-      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         if (!completedWalkthrough)
           const SliverToBoxAdapter(

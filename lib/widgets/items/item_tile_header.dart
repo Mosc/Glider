@@ -24,7 +24,7 @@ class ItemTileHeader extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool showFavicon =
-        interactive || (ref.watch(showFaviconProvider).data?.value ?? true);
+        interactive || (ref.watch(showFaviconProvider).asData?.value ?? true);
 
     return ConstrainedBox(
       constraints: showFavicon

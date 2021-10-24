@@ -45,12 +45,14 @@ class WalkthoughItem extends HookConsumerWidget {
       switch (stepStateController.state) {
         case WalkthroughStep.step1:
           if (upvotedStateController.state) {
-            stepStateController.state = stepStateController.state.nextStep;
+            stepStateController
+                .update((WalkthroughStep state) => state.nextStep);
           }
           break;
         case WalkthroughStep.step2:
           if (favoritedStateController.state) {
-            stepStateController.state = stepStateController.state.nextStep;
+            stepStateController
+                .update((WalkthroughStep state) => state.nextStep);
           }
           break;
         case WalkthroughStep.step3:
@@ -65,7 +67,7 @@ class WalkthoughItem extends HookConsumerWidget {
               action: () async {
                 Future<void>.delayed(
                   Slidable.movementDuration,
-                  () => upvotedStateController.state = true,
+                  () => upvotedStateController.update((_) => true),
                 );
               },
               icon: FluentIcons.arrow_up_24_regular,
@@ -76,7 +78,7 @@ class WalkthoughItem extends HookConsumerWidget {
               action: () async {
                 Future<void>.delayed(
                   Slidable.movementDuration,
-                  () => upvotedStateController.state = false,
+                  () => upvotedStateController.update((_) => false),
                 );
               },
               icon: FluentIcons.arrow_undo_24_regular,
@@ -171,7 +173,7 @@ class WalkthoughItem extends HookConsumerWidget {
             ),
             onTap: () {
               Navigator.of(context).pop();
-              upvotedStateController.state = !upvotedStateController.state;
+              upvotedStateController.update((bool state) => !state);
             },
           ),
           ListTile(
@@ -182,7 +184,7 @@ class WalkthoughItem extends HookConsumerWidget {
             ),
             onTap: () {
               Navigator.of(context).pop();
-              favoritedStateController.state = !favoritedStateController.state;
+              favoritedStateController.update((bool state) => !state);
             },
           ),
         ],

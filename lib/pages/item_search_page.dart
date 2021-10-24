@@ -1,7 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -72,7 +71,7 @@ class ItemSearchPage extends HookConsumerWidget {
             textInputAction: TextInputAction.search,
             autofocus: true,
             onChanged: (String value) =>
-                itemSearchQueryStateController.state = value,
+                itemSearchQueryStateController.update((_) => value),
           ),
           actions: <Widget>[
             if (itemSearchQueryStateController.state.isNotEmpty)
@@ -81,7 +80,7 @@ class ItemSearchPage extends HookConsumerWidget {
                 tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 onPressed: () {
                   queryController.clear();
-                  itemSearchQueryStateController.state = '';
+                  itemSearchQueryStateController.update((_) => '');
                 },
               ),
           ],
@@ -93,7 +92,8 @@ class ItemSearchPage extends HookConsumerWidget {
           children: <DecoratedSpeedDialChild>[
             for (SearchOrder searchOrder in SearchOrder.values)
               DecoratedSpeedDialChild(
-                onTap: () => itemStoryTypeStateController.state = searchOrder,
+                onTap: () =>
+                    itemStoryTypeStateController.update((_) => searchOrder),
                 label: searchOrder.title(context),
                 child: Icon(searchOrder.icon),
               ),

@@ -12,10 +12,15 @@ class AccountBody extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(loggedInProvider).when(
-          data: (bool loggedIn) =>
-              loggedIn ? const AccountLoggedIn() : const AccountLoggedOut(),
-          loading: () => const Loading(),
-          error: (_, __) => const Error(),
+          data: _accountDataBuilder,
+          loading: (AsyncValue<bool>? previousAsyncLoggedIn) =>
+              previousAsyncLoggedIn != null
+                  ? _accountDataBuilder(previousAsyncLoggedIn.value)
+                  : const Loading(),
+          error: (_, __, ___) => const Error(),
         );
   }
+
+  Widget _accountDataBuilder(bool loggedIn) =>
+      loggedIn ? const AccountLoggedIn() : const AccountLoggedOut();
 }

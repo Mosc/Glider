@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:glider/models/search_parameters.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/stories_search_page.dart';
@@ -15,8 +14,8 @@ class StoriesSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeStateNotifierProvider<StoryIdsSearchNotifier,
-        AsyncValue<Iterable<int>>> provider = storyIdsSearchNotifierProvider(
+    final AutoDisposeFutureProvider<Iterable<int>> provider =
+        storyIdsSearchProvider(
       SearchParameters(
         query: ref.watch(storySearchQueryStateProvider).state,
         range: ref.watch(storySearchRangeStateProvider).state,
@@ -29,7 +28,6 @@ class StoriesSearchBody extends HookConsumerWidget {
 
     return RefreshableBody<Iterable<int>>(
       provider: provider,
-      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

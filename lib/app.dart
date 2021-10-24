@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -22,11 +23,11 @@ class App extends HookConsumerWidget {
       () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
     );
 
-    final ThemeMode? themeMode = ref.watch(themeModeProvider).data?.value;
+    final ThemeMode? themeMode = ref.watch(themeModeProvider).asData?.value;
     final DarkTheme darkTheme =
-        ref.watch(darkThemeProvider).data?.value ?? DarkTheme.grey;
+        ref.watch(darkThemeProvider).asData?.value ?? DarkTheme.grey;
     final Color themeColor =
-        ref.watch(themeColorProvider).data?.value ?? AppTheme.defaultColor;
+        ref.watch(themeColorProvider).asData?.value ?? AppTheme.defaultColor;
 
     return MaterialApp(
       home: const Home(),
@@ -41,6 +42,9 @@ class App extends HookConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: PointerDeviceKind.values.toSet(),
+      ),
     );
   }
 }

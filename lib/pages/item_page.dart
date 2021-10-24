@@ -24,7 +24,8 @@ class ItemPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     useMemoized(() => _setVisited(ref));
 
-    final AsyncData<Item>? itemData = ref.watch(itemNotifierProvider(id)).data;
+    final AsyncData<Item>? itemData =
+        ref.watch(itemNotifierProvider(id)).asData;
 
     return Scaffold(
       body: FloatingAppBarScrollView(

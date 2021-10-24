@@ -68,7 +68,7 @@ class ItemTileData extends HookConsumerWidget {
       final bool upvoted = await ref.read(upvotedProvider(item.id).future);
 
       if (delayedUpvotedController.mounted) {
-        delayedUpvotedController.state = upvoted;
+        delayedUpvotedController.update((_) => upvoted);
       }
     }
 
@@ -137,7 +137,7 @@ class ItemTileData extends HookConsumerWidget {
 
     Color _determineDividerColor(WidgetRef ref) {
       final List<Color> colors = AppTheme.themeColors.toList(growable: false);
-      final Color? themeColor = ref.watch(themeColorProvider).data?.value;
+      final Color? themeColor = ref.watch(themeColorProvider).asData?.value;
       final int initialOffset =
           themeColor != null ? colors.indexOf(themeColor) : 0;
       final int offset =
@@ -188,7 +188,7 @@ class ItemTileData extends HookConsumerWidget {
 
   Widget _buildContent(BuildContext context, WidgetRef ref) {
     final double opacity =
-        fadeable && (ref.watch(visitedProvider(item.id)).data?.value ?? false)
+        fadeable && (ref.watch(visitedProvider(item.id)).asData?.value ?? false)
             ? 2 / 3
             : 1;
 

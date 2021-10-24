@@ -37,26 +37,31 @@ class ItemTile extends HookConsumerWidget {
       );
     }
 
-    final AsyncValue<Item> itemValue = ref.watch(itemNotifierProvider(id));
+    final AsyncValue<Item> asyncItem = ref.watch(itemNotifierProvider(id));
 
-    return itemValue.when(
-      data: (Item value) {
-        if (value.time == null) {
-          return const SizedBox.shrink();
-        }
+    return asyncItem.when(
+      data: (Item item) => _itemBuilder(context, item),
+      loading: (AsyncValue<Item>? previousAsyncItem) =>
+          previousAsyncItem != null
+              ? _itemBuilder(context, previousAsyncItem.value)
+              : loading(),
+      error: (_, __, ___) => const SizedBox.shrink(),
+    );
+  }
 
-        return ItemTileData(
-          value.copyWith(indentation: indentation),
-          key: ValueKey<String>('item_$id'),
-          root: root,
-          onTap: () => onTap?.call(context),
-          dense: dense,
-          interactive: interactive,
-          fadeable: fadeable,
-        );
-      },
-      loading: loading,
-      error: (_, __) => const SizedBox.shrink(),
+  Widget _itemBuilder(BuildContext context, Item value) {
+    if (value.time == null) {
+      return const SizedBox.shrink();
+    }
+
+    return ItemTileData(
+      value.copyWith(indentation: indentation),
+      key: ValueKey<String>('item_$id'),
+      root: root,
+      onTap: () => onTap?.call(context),
+      dense: dense,
+      interactive: interactive,
+      fadeable: fadeable,
     );
   }
 }

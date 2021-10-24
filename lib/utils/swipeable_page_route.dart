@@ -3,7 +3,6 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:glider/utils/animation_util.dart';
 
 const Duration _transitionDuration = Duration(milliseconds: 200);

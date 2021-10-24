@@ -13,9 +13,10 @@ class StoryTileLoading extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final double? faviconSize = ItemTileHeader.calculateHeight(context);
-    final bool showFavicon = ref.watch(showFaviconProvider).data?.value ?? true;
+    final bool showFavicon =
+        ref.watch(showFaviconProvider).asData?.value ?? true;
     final bool showMetadata =
-        ref.watch(showMetadataProvider).data?.value ?? true;
+        ref.watch(showMetadataProvider).asData?.value ?? true;
 
     return TileLoading(
       child: Padding(

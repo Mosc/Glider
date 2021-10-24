@@ -25,19 +25,21 @@ extension ItemMenuActionExtension on ItemMenuAction {
   bool visible(BuildContext context, WidgetRef ref, {required int id}) {
     switch (this) {
       case ItemMenuAction.vote:
-        return ref.watch(upvotedProvider(id)).data != null &&
+        return ref.watch(upvotedProvider(id)).asData != null &&
             ItemType.job !=
-                ref.watch(itemNotifierProvider(id)).data?.value.type;
+                ref.watch(itemNotifierProvider(id)).asData?.value.type;
       case ItemMenuAction.reply:
         return !<ItemType>[ItemType.job, ItemType.pollopt]
-            .contains(ref.watch(itemNotifierProvider(id)).data?.value.type);
+            .contains(ref.watch(itemNotifierProvider(id)).asData?.value.type);
       case ItemMenuAction.favorite:
-        return ref.watch(favoritedProvider(id)).data != null &&
-            !<ItemType>[ItemType.job, ItemType.pollopt]
-                .contains(ref.watch(itemNotifierProvider(id)).data?.value.type);
+        return ref.watch(favoritedProvider(id)).asData != null &&
+            !<ItemType>[
+              ItemType.job,
+              ItemType.pollopt
+            ].contains(ref.watch(itemNotifierProvider(id)).asData?.value.type);
       case ItemMenuAction.flag:
         return !<ItemType>[ItemType.job, ItemType.pollopt]
-            .contains(ref.watch(itemNotifierProvider(id)).data?.value.type);
+            .contains(ref.watch(itemNotifierProvider(id)).asData?.value.type);
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
         return true;
@@ -47,17 +49,17 @@ extension ItemMenuActionExtension on ItemMenuAction {
   String title(BuildContext context, WidgetRef ref, {required int id}) {
     switch (this) {
       case ItemMenuAction.vote:
-        return ref.watch(upvotedProvider(id)).data?.value ?? false
+        return ref.watch(upvotedProvider(id)).asData?.value ?? false
             ? AppLocalizations.of(context)!.unvote
             : AppLocalizations.of(context)!.upvote;
       case ItemMenuAction.reply:
         return AppLocalizations.of(context)!.reply;
       case ItemMenuAction.favorite:
-        return ref.watch(favoritedProvider(id)).data?.value ?? false
+        return ref.watch(favoritedProvider(id)).asData?.value ?? false
             ? AppLocalizations.of(context)!.unfavorite
             : AppLocalizations.of(context)!.favorite;
       case ItemMenuAction.flag:
-        return ref.read(itemNotifierProvider(id)).data?.value.dead ?? false
+        return ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false
             ? AppLocalizations.of(context)!.unflag
             : AppLocalizations.of(context)!.flag;
       case ItemMenuAction.copy:
@@ -71,17 +73,18 @@ extension ItemMenuActionExtension on ItemMenuAction {
       {required int id, int? rootId}) {
     switch (this) {
       case ItemMenuAction.vote:
-        final bool upvoted = ref.read(upvotedProvider(id)).data?.value ?? false;
+        final bool upvoted =
+            ref.read(upvotedProvider(id)).asData?.value ?? false;
         return VoteCommand(context, ref, id: id, upvote: !upvoted);
       case ItemMenuAction.reply:
         return ReplyCommand(context, ref, id: id, rootId: rootId);
       case ItemMenuAction.favorite:
         final bool favorited =
-            ref.read(favoritedProvider(id)).data?.value ?? false;
+            ref.read(favoritedProvider(id)).asData?.value ?? false;
         return FavoriteCommand(context, ref, id: id, favorite: !favorited);
       case ItemMenuAction.flag:
         final bool flagged =
-            ref.read(itemNotifierProvider(id)).data?.value.dead ?? false;
+            ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false;
         return FlagCommand(context, ref, id: id, flag: !flagged);
       case ItemMenuAction.copy:
         return ItemOptionsCommand.copy(context, ref, id: id);

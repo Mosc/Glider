@@ -35,9 +35,9 @@ class ItemTileMetadata extends HookConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     final AsyncData<bool>? favoritedData =
-        ref.watch(favoritedProvider(item.id)).data;
+        ref.watch(favoritedProvider(item.id)).asData;
     final AsyncData<bool>? upvotedData =
-        ref.watch(upvotedProvider(item.id)).data;
+        ref.watch(upvotedProvider(item.id)).asData;
 
     return FadeHero(
       tag: 'item_${item.id}_metadata',
@@ -126,7 +126,7 @@ class ItemTileMetadata extends HookConsumerWidget {
       {required String by, String? rootBy}) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final bool byLoggedInUser =
-        item.by == ref.watch(usernameProvider).data?.value;
+        item.by == ref.watch(usernameProvider).asData?.value;
     final bool byRoot = item.by == rootBy;
 
     return GestureDetector(

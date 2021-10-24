@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   cached_network_image: ^3.1.0
-  dio: ^4.0.0
-  fluentui_system_icons: ^1.1.138
+  dio: ^4.0.1
+  fluentui_system_icons: ^1.1.143
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
@@ -18,14 +18,14 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^5.0.0-beta.5
-  flutter_speed_dial: ^4.3.0
+  flutter_speed_dial: ^4.5.0
   flutter_web_browser: ^0.15.0
-  flutter_widget_from_html_core: ^0.7.0
-  freezed_annotation: ^0.14.2
-  hooks_riverpod: ^1.0.0-dev.7
+  flutter_widget_from_html_core: ^0.8.1
+  freezed_annotation: ^0.15.0
+  hooks_riverpod: ^1.0.0-dev.11
   html: ^0.15.0
   html_unescape: ^2.0.0
-  implicitly_animated_reorderable_list: ^0.4.1
+  implicitly_animated_reorderable_list: ^0.4.2
   intl: ^0.17.0
   jiffy:
     git:
@@ -34,18 +34,18 @@ dependencies:
   native_launcher:
     path: packages/native_launcher
   octo_image: ^1.0.0+1
-  share_plus: ^2.1.4
-  shared_preferences: ^2.0.7
+  share_plus: ^3.0.4
+  shared_preferences: ^2.0.8
   shimmer: ^2.0.0
   string_validator: ^0.3.0
   uni_links: ^0.5.1
-  url_launcher: ^6.0.9
+  url_launcher: ^6.0.12
 
 dev_dependencies:
-  build_runner: ^2.0.6
+  build_runner: ^2.1.4
   flutter_launcher_icons: ^0.9.2
-  freezed: ^0.14.5
-  json_serializable: ^5.0.0
+  freezed: ^0.15.0+1
+  json_serializable: ^6.0.1
 
 flutter:
   uses-material-design: true

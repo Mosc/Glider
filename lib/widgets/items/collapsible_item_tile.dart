@@ -28,7 +28,7 @@ class CollapsibleItemTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool _collapsed(int id) =>
-        ref.watch(collapsedProvider(id)).data?.value ?? false;
+        ref.watch(collapsedProvider(id)).asData?.value ?? false;
 
     final bool collapsed = _collapsed(id);
 
