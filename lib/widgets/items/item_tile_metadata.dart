@@ -9,7 +9,6 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
-import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -55,15 +54,15 @@ class ItemTileMetadata extends HookConsumerWidget {
                 ),
               ),
             if (item.score != null && item.type != ItemType.job)
-              SmoothAnimatedCrossFade(
-                condition: upvotedData?.value ?? false,
-                trueChild: _buildUpvotedMetadata(upvoted: true),
-                falseChild: _buildUpvotedMetadata(upvoted: false),
+              SmoothAnimatedSize(
+                child: _buildUpvotedMetadata(
+                  upvoted: upvotedData?.value ?? false,
+                ),
               )
             else if (upvotedData != null)
               SmoothAnimatedSwitcher.horizontal(
                 condition: upvotedData.value,
-                child: _buildUpvotedMetadata(upvoted: true),
+                child: _buildUpvotedMetadata(upvoted: upvotedData.value),
               ),
             if (item.descendants != null)
               SmoothAnimatedSize(

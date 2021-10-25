@@ -12,7 +12,6 @@ import 'package:glider/utils/color_extension.dart';
 import 'package:glider/utils/theme_mode_extension.dart';
 import 'package:glider/widgets/common/provider_switch_list_tile.dart';
 import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
-import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -147,9 +146,9 @@ class _ThemeModeButton extends HookConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SmoothAnimatedCrossFade(
+            SmoothAnimatedSwitcher.horizontal(
               condition: mode == themeMode,
-              trueChild: const Icon(FluentIcons.checkmark_24_regular),
+              child: const Icon(FluentIcons.checkmark_24_regular),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -201,9 +200,9 @@ class DarkThemeButton extends HookConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SmoothAnimatedCrossFade(
+            SmoothAnimatedSwitcher.horizontal(
               condition: base == darkTheme,
-              trueChild: const Icon(FluentIcons.checkmark_24_regular),
+              child: const Icon(FluentIcons.checkmark_24_regular),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),

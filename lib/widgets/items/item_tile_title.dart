@@ -6,7 +6,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/fade_hero.dart';
-import 'package:glider/widgets/common/smooth_animated_cross_fade.dart';
+import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemTileTitle extends HookConsumerWidget {
@@ -30,10 +30,8 @@ class ItemTileTitle extends HookConsumerWidget {
       child: AnimatedOpacity(
         duration: AnimationUtil.defaultDuration,
         opacity: opacity,
-        child: SmoothAnimatedCrossFade(
-          condition: dense,
-          trueChild: _buildTitleText(context, ref, dense: true),
-          falseChild: _buildTitleText(context, ref, dense: false),
+        child: SmoothAnimatedSize(
+          child: _buildTitleText(context, ref, dense: dense),
         ),
       ),
     );
