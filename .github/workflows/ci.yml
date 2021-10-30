@@ -1,10 +1,14 @@
+name: CI
+
 on:
   push:
     branches:
-      - "**"
+      - '**'
+    tags-ignore:
+      - 'v*'
   pull_request:
     branches:
-      - "**"
+      - '**'
 jobs:
   ci:
     name: CI
@@ -12,17 +16,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
           channel: beta
-      - name: Cache packages
+      - name: Cache pub
         uses: actions/cache@v2
         with:
           path: ${{ env.FLUTTER_HOME }}/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
           restore-keys: ${{ runner.os }}-pub-
-      - name: Get packages
+      - name: Get pub
         run: flutter pub get
       - name: Generate code
         run: flutter pub run build_runner build --delete-conflicting-outputs
