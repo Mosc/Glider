@@ -45,7 +45,7 @@ jobs:
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
       - name: Build Android App Bundle
-        run: flutter build appbundle
+        run: flutter build appbundle --no-tree-shake-icons
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
       - name: Cache gems
