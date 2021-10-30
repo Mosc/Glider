@@ -1,0 +1,4 @@
+• Added search functionality in comments
+• Optimized network usage, especially for search
+• Animated any list changes, such as during load and refresh
+• Allowed selecting system theme with specific dark mode color — this change resets your currently selected theme
