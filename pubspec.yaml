@@ -9,7 +9,7 @@ environment:
 dependencies:
   cached_network_image: ^3.1.0
   dio: ^4.0.1
-  fluentui_system_icons: ^1.1.143
+  fluentui_system_icons: ^1.1.144
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
@@ -18,7 +18,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^5.0.0-beta.5
-  flutter_speed_dial: ^4.5.0
+  flutter_speed_dial: ^4.6.6
   flutter_web_browser: ^0.15.0
   flutter_widget_from_html_core: ^0.8.1
   freezed_annotation: ^0.15.0
