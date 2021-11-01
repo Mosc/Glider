@@ -22,7 +22,7 @@ We want to inform users of this Service that these third parties may have access
 
 The following third-party services are used:
 
-* [Y Combinator](https://news.ycombinator.com/)'s [Hacker News website](https://news.ycombinator.com/) and [Hacker News API](https://github.com/HackerNews/API), to be able to provide our Service. The Hacker News API is hosted on [Google](https://www.google.com/)'s [Firebase](https://firebase.google.com/). If you choose to supply our Service with your Personal Information, they will only be shared with the Hacker News website. You may review Y Combinator's [Privacy Policy](https://www.ycombinator.com/legal/#privacy).
+* [Y Combinator](https://www.ycombinator.com/)'s [Hacker News website](https://news.ycombinator.com/) and [Hacker News API](https://github.com/HackerNews/API), to be able to provide our Service. The Hacker News API is hosted on [Google](https://www.google.com/)'s [Firebase](https://firebase.google.com/). If you choose to supply our Service with your Personal Information, they will only be shared with the Hacker News website. You may review Y Combinator's [Privacy Policy](https://www.ycombinator.com/legal/#privacy).
 * [Algolia](https://www.algolia.com/)'s [Hacker News Search API](https://hn.algolia.com/api), to be able to provide the "Search" and "Catch Up" functionality of our Service. Our Service specifically requests Algolia to exclude your queries from its analytics collection. You may review Algolia's [Privacy Policy](https://www.algolia.com/policies/privacy/).
 * [Favicon Kit](https://faviconkit.com/), to be able to show favicons. You may choose to disable the use of favicons, thereby preventing the use of Favicon Kit.
 
@@ -38,7 +38,7 @@ This Service may contain links to other sites. If you click on a third-party lin
 
 We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page.
 
-This policy is effective as of 2021-10-31.
+This policy is effective as of 2021-11-01.
 
 **Contact Us**
 
