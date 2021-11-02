@@ -2,11 +2,14 @@ import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/commands/command.dart';
+import 'package:glider/commands/delete_command.dart';
+import 'package:glider/commands/edit_command.dart';
 import 'package:glider/commands/favorite_command.dart';
 import 'package:glider/commands/flag_command.dart';
 import 'package:glider/commands/item_options_command.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/vote_command.dart';
+import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
@@ -17,29 +20,43 @@ enum ItemMenuAction {
   reply,
   favorite,
   flag,
+  edit,
+  delete,
   copy,
   share,
 }
 
 extension ItemMenuActionExtension on ItemMenuAction {
   bool visible(BuildContext context, WidgetRef ref, {required int id}) {
+    final Item? item = ref.read(itemNotifierProvider(id)).asData?.value;
+
     switch (this) {
       case ItemMenuAction.vote:
-        return ref.watch(upvotedProvider(id)).asData != null &&
-            ItemType.job !=
-                ref.watch(itemNotifierProvider(id)).asData?.value.type;
+        return item != null &&
+            !<ItemType>{ItemType.job}.contains(item.type) &&
+            ref.read(upvotedProvider(id)).asData != null;
       case ItemMenuAction.reply:
-        return !<ItemType>[ItemType.job, ItemType.pollopt]
-            .contains(ref.watch(itemNotifierProvider(id)).asData?.value.type);
+        return item != null &&
+            !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type);
       case ItemMenuAction.favorite:
-        return ref.watch(favoritedProvider(id)).asData != null &&
-            !<ItemType>[
-              ItemType.job,
-              ItemType.pollopt
-            ].contains(ref.watch(itemNotifierProvider(id)).asData?.value.type);
+        return item != null &&
+            !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type) &&
+            ref.read(favoritedProvider(id)).asData != null;
       case ItemMenuAction.flag:
-        return !<ItemType>[ItemType.job, ItemType.pollopt]
-            .contains(ref.watch(itemNotifierProvider(id)).asData?.value.type);
+        return item != null &&
+            !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type);
+      case ItemMenuAction.edit:
+        return item != null &&
+            !<ItemType>{ItemType.job, ItemType.poll, ItemType.pollopt}
+                .contains(item.type) &&
+            ref.read(usernameProvider).asData?.value == item.by &&
+            item.editable;
+      case ItemMenuAction.delete:
+        return item != null &&
+            !<ItemType>{ItemType.job, ItemType.poll, ItemType.pollopt}
+                .contains(item.type) &&
+            ref.read(usernameProvider).asData?.value == item.by &&
+            item.deletable;
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
         return true;
@@ -49,19 +66,23 @@ extension ItemMenuActionExtension on ItemMenuAction {
   String title(BuildContext context, WidgetRef ref, {required int id}) {
     switch (this) {
       case ItemMenuAction.vote:
-        return ref.watch(upvotedProvider(id)).asData?.value ?? false
+        return ref.read(upvotedProvider(id)).asData?.value ?? false
             ? AppLocalizations.of(context)!.unvote
             : AppLocalizations.of(context)!.upvote;
       case ItemMenuAction.reply:
         return AppLocalizations.of(context)!.reply;
       case ItemMenuAction.favorite:
-        return ref.watch(favoritedProvider(id)).asData?.value ?? false
+        return ref.read(favoritedProvider(id)).asData?.value ?? false
             ? AppLocalizations.of(context)!.unfavorite
             : AppLocalizations.of(context)!.favorite;
       case ItemMenuAction.flag:
         return ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false
             ? AppLocalizations.of(context)!.unflag
             : AppLocalizations.of(context)!.flag;
+      case ItemMenuAction.edit:
+        return AppLocalizations.of(context)!.edit;
+      case ItemMenuAction.delete:
+        return AppLocalizations.of(context)!.delete;
       case ItemMenuAction.copy:
         return AppLocalizations.of(context)!.copy;
       case ItemMenuAction.share:
@@ -86,6 +107,10 @@ extension ItemMenuActionExtension on ItemMenuAction {
         final bool flagged =
             ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false;
         return FlagCommand(context, ref, id: id, flag: !flagged);
+      case ItemMenuAction.edit:
+        return EditCommand(context, ref, id: id);
+      case ItemMenuAction.delete:
+        return DeleteCommand(context, ref, id: id);
       case ItemMenuAction.copy:
         return ItemOptionsCommand.copy(context, ref, id: id);
       case ItemMenuAction.share:

@@ -117,6 +117,79 @@ class WebsiteRepository {
     );
   }
 
+  Future<bool> edit({
+    required String username,
+    required String password,
+    required int id,
+    String? title,
+    String? text,
+  }) async {
+    final Response<List<int>> formResponse = await _getFormResponse(
+      username: username,
+      password: password,
+      id: id,
+      path: 'edit',
+    );
+    final Map<String, String>? formValues =
+        HtmlUtil.getHiddenFormValues(formResponse.data);
+
+    if (formValues == null || formValues.isEmpty) {
+      return false;
+    }
+
+    final String? cookie =
+        formResponse.headers.value(HttpHeaders.setCookieHeader);
+
+    final Uri uri = Uri.https(authority, 'xedit');
+    final PostDataMixin data = EditPostData(
+      hmac: formValues['hmac']!,
+      id: id,
+      title: title,
+      text: text,
+    );
+
+    return _performDefaultPost(
+      uri,
+      data,
+      cookie: cookie,
+    );
+  }
+
+  Future<bool> delete({
+    required String username,
+    required String password,
+    required int id,
+  }) async {
+    final Response<List<int>> formResponse = await _getFormResponse(
+      username: username,
+      password: password,
+      id: id,
+      path: 'delete-confirm',
+    );
+    final Map<String, String>? formValues =
+        HtmlUtil.getHiddenFormValues(formResponse.data);
+
+    if (formValues == null || formValues.isEmpty) {
+      return false;
+    }
+
+    final String? cookie =
+        formResponse.headers.value(HttpHeaders.setCookieHeader);
+
+    final Uri uri = Uri.https(authority, 'xdelete');
+    final PostDataMixin data = DeletePostData(
+      hmac: formValues['hmac']!,
+      id: id,
+      d: 'Yes',
+    );
+
+    return _performDefaultPost(
+      uri,
+      data,
+      cookie: cookie,
+    );
+  }
+
   Future<bool> submit({
     required String username,
     required String password,
@@ -124,8 +197,11 @@ class WebsiteRepository {
     String? url,
     String? text,
   }) async {
-    final Response<List<int>> formResponse =
-        await _getSubmitFormResponse(username: username, password: password);
+    final Response<List<int>> formResponse = await _getFormResponse(
+      username: username,
+      password: password,
+      path: 'submitlink',
+    );
     final Map<String, String>? formValues =
         HtmlUtil.getHiddenFormValues(formResponse.data);
 
@@ -170,8 +246,11 @@ class WebsiteRepository {
       {required String username, required String password}) async {
     // We're not interested in the submit form specifically, but it's a rather
     // small page that returns the cookie we need for the next call.
-    final Response<void> formResponse =
-        await _getSubmitFormResponse(username: username, password: password);
+    final Response<void> formResponse = await _getFormResponse(
+      username: username,
+      password: password,
+      path: 'submitlink',
+    );
     final String? cookie =
         formResponse.headers.value(HttpHeaders.setCookieHeader);
 
@@ -254,14 +333,21 @@ class WebsiteRepository {
     ];
   }
 
-  Future<Response<List<int>>> _getSubmitFormResponse({
+  Future<Response<List<int>>> _getFormResponse({
     required String username,
     required String password,
+    required String path,
+    int? id,
   }) async {
-    final Uri uri = Uri.https(authority, 'submitlink');
-    final PostDataMixin data = SubmitFormPostData(
+    final Uri uri = Uri.https(
+      authority,
+      path,
+      <String, dynamic>{if (id != null) 'id': id.toString()},
+    );
+    final PostDataMixin data = FormPostData(
       acct: username,
       pw: password,
+      id: id,
     );
     return _performPost(
       uri,

@@ -34,7 +34,7 @@ class ItemPage extends HookConsumerWidget {
             IconButton(
               icon: const Icon(FluentIcons.search_24_regular),
               tooltip: AppLocalizations.of(context)!.search,
-              onPressed: () => _searchSelected(context, ref),
+              onPressed: () => _searchSelected(context),
             ),
           PopupMenuButton<ItemMenuAction>(
             itemBuilder: (BuildContext context) =>
@@ -61,7 +61,7 @@ class ItemPage extends HookConsumerWidget {
     ref.refresh(visitedProvider(id));
   }
 
-  Future<void> _searchSelected(BuildContext context, WidgetRef ref) {
+  Future<void> _searchSelected(BuildContext context) {
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => ItemSearchPage(storyId: id),

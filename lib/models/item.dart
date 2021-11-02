@@ -68,6 +68,14 @@ class Item with _$Item {
   late final String? originalYear =
       title != null ? _yearRegExp.firstMatch(title!)?.group(1) : null;
 
+  late final bool editable = _timeAgoHours != null && _timeAgoHours! < 2;
+
+  late final bool deletable =
+      _timeAgoHours != null && _timeAgoHours! < 2 && kids.isEmpty;
+
+  late final num? _timeAgoHours =
+      time != null ? Jiffy().diff(Jiffy.unix(time!), Units.HOUR) : null;
+
   Item addKid(int kidId) => copyWith(kids: <int>[kidId, ...kids]);
 
   Item incrementDescendants() =>

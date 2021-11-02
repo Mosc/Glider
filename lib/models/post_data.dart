@@ -86,14 +86,28 @@ class CommentPostData with _$CommentPostData, PostDataMixin {
 }
 
 @freezed
-class SubmitFormPostData with _$SubmitFormPostData, PostDataMixin {
-  factory SubmitFormPostData({
-    required String acct,
-    required String pw,
-  }) = _SubmitFormPostData;
+class EditPostData with _$EditPostData, PostDataMixin {
+  factory EditPostData({
+    required String hmac,
+    required int id,
+    String? title,
+    String? text,
+  }) = _EditPostData;
 
-  factory SubmitFormPostData.fromJson(Map<String, dynamic> json) =>
-      _$SubmitFormPostDataFromJson(json);
+  factory EditPostData.fromJson(Map<String, dynamic> json) =>
+      _$EditPostDataFromJson(json);
+}
+
+@freezed
+class DeletePostData with _$DeletePostData, PostDataMixin {
+  factory DeletePostData({
+    required String hmac,
+    required int id,
+    required String d,
+  }) = _DeletePostData;
+
+  factory DeletePostData.fromJson(Map<String, dynamic> json) =>
+      _$DeletePostDataFromJson(json);
 }
 
 @freezed
@@ -108,4 +122,16 @@ class SubmitPostData with _$SubmitPostData, PostDataMixin {
 
   factory SubmitPostData.fromJson(Map<String, dynamic> json) =>
       _$SubmitPostDataFromJson(json);
+}
+
+@freezed
+class FormPostData with _$FormPostData, PostDataMixin {
+  factory FormPostData({
+    required String acct,
+    required String pw,
+    int? id,
+  }) = _FormPostData;
+
+  factory FormPostData.fromJson(Map<String, dynamic> json) =>
+      _$FormPostDataFromJson(json);
 }

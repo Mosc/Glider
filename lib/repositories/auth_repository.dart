@@ -188,6 +188,38 @@ class AuthRepository {
     return false;
   }
 
+  Future<bool> edit({required int id, String? title, String? text}) async {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
+      return _websiteRepository.edit(
+        username: username,
+        password: password,
+        id: id,
+        title: title,
+        text: text,
+      );
+    }
+
+    return false;
+  }
+
+  Future<bool> delete({required int id}) async {
+    final String? username = await _storageRepository.username;
+    final String? password = await _storageRepository.password;
+
+    if (username != null && password != null) {
+      return _websiteRepository.delete(
+        username: username,
+        password: password,
+        id: id,
+      );
+    }
+
+    return false;
+  }
+
   Future<bool> submit(
       {required String title, String? url, String? text}) async {
     final String? username = await _storageRepository.username;
