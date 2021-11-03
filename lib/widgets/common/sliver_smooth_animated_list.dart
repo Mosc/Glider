@@ -14,22 +14,26 @@ class SliverSmoothAnimatedList<T extends Object> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverImplicitlyAnimatedList<T>(
-      items: items.toList(growable: false),
-      areItemsTheSame: (T a, T b) => a == b,
-      itemBuilder: (BuildContext context, Animation<double> animation, T item,
-              int index) =>
-          AnimationUtil.verticalFadeTransitionBuilder(
-        builder(context, item, index),
-        CurvedAnimation(
-          parent: animation,
-          curve: AnimationUtil.defaultCurve,
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      sliver: SliverImplicitlyAnimatedList<T>(
+        items: items.toList(growable: false),
+        areItemsTheSame: (T a, T b) => a == b,
+        itemBuilder: (BuildContext context, Animation<double> animation, T item,
+                int index) =>
+            AnimationUtil.verticalFadeTransitionBuilder(
+          builder(context, item, index),
+          CurvedAnimation(
+            parent: animation,
+            curve: AnimationUtil.defaultCurve,
+          ),
         ),
+        insertDuration: AnimationUtil.defaultDuration,
+        removeDuration: AnimationUtil.defaultDuration,
+        updateDuration: AnimationUtil.defaultDuration,
+        spawnIsolate: false,
       ),
-      insertDuration: AnimationUtil.defaultDuration,
-      removeDuration: AnimationUtil.defaultDuration,
-      updateDuration: AnimationUtil.defaultDuration,
-      spawnIsolate: false,
     );
   }
 }
