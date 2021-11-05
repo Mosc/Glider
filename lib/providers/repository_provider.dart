@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/repositories/auth_repository.dart';
@@ -11,7 +12,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final Provider<Dio> _dioProvider = Provider<Dio>(
-  (_) => Dio()..interceptors.add(CacheInterceptor()),
+  (_) {
+    final Dio dio = Dio();
+    dio.interceptors
+      ..add(CacheInterceptor())
+      ..add(RetryInterceptor(dio: dio));
+    return dio;
+  },
 );
 
 final FutureProvider<SharedPreferences> _sharedPreferences =
