@@ -98,7 +98,7 @@ packages:
       name: cached_network_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.0+1"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
@@ -276,7 +276,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-dev.11"
+    version: "1.0.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -386,7 +386,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-dev.11"
+    version: "1.0.0"
   html:
     dependency: "direct main"
     description:
@@ -633,7 +633,7 @@ packages:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-dev.10"
+    version: "1.0.0"
   rxdart:
     dependency: transitive
     description:

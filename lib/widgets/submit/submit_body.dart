@@ -182,7 +182,7 @@ class SubmitBody extends HookConsumerWidget {
           ItemTileData(
             _buildItem(
               context,
-              id: ref.watch(previewIdStateProvider).state,
+              id: ref.watch(previewIdStateProvider),
               username: username,
               title: titleListenable.text,
               url: link(),
@@ -227,11 +227,8 @@ class SubmitBody extends HookConsumerWidget {
     );
 
     if (success) {
-      final StateController<int> previewIdStateController =
-          ref.read(previewIdStateProvider);
-
       // Decrement preview ID to prevent duplicates.
-      previewIdStateController.state--;
+      ref.read(previewIdStateProvider.state).update((int state) => state - 1);
 
       Navigator.of(context).pop(true);
     } else {

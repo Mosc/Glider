@@ -22,9 +22,10 @@ class FavoriteCommand with CommandMixin {
       ref.read(authRepositoryProvider).favorite(
             id: id,
             favorite: favorite,
-            onUpdate: () => ref
-              ..refresh(favoritedProvider(id))
-              ..refresh(favoriteIdsProvider),
+            onUpdate: () {
+              ref.refresh(favoritedProvider(id));
+              ref.read(favoriteIdsNotifierProvider.notifier).forceLoad();
+            },
           ),
     );
   }

@@ -62,11 +62,11 @@ class StoriesSearchPage extends HookConsumerWidget {
 
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> storySearchQueryStateController =
-        ref.watch(storySearchQueryStateProvider);
+        ref.watch(storySearchQueryStateProvider.state);
     final StateController<SearchRange?> storySearchRangeStateController =
-        ref.watch(storySearchRangeStateProvider);
+        ref.watch(storySearchRangeStateProvider.state);
     final StateController<SearchOrder> searchStoryTypeStateController =
-        ref.watch(storySearchOrderStateProvider);
+        ref.watch(storySearchOrderStateProvider.state);
     useMemoized(
       () => Future<void>.microtask(
         () => storySearchRangeStateController.update((_) => initialSearchRange),
@@ -183,10 +183,10 @@ class _SearchRangeChip extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final StateController<SearchRange?> storySearchRangeStateController =
-        ref.watch(storySearchRangeStateProvider);
+        ref.watch(storySearchRangeStateProvider.state);
     final StateController<DateTimeRange?>
         storySearchCustomDateTimeRangeStateController =
-        ref.watch(storySearchCustomDateTimeRangeStateProvider);
+        ref.watch(storySearchCustomDateTimeRangeStateProvider.state);
 
     return ChoiceChip(
       label: Text(searchRange.title(
@@ -195,7 +195,7 @@ class _SearchRangeChip extends HookConsumerWidget {
       onSelected: (bool selected) async {
         final StateController<DateTimeRange?>
             customDateTimeRangeStateController = ref
-                .read(storySearchCustomDateTimeRangeStateProvider)
+                .read(storySearchCustomDateTimeRangeStateProvider.state)
               ..update((_) => null);
 
         if (searchRange == SearchRange.custom && selected) {

@@ -31,9 +31,9 @@ class ItemTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (refreshProvider != null) {
-      ref.listen(
+      ref.listen<void>(
         refreshProvider!,
-        (_) => ref.read(itemNotifierProvider(id).notifier).forceLoad(),
+        (_, __) => ref.read(itemNotifierProvider(id).notifier).forceLoad(),
       );
     }
 
@@ -41,11 +41,8 @@ class ItemTile extends HookConsumerWidget {
 
     return asyncItem.when(
       data: (Item item) => _itemBuilder(context, item),
-      loading: (AsyncValue<Item>? previousAsyncItem) =>
-          previousAsyncItem != null
-              ? _itemBuilder(context, previousAsyncItem.value)
-              : loading(),
-      error: (_, __, ___) => const SizedBox.shrink(),
+      loading: loading,
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 

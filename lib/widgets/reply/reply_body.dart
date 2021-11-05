@@ -108,7 +108,7 @@ class ReplyBody extends HookConsumerWidget {
         if (username != null)
           ItemTileData(
             _buildItem(
-              id: ref.watch(previewIdStateProvider).state,
+              id: ref.watch(previewIdStateProvider),
               username: username,
               text: commentListenable.text,
             ),
@@ -137,7 +137,7 @@ class ReplyBody extends HookConsumerWidget {
 
     if (success) {
       final StateController<int> previewIdStateController =
-          ref.read(previewIdStateProvider);
+          ref.read(previewIdStateProvider.state);
       final int previewId = previewIdStateController.state;
 
       // Make comment preview available.
@@ -162,7 +162,7 @@ class ReplyBody extends HookConsumerWidget {
       }
 
       // Decrement preview ID to prevent duplicates.
-      previewIdStateController.state--;
+      previewIdStateController.update((int state) => state - 1);
 
       Navigator.of(context).pop(true);
     } else {

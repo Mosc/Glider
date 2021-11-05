@@ -62,7 +62,7 @@ class ItemTileData extends HookConsumerWidget {
     // We don't want the slidable to update while being slided, so we delay any
     // upvote state until after the call has actually finished.
     final StateController<bool?> delayedUpvotedController =
-        ref.watch(delayedUpvoteStateProvider(item.id));
+        ref.watch(delayedUpvoteStateProvider(item.id).state);
 
     Future<void> updateDelayedUpvoted() async {
       final bool upvoted = await ref.read(upvotedProvider(item.id).future);

@@ -14,20 +14,21 @@ class StoriesSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeFutureProvider<Iterable<int>> provider =
-        storyIdsSearchProvider(
+    final AutoDisposeStateNotifierProvider<StoryIdsSearchNotifier,
+        AsyncValue<Iterable<int>>> provider = storyIdsSearchNotifierProvider(
       SearchParameters(
-        query: ref.watch(storySearchQueryStateProvider).state,
-        range: ref.watch(storySearchRangeStateProvider).state,
+        query: ref.watch(storySearchQueryStateProvider),
+        range: ref.watch(storySearchRangeStateProvider),
         customDateTimeRange:
-            ref.watch(storySearchCustomDateTimeRangeStateProvider).state,
-        order: ref.watch(storySearchOrderStateProvider).state,
+            ref.watch(storySearchCustomDateTimeRangeStateProvider),
+        order: ref.watch(storySearchOrderStateProvider),
         maxResults: 50,
       ),
     );
 
     return RefreshableBody<Iterable<int>>(
       provider: provider,
+      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -45,7 +47,7 @@ class StoriesPage extends HookConsumerWidget {
     );
 
     final StateController<StoryType> storyTypeStateController =
-        ref.watch(storyTypeStateProvider);
+        ref.watch(storyTypeStateProvider.state);
 
     return Scaffold(
       body: FloatingAppBarScrollView(
@@ -100,7 +102,9 @@ class StoriesPage extends HookConsumerWidget {
   }
 
   Future<void> _searchSelected(BuildContext context, WidgetRef ref) {
-    ref.read(storySearchRangeStateProvider).update((_) => SearchRange.pastYear);
+    ref
+        .read(storySearchRangeStateProvider.state)
+        .update((_) => SearchRange.pastYear);
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => const StoriesSearchPage(
@@ -142,15 +146,23 @@ class StoriesPage extends HookConsumerWidget {
           false;
 
       if (success) {
-        ref.refresh(storyIdsProvider(StoryType.newStories));
-        ref.read(storyTypeStateProvider).update((_) => StoryType.newStories);
+        unawaited(
+          ref
+              .read(storyIdsNotifierProvider(StoryType.newStories).notifier)
+              .forceLoad(),
+        );
+        ref
+            .read(storyTypeStateProvider.state)
+            .update((_) => StoryType.newStories);
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.processingInfo),
             action: SnackBarAction(
               label: AppLocalizations.of(context)!.refresh,
-              onPressed: () =>
-                  ref.refresh(storyIdsProvider(StoryType.newStories)),
+              onPressed: () => ref
+                  .refresh(
+                      storyIdsNotifierProvider(StoryType.newStories).notifier)
+                  .forceLoad(),
             ),
           ),
         );

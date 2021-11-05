@@ -12,11 +12,8 @@ class AccountLoggedIn extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(usernameProvider).when(
           data: _userDataBuilder,
-          loading: (AsyncValue<String?>? previousAsyncUsername) =>
-              previousAsyncUsername != null
-                  ? _userDataBuilder(previousAsyncUsername.value)
-                  : const Loading(),
-          error: (_, __, ___) => const Error(),
+          loading: () => const Loading(),
+          error: (_, __) => const Error(),
         );
   }
 

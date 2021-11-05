@@ -7,7 +7,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  cached_network_image: ^3.1.0
+  cached_network_image: ^3.1.0+1
   dio: ^4.0.1
   fluentui_system_icons: ^1.1.144
   flutter:
@@ -22,7 +22,7 @@ dependencies:
   flutter_web_browser: ^0.15.0
   flutter_widget_from_html_core: ^0.8.1
   freezed_annotation: ^0.15.0
-  hooks_riverpod: ^1.0.0-dev.11
+  hooks_riverpod: ^1.0.0
   html: ^0.15.0
   html_unescape: ^2.0.0
   implicitly_animated_reorderable_list: ^0.4.2

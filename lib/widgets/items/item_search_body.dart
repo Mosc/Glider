@@ -16,11 +16,11 @@ class ItemSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeFutureProvider<Iterable<int>> provider =
-        itemIdsSearchProvider(
+    final AutoDisposeStateNotifierProvider<StoryIdsSearchNotifier,
+        AsyncValue<Iterable<int>>> provider = storyIdsSearchNotifierProvider(
       SearchParameters(
-        query: ref.watch(itemSearchQueryStateProvider).state,
-        order: ref.watch(itemSearchOrderStateProvider).state,
+        query: ref.watch(itemSearchQueryStateProvider),
+        order: ref.watch(itemSearchOrderStateProvider),
         parentStoryId: storyId,
         maxResults: 50,
       ),
@@ -28,6 +28,7 @@ class ItemSearchBody extends HookConsumerWidget {
 
     return RefreshableBody<Iterable<int>>(
       provider: provider,
+      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

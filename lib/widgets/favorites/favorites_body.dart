@@ -13,11 +13,12 @@ class FavoritesBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeFutureProvider<Iterable<int>> provider =
-        favoriteIdsProvider;
+    final AutoDisposeStateNotifierProvider<FavoriteIdsNotifier,
+        AsyncValue<Iterable<int>>> provider = favoriteIdsNotifierProvider;
 
     return RefreshableBody<Iterable<int>>(
-      provider: favoriteIdsProvider,
+      provider: provider,
+      onRefresh: () => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
