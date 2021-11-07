@@ -38,10 +38,9 @@ class AppTheme {
   static ThemeData _buildTheme(Color color, {required Color backgroundColor}) {
     final Brightness brightness =
         ThemeData.estimateBrightnessForColor(backgroundColor);
-    final Color onColor =
-        ThemeData.estimateBrightnessForColor(color) == Brightness.dark
-            ? Colors.white
-            : Colors.black;
+    final Brightness colorBrightness =
+        ThemeData.estimateBrightnessForColor(color);
+    final Color onColor = colorBrightness.isDark ? Colors.white : Colors.black;
     final Color canvasColor = backgroundColor.lighten(0.05);
 
     return ThemeData(

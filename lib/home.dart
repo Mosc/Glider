@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -33,13 +36,31 @@ class Home extends HookConsumerWidget {
       <Object?>[UniLinksHandler.uriSubscription],
     );
 
-    final Color overlayColor =
-        Theme.of(context).brightness.isDark ? Colors.black54 : Colors.black26;
+    final ValueNotifier<bool> isEdgeToEdgeState = useState(true);
+
+    useMemoized(
+      () async {
+        if (Platform.isAndroid) {
+          final AndroidDeviceInfo androidInfo =
+              await DeviceInfoPlugin().androidInfo;
+          isEdgeToEdgeState.value = androidInfo.version.sdkInt != null &&
+              androidInfo.version.sdkInt! >= 29;
+        }
+      },
+    );
+
+    final bool isDark = Theme.of(context).brightness.isDark;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: overlayColor,
-        systemNavigationBarColor: overlayColor,
+        statusBarColor: isDark ? Colors.black38 : Colors.black26,
+        systemNavigationBarColor: isEdgeToEdgeState.value
+            ? Colors.transparent
+            : isDark
+                ? Colors.black38
+                : const Color(0xE6FFFFFF),
+        systemNavigationBarIconBrightness:
+            isDark ? Brightness.light : Brightness.dark,
       ),
       child: const StoriesPage(),
     );
