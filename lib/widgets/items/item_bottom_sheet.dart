@@ -18,6 +18,7 @@ class ItemBottomSheet extends HookConsumerWidget {
         for (ItemMenuAction menuAction in ItemMenuAction.values)
           if (menuAction.visible(context, ref, id: id))
             ListTile(
+              leading: Icon(menuAction.icon(ref, id: id)),
               title: Text(menuAction.title(context, ref, id: id)),
               onTap: () async {
                 await menuAction

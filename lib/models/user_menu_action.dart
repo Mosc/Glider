@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,6 +18,15 @@ extension UserMenuActionExtension on UserMenuAction {
         return AppLocalizations.of(context)!.copy;
       case UserMenuAction.share:
         return AppLocalizations.of(context)!.share;
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case UserMenuAction.copy:
+        return FluentIcons.copy_24_regular;
+      case UserMenuAction.share:
+        return FluentIcons.share_24_regular;
     }
   }
 

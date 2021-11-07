@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -66,17 +67,23 @@ extension ItemMenuActionExtension on ItemMenuAction {
   String title(BuildContext context, WidgetRef ref, {required int id}) {
     switch (this) {
       case ItemMenuAction.vote:
-        return ref.read(upvotedProvider(id)).asData?.value ?? false
+        final bool upvoted =
+            ref.read(upvotedProvider(id)).asData?.value ?? false;
+        return upvoted
             ? AppLocalizations.of(context)!.unvote
             : AppLocalizations.of(context)!.upvote;
       case ItemMenuAction.reply:
         return AppLocalizations.of(context)!.reply;
       case ItemMenuAction.favorite:
-        return ref.read(favoritedProvider(id)).asData?.value ?? false
+        final bool favorited =
+            ref.read(favoritedProvider(id)).asData?.value ?? false;
+        return favorited
             ? AppLocalizations.of(context)!.unfavorite
             : AppLocalizations.of(context)!.favorite;
       case ItemMenuAction.flag:
-        return ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false
+        final bool flagged =
+            ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false;
+        return flagged
             ? AppLocalizations.of(context)!.unflag
             : AppLocalizations.of(context)!.flag;
       case ItemMenuAction.edit:
@@ -87,6 +94,39 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return AppLocalizations.of(context)!.copy;
       case ItemMenuAction.share:
         return AppLocalizations.of(context)!.share;
+    }
+  }
+
+  IconData icon(WidgetRef ref, {required int id}) {
+    switch (this) {
+      case ItemMenuAction.vote:
+        final bool upvoted =
+            ref.read(upvotedProvider(id)).asData?.value ?? false;
+        return upvoted
+            ? FluentIcons.arrow_undo_24_regular
+            : FluentIcons.arrow_up_24_regular;
+      case ItemMenuAction.reply:
+        return FluentIcons.arrow_reply_24_regular;
+      case ItemMenuAction.favorite:
+        final bool favorited =
+            ref.read(favoritedProvider(id)).asData?.value ?? false;
+        return favorited
+            ? FluentIcons.star_off_24_regular
+            : FluentIcons.star_24_regular;
+      case ItemMenuAction.flag:
+        final bool flagged =
+            ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false;
+        return flagged
+            ? FluentIcons.flag_off_24_regular
+            : FluentIcons.flag_24_regular;
+      case ItemMenuAction.edit:
+        return FluentIcons.edit_24_regular;
+      case ItemMenuAction.delete:
+        return FluentIcons.delete_24_regular;
+      case ItemMenuAction.copy:
+        return FluentIcons.copy_24_regular;
+      case ItemMenuAction.share:
+        return FluentIcons.share_24_regular;
     }
   }
 
