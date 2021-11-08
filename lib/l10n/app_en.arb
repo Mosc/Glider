@@ -56,6 +56,8 @@
   "grey": "Gray",
   "black": "Black",
   "space": "Space",
+  "settings": "Settings",
+  "useCustomTabs": "Open links in custom tabs",
   "account": "Account",
   "register": "Register",
   "registerError": "Registering failed",

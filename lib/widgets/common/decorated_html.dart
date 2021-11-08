@@ -59,7 +59,7 @@ class DecoratedHtml extends HookConsumerWidget {
 
         return null;
       },
-      onTapUrl: (String url) => UrlUtil.tryLaunch(context, url),
+      onTapUrl: (String url) => UrlUtil.tryLaunch(context, ref, url),
       textStyle: textStyle ?? Theme.of(context).textTheme.bodyText2,
     );
   }

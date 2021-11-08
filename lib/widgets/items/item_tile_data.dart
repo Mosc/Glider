@@ -106,7 +106,7 @@ class ItemTileData extends HookConsumerWidget {
           ? item.url != null
               ? SlidableAction(
                   action: () async {
-                    unawaited(UrlUtil.tryLaunch(context, item.url!));
+                    unawaited(UrlUtil.tryLaunch(context, ref, item.url!));
                   },
                   icon: FluentIcons.window_arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.surface,

@@ -23,7 +23,7 @@ class ItemTileUrl extends HookConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: () => UrlUtil.tryLaunch(context, item.url!),
+      onTap: () => UrlUtil.tryLaunch(context, ref, item.url!),
       child: FadeHero(
         tag: 'item_${item.id}_url',
         child: AnimatedOpacity(

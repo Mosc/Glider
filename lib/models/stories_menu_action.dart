@@ -7,6 +7,7 @@ enum StoriesMenuAction {
   favorites,
   submit,
   appearance,
+  settings,
   account,
 }
 
@@ -21,6 +22,8 @@ extension StoriesMenuActionExtension on StoriesMenuAction {
         return AppLocalizations.of(context)!.submit;
       case StoriesMenuAction.appearance:
         return AppLocalizations.of(context)!.appearance;
+      case StoriesMenuAction.settings:
+        return AppLocalizations.of(context)!.settings;
       case StoriesMenuAction.account:
         return AppLocalizations.of(context)!.account;
     }

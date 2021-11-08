@@ -27,7 +27,7 @@ class ItemTileFavicon extends HookConsumerWidget {
     final double? size = ItemTileHeader.calculateHeight(context);
 
     return GestureDetector(
-      onTap: () => UrlUtil.tryLaunch(context, item.url!),
+      onTap: () => UrlUtil.tryLaunch(context, ref, item.url!),
       child: FadeHero(
         tag: 'item_${item.id}_favicon',
         child: AnimatedOpacity(

@@ -40,6 +40,12 @@ final AutoDisposeFutureProvider<bool> showMetadataProvider =
       ref.read(storageRepositoryProvider).showMetadata,
 );
 
+final AutoDisposeFutureProvider<bool> useCustomTabsProvider =
+    FutureProvider.autoDispose<bool>(
+  (AutoDisposeFutureProviderRef<bool> ref) =>
+      ref.read(storageRepositoryProvider).useCustomTabs,
+);
+
 final AutoDisposeFutureProvider<bool> completedWalkthroughProvider =
     FutureProvider.autoDispose<bool>(
   (AutoDisposeFutureProviderRef<bool> ref) =>

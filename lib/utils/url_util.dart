@@ -3,16 +3,20 @@ import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:native_launcher/native_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlUtil {
   UrlUtil._();
 
-  static Future<bool> tryLaunch(BuildContext context, String urlString) async {
+  static Future<bool> tryLaunch(
+      BuildContext context, WidgetRef ref, String urlString) async {
     final bool success = await _tryLaunchNonBrowser(urlString) ||
-        await _tryLaunchCustomTab(context, urlString) ||
+        await ref.read(useCustomTabsProvider.future) &&
+            await _tryLaunchCustomTab(context, urlString) ||
         await _tryLaunchPlatform(urlString);
 
     if (!success) {

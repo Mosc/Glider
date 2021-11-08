@@ -21,6 +21,7 @@ import 'package:glider/widgets/appearance/appearance_bottom_sheet.dart';
 import 'package:glider/widgets/common/decorated_speed_dial.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_body.dart';
+import 'package:glider/widgets/settings/settings_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeStateProvider<StoryType> storyTypeStateProvider =
@@ -77,6 +78,8 @@ class StoriesPage extends HookConsumerWidget {
                   return _submitSelected(context, ref);
                 case StoriesMenuAction.appearance:
                   return _appearanceSelected(context);
+                case StoriesMenuAction.settings:
+                  return _settingsSelected(context);
                 case StoriesMenuAction.account:
                   return _accountSelected(context);
               }
@@ -189,6 +192,14 @@ class StoriesPage extends HookConsumerWidget {
       context: context,
       isScrollControlled: true,
       builder: (_) => const AppearanceBottomSheet(),
+    );
+  }
+
+  Future<void> _settingsSelected(BuildContext context) async {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const SettingsBottomSheet(),
     );
   }
 
