@@ -87,6 +87,7 @@
   "delete": "Delete",
   "deleteNotLoggedIn": "Log in to delete",
   "deleteConfirm": "Are you sure you want to delete this?",
+  "report": "Report",
   "copy": "Copy...",
   "share": "Share...",
   "text": "Text",
