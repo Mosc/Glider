@@ -1,0 +1,10 @@
+• Implemented edit and delete functionality (within 2 hours)
+• Retry failed network calls
+• Added setting to disable custom tabs usage
+• Fixed indentation of code in comments
+
+Previously:
+• Added search functionality in comments
+• Optimized network usage, especially for search
+• Animated any list changes, such as during load and refresh
+• Allowed selecting system theme with specific dark mode color — this change resets your currently selected theme
