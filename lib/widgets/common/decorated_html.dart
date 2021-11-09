@@ -27,14 +27,6 @@ class DecoratedHtml extends HookConsumerWidget {
       _html,
       buildAsync: false,
       customStylesBuilder: (dom.Element element) {
-        if (element.localName == 'pre') {
-          return <String, String>{
-            'margin-top': '1em',
-            'margin-bottom': '1em',
-            'font-family': 'monospace',
-          };
-        }
-
         if (_isQuote(element)) {
           return <String, String>{'margin': '0'};
         }
