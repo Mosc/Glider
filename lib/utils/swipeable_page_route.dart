@@ -81,7 +81,6 @@ mixin SwipeablePageRouteMixin<T> on PageRoute<T> {
                 enabledCallback: () =>
                     !route.isFirst &&
                     !route.willHandlePopInternally &&
-                    !route.hasScopedWillPopCallback &&
                     !route.fullscreenDialog &&
                     route.animation!.status == AnimationStatus.completed &&
                     route.secondaryAnimation!.status ==
