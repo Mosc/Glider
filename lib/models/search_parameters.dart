@@ -8,12 +8,20 @@ part 'search_parameters.freezed.dart';
 
 @freezed
 class SearchParameters with _$SearchParameters {
-  factory SearchParameters({
+  factory SearchParameters.stories({
     required String query,
     SearchRange? range,
     DateTimeRange? customDateTimeRange,
     @Default(SearchOrder.byRelevance) SearchOrder order,
-    int? parentStoryId,
     int? maxResults,
-  }) = _SearchParameters;
+  }) = _StoriesSearchParameters;
+
+  factory SearchParameters.children({
+    required String query,
+    SearchRange? range,
+    DateTimeRange? customDateTimeRange,
+    @Default(SearchOrder.byRelevance) SearchOrder order,
+    required int parentStoryId,
+    int? maxResults,
+  }) = _ChildrenSearchParameters;
 }

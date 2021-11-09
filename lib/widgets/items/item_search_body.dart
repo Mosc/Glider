@@ -16,9 +16,9 @@ class ItemSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeStateNotifierProvider<StoryIdsSearchNotifier,
-        AsyncValue<Iterable<int>>> provider = storyIdsSearchNotifierProvider(
-      SearchParameters(
+    final AutoDisposeStateNotifierProvider<ItemIdsSearchNotifier,
+        AsyncValue<Iterable<int>>> provider = itemIdsSearchNotifierProvider(
+      SearchParameters.children(
         query: ref.watch(itemSearchQueryStateProvider),
         order: ref.watch(itemSearchOrderStateProvider),
         parentStoryId: storyId,

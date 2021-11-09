@@ -14,18 +14,14 @@ class SearchApiRepository {
 
   final Dio _dio;
 
-  Future<Iterable<int>> searchStoryIds(
-      SearchParameters searchParameters) async {
-    return _searchIds(
-      searchParameters,
-      tags: '(story,poll)',
-    );
-  }
-
   Future<Iterable<int>> searchItemIds(SearchParameters searchParameters) async {
     return _searchIds(
       searchParameters,
-      tags: 'story_${searchParameters.parentStoryId!}',
+      tags: searchParameters.when(
+        stories: (_, __, ___, ____, _____) => '(story,poll)',
+        children: (_, __, ___, ____, int parentStoryId, _____) =>
+            'story_$parentStoryId',
+      ),
     );
   }
 

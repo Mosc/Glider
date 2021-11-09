@@ -62,26 +62,6 @@ class StoryIdsNotifier extends BaseNotifier<Iterable<int>> {
   }
 }
 
-final AutoDisposeStateNotifierProviderFamily<StoryIdsSearchNotifier,
-        AsyncValue<Iterable<int>>, SearchParameters>
-    storyIdsSearchNotifierProvider = StateNotifierProvider.autoDispose.family(
-  (AutoDisposeStateNotifierProviderRef<StoryIdsSearchNotifier,
-                  AsyncValue<Iterable<int>>>
-              ref,
-          SearchParameters searchParameters) =>
-      StoryIdsSearchNotifier(ref.read, searchParameters),
-);
-
-class StoryIdsSearchNotifier extends BaseNotifier<Iterable<int>> {
-  StoryIdsSearchNotifier(Reader read, this.searchParameters) : super(read);
-
-  final SearchParameters searchParameters;
-
-  @override
-  Future<Iterable<int>> getData() =>
-      read(searchApiRepositoryProvider).searchStoryIds(searchParameters);
-}
-
 final AutoDisposeStateNotifierProviderFamily<ItemIdsSearchNotifier,
         AsyncValue<Iterable<int>>, SearchParameters>
     itemIdsSearchNotifierProvider = StateNotifierProvider.autoDispose.family(

@@ -14,9 +14,9 @@ class StoriesSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeStateNotifierProvider<StoryIdsSearchNotifier,
-        AsyncValue<Iterable<int>>> provider = storyIdsSearchNotifierProvider(
-      SearchParameters(
+    final AutoDisposeStateNotifierProvider<ItemIdsSearchNotifier,
+        AsyncValue<Iterable<int>>> provider = itemIdsSearchNotifierProvider(
+      SearchParameters.stories(
         query: ref.watch(storySearchQueryStateProvider),
         range: ref.watch(storySearchRangeStateProvider),
         customDateTimeRange:
