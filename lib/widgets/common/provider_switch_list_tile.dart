@@ -17,7 +17,7 @@ class ProviderSwitchListTile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile(
       title: Text(title),
-      value: ref.watch(provider).asData?.value ?? true,
+      value: ref.watch(provider).asData?.value ?? false,
       onChanged: (bool newValue) async {
         await onSave(newValue);
         ref.refresh(provider);
