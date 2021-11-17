@@ -53,8 +53,16 @@ class Item with _$Item {
   late final String? timeAgo =
       time != null ? Jiffy.unix(time!).fromNow() : null;
 
-  String? faviconUrl(int? size) => urlHost != null
-      ? 'https://api.faviconkit.com/$urlHost${size != null ? '/$size' : ''}'
+  String? faviconUrl(int size) => urlHost != null
+      ? Uri.https(
+          'icons.viter.nl',
+          'icon',
+          <String, String>{
+            'url': urlHost!,
+            'size': '0..$size..500',
+            'formats': 'gif,ico,jpg,png',
+          },
+        ).toString()
       : null;
 
   late final bool hasVideo = title != null && _videoRegExp.hasMatch(title!);

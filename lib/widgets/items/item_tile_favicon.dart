@@ -36,7 +36,7 @@ class ItemTileFavicon extends HookConsumerWidget {
           child: item.preview
               ? _placeholderBuilder(context, size: size)
               : OctoImage(
-                  image: ref.read(imageProvider(item.faviconUrl(48)!)),
+                  image: ref.read(imageProvider(item.faviconUrl(64)!)),
                   imageBuilder: (_, Widget child) => ClipRRect(
                     borderRadius: _borderRadius,
                     child: Container(
