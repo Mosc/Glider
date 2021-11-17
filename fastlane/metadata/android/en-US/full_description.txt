@@ -12,4 +12,4 @@ Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
 
 Source code is available at https://github.com/Mosc/Glider. Don't hesitate to submit an issue if you'd like to see anything improved.
 
-Uses the official Hacker News API hosted on Firebase and the Hacker News Search API provided by Algolia. The Favicon Kit API is used for displaying favicons.
+Uses the official Hacker News API hosted on Firebase and the Hacker News Search API provided by Algolia.
