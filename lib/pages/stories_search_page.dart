@@ -35,9 +35,15 @@ final AutoDisposeStateProvider<SearchOrder> storySearchOrderStateProvider =
 );
 
 class StoriesSearchPage extends HookConsumerWidget {
-  const StoriesSearchPage(
-      {Key? key, this.initialSearchRange, this.enableSearch = true})
-      : super(key: key);
+  const StoriesSearchPage({Key? key})
+      : initialSearchRange = SearchRange.pastYear,
+        enableSearch = true,
+        super(key: key);
+
+  const StoriesSearchPage.catchUp({Key? key})
+      : initialSearchRange = SearchRange.pastWeek,
+        enableSearch = false,
+        super(key: key);
 
   final SearchRange? initialSearchRange;
   final bool enableSearch;

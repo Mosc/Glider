@@ -110,9 +110,7 @@ class StoriesPage extends HookConsumerWidget {
         .update((_) => SearchRange.pastYear);
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
-        builder: (_) => const StoriesSearchPage(
-          initialSearchRange: SearchRange.pastYear,
-        ),
+        builder: (_) => const StoriesSearchPage(),
       ),
     );
   }
@@ -120,10 +118,7 @@ class StoriesPage extends HookConsumerWidget {
   Future<void> _catchUpSelected(BuildContext context) {
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
-        builder: (_) => const StoriesSearchPage(
-          initialSearchRange: SearchRange.pastWeek,
-          enableSearch: false,
-        ),
+        builder: (_) => const StoriesSearchPage.catchUp(),
       ),
     );
   }
