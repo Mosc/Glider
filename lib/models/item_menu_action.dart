@@ -97,7 +97,7 @@ extension ItemMenuActionExtension on ItemMenuAction {
     }
   }
 
-  IconData icon(WidgetRef ref, {required int id}) {
+  IconData icon(BuildContext context, WidgetRef ref, {required int id}) {
     switch (this) {
       case ItemMenuAction.vote:
         final bool upvoted =
@@ -124,7 +124,9 @@ extension ItemMenuActionExtension on ItemMenuAction {
       case ItemMenuAction.delete:
         return FluentIcons.delete_20_regular;
       case ItemMenuAction.copy:
-        return FluentIcons.copy_20_regular;
+        return Directionality.of(context) == TextDirection.rtl
+            ? FluentIcons.clipboard_text_rtl_20_regular
+            : FluentIcons.clipboard_text_ltr_20_regular;
       case ItemMenuAction.share:
         return FluentIcons.share_20_regular;
     }

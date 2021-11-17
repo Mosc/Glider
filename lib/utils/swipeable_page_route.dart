@@ -172,9 +172,9 @@ class _SwipeableBackGestureDetectorState<T>
         PositionedDirectional(
           start: 0,
           width: max(
-            Directionality.of(context) == TextDirection.ltr
-                ? MediaQuery.of(context).padding.left
-                : MediaQuery.of(context).padding.right,
+            Directionality.of(context) == TextDirection.rtl
+                ? MediaQuery.of(context).padding.right
+                : MediaQuery.of(context).padding.left,
             kMinInteractiveDimension,
           ),
           top: 0,

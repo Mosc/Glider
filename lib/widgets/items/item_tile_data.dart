@@ -60,7 +60,7 @@ class ItemTileData extends HookConsumerWidget {
               for (ItemMenuAction menuAction in ItemMenuAction.values)
                 if (menuAction.visible(context, ref, id: item.id))
                   IconButton(
-                    icon: Icon(menuAction.icon(ref, id: item.id)),
+                    icon: Icon(menuAction.icon(context, ref, id: item.id)),
                     tooltip: menuAction.title(context, ref, id: item.id),
                     onPressed: () => menuAction
                         .command(context, ref, id: item.id, rootId: root?.id)
