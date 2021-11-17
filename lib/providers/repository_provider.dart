@@ -28,7 +28,9 @@ final FutureProvider<SharedPreferences> _sharedPreferences =
 
 final Provider<FlutterSecureStorage> _secureStorageProvider =
     Provider<FlutterSecureStorage>(
-  (_) => const FlutterSecureStorage(),
+  (_) => const FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  ),
 );
 
 final Provider<ApiRepository> apiRepositoryProvider = Provider<ApiRepository>(
