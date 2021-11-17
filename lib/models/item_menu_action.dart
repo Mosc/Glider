@@ -29,20 +29,20 @@ enum ItemMenuAction {
 
 extension ItemMenuActionExtension on ItemMenuAction {
   bool visible(BuildContext context, WidgetRef ref, {required int id}) {
-    final Item? item = ref.read(itemNotifierProvider(id)).asData?.value;
+    final Item? item = ref.watch(itemNotifierProvider(id)).asData?.value;
 
     switch (this) {
       case ItemMenuAction.vote:
         return item != null &&
             !<ItemType>{ItemType.job}.contains(item.type) &&
-            ref.read(upvotedProvider(id)).asData != null;
+            ref.watch(upvotedProvider(id)).asData != null;
       case ItemMenuAction.reply:
         return item != null &&
             !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type);
       case ItemMenuAction.favorite:
         return item != null &&
             !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type) &&
-            ref.read(favoritedProvider(id)).asData != null;
+            ref.watch(favoritedProvider(id)).asData != null;
       case ItemMenuAction.flag:
         return item != null &&
             !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type);
@@ -50,13 +50,13 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return item != null &&
             !<ItemType>{ItemType.job, ItemType.poll, ItemType.pollopt}
                 .contains(item.type) &&
-            ref.read(usernameProvider).asData?.value == item.by &&
+            ref.watch(usernameProvider).asData?.value == item.by &&
             item.editable;
       case ItemMenuAction.delete:
         return item != null &&
             !<ItemType>{ItemType.job, ItemType.poll, ItemType.pollopt}
                 .contains(item.type) &&
-            ref.read(usernameProvider).asData?.value == item.by &&
+            ref.watch(usernameProvider).asData?.value == item.by &&
             item.deletable;
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
@@ -68,7 +68,7 @@ extension ItemMenuActionExtension on ItemMenuAction {
     switch (this) {
       case ItemMenuAction.vote:
         final bool upvoted =
-            ref.read(upvotedProvider(id)).asData?.value ?? false;
+            ref.watch(upvotedProvider(id)).asData?.value ?? false;
         return upvoted
             ? AppLocalizations.of(context)!.unvote
             : AppLocalizations.of(context)!.upvote;
@@ -76,13 +76,13 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return AppLocalizations.of(context)!.reply;
       case ItemMenuAction.favorite:
         final bool favorited =
-            ref.read(favoritedProvider(id)).asData?.value ?? false;
+            ref.watch(favoritedProvider(id)).asData?.value ?? false;
         return favorited
             ? AppLocalizations.of(context)!.unfavorite
             : AppLocalizations.of(context)!.favorite;
       case ItemMenuAction.flag:
         final bool flagged =
-            ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false;
+            ref.watch(itemNotifierProvider(id)).asData?.value.dead ?? false;
         return flagged
             ? AppLocalizations.of(context)!.unflag
             : AppLocalizations.of(context)!.flag;
@@ -101,32 +101,32 @@ extension ItemMenuActionExtension on ItemMenuAction {
     switch (this) {
       case ItemMenuAction.vote:
         final bool upvoted =
-            ref.read(upvotedProvider(id)).asData?.value ?? false;
+            ref.watch(upvotedProvider(id)).asData?.value ?? false;
         return upvoted
-            ? FluentIcons.arrow_undo_24_regular
-            : FluentIcons.arrow_up_24_regular;
+            ? FluentIcons.arrow_undo_20_regular
+            : FluentIcons.arrow_up_20_regular;
       case ItemMenuAction.reply:
-        return FluentIcons.arrow_reply_24_regular;
+        return FluentIcons.arrow_reply_20_regular;
       case ItemMenuAction.favorite:
         final bool favorited =
-            ref.read(favoritedProvider(id)).asData?.value ?? false;
+            ref.watch(favoritedProvider(id)).asData?.value ?? false;
         return favorited
-            ? FluentIcons.star_off_24_regular
-            : FluentIcons.star_24_regular;
+            ? FluentIcons.star_off_20_regular
+            : FluentIcons.star_20_regular;
       case ItemMenuAction.flag:
         final bool flagged =
-            ref.read(itemNotifierProvider(id)).asData?.value.dead ?? false;
+            ref.watch(itemNotifierProvider(id)).asData?.value.dead ?? false;
         return flagged
-            ? FluentIcons.flag_off_24_regular
-            : FluentIcons.flag_24_regular;
+            ? FluentIcons.flag_off_20_regular
+            : FluentIcons.flag_20_regular;
       case ItemMenuAction.edit:
-        return FluentIcons.edit_24_regular;
+        return FluentIcons.edit_20_regular;
       case ItemMenuAction.delete:
-        return FluentIcons.delete_24_regular;
+        return FluentIcons.delete_20_regular;
       case ItemMenuAction.copy:
-        return FluentIcons.copy_24_regular;
+        return FluentIcons.copy_20_regular;
       case ItemMenuAction.share:
-        return FluentIcons.share_24_regular;
+        return FluentIcons.share_20_regular;
     }
   }
 

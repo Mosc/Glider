@@ -28,11 +28,11 @@ extension UserMenuActionExtension on UserMenuAction {
   IconData get icon {
     switch (this) {
       case UserMenuAction.report:
-        return FluentIcons.mail_error_24_regular;
+        return FluentIcons.mail_error_20_regular;
       case UserMenuAction.copy:
-        return FluentIcons.copy_24_regular;
+        return FluentIcons.copy_20_regular;
       case UserMenuAction.share:
-        return FluentIcons.share_24_regular;
+        return FluentIcons.share_20_regular;
     }
   }
 
