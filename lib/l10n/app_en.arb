@@ -58,6 +58,7 @@
   "space": "Space",
   "settings": "Settings",
   "useCustomTabs": "Open links in custom tabs",
+  "useGestureNavigation": "Swipe from left edge to go to previous page",
   "account": "Account",
   "register": "Register",
   "registerError": "Registering failed",
