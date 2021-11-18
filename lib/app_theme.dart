@@ -23,20 +23,20 @@ class AppTheme {
   static const Color blackBackgroundColor = Colors.black;
   static const Color spaceBackgroundColor = Color(0xff242933);
 
-  static ThemeData lightTheme(Color color, {required bool useGestureNavigation}) =>
-      _buildTheme(color, backgroundColor: lightBackgroundColor, useGestureNavigation: useGestureNavigation);
+  static ThemeData lightTheme(Color color, {required bool useGestures}) =>
+      _buildTheme(color, backgroundColor: lightBackgroundColor, useGestures: useGestures);
 
-  static ThemeData darkTheme(Color color, {required bool useGestureNavigation}) =>
-      _buildTheme(color, backgroundColor: darkBackgroundColor, useGestureNavigation: useGestureNavigation);
+  static ThemeData darkTheme(Color color, {required bool useGestures}) =>
+      _buildTheme(color, backgroundColor: darkBackgroundColor, useGestures: useGestures);
 
-  static ThemeData blackTheme(Color color, {required bool useGestureNavigation}) =>
-      _buildTheme(color, backgroundColor: blackBackgroundColor, useGestureNavigation: useGestureNavigation);
+  static ThemeData blackTheme(Color color, {required bool useGestures}) =>
+      _buildTheme(color, backgroundColor: blackBackgroundColor, useGestures: useGestures);
 
-  static ThemeData spaceTheme(Color color, {required bool useGestureNavigation}) =>
-      _buildTheme(color, backgroundColor: spaceBackgroundColor, useGestureNavigation: useGestureNavigation);
+  static ThemeData spaceTheme(Color color, {required bool useGestures}) =>
+      _buildTheme(color, backgroundColor: spaceBackgroundColor, useGestures: useGestures);
 
   static ThemeData _buildTheme(Color color,
-        {required Color backgroundColor, required bool useGestureNavigation}) {
+        {required Color backgroundColor, required bool useGestures}) {
     final Brightness brightness =
         ThemeData.estimateBrightnessForColor(backgroundColor);
     final Brightness colorBrightness =
@@ -65,7 +65,7 @@ class AppTheme {
         backgroundColor: backgroundColor,
         side: StateBorderSide(selectedColor: color, defaultColor: surfaceColor),
       ),
-      pageTransitionsTheme: useGestureNavigation ? PageTransitionsTheme(
+      pageTransitionsTheme: useGestures ? PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
           for (TargetPlatform targetPlatform in TargetPlatform.values)
             targetPlatform: const SwipeablePageTransitionsBuilder(),

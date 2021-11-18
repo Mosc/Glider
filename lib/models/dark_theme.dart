@@ -32,14 +32,14 @@ extension DarkThemeExtension on DarkTheme {
     }
   }
 
-  ThemeData theme(Color color, {required bool useGestureNavigation}) {
+  ThemeData theme(Color color, {required bool useGestures}) {
     switch (this) {
       case DarkTheme.grey:
-        return AppTheme.darkTheme(color, useGestureNavigation: useGestureNavigation);
+        return AppTheme.darkTheme(color, useGestures: useGestures);
       case DarkTheme.black:
-        return AppTheme.blackTheme(color, useGestureNavigation: useGestureNavigation);
+        return AppTheme.blackTheme(color, useGestures: useGestures);
       case DarkTheme.space:
-        return AppTheme.spaceTheme(color, useGestureNavigation: useGestureNavigation);
+        return AppTheme.spaceTheme(color, useGestures: useGestures);
     }
   }
 }

@@ -46,10 +46,10 @@ final AutoDisposeFutureProvider<bool> useCustomTabsProvider =
       ref.read(storageRepositoryProvider).useCustomTabs,
 );
 
-final AutoDisposeFutureProvider<bool> useGestureNavigationProvider =
+final AutoDisposeFutureProvider<bool> useGesturesProvider =
     FutureProvider.autoDispose<bool>(
   (AutoDisposeFutureProviderRef<bool> ref) =>
-      ref.read(storageRepositoryProvider).useGestureNavigation,
+      ref.read(storageRepositoryProvider).useGestures,
 );
 
 final AutoDisposeFutureProvider<bool> completedWalkthroughProvider =
