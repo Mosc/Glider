@@ -29,15 +29,19 @@ class OptionsDialogOption {
 }
 
 class OptionsDialog extends HookConsumerWidget {
-  const OptionsDialog.copy({Key? key, required this.options})
-      : action = _copyAction,
+  OptionsDialog.copy(BuildContext context, {Key? key, required this.options})
+      : title = AppLocalizations.of(context)!.copy,
+        action = _copyAction,
         super(key: key);
 
-  OptionsDialog.share({Key? key, required this.options, String? subject})
-      : action = ((BuildContext context, OptionsDialogOption option) =>
+  OptionsDialog.share(BuildContext context,
+      {Key? key, required this.options, String? subject})
+      : title = AppLocalizations.of(context)!.share,
+        action = ((BuildContext context, OptionsDialogOption option) =>
             _shareAction(context, option, subject)),
         super(key: key);
 
+  final String title;
   final Iterable<OptionsDialogOption> options;
   final Future<void> Function(BuildContext, OptionsDialogOption) action;
 
@@ -45,6 +49,8 @@ class OptionsDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleDialog(
       contentPadding: const EdgeInsets.symmetric(vertical: 16),
+      title: Text(title),
+      titleTextStyle: Theme.of(context).textTheme.subtitle1,
       children: <Widget>[
         for (OptionsDialogOption option in options)
           SimpleDialogOption(

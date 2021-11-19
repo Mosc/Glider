@@ -14,11 +14,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ItemOptionsCommand with CommandMixin {
   ItemOptionsCommand.copy(this.context, this.ref, {required this.id})
       : optionsDialogBuilder = ((Iterable<OptionsDialogOption> options) =>
-            OptionsDialog.copy(options: options));
+            OptionsDialog.copy(context, options: options));
 
   ItemOptionsCommand.share(this.context, this.ref, {required this.id})
       : optionsDialogBuilder = ((Iterable<OptionsDialogOption> options) =>
-            OptionsDialog.share(options: options));
+            OptionsDialog.share(context, options: options));
 
   final BuildContext context;
   final WidgetRef ref;
