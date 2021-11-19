@@ -24,9 +24,8 @@ class SettingsBottomSheet extends HookConsumerWidget {
         ProviderSwitchListTile(
           title: AppLocalizations.of(context)!.useGestures,
           provider: useGesturesProvider,
-          onSave: (bool value) => ref
-              .read(storageRepositoryProvider)
-              .setUseGestures(value: value),
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setUseGestures(value: value),
         ),
       ],
     );

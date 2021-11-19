@@ -28,15 +28,13 @@ class App extends HookConsumerWidget {
         ref.watch(darkThemeProvider).asData?.value ?? DarkTheme.grey;
     final Color themeColor =
         ref.watch(themeColorProvider).asData?.value ?? AppTheme.defaultColor;
-    final bool useGestures =
-        ref.watch(useGesturesProvider).asData?.value ?? true;
 
     return MaterialApp(
       home: const Home(),
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appName,
-      theme: AppTheme.lightTheme(themeColor, useGestures: useGestures),
-      darkTheme: darkTheme.theme(themeColor, useGestures: useGestures),
+      theme: AppTheme.lightTheme(ref, themeColor),
+      darkTheme: darkTheme.theme(ref, themeColor),
       themeMode: themeMode,
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         AppLocalizations.delegate,
