@@ -21,6 +21,12 @@ class SettingsBottomSheet extends HookConsumerWidget {
               .read(storageRepositoryProvider)
               .setUseCustomTabs(value: value),
         ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context)!.useGestures,
+          provider: useGesturesProvider,
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setUseGestures(value: value),
+        ),
       ],
     );
   }

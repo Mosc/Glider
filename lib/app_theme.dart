@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/utils/swipeable_page_route.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AppTheme {
   AppTheme._();
@@ -23,25 +25,28 @@ class AppTheme {
   static const Color blackBackgroundColor = Colors.black;
   static const Color spaceBackgroundColor = Color(0xff242933);
 
-  static ThemeData lightTheme(Color color) =>
-      _buildTheme(color, backgroundColor: lightBackgroundColor);
+  static ThemeData lightTheme(WidgetRef ref, Color color) =>
+      _buildTheme(ref, color, backgroundColor: lightBackgroundColor);
 
-  static ThemeData darkTheme(Color color) =>
-      _buildTheme(color, backgroundColor: darkBackgroundColor);
+  static ThemeData darkTheme(WidgetRef ref, Color color) =>
+      _buildTheme(ref, color, backgroundColor: darkBackgroundColor);
 
-  static ThemeData blackTheme(Color color) =>
-      _buildTheme(color, backgroundColor: blackBackgroundColor);
+  static ThemeData blackTheme(WidgetRef ref, Color color) =>
+      _buildTheme(ref, color, backgroundColor: blackBackgroundColor);
 
-  static ThemeData spaceTheme(Color color) =>
-      _buildTheme(color, backgroundColor: spaceBackgroundColor);
+  static ThemeData spaceTheme(WidgetRef ref, Color color) =>
+      _buildTheme(ref, color, backgroundColor: spaceBackgroundColor);
 
-  static ThemeData _buildTheme(Color color, {required Color backgroundColor}) {
+  static ThemeData _buildTheme(WidgetRef ref, Color color,
+      {required Color backgroundColor}) {
     final Brightness brightness =
         ThemeData.estimateBrightnessForColor(backgroundColor);
     final Brightness colorBrightness =
         ThemeData.estimateBrightnessForColor(color);
     final Color onColor = colorBrightness.isDark ? Colors.white : Colors.black;
     final Color canvasColor = backgroundColor.lighten(0.05);
+    final bool useGestures =
+        ref.watch(useGesturesProvider).asData?.value ?? true;
 
     return ThemeData(
       brightness: brightness,
@@ -64,12 +69,14 @@ class AppTheme {
         backgroundColor: backgroundColor,
         side: StateBorderSide(selectedColor: color, defaultColor: surfaceColor),
       ),
-      pageTransitionsTheme: PageTransitionsTheme(
-        builders: <TargetPlatform, PageTransitionsBuilder>{
-          for (TargetPlatform targetPlatform in TargetPlatform.values)
-            targetPlatform: const SwipeablePageTransitionsBuilder(),
-        },
-      ),
+      pageTransitionsTheme: useGestures
+          ? PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                for (TargetPlatform targetPlatform in TargetPlatform.values)
+                  targetPlatform: const SwipeablePageTransitionsBuilder(),
+              },
+            )
+          : null,
       appBarTheme: AppBarTheme(
         backgroundColor: brightness.isDark ? backgroundColor : color,
         iconTheme: IconThemeData(

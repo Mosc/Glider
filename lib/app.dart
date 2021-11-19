@@ -33,8 +33,8 @@ class App extends HookConsumerWidget {
       home: const Home(),
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appName,
-      theme: AppTheme.lightTheme(themeColor),
-      darkTheme: darkTheme.theme(themeColor),
+      theme: AppTheme.lightTheme(ref, themeColor),
+      darkTheme: darkTheme.theme(ref, themeColor),
       themeMode: themeMode,
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         AppLocalizations.delegate,

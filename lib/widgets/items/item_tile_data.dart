@@ -89,6 +89,8 @@ class ItemTileData extends HookConsumerWidget {
     // upvote state until after the call has actually finished.
     final StateController<bool?> delayedUpvotedController =
         ref.watch(_delayedUpvoteStateProvider(item.id).state);
+    final bool useGestures =
+        ref.watch(useGesturesProvider).asData?.value ?? true;
 
     Future<void> updateDelayedUpvoted() async {
       final bool upvoted = await ref.read(upvotedProvider(item.id).future);
@@ -152,6 +154,7 @@ class ItemTileData extends HookConsumerWidget {
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )
               : null,
+      useGestures: useGestures,
       child: child,
     );
   }

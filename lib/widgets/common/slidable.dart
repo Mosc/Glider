@@ -8,6 +8,7 @@ class Slidable extends HookConsumerWidget {
     this.startToEndAction,
     this.endToStartAction,
     this.onDismiss,
+    this.useGestures = true,
     required this.child,
   }) : super(key: key);
 
@@ -17,10 +18,11 @@ class Slidable extends HookConsumerWidget {
   final SlidableAction? startToEndAction;
   final SlidableAction? endToStartAction;
   final DismissDirectionCallback? onDismiss;
+  final bool useGestures;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (startToEndAction == null && endToStartAction == null) {
+    if (startToEndAction == null && endToStartAction == null || !useGestures) {
       return child;
     }
 

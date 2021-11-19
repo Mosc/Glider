@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/app_theme.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum DarkTheme {
   grey,
@@ -32,14 +33,14 @@ extension DarkThemeExtension on DarkTheme {
     }
   }
 
-  ThemeData theme(Color color) {
+  ThemeData theme(WidgetRef ref, Color color) {
     switch (this) {
       case DarkTheme.grey:
-        return AppTheme.darkTheme(color);
+        return AppTheme.darkTheme(ref, color);
       case DarkTheme.black:
-        return AppTheme.blackTheme(color);
+        return AppTheme.blackTheme(ref, color);
       case DarkTheme.space:
-        return AppTheme.spaceTheme(color);
+        return AppTheme.spaceTheme(ref, color);
     }
   }
 }

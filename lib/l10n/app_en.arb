@@ -58,6 +58,7 @@
   "space": "Space",
   "settings": "Settings",
   "useCustomTabs": "Open links in custom tabs",
+  "useGestures": "Use gestures within the app",
   "account": "Account",
   "register": "Register",
   "registerError": "Registering failed",
