@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MenuActionsBar extends StatelessWidget {
+class MenuActionsBar extends ConsumerWidget {
   const MenuActionsBar({Key? key, required this.children}) : super(key: key);
 
   final Iterable<IconButton> children;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Material(

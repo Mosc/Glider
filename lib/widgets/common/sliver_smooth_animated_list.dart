@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:glider/utils/animation_util.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 
-class SliverSmoothAnimatedList<T extends Object> extends StatelessWidget {
+class SliverSmoothAnimatedList<T extends Object> extends ConsumerWidget {
   const SliverSmoothAnimatedList({
     Key? key,
     required this.items,
@@ -13,7 +14,7 @@ class SliverSmoothAnimatedList<T extends Object> extends StatelessWidget {
   final Widget Function(BuildContext, T, int) builder;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SliverSafeArea(
       top: false,
       bottom: false,
