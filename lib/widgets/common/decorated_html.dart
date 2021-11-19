@@ -9,7 +9,6 @@ class DecoratedHtml extends HookConsumerWidget {
   const DecoratedHtml(
     String html, {
     Key? key,
-    this.textStyle,
     bool prependParagraphTag = true,
   })  
   // Hacker News prefixes every paragraph with a tag except the first one.
@@ -17,7 +16,6 @@ class DecoratedHtml extends HookConsumerWidget {
         super(key: key);
 
   final String _html;
-  final TextStyle? textStyle;
 
   static final RegExp _quoteRegex = RegExp(r'^\s?(&gt;)+');
 
@@ -52,7 +50,7 @@ class DecoratedHtml extends HookConsumerWidget {
         return null;
       },
       onTapUrl: (String url) => UrlUtil.tryLaunch(context, ref, url),
-      textStyle: textStyle ?? Theme.of(context).textTheme.bodyText2,
+      textStyle: Theme.of(context).textTheme.bodyText2,
     );
   }
 
