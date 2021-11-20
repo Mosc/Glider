@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:jiffy/jiffy.dart';
+import 'package:glider/utils/date_time_extension.dart';
 
 enum SearchRange {
   custom,
@@ -48,7 +48,7 @@ extension SearchRangeExtension on SearchRange {
       case SearchRange.custom:
         return DateTimeRange(
           start: customDateTimeRange!.start,
-          end: (Jiffy(customDateTimeRange.end)..endOf(Units.DAY)).dateTime,
+          end: customDateTimeRange.end.endOfDay,
         );
       case SearchRange.pastDay:
         return pastDays(1);

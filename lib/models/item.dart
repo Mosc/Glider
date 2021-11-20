@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glider/models/item_type.dart';
+import 'package:glider/utils/date_time_extension.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -50,8 +51,11 @@ class Item with _$Item {
 
   late final String? urlHost = url != null ? Uri.parse(url!).host : null;
 
+  late final DateTime? timeDate =
+      time != null ? DateTimeExtension.fromSecondsSinceEpoch(time!) : null;
+
   late final String? timeAgo =
-      time != null ? Jiffy.unix(time!).fromNow() : null;
+      timeDate != null ? Jiffy(timeDate).fromNow() : null;
 
   String? faviconUrl(int size) => urlHost != null
       ? Uri.https(
@@ -83,7 +87,7 @@ class Item with _$Item {
       _timeAgoHours != null && _timeAgoHours! < 2 && kids.isEmpty;
 
   late final num? _timeAgoHours =
-      time != null ? Jiffy().diff(Jiffy.unix(time!), Units.HOUR) : null;
+      timeDate != null ? DateTime.now().difference(timeDate!).inHours : null;
 
   Item addKid(int kidId) => copyWith(kids: <int>[kidId, ...kids]);
 
