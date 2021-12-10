@@ -174,6 +174,7 @@ linter:
     - unnecessary_await_in_return
     - unnecessary_brace_in_string_interps
     - unnecessary_const
+    - unnecessary_constructor_name
     # - unnecessary_final # conflicts with prefer_final_locals
     - unnecessary_getters_setters
     - unnecessary_lambdas
