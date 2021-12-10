@@ -25,12 +25,14 @@ extension UserMenuActionExtension on UserMenuAction {
     }
   }
 
-  IconData get icon {
+  IconData icon(BuildContext context) {
     switch (this) {
       case UserMenuAction.report:
         return FluentIcons.mail_error_20_regular;
       case UserMenuAction.copy:
-        return FluentIcons.copy_20_regular;
+        return Directionality.of(context) == TextDirection.rtl
+            ? FluentIcons.clipboard_text_rtl_20_regular
+            : FluentIcons.clipboard_text_ltr_20_regular;
       case UserMenuAction.share:
         return FluentIcons.share_20_regular;
     }

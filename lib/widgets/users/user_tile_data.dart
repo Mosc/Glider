@@ -74,7 +74,7 @@ class UserTileData extends HookConsumerWidget {
               children: <IconButton>[
                 for (UserMenuAction menuAction in UserMenuAction.values)
                   IconButton(
-                    icon: Icon(menuAction.icon),
+                    icon: Icon(menuAction.icon(context)),
                     tooltip: menuAction.title(context),
                     onPressed: () =>
                         menuAction.command(context, ref, id: user.id).execute(),
