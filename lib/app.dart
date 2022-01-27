@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +19,9 @@ class App extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useMemoized(FlutterDisplayMode.setHighRefreshRate);
+    if (Platform.isAndroid) {
+      useMemoized(FlutterDisplayMode.setHighRefreshRate);
+    }
 
     useMemoized(
       () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
