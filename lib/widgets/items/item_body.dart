@@ -105,7 +105,7 @@ class ItemBody extends HookConsumerWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    AppLocalizations.of(context)!.openParent,
+                    AppLocalizations.of(context).openParent,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),

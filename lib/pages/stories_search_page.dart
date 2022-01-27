@@ -107,14 +107,14 @@ class StoriesSearchPage extends HookConsumerWidget {
               ? TextField(
                   controller: queryController,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.searchHint,
+                    hintText: AppLocalizations.of(context).searchHint,
                   ),
                   textInputAction: TextInputAction.search,
                   autofocus: true,
                   onChanged: (String value) =>
                       storySearchQueryStateController.update((_) => value),
                 )
-              : Text(AppLocalizations.of(context)!.catchUp),
+              : Text(AppLocalizations.of(context).catchUp),
           actions: <Widget>[
             if (storySearchQueryStateController.state.isNotEmpty)
               IconButton(

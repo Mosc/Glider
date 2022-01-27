@@ -14,11 +14,11 @@ extension DarkThemeExtension on DarkTheme {
   String title(BuildContext context) {
     switch (this) {
       case DarkTheme.grey:
-        return AppLocalizations.of(context)!.grey;
+        return AppLocalizations.of(context).grey;
       case DarkTheme.black:
-        return AppLocalizations.of(context)!.black;
+        return AppLocalizations.of(context).black;
       case DarkTheme.space:
-        return AppLocalizations.of(context)!.space;
+        return AppLocalizations.of(context).space;
     }
   }
 

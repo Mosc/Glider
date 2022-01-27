@@ -70,30 +70,30 @@ extension ItemMenuActionExtension on ItemMenuAction {
         final bool upvoted =
             ref.watch(upvotedProvider(id)).asData?.value ?? false;
         return upvoted
-            ? AppLocalizations.of(context)!.unvote
-            : AppLocalizations.of(context)!.upvote;
+            ? AppLocalizations.of(context).unvote
+            : AppLocalizations.of(context).upvote;
       case ItemMenuAction.reply:
-        return AppLocalizations.of(context)!.reply;
+        return AppLocalizations.of(context).reply;
       case ItemMenuAction.favorite:
         final bool favorited =
             ref.watch(favoritedProvider(id)).asData?.value ?? false;
         return favorited
-            ? AppLocalizations.of(context)!.unfavorite
-            : AppLocalizations.of(context)!.favorite;
+            ? AppLocalizations.of(context).unfavorite
+            : AppLocalizations.of(context).favorite;
       case ItemMenuAction.flag:
         final bool flagged =
             ref.watch(itemNotifierProvider(id)).asData?.value.dead ?? false;
         return flagged
-            ? AppLocalizations.of(context)!.unflag
-            : AppLocalizations.of(context)!.flag;
+            ? AppLocalizations.of(context).unflag
+            : AppLocalizations.of(context).flag;
       case ItemMenuAction.edit:
-        return AppLocalizations.of(context)!.edit;
+        return AppLocalizations.of(context).edit;
       case ItemMenuAction.delete:
-        return AppLocalizations.of(context)!.delete;
+        return AppLocalizations.of(context).delete;
       case ItemMenuAction.copy:
-        return AppLocalizations.of(context)!.copy;
+        return AppLocalizations.of(context).copy;
       case ItemMenuAction.share:
-        return AppLocalizations.of(context)!.share;
+        return AppLocalizations.of(context).share;
     }
   }
 

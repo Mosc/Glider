@@ -33,7 +33,7 @@ class ItemPage extends HookConsumerWidget {
           if (itemData != null && itemData.value.parent == null)
             IconButton(
               icon: const Icon(FluentIcons.search_24_regular),
-              tooltip: AppLocalizations.of(context)!.search,
+              tooltip: AppLocalizations.of(context).search,
               onPressed: () => _searchSelected(context),
             ),
           PopupMenuButton<ItemMenuAction>(

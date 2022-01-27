@@ -24,7 +24,7 @@ class BlockCommand with CommandMixin {
     await showDialog<void>(
       context: context,
       builder: (_) => AlertDialog(
-        content: Text(AppLocalizations.of(context)!.blockConfirm),
+        content: Text(AppLocalizations.of(context).blockConfirm),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

@@ -15,14 +15,14 @@ class SettingsBottomSheet extends HookConsumerWidget {
     return ScrollableBottomSheet(
       children: <Widget>[
         ProviderSwitchListTile(
-          title: AppLocalizations.of(context)!.useCustomTabs,
+          title: AppLocalizations.of(context).useCustomTabs,
           provider: useCustomTabsProvider,
           onSave: (bool value) => ref
               .read(storageRepositoryProvider)
               .setUseCustomTabs(value: value),
         ),
         ProviderSwitchListTile(
-          title: AppLocalizations.of(context)!.useGestures,
+          title: AppLocalizations.of(context).useGestures,
           provider: useGesturesProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setUseGestures(value: value),

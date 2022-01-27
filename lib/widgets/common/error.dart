@@ -23,7 +23,7 @@ class Error extends HookConsumerWidget {
               size: fontSize != null ? fontSize * 2 : null,
             ),
             const SizedBox(height: 12),
-            Text(AppLocalizations.of(context)!.wittyError),
+            Text(AppLocalizations.of(context).wittyError),
           ],
         ),
       ),

@@ -17,22 +17,22 @@ extension SearchRangeExtension on SearchRange {
       case SearchRange.custom:
         return customDateTimeRange != null
             ? customDateTimeRange.duration != Duration.zero
-                ? AppLocalizations.of(context)!.dateRange(
+                ? AppLocalizations.of(context).dateRange(
                     customDateTimeRange.start,
                     customDateTimeRange.end,
                   )
-                : AppLocalizations.of(context)!.dateRangeSingle(
+                : AppLocalizations.of(context).dateRangeSingle(
                     customDateTimeRange.start,
                   )
-            : AppLocalizations.of(context)!.custom;
+            : AppLocalizations.of(context).custom;
       case SearchRange.pastDay:
-        return AppLocalizations.of(context)!.pastDay;
+        return AppLocalizations.of(context).pastDay;
       case SearchRange.pastWeek:
-        return AppLocalizations.of(context)!.pastWeek;
+        return AppLocalizations.of(context).pastWeek;
       case SearchRange.pastMonth:
-        return AppLocalizations.of(context)!.pastMonth;
+        return AppLocalizations.of(context).pastMonth;
       case SearchRange.pastYear:
-        return AppLocalizations.of(context)!.pastYear;
+        return AppLocalizations.of(context).pastYear;
     }
   }
 

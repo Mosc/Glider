@@ -1,6 +1,5 @@
 import 'dart:async';
 
-// ignore: depend_on_referenced_packages
 import 'package:flutter/widgets.dart';
 import 'package:glider/commands/command.dart';
 import 'package:glider/providers/item_provider.dart';

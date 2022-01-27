@@ -33,7 +33,7 @@ class FlagCommand implements CommandMixin {
         await showDialog<void>(
           context: context,
           builder: (_) => AlertDialog(
-            content: Text(AppLocalizations.of(context)!.flagConfirm),
+            content: Text(AppLocalizations.of(context).flagConfirm),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -60,9 +60,9 @@ class FlagCommand implements CommandMixin {
       final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.flagNotLoggedIn),
+          content: Text(AppLocalizations.of(context).flagNotLoggedIn),
           action: SnackBarAction(
-            label: AppLocalizations.of(context)!.logIn,
+            label: AppLocalizations.of(context).logIn,
             onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

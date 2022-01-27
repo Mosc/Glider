@@ -8,7 +8,7 @@ class Validators {
 
   static String? notEmpty(BuildContext context, String? value) {
     if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context)!.notEmptyError;
+      return AppLocalizations.of(context).notEmptyError;
     }
 
     return null;
@@ -16,7 +16,7 @@ class Validators {
 
   static String? maxLength(BuildContext context, String? value, int maxLength) {
     if (value != null && value.length > maxLength) {
-      return AppLocalizations.of(context)!.maxLengthError(maxLength);
+      return AppLocalizations.of(context).maxLengthError(maxLength);
     }
 
     return null;
@@ -25,7 +25,7 @@ class Validators {
   static String? url(BuildContext context, String? value) {
     if (value != null &&
         !isURL(value, <String, Object>{'requireProtocol': true})) {
-      return AppLocalizations.of(context)!.urlError;
+      return AppLocalizations.of(context).urlError;
     }
 
     return null;

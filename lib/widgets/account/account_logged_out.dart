@@ -37,7 +37,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                   TextFormField(
                     controller: usernameController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.username,
+                      labelText: AppLocalizations.of(context).username,
                     ),
                     validator: (String? value) =>
                         Validators.notEmpty(context, value),
@@ -49,7 +49,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                     controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.password,
+                      labelText: AppLocalizations.of(context).password,
                     ),
                     validator: (String? value) =>
                         Validators.notEmpty(context, value),
@@ -59,9 +59,9 @@ class AccountLoggedOut extends HookConsumerWidget {
               ),
             ),
             SwitchListTile(
-              title: Text(AppLocalizations.of(context)!.synchronize),
+              title: Text(AppLocalizations.of(context).synchronize),
               subtitle:
-                  Text(AppLocalizations.of(context)!.synchronizeDescription),
+                  Text(AppLocalizations.of(context).synchronizeDescription),
               dense: true,
               value: synchronizeState.value,
               onChanged: loadingState.value
@@ -74,7 +74,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   HtmlWidget(
-                    AppLocalizations.of(context)!.legalHtml,
+                    AppLocalizations.of(context).legalHtml,
                     onTapUrl: (String url) =>
                         UrlUtil.tryLaunch(context, ref, url),
                     textStyle: Theme.of(context).textTheme.caption,
@@ -98,7 +98,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                                   loadingState.value = false;
                                 }
                               },
-                        child: Text(AppLocalizations.of(context)!.register),
+                        child: Text(AppLocalizations.of(context).register),
                       ),
                       const SizedBox(width: 16),
                       ElevatedButton(
@@ -117,7 +117,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                                   loadingState.value = false;
                                 }
                               },
-                        child: Text(AppLocalizations.of(context)!.logIn),
+                        child: Text(AppLocalizations.of(context).logIn),
                       ),
                     ],
                   ),
@@ -142,7 +142,7 @@ class AccountLoggedOut extends HookConsumerWidget {
         ..refresh(loggedInProvider);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.registerError)),
+        SnackBar(content: Text(AppLocalizations.of(context).registerError)),
       );
     }
   }
@@ -165,7 +165,7 @@ class AccountLoggedOut extends HookConsumerWidget {
         ..refresh(loggedInProvider);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.logInError)),
+        SnackBar(content: Text(AppLocalizations.of(context).logInError)),
       );
     }
   }
@@ -182,7 +182,7 @@ class AccountLoggedOut extends HookConsumerWidget {
     if (!success) {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.synchronizeError),
+          content: Text(AppLocalizations.of(context).synchronizeError),
         ),
       );
     }

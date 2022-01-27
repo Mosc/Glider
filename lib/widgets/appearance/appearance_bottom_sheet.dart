@@ -23,26 +23,26 @@ class AppearanceBottomSheet extends HookConsumerWidget {
     return ScrollableBottomSheet(
       children: <Widget>[
         ProviderSwitchListTile(
-          title: AppLocalizations.of(context)!.showUrl,
+          title: AppLocalizations.of(context).showUrl,
           provider: showUrlProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowUrl(value: value),
         ),
         ProviderSwitchListTile(
-          title: AppLocalizations.of(context)!.showFavicon,
+          title: AppLocalizations.of(context).showFavicon,
           provider: showFaviconProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowFavicon(value: value),
         ),
         ProviderSwitchListTile(
-          title: AppLocalizations.of(context)!.showMetadata,
+          title: AppLocalizations.of(context).showMetadata,
           provider: showMetadataProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowMetadata(value: value),
         ),
         _buildTitledButtons(
           context,
-          title: AppLocalizations.of(context)!.themeMode,
+          title: AppLocalizations.of(context).themeMode,
           children: <Widget>[
             for (ThemeMode themeMode in ThemeMode.values)
               _ThemeModeButton(themeMode),
@@ -53,7 +53,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
               ref.watch(themeModeProvider).asData?.value != ThemeMode.light,
           child: _buildTitledButtons(
             context,
-            title: AppLocalizations.of(context)!.darkTheme,
+            title: AppLocalizations.of(context).darkTheme,
             children: <Widget>[
               for (DarkTheme darkTheme in DarkTheme.values)
                 DarkThemeButton(darkTheme),

@@ -12,7 +12,7 @@ class SubmitPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(AppLocalizations.of(context)!.submit),
+        title: Text(AppLocalizations.of(context).submit),
         body: const SubmitBody(),
       ),
     );

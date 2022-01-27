@@ -22,7 +22,7 @@ class SynchronizeDialog extends HookConsumerWidget {
       title: Row(
         children: <Widget>[
           Expanded(
-            child: Text(AppLocalizations.of(context)!.synchronize),
+            child: Text(AppLocalizations.of(context).synchronize),
           ),
           if (loadingState.value)
             Center(
@@ -35,8 +35,8 @@ class SynchronizeDialog extends HookConsumerWidget {
         ],
       ),
       content: Text(
-        AppLocalizations.of(context)!.synchronizeDescriptionLong(
-          AppLocalizations.of(context)!.appName,
+        AppLocalizations.of(context).synchronizeDescriptionLong(
+          AppLocalizations.of(context).appName,
         ),
       ),
       actions: <Widget>[
@@ -78,13 +78,13 @@ class SynchronizeDialog extends HookConsumerWidget {
     if (success) {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.synchronizeSuccess),
+          content: Text(AppLocalizations.of(context).synchronizeSuccess),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.synchronizeError),
+          content: Text(AppLocalizations.of(context).synchronizeError),
         ),
       );
     }

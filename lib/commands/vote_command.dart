@@ -34,9 +34,9 @@ class VoteCommand with CommandMixin {
       final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.voteNotLoggedIn),
+          content: Text(AppLocalizations.of(context).voteNotLoggedIn),
           action: SnackBarAction(
-            label: AppLocalizations.of(context)!.logIn,
+            label: AppLocalizations.of(context).logIn,
             onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),
@@ -65,7 +65,7 @@ class VoteCommand with CommandMixin {
       }
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
+        SnackBar(content: Text(AppLocalizations.of(context).genericError)),
       );
     }
   }

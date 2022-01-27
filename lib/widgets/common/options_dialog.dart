@@ -11,7 +11,7 @@ Future<void> _copyAction(
   await Clipboard.setData(ClipboardData(text: option.text));
   ScaffoldMessenger.of(context).replaceSnackBar(
     SnackBar(
-      content: Text(AppLocalizations.of(context)!.copySuccess(option.title)),
+      content: Text(AppLocalizations.of(context).copySuccess(option.title)),
     ),
   );
 }
@@ -30,13 +30,13 @@ class OptionsDialogOption {
 
 class OptionsDialog extends HookConsumerWidget {
   OptionsDialog.copy(BuildContext context, {Key? key, required this.options})
-      : title = AppLocalizations.of(context)!.copy,
+      : title = AppLocalizations.of(context).copy,
         action = _copyAction,
         super(key: key);
 
   OptionsDialog.share(BuildContext context,
       {Key? key, required this.options, String? subject})
-      : title = AppLocalizations.of(context)!.share,
+      : title = AppLocalizations.of(context).share,
         action = ((BuildContext context, OptionsDialogOption option) =>
             _shareAction(context, option, subject)),
         super(key: key);

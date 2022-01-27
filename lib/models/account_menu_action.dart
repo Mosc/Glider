@@ -11,9 +11,9 @@ extension StoriesMenuActionExtension on AccountMenuAction {
   String title(BuildContext context) {
     switch (this) {
       case AccountMenuAction.synchronize:
-        return AppLocalizations.of(context)!.synchronize;
+        return AppLocalizations.of(context).synchronize;
       case AccountMenuAction.logOut:
-        return AppLocalizations.of(context)!.logOut;
+        return AppLocalizations.of(context).logOut;
     }
   }
 }

@@ -1,1 +1,2 @@
 preferred-supported-locales: [en]
+nullable-getter: false

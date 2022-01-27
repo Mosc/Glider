@@ -12,7 +12,7 @@ class FavoritesPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(AppLocalizations.of(context)!.favorites),
+        title: Text(AppLocalizations.of(context).favorites),
         body: const FavoritesBody(),
       ),
     );

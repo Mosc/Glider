@@ -33,16 +33,16 @@ class ItemOptionsCommand with CommandMixin {
         <OptionsDialogOption>[
       if (item.text != null)
         OptionsDialogOption(
-          title: AppLocalizations.of(context)!.text,
+          title: AppLocalizations.of(context).text,
           text: FormattingUtil.convertHtmlToHackerNews(item.text!),
         ),
       if (item.url != null)
         OptionsDialogOption(
-          title: AppLocalizations.of(context)!.link,
+          title: AppLocalizations.of(context).link,
           text: item.url!,
         ),
       OptionsDialogOption(
-        title: AppLocalizations.of(context)!.threadLink,
+        title: AppLocalizations.of(context).threadLink,
         text: Uri.https(
           WebsiteRepository.authority,
           'item',

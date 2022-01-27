@@ -17,7 +17,7 @@ class ReplyPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(AppLocalizations.of(context)!.reply),
+        title: Text(AppLocalizations.of(context).reply),
         body: ReplyBody(parent: parent, root: root),
       ),
     );

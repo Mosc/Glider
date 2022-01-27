@@ -15,7 +15,7 @@ class EditPage extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(AppLocalizations.of(context)!.edit),
+        title: Text(AppLocalizations.of(context).edit),
         body: EditBody(item: item),
       ),
     );

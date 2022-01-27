@@ -40,9 +40,9 @@ class EditCommand with CommandMixin {
       if (success) {
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.processingInfo),
+            content: Text(AppLocalizations.of(context).processingInfo),
             action: SnackBarAction(
-              label: AppLocalizations.of(context)!.refresh,
+              label: AppLocalizations.of(context).refresh,
               onPressed: itemNotifier.forceLoad,
             ),
           ),
@@ -52,9 +52,9 @@ class EditCommand with CommandMixin {
       final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.editNotLoggedIn),
+          content: Text(AppLocalizations.of(context).editNotLoggedIn),
           action: SnackBarAction(
-            label: AppLocalizations.of(context)!.logIn,
+            label: AppLocalizations.of(context).logIn,
             onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

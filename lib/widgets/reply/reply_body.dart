@@ -48,7 +48,7 @@ class ReplyBody extends HookConsumerWidget {
                 TextFormField(
                   controller: commentController,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.comment,
+                    labelText: AppLocalizations.of(context).comment,
                   ),
                   keyboardType: TextInputType.multiline,
                   textCapitalization: TextCapitalization.sentences,
@@ -68,7 +68,7 @@ class ReplyBody extends HookConsumerWidget {
                             ? null
                             : () => _quoteParent(commentController),
                         child: Text(
-                          AppLocalizations.of(context)!.quoteParent,
+                          AppLocalizations.of(context).quoteParent,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -84,7 +84,7 @@ class ReplyBody extends HookConsumerWidget {
                                 loadingState.value = false;
                               }
                             },
-                      child: Text(AppLocalizations.of(context)!.reply),
+                      child: Text(AppLocalizations.of(context).reply),
                     ),
                   ],
                 ),
@@ -95,7 +95,7 @@ class ReplyBody extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            AppLocalizations.of(context)!.preview,
+            AppLocalizations.of(context).preview,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -167,7 +167,7 @@ class ReplyBody extends HookConsumerWidget {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
+        SnackBar(content: Text(AppLocalizations.of(context).genericError)),
       );
     }
   }

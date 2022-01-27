@@ -122,7 +122,7 @@ class WalkthoughItem extends HookConsumerWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 1),
                               child: Text(
-                                AppLocalizations.of(context)!.walkthroughTitle(
+                                AppLocalizations.of(context).walkthroughTitle(
                                   stepStateController.state.number,
                                   WalkthroughStep.values.length,
                                 ),
@@ -163,8 +163,8 @@ class WalkthoughItem extends HookConsumerWidget {
                       onPressed: () =>
                           upvotedStateController.update((bool state) => !state),
                       tooltip: upvotedStateController.state
-                          ? AppLocalizations.of(context)!.unvote
-                          : AppLocalizations.of(context)!.upvote,
+                          ? AppLocalizations.of(context).unvote
+                          : AppLocalizations.of(context).upvote,
                       icon: Icon(
                         upvotedStateController.state
                             ? FluentIcons.arrow_undo_20_regular
@@ -175,8 +175,8 @@ class WalkthoughItem extends HookConsumerWidget {
                       onPressed: () => favoritedStateController
                           .update((bool state) => !state),
                       tooltip: favoritedStateController.state
-                          ? AppLocalizations.of(context)!.unfavorite
-                          : AppLocalizations.of(context)!.favorite,
+                          ? AppLocalizations.of(context).unfavorite
+                          : AppLocalizations.of(context).favorite,
                       icon: Icon(
                         favoritedStateController.state
                             ? FluentIcons.star_off_20_regular

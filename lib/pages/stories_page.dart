@@ -53,11 +53,11 @@ class StoriesPage extends HookConsumerWidget {
     return Scaffold(
       body: FloatingAppBarScrollView(
         controller: scrollController,
-        title: Text(AppLocalizations.of(context)!.appName),
+        title: Text(AppLocalizations.of(context).appName),
         actions: <Widget>[
           IconButton(
             icon: const Icon(FluentIcons.search_24_regular),
-            tooltip: AppLocalizations.of(context)!.search,
+            tooltip: AppLocalizations.of(context).search,
             onPressed: () => _searchSelected(context, ref),
           ),
           PopupMenuButton<StoriesMenuAction>(
@@ -154,9 +154,9 @@ class StoriesPage extends HookConsumerWidget {
             .update((_) => StoryType.newStories);
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.processingInfo),
+            content: Text(AppLocalizations.of(context).processingInfo),
             action: SnackBarAction(
-              label: AppLocalizations.of(context)!.refresh,
+              label: AppLocalizations.of(context).refresh,
               onPressed: () => ref
                   .refresh(
                       storyIdsNotifierProvider(StoryType.newStories).notifier)
@@ -168,9 +168,9 @@ class StoriesPage extends HookConsumerWidget {
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.submitNotLoggedIn),
+          content: Text(AppLocalizations.of(context).submitNotLoggedIn),
           action: SnackBarAction(
-            label: AppLocalizations.of(context)!.logIn,
+            label: AppLocalizations.of(context).logIn,
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),

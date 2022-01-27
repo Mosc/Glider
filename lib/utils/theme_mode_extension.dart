@@ -11,11 +11,11 @@ extension ThemeModeExtension on ThemeMode {
   String title(BuildContext context) {
     switch (this) {
       case ThemeMode.system:
-        return AppLocalizations.of(context)!.system;
+        return AppLocalizations.of(context).system;
       case ThemeMode.light:
-        return AppLocalizations.of(context)!.light;
+        return AppLocalizations.of(context).light;
       case ThemeMode.dark:
-        return AppLocalizations.of(context)!.dark;
+        return AppLocalizations.of(context).dark;
     }
   }
 

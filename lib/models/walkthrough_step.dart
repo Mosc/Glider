@@ -23,23 +23,23 @@ extension WalktroughStepExtension on WalkthroughStep {
   String text(BuildContext context) {
     final bool rtl = Directionality.of(context) == TextDirection.rtl;
     final String startToEnd = rtl
-        ? AppLocalizations.of(context)!.left
-        : AppLocalizations.of(context)!.right;
+        ? AppLocalizations.of(context).left
+        : AppLocalizations.of(context).right;
     final String endToStart = rtl
-        ? AppLocalizations.of(context)!.right
-        : AppLocalizations.of(context)!.left;
+        ? AppLocalizations.of(context).right
+        : AppLocalizations.of(context).left;
 
     switch (this) {
       case WalkthroughStep.step1:
-        return AppLocalizations.of(context)!.walkthroughStep1(
+        return AppLocalizations.of(context).walkthroughStep1(
           startToEnd,
           endToStart,
-          AppLocalizations.of(context)!.appName,
+          AppLocalizations.of(context).appName,
         );
       case WalkthroughStep.step2:
-        return AppLocalizations.of(context)!.walkthroughStep2;
+        return AppLocalizations.of(context).walkthroughStep2;
       case WalkthroughStep.step3:
-        return AppLocalizations.of(context)!.walkthroughStep3(
+        return AppLocalizations.of(context).walkthroughStep3(
           endToStart,
         );
     }

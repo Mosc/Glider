@@ -56,7 +56,7 @@ class UserTileData extends HookConsumerWidget {
                     const SizedBox(width: 8),
                     const Spacer(),
                     Text(
-                      AppLocalizations.of(context)!.sinceDate(user.createdDate),
+                      AppLocalizations.of(context).sinceDate(user.createdDate),
                       style: textTheme.caption,
                     ),
                   ],

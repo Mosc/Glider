@@ -36,7 +36,7 @@ class App extends HookConsumerWidget {
     return MaterialApp(
       home: const Home(),
       onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.of(context)!.appName,
+          AppLocalizations.of(context).appName,
       theme: AppTheme.lightTheme(ref, themeColor),
       darkTheme: darkTheme.theme(ref, themeColor),
       themeMode: themeMode,

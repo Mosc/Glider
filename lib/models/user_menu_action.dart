@@ -17,11 +17,11 @@ extension UserMenuActionExtension on UserMenuAction {
   String title(BuildContext context) {
     switch (this) {
       case UserMenuAction.block:
-        return AppLocalizations.of(context)!.block;
+        return AppLocalizations.of(context).block;
       case UserMenuAction.copy:
-        return AppLocalizations.of(context)!.copy;
+        return AppLocalizations.of(context).copy;
       case UserMenuAction.share:
-        return AppLocalizations.of(context)!.share;
+        return AppLocalizations.of(context).share;
     }
   }
 

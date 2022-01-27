@@ -79,7 +79,7 @@ class ItemTileMetadata extends HookConsumerWidget {
             if (item.deleted ?? false) ...<Widget>[
               const MetadataItem(icon: FluentIcons.delete_24_regular),
               Text(
-                '[${AppLocalizations.of(context)!.deleted}]',
+                '[${AppLocalizations.of(context).deleted}]',
                 style: textTheme.bodyText2
                     ?.copyWith(fontSize: textTheme.caption?.fontSize),
               ),
@@ -92,8 +92,7 @@ class ItemTileMetadata extends HookConsumerWidget {
             if (item.hasOriginalYear)
               MetadataItem(
                 icon: FluentIcons.shifts_activity_24_regular,
-                text:
-                    AppLocalizations.of(context)!.fromYear(item.originalYear!),
+                text: AppLocalizations.of(context).fromYear(item.originalYear!),
               ),
             SmoothAnimatedSwitcher.horizontal(
               condition: item.cache,

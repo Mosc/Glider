@@ -57,7 +57,7 @@ class EditBody extends HookConsumerWidget {
                   TextFormField(
                     controller: titleController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.title,
+                      labelText: AppLocalizations.of(context).title,
                     ),
                     textCapitalization: TextCapitalization.words,
                     autofocus: true,
@@ -75,8 +75,8 @@ class EditBody extends HookConsumerWidget {
                     controller: textController,
                     decoration: InputDecoration(
                       labelText: item.type == ItemType.comment
-                          ? AppLocalizations.of(context)!.comment
-                          : AppLocalizations.of(context)!.text,
+                          ? AppLocalizations.of(context).comment
+                          : AppLocalizations.of(context).text,
                     ),
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
@@ -106,7 +106,7 @@ class EditBody extends HookConsumerWidget {
                                 loadingState.value = false;
                               }
                             },
-                      child: Text(AppLocalizations.of(context)!.edit),
+                      child: Text(AppLocalizations.of(context).edit),
                     ),
                   ],
                 ),
@@ -117,7 +117,7 @@ class EditBody extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            AppLocalizations.of(context)!.preview,
+            AppLocalizations.of(context).preview,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -156,7 +156,7 @@ class EditBody extends HookConsumerWidget {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
+        SnackBar(content: Text(AppLocalizations.of(context).genericError)),
       );
     }
   }

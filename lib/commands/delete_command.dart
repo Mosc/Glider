@@ -30,7 +30,7 @@ class DeleteCommand implements CommandMixin {
       await showDialog<void>(
         context: context,
         builder: (_) => AlertDialog(
-          content: Text(AppLocalizations.of(context)!.deleteConfirm),
+          content: Text(AppLocalizations.of(context).deleteConfirm),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -54,9 +54,9 @@ class DeleteCommand implements CommandMixin {
       final NavigatorState navigator = Navigator.of(context);
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.deleteNotLoggedIn),
+          content: Text(AppLocalizations.of(context).deleteNotLoggedIn),
           action: SnackBarAction(
-            label: AppLocalizations.of(context)!.logIn,
+            label: AppLocalizations.of(context).logIn,
             onPressed: () => navigator.push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const AccountPage(),
@@ -84,9 +84,9 @@ class DeleteCommand implements CommandMixin {
       );
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.processingInfo),
+          content: Text(AppLocalizations.of(context).processingInfo),
           action: SnackBarAction(
-            label: AppLocalizations.of(context)!.refresh,
+            label: AppLocalizations.of(context).refresh,
             onPressed: itemNotifier.forceLoad,
           ),
         ),

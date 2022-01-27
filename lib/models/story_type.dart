@@ -16,17 +16,17 @@ extension StoryTypeExtension on StoryType {
   String title(BuildContext context) {
     switch (this) {
       case StoryType.topStories:
-        return AppLocalizations.of(context)!.topStories;
+        return AppLocalizations.of(context).topStories;
       case StoryType.newTopStories:
-        return AppLocalizations.of(context)!.newTopStories;
+        return AppLocalizations.of(context).newTopStories;
       case StoryType.newStories:
-        return AppLocalizations.of(context)!.newStories;
+        return AppLocalizations.of(context).newStories;
       case StoryType.bestStories:
-        return AppLocalizations.of(context)!.bestStories;
+        return AppLocalizations.of(context).bestStories;
       case StoryType.askStories:
-        return AppLocalizations.of(context)!.askHn;
+        return AppLocalizations.of(context).askHn;
       case StoryType.showStories:
-        return AppLocalizations.of(context)!.showHn;
+        return AppLocalizations.of(context).showHn;
     }
   }
 

@@ -57,7 +57,7 @@ class SubmitBody extends HookConsumerWidget {
                 const Experimental(),
                 const SizedBox(height: 16),
                 Text(
-                  AppLocalizations.of(context)!.storyTypeDescription,
+                  AppLocalizations.of(context).storyTypeDescription,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Wrap(
@@ -86,7 +86,7 @@ class SubmitBody extends HookConsumerWidget {
                 TextFormField(
                   controller: titleController,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.title,
+                    labelText: AppLocalizations.of(context).title,
                   ),
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
@@ -103,7 +103,7 @@ class SubmitBody extends HookConsumerWidget {
                   TextFormField(
                     controller: urlController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.link,
+                      labelText: AppLocalizations.of(context).link,
                     ),
                     keyboardType: TextInputType.url,
                     maxLines: null,
@@ -116,7 +116,7 @@ class SubmitBody extends HookConsumerWidget {
                   TextFormField(
                     controller: textController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.text,
+                      labelText: AppLocalizations.of(context).text,
                     ),
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
@@ -142,7 +142,7 @@ class SubmitBody extends HookConsumerWidget {
                                     )
                                 : null,
                         child: Text(
-                          AppLocalizations.of(context)!.autofillTitle,
+                          AppLocalizations.of(context).autofillTitle,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -163,7 +163,7 @@ class SubmitBody extends HookConsumerWidget {
                                 loadingState.value = false;
                               }
                             },
-                      child: Text(AppLocalizations.of(context)!.submit),
+                      child: Text(AppLocalizations.of(context).submit),
                     ),
                   ],
                 ),
@@ -174,7 +174,7 @@ class SubmitBody extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            AppLocalizations.of(context)!.preview,
+            AppLocalizations.of(context).preview,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -211,7 +211,7 @@ class SubmitBody extends HookConsumerWidget {
     } on Exception {
       ScaffoldMessenger.of(context).replaceSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.autofillTitleError),
+          content: Text(AppLocalizations.of(context).autofillTitleError),
         ),
       );
     }
@@ -233,7 +233,7 @@ class SubmitBody extends HookConsumerWidget {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
+        SnackBar(content: Text(AppLocalizations.of(context).genericError)),
       );
     }
   }

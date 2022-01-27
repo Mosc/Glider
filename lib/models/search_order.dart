@@ -12,9 +12,9 @@ extension SearchOrderExtension on SearchOrder {
   String title(BuildContext context) {
     switch (this) {
       case SearchOrder.byDate:
-        return AppLocalizations.of(context)!.byDate;
+        return AppLocalizations.of(context).byDate;
       case SearchOrder.byRelevance:
-        return AppLocalizations.of(context)!.byRelevance;
+        return AppLocalizations.of(context).byRelevance;
     }
   }
 

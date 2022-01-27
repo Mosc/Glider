@@ -21,7 +21,7 @@ class UrlUtil {
 
     if (!success) {
       ScaffoldMessenger.of(context).replaceSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.openLinkError)),
+        SnackBar(content: Text(AppLocalizations.of(context).openLinkError)),
       );
     }
 

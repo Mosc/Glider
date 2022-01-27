@@ -33,11 +33,11 @@ class UserOptionsCommand with CommandMixin {
         <OptionsDialogOption>[
       if (user.about != null)
         OptionsDialogOption(
-          title: AppLocalizations.of(context)!.text,
+          title: AppLocalizations.of(context).text,
           text: FormattingUtil.convertHtmlToHackerNews(user.about!),
         ),
       OptionsDialogOption(
-        title: AppLocalizations.of(context)!.userLink,
+        title: AppLocalizations.of(context).userLink,
         text: Uri.https(
           WebsiteRepository.authority,
           'user',

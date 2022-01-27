@@ -66,7 +66,7 @@ class ItemSearchPage extends HookConsumerWidget {
           title: TextField(
             controller: queryController,
             decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.searchHint,
+              hintText: AppLocalizations.of(context).searchHint,
             ),
             textInputAction: TextInputAction.search,
             autofocus: true,
