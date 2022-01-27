@@ -51,6 +51,7 @@ class AppTheme {
     return ThemeData(
       brightness: brightness,
       visualDensity: VisualDensity.standard,
+      useMaterial3: true,
       primaryColor: color,
       canvasColor: canvasColor,
       scaffoldBackgroundColor: backgroundColor,
