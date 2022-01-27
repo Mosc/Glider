@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
+import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -40,19 +41,24 @@ class ItemTile extends HookConsumerWidget {
     final AsyncValue<Item> asyncItem = ref.watch(itemNotifierProvider(id));
 
     return asyncItem.when(
-      data: (Item item) => _itemBuilder(context, item),
+      data: (Item item) => _itemBuilder(context, ref, item),
       loading: loading,
       error: (_, __) => const SizedBox.shrink(),
     );
   }
 
-  Widget _itemBuilder(BuildContext context, Item value) {
-    if (value.time == null) {
+  Widget _itemBuilder(BuildContext context, WidgetRef ref, Item item) {
+    if (item.time == null) {
+      return const SizedBox.shrink();
+    }
+
+    if (item.by != null &&
+        (ref.watch(blockedProvider(item.by!)).asData?.value ?? false)) {
       return const SizedBox.shrink();
     }
 
     return ItemTileData(
-      value.copyWith(indentation: indentation),
+      item.copyWith(indentation: indentation),
       key: ValueKey<String>('item_$id'),
       root: root,
       onTap: () => onTap?.call(context),

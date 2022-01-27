@@ -22,6 +22,7 @@ class StorageRepository {
   static const String _upvotedKey = 'upvoted';
   static const String _visitedKey = 'visited';
   static const String _collapsedKey = 'collapsed';
+  static const String _blockedKey = 'blocked';
 
   final FlutterSecureStorage _secureStorage;
   final Future<SharedPreferences> _sharedPreferences;
@@ -188,4 +189,10 @@ class StorageRepository {
       await sharedPreferences.removeElement(_collapsedKey, id.toString());
     }
   }
+
+  Future<bool> blocked({required String id}) async =>
+      (await _sharedPreferences).containsElement(_blockedKey, id);
+
+  Future<void> setBlocked({required String id}) async =>
+      (await _sharedPreferences).addElement(_blockedKey, id);
 }

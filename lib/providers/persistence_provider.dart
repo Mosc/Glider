@@ -69,6 +69,12 @@ final FutureProviderFamily<bool, int> collapsedProvider = FutureProvider.family(
       ref.read(storageRepositoryProvider).collapsed(id: id),
 );
 
+final AutoDisposeFutureProviderFamily<bool, String> blockedProvider =
+    FutureProvider.autoDispose.family(
+  (AutoDisposeFutureProviderRef<bool> ref, String id) =>
+      ref.read(storageRepositoryProvider).blocked(id: id),
+);
+
 final AutoDisposeFutureProvider<bool> loggedInProvider =
     FutureProvider.autoDispose<bool>(
   (AutoDisposeFutureProviderRef<bool> ref) =>
