@@ -44,8 +44,10 @@ class UrlUtil {
       await FlutterWebBrowser.openWebPage(
         url: urlString,
         customTabsOptions: CustomTabsOptions(
-          toolbarColor: appBarTheme.backgroundColor,
-          addDefaultShareMenuItem: true,
+          defaultColorSchemeParams: CustomTabsColorSchemeParams(
+            toolbarColor: appBarTheme.backgroundColor,
+          ),
+          shareState: CustomTabsShareState.on,
           showTitle: true,
         ),
         safariVCOptions: SafariViewControllerOptions(
