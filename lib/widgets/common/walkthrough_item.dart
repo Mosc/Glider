@@ -76,6 +76,7 @@ class WalkthoughItem extends HookConsumerWidget {
                   Slidable.movementDuration,
                   () => upvotedStateController.update((_) => true),
                 );
+                return false;
               },
               icon: FluentIcons.arrow_up_24_regular,
               color: Theme.of(context).colorScheme.primary,
@@ -87,6 +88,7 @@ class WalkthoughItem extends HookConsumerWidget {
                   Slidable.movementDuration,
                   () => upvotedStateController.update((_) => false),
                 );
+                return false;
               },
               icon: FluentIcons.arrow_undo_24_regular,
             ),

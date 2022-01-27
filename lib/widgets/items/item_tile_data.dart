@@ -117,6 +117,7 @@ class ItemTileData extends HookConsumerWidget {
               ? SlidableAction(
                   action: () async {
                     unawaited(vote(upvote: true));
+                    return false;
                   },
                   icon: FluentIcons.arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.primary,
@@ -125,6 +126,7 @@ class ItemTileData extends HookConsumerWidget {
               : SlidableAction(
                   action: () async {
                     unawaited(vote(upvote: false));
+                    return false;
                   },
                   icon: FluentIcons.arrow_undo_24_regular,
                 )
@@ -134,6 +136,7 @@ class ItemTileData extends HookConsumerWidget {
               ? SlidableAction(
                   action: () async {
                     unawaited(UrlUtil.tryLaunch(context, ref, item.url!));
+                    return false;
                   },
                   icon: FluentIcons.window_arrow_up_24_regular,
                   color: Theme.of(context).colorScheme.surface,
@@ -147,6 +150,7 @@ class ItemTileData extends HookConsumerWidget {
                       ReplyCommand(context, ref, id: item.id, rootId: root?.id)
                           .execute(),
                     );
+                    return false;
                   },
                   icon: FluentIcons.arrow_reply_24_regular,
                   color: Theme.of(context).colorScheme.surface,
