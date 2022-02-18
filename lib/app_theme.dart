@@ -45,8 +45,7 @@ class AppTheme {
         ThemeData.estimateBrightnessForColor(color);
     final Color onColor = colorBrightness.isDark ? Colors.white : Colors.black;
     final Color canvasColor = backgroundColor.lighten(0.05);
-    final bool useGestures =
-        ref.watch(useGesturesProvider).asData?.value ?? true;
+    final bool useGestures = ref.watch(useGesturesProvider).value ?? true;
 
     return ThemeData(
       brightness: brightness,

@@ -36,7 +36,7 @@ class SubmitBody extends HookConsumerWidget {
     final TextEditingValue urlListenable = useValueListenable(urlController);
     final TextEditingController textController = useTextEditingController();
     final TextEditingValue textListenable = useValueListenable(textController);
-    final String? username = ref.watch(usernameProvider).asData?.value;
+    final String? username = ref.watch(usernameProvider).value;
 
     String? link() =>
         submitTypeState.value == SubmitType.link ? urlListenable.text : null;

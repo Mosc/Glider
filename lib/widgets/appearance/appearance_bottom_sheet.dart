@@ -49,8 +49,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
           ],
         ),
         SmoothAnimatedSwitcher.vertical(
-          condition:
-              ref.watch(themeModeProvider).asData?.value != ThemeMode.light,
+          condition: ref.watch(themeModeProvider).value != ThemeMode.light,
           child: _buildTitledButtons(
             context,
             title: AppLocalizations.of(context).darkTheme,
@@ -114,7 +113,7 @@ class _ThemeModeButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeMode themeMode =
-        ref.watch(themeModeProvider).asData?.value ?? ThemeMode.system;
+        ref.watch(themeModeProvider).value ?? ThemeMode.system;
     final Color color = mode.color(context, ref);
 
     useMemoized(
@@ -169,7 +168,7 @@ class DarkThemeButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DarkTheme darkTheme =
-        ref.watch(darkThemeProvider).asData?.value ?? DarkTheme.grey;
+        ref.watch(darkThemeProvider).value ?? DarkTheme.grey;
 
     useMemoized(
       () => Future<void>.microtask(() {
@@ -223,7 +222,7 @@ class _ThemeColorButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Color themeColor =
-        ref.watch(themeColorProvider).asData?.value ?? AppTheme.defaultColor;
+        ref.watch(themeColorProvider).value ?? AppTheme.defaultColor;
 
     useMemoized(
       () => Future<void>.microtask(() {

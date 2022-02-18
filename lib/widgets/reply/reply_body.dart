@@ -31,7 +31,7 @@ class ReplyBody extends HookConsumerWidget {
     final TextEditingController commentController = useTextEditingController();
     final TextEditingValue commentListenable =
         useValueListenable(commentController);
-    final String? username = ref.watch(usernameProvider).asData?.value;
+    final String? username = ref.watch(usernameProvider).value;
 
     return ListView(
       padding: MediaQuery.of(context).padding.copyWith(top: 0),

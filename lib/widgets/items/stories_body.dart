@@ -19,7 +19,7 @@ class StoriesBody extends HookConsumerWidget {
     final StateController<StoryType> storyTypeStateController =
         ref.watch(storyTypeStateProvider.state);
     final bool completedWalkthrough =
-        ref.watch(completedWalkthroughProvider).asData?.value ?? true;
+        ref.watch(completedWalkthroughProvider).value ?? true;
     final AutoDisposeStateNotifierProvider<StoryIdsNotifier,
             AsyncValue<Iterable<int>>> provider =
         storyIdsNotifierProvider(storyTypeStateController.state);

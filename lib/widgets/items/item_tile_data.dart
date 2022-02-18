@@ -88,8 +88,7 @@ class ItemTileData extends HookConsumerWidget {
     // upvote state until after the call has actually finished.
     final StateController<bool?> delayedUpvotedController =
         ref.watch(_delayedUpvoteStateProvider(item.id).state);
-    final bool useGestures =
-        ref.watch(useGesturesProvider).asData?.value ?? true;
+    final bool useGestures = ref.watch(useGesturesProvider).value ?? true;
 
     Future<void> updateDelayedUpvoted() async {
       final bool upvoted = await ref.read(upvotedProvider(item.id).future);
@@ -169,7 +168,7 @@ class ItemTileData extends HookConsumerWidget {
 
     Color _determineDividerColor(WidgetRef ref) {
       final List<Color> colors = AppTheme.themeColors.toList(growable: false);
-      final Color? themeColor = ref.watch(themeColorProvider).asData?.value;
+      final Color? themeColor = ref.watch(themeColorProvider).value;
       final int initialOffset =
           themeColor != null ? colors.indexOf(themeColor) : 0;
       final int offset =
@@ -222,7 +221,7 @@ class ItemTileData extends HookConsumerWidget {
 
   Widget _buildContent(BuildContext context, WidgetRef ref) {
     final double opacity =
-        fadeable && (ref.watch(visitedProvider(item.id)).asData?.value ?? false)
+        fadeable && (ref.watch(visitedProvider(item.id)).value ?? false)
             ? 2 / 3
             : 1;
 

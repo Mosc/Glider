@@ -17,12 +17,12 @@ class ItemOptionsCommand with CommandMixin {
             OptionsDialog.copy(context, options: options));
 
   ItemOptionsCommand.share(this.context, this.ref, {required this.id})
-      : optionsDialogBuilder = ((Iterable<OptionsDialogOption> options) =>
-            OptionsDialog.share(
-              context,
-              options: options,
-              subject: ref.read(itemNotifierProvider(id)).asData?.value.title,
-            ));
+      : optionsDialogBuilder =
+            ((Iterable<OptionsDialogOption> options) => OptionsDialog.share(
+                  context,
+                  options: options,
+                  subject: ref.read(itemNotifierProvider(id)).value?.title,
+                ));
 
   final BuildContext context;
   final WidgetRef ref;

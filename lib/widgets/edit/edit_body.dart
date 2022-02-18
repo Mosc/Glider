@@ -31,7 +31,7 @@ class EditBody extends HookConsumerWidget {
         useValueListenable(titleController);
     final TextEditingController textController = useTextEditingController();
     final TextEditingValue textListenable = useValueListenable(textController);
-    final String? username = ref.watch(usernameProvider).asData?.value;
+    final String? username = ref.watch(usernameProvider).value;
 
     useMemoized(
       () {

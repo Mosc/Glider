@@ -122,8 +122,7 @@ class ItemTileMetadata extends HookConsumerWidget {
       BuildContext context, WidgetRef ref, TextTheme textTheme,
       {required String by, String? rootBy}) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final bool byLoggedInUser =
-        item.by == ref.watch(usernameProvider).asData?.value;
+    final bool byLoggedInUser = item.by == ref.watch(usernameProvider).value;
     final bool byRoot = item.by == rootBy;
 
     return GestureDetector(

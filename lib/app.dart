@@ -27,11 +27,11 @@ class App extends HookConsumerWidget {
       () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
     );
 
-    final ThemeMode? themeMode = ref.watch(themeModeProvider).asData?.value;
+    final ThemeMode? themeMode = ref.watch(themeModeProvider).value;
     final DarkTheme darkTheme =
-        ref.watch(darkThemeProvider).asData?.value ?? DarkTheme.grey;
+        ref.watch(darkThemeProvider).value ?? DarkTheme.grey;
     final Color themeColor =
-        ref.watch(themeColorProvider).asData?.value ?? AppTheme.defaultColor;
+        ref.watch(themeColorProvider).value ?? AppTheme.defaultColor;
 
     return MaterialApp(
       home: const Home(),

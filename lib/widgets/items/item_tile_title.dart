@@ -40,7 +40,7 @@ class ItemTileTitle extends HookConsumerWidget {
   Widget _buildTitleText(BuildContext context, WidgetRef ref,
       {required bool dense}) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final bool showUrl = ref.watch(showUrlProvider).asData?.value ?? false;
+    final bool showUrl = ref.watch(showUrlProvider).value ?? false;
 
     return Text.rich(
       TextSpan(

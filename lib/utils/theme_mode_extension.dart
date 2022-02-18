@@ -21,7 +21,7 @@ extension ThemeModeExtension on ThemeMode {
 
   Color color(BuildContext context, WidgetRef ref) {
     Color darkBackgroundColor(WidgetRef ref) =>
-        (ref.read(darkThemeProvider).asData?.value ?? DarkTheme.grey).color;
+        (ref.read(darkThemeProvider).value ?? DarkTheme.grey).color;
 
     switch (this) {
       case ThemeMode.system:

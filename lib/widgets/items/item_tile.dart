@@ -53,7 +53,7 @@ class ItemTile extends HookConsumerWidget {
     }
 
     if (item.by != null &&
-        (ref.watch(blockedProvider(item.by!)).asData?.value ?? false)) {
+        (ref.watch(blockedProvider(item.by!)).value ?? false)) {
       return const SizedBox.shrink();
     }
 
