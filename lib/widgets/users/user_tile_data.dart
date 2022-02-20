@@ -49,7 +49,7 @@ class UserTileData extends HookConsumerWidget {
                       padding: const EdgeInsets.symmetric(vertical: 1),
                       child: Text(
                         user.id,
-                        style: textTheme.caption?.copyWith(
+                        style: textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
@@ -57,7 +57,7 @@ class UserTileData extends HookConsumerWidget {
                     const Spacer(),
                     Text(
                       AppLocalizations.of(context).sinceDate(user.createdDate),
-                      style: textTheme.caption,
+                      style: textTheme.bodySmall,
                     ),
                   ],
                 ),

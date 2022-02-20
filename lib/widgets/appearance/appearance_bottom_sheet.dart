@@ -81,7 +81,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
                 overflow: TextOverflow.ellipsis,
               ),
             ),

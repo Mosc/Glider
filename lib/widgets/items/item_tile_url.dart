@@ -34,13 +34,13 @@ class ItemTileUrl extends HookConsumerWidget {
               children: <Widget>[
                 Icon(
                   FluentIcons.window_arrow_up_24_regular,
-                  size: textTheme.bodyText2?.scaledFontSize(context),
+                  size: textTheme.bodyMedium?.scaledFontSize(context),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     item.url!,
-                    style: textTheme.bodyText2
+                    style: textTheme.bodyMedium
                         ?.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),

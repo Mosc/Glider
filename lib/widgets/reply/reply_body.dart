@@ -96,7 +96,7 @@ class ReplyBody extends HookConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             AppLocalizations.of(context).preview,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         ItemTileData(

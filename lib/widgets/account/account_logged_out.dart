@@ -77,7 +77,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                     AppLocalizations.of(context).legalHtml,
                     onTapUrl: (String url) =>
                         UrlUtil.tryLaunch(context, ref, url),
-                    textStyle: Theme.of(context).textTheme.caption,
+                    textStyle: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 16),
                   Row(

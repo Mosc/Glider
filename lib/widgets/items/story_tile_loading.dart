@@ -31,12 +31,12 @@ class StoryTileLoading extends HookConsumerWidget {
                     children: <Widget>[
                       const SizedBox(height: 3),
                       TileLoadingBlock(
-                        height: textTheme.subtitle1?.scaledFontSize(context),
+                        height: textTheme.titleMedium?.scaledFontSize(context),
                       ),
                       const SizedBox(height: 3),
                       TileLoadingBlock(
                         width: 120,
-                        height: textTheme.subtitle1?.scaledFontSize(context),
+                        height: textTheme.titleMedium?.scaledFontSize(context),
                       ),
                     ],
                   ),
@@ -57,12 +57,12 @@ class StoryTileLoading extends HookConsumerWidget {
                 children: <Widget>[
                   TileLoadingBlock(
                     width: 160,
-                    height: textTheme.caption?.scaledFontSize(context),
+                    height: textTheme.bodySmall?.scaledFontSize(context),
                   ),
                   const Spacer(),
                   TileLoadingBlock(
                     width: 80,
-                    height: textTheme.caption?.scaledFontSize(context),
+                    height: textTheme.bodySmall?.scaledFontSize(context),
                   ),
                 ],
               ),

@@ -23,28 +23,28 @@ class CommentTileLoading extends HookConsumerWidget {
               children: <Widget>[
                 TileLoadingBlock(
                   width: 80,
-                  height: textTheme.caption?.scaledFontSize(context),
+                  height: textTheme.bodySmall?.scaledFontSize(context),
                 ),
                 const Spacer(),
                 TileLoadingBlock(
                   width: 80,
-                  height: textTheme.caption?.scaledFontSize(context),
+                  height: textTheme.bodySmall?.scaledFontSize(context),
                 ),
               ],
             ),
             const SizedBox(height: 13),
             for (int i = 0; i < 2; i++) ...<Widget>[
               if (i > 0)
-                SizedBox(height: textTheme.bodyText2?.scaledFontSize(context)),
+                SizedBox(height: textTheme.bodyMedium?.scaledFontSize(context)),
               for (int j = 0; j < 2; j++) ...<Widget>[
                 const SizedBox(height: 2),
                 TileLoadingBlock(
-                    height: textTheme.bodyText2?.scaledFontSize(context)),
+                    height: textTheme.bodyMedium?.scaledFontSize(context)),
               ],
               const SizedBox(height: 2),
               TileLoadingBlock(
                 width: 120,
-                height: textTheme.bodyText2?.scaledFontSize(context),
+                height: textTheme.bodyMedium?.scaledFontSize(context),
               ),
             ],
           ],

@@ -128,7 +128,7 @@ class WalkthoughItem extends HookConsumerWidget {
                                   stepStateController.state.number,
                                   WalkthroughStep.values.length,
                                 ),
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ),
                             const SizedBox(width: 8),

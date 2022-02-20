@@ -99,14 +99,14 @@ class ItemBody extends HookConsumerWidget {
                   FluentIcons.arrow_circle_up_24_regular,
                   size: Theme.of(context)
                       .textTheme
-                      .bodyText2
+                      .bodyMedium
                       ?.scaledFontSize(context),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     AppLocalizations.of(context).openParent,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ],

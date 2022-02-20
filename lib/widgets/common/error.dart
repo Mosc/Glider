@@ -11,7 +11,7 @@ class Error extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double? fontSize =
-        Theme.of(context).textTheme.bodyText2?.scaledFontSize(context);
+        Theme.of(context).textTheme.bodyMedium?.scaledFontSize(context);
 
     return Center(
       child: Padding(

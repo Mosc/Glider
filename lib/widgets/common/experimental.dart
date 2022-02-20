@@ -17,7 +17,7 @@ class Experimental extends HookConsumerWidget {
           Icon(
             FluentIcons.warning_24_regular,
             size:
-                Theme.of(context).textTheme.bodyText2?.scaledFontSize(context),
+                Theme.of(context).textTheme.bodyMedium?.scaledFontSize(context),
           ),
           const SizedBox(width: 12),
           Expanded(

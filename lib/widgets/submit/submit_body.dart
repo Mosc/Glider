@@ -58,7 +58,7 @@ class SubmitBody extends HookConsumerWidget {
                 const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context).storyTypeDescription,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Wrap(
                   children: <Widget>[
@@ -175,7 +175,7 @@ class SubmitBody extends HookConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             AppLocalizations.of(context).preview,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         if (username != null)

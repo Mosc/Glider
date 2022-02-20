@@ -81,7 +81,7 @@ class ItemTileMetadata extends HookConsumerWidget {
               Text(
                 '[${AppLocalizations.of(context).deleted}]',
                 style: textTheme.bodyText2
-                    ?.copyWith(fontSize: textTheme.caption?.fontSize),
+                    ?.copyWith(fontSize: textTheme.bodySmall?.fontSize),
               ),
             ] else if (item.by != null &&
                 item.type != ItemType.pollopt) ...<Widget>[
@@ -101,7 +101,7 @@ class ItemTileMetadata extends HookConsumerWidget {
             if (interactive) _buildCollapsedIndicator(),
             if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
               const Spacer(),
-              Text(item.timeAgo!, style: textTheme.caption),
+              Text(item.timeAgo!, style: textTheme.bodySmall),
             ],
           ],
         ),
@@ -141,7 +141,7 @@ class ItemTileMetadata extends HookConsumerWidget {
               ),
               child: Text(
                 by,
-                style: textTheme.caption?.copyWith(
+                style: textTheme.bodySmall?.copyWith(
                   color: byLoggedInUser
                       ? colorScheme.onPrimary
                       : colorScheme.primary,
@@ -152,7 +152,8 @@ class ItemTileMetadata extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: Text(
                 by,
-                style: textTheme.caption?.copyWith(color: colorScheme.primary),
+                style:
+                    textTheme.bodySmall?.copyWith(color: colorScheme.primary),
               ),
             ),
     );

@@ -57,21 +57,21 @@ class ItemTileTitle extends HookConsumerWidget {
             ..._buildIconSpans(context, FluentIcons.document_24_regular),
           TextSpan(
             text: item.formattedTitle,
-            style: textTheme.subtitle1,
+            style: textTheme.titleMedium,
           ),
           if (item.url != null && showUrl) ...<InlineSpan>[
             TextSpan(
               text: '​ ',
-              style: textTheme.subtitle1,
+              style: textTheme.titleMedium,
             ),
             TextSpan(
               text: '(${item.urlHost})',
-              style: textTheme.caption,
+              style: textTheme.bodySmall,
             ),
             // Attach zero-width space of title style to enforce height.
             TextSpan(
               text: '​\u200b',
-              style: textTheme.subtitle1,
+              style: textTheme.titleMedium,
             ),
           ],
         ],
@@ -91,10 +91,10 @@ class ItemTileTitle extends HookConsumerWidget {
         baseline: TextBaseline.ideographic,
         child: Icon(
           icon,
-          size: textTheme.subtitle1?.scaledFontSize(context),
+          size: textTheme.titleMedium?.scaledFontSize(context),
         ),
       ),
-      TextSpan(text: ' ', style: textTheme.subtitle1),
+      TextSpan(text: ' ', style: textTheme.titleMedium),
     ];
   }
 }
