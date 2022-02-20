@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class AnimationUtil {
   const AnimationUtil._();
 
-  static const Duration defaultDuration = Duration(milliseconds: 400);
+  static const Duration defaultDuration = Duration(milliseconds: 300);
 
   static const Curve defaultCurve = Curves.easeInOut;
 
