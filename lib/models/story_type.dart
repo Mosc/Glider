@@ -1,4 +1,3 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,23 +26,6 @@ extension StoryTypeExtension on StoryType {
         return AppLocalizations.of(context).askHn;
       case StoryType.showStories:
         return AppLocalizations.of(context).showHn;
-    }
-  }
-
-  IconData get icon {
-    switch (this) {
-      case StoryType.topStories:
-        return FluentIcons.arrow_trending_24_regular;
-      case StoryType.newTopStories:
-        return FluentIcons.rocket_24_filled;
-      case StoryType.newStories:
-        return FluentIcons.new_24_regular;
-      case StoryType.bestStories:
-        return FluentIcons.ribbon_star_24_regular;
-      case StoryType.askStories:
-        return FluentIcons.chat_help_24_regular;
-      case StoryType.showStories:
-        return FluentIcons.chat_warning_24_regular;
     }
   }
 

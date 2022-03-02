@@ -18,7 +18,6 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/appearance/appearance_bottom_sheet.dart';
-import 'package:glider/widgets/common/decorated_speed_dial.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_body.dart';
 import 'package:glider/widgets/settings/settings_bottom_sheet.dart';
@@ -53,12 +52,25 @@ class StoriesPage extends HookConsumerWidget {
     return Scaffold(
       body: FloatingAppBarScrollView(
         controller: scrollController,
-        title: Text(AppLocalizations.of(context).appName),
+        title: Text(storyTypeStateController.state.title(context)),
         actions: <Widget>[
           IconButton(
             icon: const Icon(FluentIcons.search_24_regular),
             tooltip: AppLocalizations.of(context).search,
             onPressed: () => _searchSelected(context, ref),
+          ),
+          PopupMenuButton<StoryType>(
+            itemBuilder: (_) => <PopupMenuEntry<StoryType>>[
+              for (StoryType storyType in StoryType.values)
+                PopupMenuItem<StoryType>(
+                  value: storyType,
+                  child: Text(storyType.title(context)),
+                ),
+            ],
+            onSelected: (StoryType storyType) =>
+                storyTypeStateController.update((_) => storyType),
+            tooltip: AppLocalizations.of(context).storyType,
+            icon: const Icon(FluentIcons.filter_24_regular),
           ),
           PopupMenuButton<StoriesMenuAction>(
             itemBuilder: (_) => <PopupMenuEntry<StoriesMenuAction>>[
@@ -88,18 +100,6 @@ class StoriesPage extends HookConsumerWidget {
           ),
         ],
         body: const StoriesBody(),
-      ),
-      floatingActionButton: DecoratedSpeedDial(
-        visible: speedDialVisibleState.value,
-        icon: storyTypeStateController.state.icon,
-        children: <DecoratedSpeedDialChild>[
-          for (StoryType storyType in StoryType.values)
-            DecoratedSpeedDialChild(
-              onTap: () => storyTypeStateController.update((_) => storyType),
-              label: storyType.title(context),
-              child: Icon(storyType.icon),
-            ),
-        ],
       ),
     );
   }

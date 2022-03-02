@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/search_order.dart';
 import 'package:glider/utils/color_extension.dart';
-import 'package:glider/widgets/common/decorated_speed_dial.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/item_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -83,21 +82,21 @@ class ItemSearchPage extends HookConsumerWidget {
                   itemSearchQueryStateController.update((_) => '');
                 },
               ),
+            PopupMenuButton<SearchOrder>(
+              itemBuilder: (_) => <PopupMenuEntry<SearchOrder>>[
+                for (SearchOrder searchOrder in SearchOrder.values)
+                  PopupMenuItem<SearchOrder>(
+                    value: searchOrder,
+                    child: Text(searchOrder.title(context)),
+                  ),
+              ],
+              onSelected: (SearchOrder searchOrder) =>
+                  itemStoryTypeStateController.update((_) => searchOrder),
+              tooltip: AppLocalizations.of(context).sort,
+              icon: const Icon(FluentIcons.arrow_sort_down_lines_16_regular),
+            ),
           ],
           body: ItemSearchBody(storyId: storyId),
-        ),
-        floatingActionButton: DecoratedSpeedDial(
-          visible: speedDialVisibleState.value,
-          icon: itemStoryTypeStateController.state.icon,
-          children: <DecoratedSpeedDialChild>[
-            for (SearchOrder searchOrder in SearchOrder.values)
-              DecoratedSpeedDialChild(
-                onTap: () =>
-                    itemStoryTypeStateController.update((_) => searchOrder),
-                label: searchOrder.title(context),
-                child: Icon(searchOrder.icon),
-              ),
-          ],
         ),
       ),
     );

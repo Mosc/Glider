@@ -8,7 +8,6 @@ import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
-import 'package:glider/widgets/common/decorated_speed_dial.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -125,6 +124,19 @@ class StoriesSearchPage extends HookConsumerWidget {
                   storySearchQueryStateController.update((_) => '');
                 },
               ),
+            PopupMenuButton<SearchOrder>(
+              itemBuilder: (_) => <PopupMenuEntry<SearchOrder>>[
+                for (SearchOrder searchOrder in SearchOrder.values)
+                  PopupMenuItem<SearchOrder>(
+                    value: searchOrder,
+                    child: Text(searchOrder.title(context)),
+                  ),
+              ],
+              onSelected: (SearchOrder searchOrder) =>
+                  searchStoryTypeStateController.update((_) => searchOrder),
+              tooltip: AppLocalizations.of(context).sort,
+              icon: const Icon(FluentIcons.arrow_sort_down_lines_16_regular),
+            ),
           ],
           bottom: _buildAppBarBottom(
             context,
@@ -132,19 +144,6 @@ class StoriesSearchPage extends HookConsumerWidget {
             heightFactor: bottomHeightFactor,
           ),
           body: const StoriesSearchBody(),
-        ),
-        floatingActionButton: DecoratedSpeedDial(
-          visible: speedDialVisibleState.value,
-          icon: searchStoryTypeStateController.state.icon,
-          children: <DecoratedSpeedDialChild>[
-            for (SearchOrder searchOrder in SearchOrder.values)
-              DecoratedSpeedDialChild(
-                onTap: () =>
-                    searchStoryTypeStateController.update((_) => searchOrder),
-                label: searchOrder.title(context),
-                child: Icon(searchOrder.icon),
-              ),
-          ],
         ),
       ),
     );
