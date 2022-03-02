@@ -11,6 +11,7 @@ import 'package:glider/models/item_menu_action.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
 import 'package:glider/providers/persistence_provider.dart';
+import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/menu_actions_bar.dart';
 import 'package:glider/widgets/common/slidable.dart';
@@ -48,47 +49,148 @@ class ItemTileData extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool active = item.deleted != true && item.preview != true;
-    final Widget content = Column(
+    Widget child = Column(
       children: <Widget>[
         _buildContent(context, ref),
-        SmoothAnimatedSwitcher.vertical(
-          condition: ref.watch(_longPressStateProvider(item.id)),
-          child: MenuActionsBar(
-            children: <IconButton>[
-              for (ItemMenuAction menuAction in ItemMenuAction.values)
-                if (menuAction.visible(context, ref, id: item.id))
-                  IconButton(
-                    icon: Icon(menuAction.icon(context, ref, id: item.id)),
-                    tooltip: menuAction.title(context, ref, id: item.id),
-                    onPressed: () => menuAction
-                        .command(context, ref, id: item.id, rootId: root?.id)
-                        .execute(),
-                  ),
-            ],
-          ),
-        ),
+        _buildMenuActionsBar(ref, context),
       ],
     );
 
-    return _buildSlidable(
-      context,
-      ref,
-      active: active,
-      child: _buildIndented(
-        ref,
-        child: active ? _buildTappable(context, ref, child: content) : content,
+    child = _buildFaded(context, ref, child: child);
+    child = _buildTappable(context, ref, child: child);
+    child = _buildIndented(ref, child: child);
+    child = _buildSlidable(context, ref, child: child);
+    return child;
+  }
+
+  Widget _buildContent(BuildContext context, WidgetRef ref) {
+    if (item.type == ItemType.pollopt) {
+      return ItemTileContentPollOption(
+        item,
+        root: root,
+        interactive: interactive,
+      );
+    } else {
+      return ItemTileContent(
+        item,
+        root: root,
+        dense: dense,
+        interactive: interactive,
+      );
+    }
+  }
+
+  SmoothAnimatedSwitcher _buildMenuActionsBar(
+      WidgetRef ref, BuildContext context) {
+    return SmoothAnimatedSwitcher.vertical(
+      condition: ref.watch(_longPressStateProvider(item.id)),
+      child: MenuActionsBar(
+        children: <IconButton>[
+          for (ItemMenuAction menuAction in ItemMenuAction.values)
+            if (menuAction.visible(context, ref, id: item.id))
+              IconButton(
+                icon: Icon(menuAction.icon(context, ref, id: item.id)),
+                tooltip: menuAction.title(context, ref, id: item.id),
+                onPressed: () => menuAction
+                    .command(context, ref, id: item.id, rootId: root?.id)
+                    .execute(),
+              ),
+        ],
       ),
     );
   }
 
+  Widget _buildFaded(BuildContext context, WidgetRef ref,
+      {required Widget child}) {
+    if (!fadeable) {
+      return child;
+    }
+
+    final double opacity =
+        (ref.watch(visitedProvider(item.id)).value ?? false) ? 2 / 3 : 1;
+
+    return AnimatedOpacity(
+      opacity: opacity,
+      duration: AnimationUtil.defaultDuration,
+      child: child,
+    );
+  }
+
+  Widget _buildTappable(BuildContext context, WidgetRef ref,
+      {required Widget child}) {
+    if (!item.active) {
+      return child;
+    }
+
+    return InkWell(
+      onTap: item.type == ItemType.pollopt && interactive
+          ? () => VoteCommand(
+                context,
+                ref,
+                id: item.id,
+                upvote: !ref.read(upvotedProvider(item.id)).maybeWhen(
+                      data: (bool upvoted) => upvoted,
+                      orElse: () => false,
+                    ),
+              ).execute()
+          : onTap,
+      onLongPress: () => ref
+          .read(_longPressStateProvider(item.id).state)
+          .update((bool state) => !state),
+      child: child,
+    );
+  }
+
+  Widget _buildIndented(WidgetRef ref, {required Widget child}) {
+    final int indentation =
+        item.type != ItemType.pollopt ? item.indentation : 0;
+
+    if (indentation == 0) {
+      return child;
+    }
+
+    final double indentationPadding = indentation.toDouble() * 8;
+
+    Color _determineDividerColor(WidgetRef ref) {
+      final List<Color> colors = AppTheme.themeColors.toList(growable: false);
+      final Color? themeColor = ref.watch(themeColorProvider).value;
+      final int initialOffset =
+          themeColor != null ? colors.indexOf(themeColor) : 0;
+      final int offset =
+          (initialOffset + (indentation - 1) * 2) % colors.length;
+      return colors[offset];
+    }
+
+    return Stack(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: indentationPadding),
+          child: child,
+        ),
+        PositionedDirectional(
+          start: indentationPadding - 1,
+          top: 4,
+          bottom: 4,
+          child: VerticalDivider(
+            width: 1,
+            thickness: 1,
+            color: _determineDividerColor(ref),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildSlidable(BuildContext context, WidgetRef ref,
-      {required Widget child, required bool active}) {
+      {required Widget child}) {
+    if (!(ref.watch(useGesturesProvider).value ?? true)) {
+      return child;
+    }
+
     // We don't want the slidable to update while being slided, so we delay any
     // upvote state until after the call has actually finished.
     final StateController<bool?> delayedUpvotedController =
         ref.watch(_delayedUpvoteStateProvider(item.id).state);
-    final bool useGestures = ref.watch(useGesturesProvider).value ?? true;
 
     Future<void> updateDelayedUpvoted() async {
       final bool upvoted = await ref.read(upvotedProvider(item.id).future);
@@ -109,9 +211,7 @@ class ItemTileData extends HookConsumerWidget {
 
     return Slidable(
       key: ValueKey<String>('item_${item.id}_slidable'),
-      startToEndAction: active &&
-              item.type != ItemType.job &&
-              delayedUpvotedController.state != null
+      startToEndAction: item.votable && delayedUpvotedController.state != null
           ? delayedUpvotedController.state != true
               ? SlidableAction(
                   action: () async {
@@ -142,7 +242,7 @@ class ItemTileData extends HookConsumerWidget {
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )
               : null
-          : active && item.type != ItemType.job && item.type != ItemType.pollopt
+          : item.replyable
               ? SlidableAction(
                   action: () async {
                     unawaited(
@@ -156,90 +256,7 @@ class ItemTileData extends HookConsumerWidget {
                   iconColor: Theme.of(context).colorScheme.onSurface,
                 )
               : null,
-      useGestures: useGestures,
       child: child,
     );
-  }
-
-  Widget _buildIndented(WidgetRef ref, {required Widget child}) {
-    final int indentation =
-        item.type != ItemType.pollopt ? item.indentation : 0;
-    final double indentationPadding = indentation.toDouble() * 8;
-
-    Color _determineDividerColor(WidgetRef ref) {
-      final List<Color> colors = AppTheme.themeColors.toList(growable: false);
-      final Color? themeColor = ref.watch(themeColorProvider).value;
-      final int initialOffset =
-          themeColor != null ? colors.indexOf(themeColor) : 0;
-      final int offset =
-          (initialOffset + (indentation - 1) * 2) % colors.length;
-      return colors[offset];
-    }
-
-    return indentation > 0
-        ? Stack(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: indentationPadding),
-                child: child,
-              ),
-              PositionedDirectional(
-                start: indentationPadding - 1,
-                top: 4,
-                bottom: 4,
-                child: VerticalDivider(
-                  width: 1,
-                  thickness: 1,
-                  color: _determineDividerColor(ref),
-                ),
-              ),
-            ],
-          )
-        : child;
-  }
-
-  Widget _buildTappable(BuildContext context, WidgetRef ref,
-      {required Widget child}) {
-    return InkWell(
-      onTap: item.type == ItemType.pollopt && interactive
-          ? () => VoteCommand(
-                context,
-                ref,
-                id: item.id,
-                upvote: !ref.read(upvotedProvider(item.id)).maybeWhen(
-                      data: (bool upvoted) => upvoted,
-                      orElse: () => false,
-                    ),
-              ).execute()
-          : onTap,
-      onLongPress: () => ref
-          .read(_longPressStateProvider(item.id).state)
-          .update((bool state) => !state),
-      child: child,
-    );
-  }
-
-  Widget _buildContent(BuildContext context, WidgetRef ref) {
-    final double opacity =
-        fadeable && (ref.watch(visitedProvider(item.id)).value ?? false)
-            ? 2 / 3
-            : 1;
-
-    if (item.type == ItemType.pollopt) {
-      return ItemTileContentPollOption(
-        item,
-        root: root,
-        interactive: interactive,
-        opacity: opacity,
-      );
-    } else {
-      return ItemTileContent(
-        item,
-        root: root,
-        dense: dense,
-        interactive: interactive,
-        opacity: opacity,
-      );
-    }
   }
 }

@@ -13,13 +13,11 @@ class ItemTileHeader extends HookConsumerWidget {
     Key? key,
     this.dense = false,
     this.interactive = false,
-    this.opacity = 1,
   }) : super(key: key);
 
   final Item item;
   final bool dense;
   final bool interactive;
-  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,7 +35,6 @@ class ItemTileHeader extends HookConsumerWidget {
               item,
               dense: dense,
               interactive: interactive,
-              opacity: opacity,
             ),
           ),
           if (item.url != null)
@@ -48,7 +45,6 @@ class ItemTileHeader extends HookConsumerWidget {
                   const SizedBox(width: 12),
                   ItemTileFavicon(
                     item,
-                    opacity: opacity,
                   ),
                 ],
               ),

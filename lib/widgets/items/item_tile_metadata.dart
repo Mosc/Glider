@@ -6,7 +6,6 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/utils/animation_util.dart';
 import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
 import 'package:glider/widgets/common/smooth_animated_size.dart';
@@ -20,14 +19,12 @@ class ItemTileMetadata extends HookConsumerWidget {
     this.root,
     this.dense = false,
     this.interactive = false,
-    this.opacity = 1,
   }) : super(key: key);
 
   final Item item;
   final Item? root;
   final bool dense;
   final bool interactive;
-  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,71 +37,67 @@ class ItemTileMetadata extends HookConsumerWidget {
 
     return FadeHero(
       tag: 'item_${item.id}_metadata',
-      child: AnimatedOpacity(
-        opacity: opacity,
-        duration: AnimationUtil.defaultDuration,
-        child: Row(
-          children: <Widget>[
-            if (favoritedData != null)
-              SmoothAnimatedSwitcher.horizontal(
-                condition: favoritedData.value,
-                child: const MetadataItem(
-                  icon: FluentIcons.star_24_regular,
-                  highlight: true,
-                ),
-              ),
-            if (item.score != null && item.type != ItemType.job)
-              SmoothAnimatedSize(
-                child: _buildUpvotedMetadata(
-                  upvoted: upvotedData?.value ?? false,
-                ),
-              )
-            else if (upvotedData != null)
-              SmoothAnimatedSwitcher.horizontal(
-                condition: upvotedData.value,
-                child: _buildUpvotedMetadata(upvoted: upvotedData.value),
-              ),
-            if (item.descendants != null)
-              SmoothAnimatedSize(
-                child: MetadataItem(
-                  icon: FluentIcons.comment_24_regular,
-                  text: item.descendants?.toString(),
-                ),
-              ),
+      child: Row(
+        children: <Widget>[
+          if (favoritedData != null)
             SmoothAnimatedSwitcher.horizontal(
-              key: ValueKey<String>('item_${item.id}_dead_${item.dead}'),
-              condition: item.dead ?? false,
-              child: const MetadataItem(icon: FluentIcons.flag_24_regular),
+              condition: favoritedData.value,
+              child: const MetadataItem(
+                icon: FluentIcons.star_24_regular,
+                highlight: true,
+              ),
             ),
-            if (item.deleted ?? false) ...<Widget>[
-              const MetadataItem(icon: FluentIcons.delete_24_regular),
-              Text(
-                '[${AppLocalizations.of(context).deleted}]',
-                style: textTheme.bodyText2
-                    ?.copyWith(fontSize: textTheme.bodySmall?.fontSize),
+          if (item.score != null && item.type != ItemType.job)
+            SmoothAnimatedSize(
+              child: _buildUpvotedMetadata(
+                upvoted: upvotedData?.value ?? false,
               ),
-            ] else if (item.by != null &&
-                item.type != ItemType.pollopt) ...<Widget>[
-              _buildUsername(context, ref, textTheme,
-                  by: item.by!, rootBy: root?.by),
-              const SizedBox(width: 8),
-            ],
-            if (item.hasOriginalYear)
-              MetadataItem(
-                icon: FluentIcons.shifts_activity_24_regular,
-                text: AppLocalizations.of(context).fromYear(item.originalYear!),
-              ),
+            )
+          else if (upvotedData != null)
             SmoothAnimatedSwitcher.horizontal(
-              condition: item.cache,
-              child: const MetadataItem(icon: FluentIcons.cloud_off_24_regular),
+              condition: upvotedData.value,
+              child: _buildUpvotedMetadata(upvoted: upvotedData.value),
             ),
-            if (interactive) _buildCollapsedIndicator(),
-            if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
-              const Spacer(),
-              Text(item.timeAgo!, style: textTheme.bodySmall),
-            ],
+          if (item.descendants != null)
+            SmoothAnimatedSize(
+              child: MetadataItem(
+                icon: FluentIcons.comment_24_regular,
+                text: item.descendants?.toString(),
+              ),
+            ),
+          SmoothAnimatedSwitcher.horizontal(
+            key: ValueKey<String>('item_${item.id}_dead_${item.dead}'),
+            condition: item.dead ?? false,
+            child: const MetadataItem(icon: FluentIcons.flag_24_regular),
+          ),
+          if (item.deleted ?? false) ...<Widget>[
+            const MetadataItem(icon: FluentIcons.delete_24_regular),
+            Text(
+              '[${AppLocalizations.of(context).deleted}]',
+              style: textTheme.bodyText2
+                  ?.copyWith(fontSize: textTheme.bodySmall?.fontSize),
+            ),
+          ] else if (item.by != null &&
+              item.type != ItemType.pollopt) ...<Widget>[
+            _buildUsername(context, ref, textTheme,
+                by: item.by!, rootBy: root?.by),
+            const SizedBox(width: 8),
           ],
-        ),
+          if (item.hasOriginalYear)
+            MetadataItem(
+              icon: FluentIcons.shifts_activity_24_regular,
+              text: AppLocalizations.of(context).fromYear(item.originalYear!),
+            ),
+          SmoothAnimatedSwitcher.horizontal(
+            condition: item.cache,
+            child: const MetadataItem(icon: FluentIcons.cloud_off_24_regular),
+          ),
+          if (interactive) _buildCollapsedIndicator(),
+          if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
+            const Spacer(),
+            Text(item.timeAgo!, style: textTheme.bodySmall),
+          ],
+        ],
       ),
     );
   }

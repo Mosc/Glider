@@ -2,7 +2,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:glider/widgets/common/tile_loading_block.dart';
@@ -14,11 +13,9 @@ class ItemTileFavicon extends HookConsumerWidget {
   const ItemTileFavicon(
     this.item, {
     Key? key,
-    this.opacity = 1,
   }) : super(key: key);
 
   final Item item;
-  final double opacity;
 
   static final BorderRadius _borderRadius = BorderRadius.circular(4);
 
@@ -30,31 +27,27 @@ class ItemTileFavicon extends HookConsumerWidget {
       onTap: () => UrlUtil.tryLaunch(context, ref, item.url!),
       child: FadeHero(
         tag: 'item_${item.id}_favicon',
-        child: AnimatedOpacity(
-          opacity: opacity,
-          duration: AnimationUtil.defaultDuration,
-          child: item.preview
-              ? _placeholderBuilder(context, size: size)
-              : OctoImage(
-                  image: ref.read(imageProvider(item.faviconUrl(64)!)),
-                  imageBuilder: (_, Widget child) => ClipRRect(
-                    borderRadius: _borderRadius,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      color: Theme.of(context).colorScheme.surface,
-                      child: child,
-                    ),
+        child: item.preview
+            ? _placeholderBuilder(context, size: size)
+            : OctoImage(
+                image: ref.read(imageProvider(item.faviconUrl(64)!)),
+                imageBuilder: (_, Widget child) => ClipRRect(
+                  borderRadius: _borderRadius,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    color: Theme.of(context).colorScheme.surface,
+                    child: child,
                   ),
-                  placeholderBuilder: (BuildContext context) =>
-                      _placeholderBuilder(context, size: size),
-                  errorBuilder: (_, __, ___) => Icon(
-                    FluentIcons.chevron_right_24_regular,
-                    size: size,
-                  ),
-                  width: size,
-                  height: size,
                 ),
-        ),
+                placeholderBuilder: (BuildContext context) =>
+                    _placeholderBuilder(context, size: size),
+                errorBuilder: (_, __, ___) => Icon(
+                  FluentIcons.chevron_right_24_regular,
+                  size: size,
+                ),
+                width: size,
+                height: size,
+              ),
       ),
     );
   }
