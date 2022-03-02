@@ -17,7 +17,8 @@ class UserTileLoading extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 3),
+            SizedBox(height: textTheme.bodySmall?.leading(context)),
+            const SizedBox(height: 1),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -32,14 +33,16 @@ class UserTileLoading extends HookConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 13),
+            const SizedBox(height: 1),
+            const SizedBox(height: 12),
+            SizedBox(height: textTheme.bodySmall?.leading(context)),
             for (int i = 0; i < 2; i++) ...<Widget>[
-              const SizedBox(height: 2),
+              SizedBox(height: textTheme.bodyMedium?.leading(context)),
               TileLoadingBlock(
                 height: textTheme.bodyMedium?.scaledFontSize(context),
               ),
             ],
-            const SizedBox(height: 2),
+            SizedBox(height: textTheme.bodyMedium?.leading(context)),
             TileLoadingBlock(
               width: 120,
               height: textTheme.bodyMedium?.scaledFontSize(context),

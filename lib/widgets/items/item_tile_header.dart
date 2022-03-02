@@ -59,8 +59,8 @@ class ItemTileHeader extends HookConsumerWidget {
   }
 
   static double? calculateHeight(BuildContext context) {
-    final double? fontSize =
-        Theme.of(context).textTheme.titleMedium?.scaledFontSize(context);
-    return fontSize != null ? fontSize * 2 + 6 : null;
+    final double? lineHeight =
+        Theme.of(context).textTheme.titleMedium?.lineHeight(context);
+    return lineHeight != null ? lineHeight * 2 : null;
   }
 }

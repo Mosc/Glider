@@ -29,11 +29,11 @@ class StoryTileLoading extends HookConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const SizedBox(height: 3),
+                      SizedBox(height: textTheme.titleMedium?.leading(context)),
                       TileLoadingBlock(
                         height: textTheme.titleMedium?.scaledFontSize(context),
                       ),
-                      const SizedBox(height: 3),
+                      SizedBox(height: textTheme.titleMedium?.leading(context)),
                       TileLoadingBlock(
                         width: 120,
                         height: textTheme.titleMedium?.scaledFontSize(context),
@@ -51,7 +51,9 @@ class StoryTileLoading extends HookConsumerWidget {
               ],
             ),
             if (showMetadata) ...<Widget>[
-              const SizedBox(height: 15),
+              const SizedBox(height: 12),
+              const SizedBox(height: 1),
+              SizedBox(height: textTheme.bodySmall?.leading(context)),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[

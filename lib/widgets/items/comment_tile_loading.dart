@@ -17,7 +17,8 @@ class CommentTileLoading extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 3),
+            SizedBox(height: textTheme.bodySmall?.leading(context)),
+            const SizedBox(height: 1),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -32,16 +33,19 @@ class CommentTileLoading extends HookConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 13),
+            const SizedBox(height: 1),
+            const SizedBox(height: 12),
+            SizedBox(height: textTheme.bodyMedium?.leading(context)),
             for (int i = 0; i < 2; i++) ...<Widget>[
               if (i > 0)
-                SizedBox(height: textTheme.bodyMedium?.scaledFontSize(context)),
+                SizedBox(height: textTheme.bodyMedium?.lineHeight(context)),
               for (int j = 0; j < 2; j++) ...<Widget>[
-                const SizedBox(height: 2),
+                SizedBox(height: textTheme.bodyMedium?.leading(context)),
                 TileLoadingBlock(
-                    height: textTheme.bodyMedium?.scaledFontSize(context)),
+                  height: textTheme.bodyMedium?.scaledFontSize(context),
+                ),
               ],
-              const SizedBox(height: 2),
+              SizedBox(height: textTheme.bodyMedium?.leading(context)),
               TileLoadingBlock(
                 width: 120,
                 height: textTheme.bodyMedium?.scaledFontSize(context),

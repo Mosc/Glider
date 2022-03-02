@@ -24,6 +24,7 @@ class AppTheme {
   static final Color darkBackgroundColor = Colors.grey.shade900;
   static const Color blackBackgroundColor = Colors.black;
   static const Color spaceBackgroundColor = Color(0xff242933);
+  static const TextStyle tallTextStyle = TextStyle(height: 1.25);
 
   static ThemeData lightTheme(WidgetRef ref, Color color) =>
       _buildTheme(ref, color, backgroundColor: lightBackgroundColor);
@@ -51,38 +52,6 @@ class AppTheme {
       brightness: brightness,
       visualDensity: VisualDensity.standard,
       useMaterial3: true,
-      primaryColor: color,
-      canvasColor: canvasColor,
-      scaffoldBackgroundColor: backgroundColor,
-      cardColor: canvasColor,
-      materialTapTargetSize: MaterialTapTargetSize.padded,
-      buttonTheme: const ButtonThemeData(
-        textTheme: ButtonTextTheme.primary,
-      ),
-      dialogBackgroundColor: canvasColor,
-      toggleableActiveColor: color,
-      chipTheme: ChipThemeData.fromDefaults(
-        brightness: brightness,
-        secondaryColor: color,
-        labelStyle: const TextStyle(),
-      ).copyWith(
-        backgroundColor: backgroundColor,
-        side: StateBorderSide(selectedColor: color, defaultColor: surfaceColor),
-      ),
-      pageTransitionsTheme: useGestures
-          ? PageTransitionsTheme(
-              builders: <TargetPlatform, PageTransitionsBuilder>{
-                for (TargetPlatform targetPlatform in TargetPlatform.values)
-                  targetPlatform: const SwipeablePageTransitionsBuilder(),
-              },
-            )
-          : null,
-      appBarTheme: AppBarTheme(
-        backgroundColor: brightness.isDark ? backgroundColor : color,
-        iconTheme: IconThemeData(
-          color: brightness.isDark ? Colors.white : onColor,
-        ),
-      ),
       colorScheme: brightness.isDark
           ? ColorScheme.dark(
               primary: color,
@@ -103,6 +72,51 @@ class AppTheme {
               // ignore: avoid_redundant_argument_values
               onError: onErrorColor,
             ),
+      canvasColor: canvasColor,
+      scaffoldBackgroundColor: backgroundColor,
+      cardColor: canvasColor,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      textTheme: const TextTheme(
+        displayLarge: tallTextStyle,
+        displayMedium: tallTextStyle,
+        displaySmall: tallTextStyle,
+        headlineLarge: tallTextStyle,
+        headlineMedium: tallTextStyle,
+        headlineSmall: tallTextStyle,
+        titleLarge: tallTextStyle,
+        titleMedium: tallTextStyle,
+        titleSmall: tallTextStyle,
+        bodyLarge: tallTextStyle,
+        bodyMedium: tallTextStyle,
+        bodySmall: tallTextStyle,
+      ),
+      pageTransitionsTheme: useGestures
+          ? PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                for (TargetPlatform targetPlatform in TargetPlatform.values)
+                  targetPlatform: const SwipeablePageTransitionsBuilder(),
+              },
+            )
+          : null,
+      dialogBackgroundColor: canvasColor,
+      toggleableActiveColor: color,
+      appBarTheme: AppBarTheme(
+        backgroundColor: brightness.isDark ? backgroundColor : color,
+        iconTheme: IconThemeData(
+          color: brightness.isDark ? Colors.white : onColor,
+        ),
+      ),
+      buttonTheme: const ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+      ),
+      chipTheme: ChipThemeData.fromDefaults(
+        brightness: brightness,
+        secondaryColor: color,
+        labelStyle: const TextStyle(),
+      ).copyWith(
+        backgroundColor: backgroundColor,
+        side: StateBorderSide(selectedColor: color, defaultColor: surfaceColor),
+      ),
     );
   }
 }
