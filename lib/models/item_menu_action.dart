@@ -34,30 +34,24 @@ extension ItemMenuActionExtension on ItemMenuAction {
     switch (this) {
       case ItemMenuAction.vote:
         return item != null &&
-            !<ItemType>{ItemType.job}.contains(item.type) &&
+            item.votable &&
             ref.watch(upvotedProvider(id)).asData != null;
       case ItemMenuAction.reply:
-        return item != null &&
-            !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type);
+        return item != null && item.replyable;
       case ItemMenuAction.favorite:
         return item != null &&
-            !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type) &&
+            item.favoritable &&
             ref.watch(favoritedProvider(id)).asData != null;
       case ItemMenuAction.flag:
-        return item != null &&
-            !<ItemType>{ItemType.job, ItemType.pollopt}.contains(item.type);
+        return item != null && item.flaggable;
       case ItemMenuAction.edit:
         return item != null &&
-            !<ItemType>{ItemType.job, ItemType.poll, ItemType.pollopt}
-                .contains(item.type) &&
-            ref.watch(usernameProvider).value == item.by &&
-            item.editable;
+            item.editable &&
+            ref.watch(usernameProvider).value == item.by;
       case ItemMenuAction.delete:
         return item != null &&
-            !<ItemType>{ItemType.job, ItemType.poll, ItemType.pollopt}
-                .contains(item.type) &&
-            ref.watch(usernameProvider).value == item.by &&
-            item.deletable;
+            item.deletable &&
+            ref.watch(usernameProvider).value == item.by;
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
         return true;

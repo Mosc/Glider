@@ -81,12 +81,41 @@ class Item with _$Item {
   late final String? originalYear =
       title != null ? _yearRegExp.firstMatch(title!)?.group(1) : null;
 
-  late final bool editable = _timeAgoHours != null && _timeAgoHours! < 2;
+  late final bool active = deleted != true && preview != true;
 
-  late final bool deletable =
-      _timeAgoHours != null && _timeAgoHours! < 2 && kids.isEmpty;
+  late final bool votable = active && type != ItemType.job;
 
-  late final num? _timeAgoHours =
+  late final bool replyable =
+      active && type != ItemType.job && type != ItemType.pollopt;
+
+  late final bool favoritable =
+      active && type != ItemType.job && type != ItemType.pollopt;
+
+  late final bool flaggable =
+      active && type != ItemType.job && type != ItemType.pollopt;
+
+  bool get editable {
+    final num? timeAgoHours = _timeAgoHours;
+    return active &&
+        type != ItemType.job &&
+        type != ItemType.poll &&
+        type != ItemType.pollopt &&
+        timeAgoHours != null &&
+        timeAgoHours < 2;
+  }
+
+  bool get deletable {
+    final num? timeAgoHours = _timeAgoHours;
+    return active &&
+        type != ItemType.job &&
+        type != ItemType.poll &&
+        type != ItemType.pollopt &&
+        timeAgoHours != null &&
+        timeAgoHours < 2 &&
+        kids.isEmpty;
+  }
+
+  num? get _timeAgoHours =>
       timeDate != null ? DateTime.now().difference(timeDate!).inHours : null;
 
   Item addKid(int kidId) => copyWith(kids: <int>[kidId, ...kids]);
