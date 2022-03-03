@@ -50,7 +50,7 @@ class OptionsDialog extends HookConsumerWidget {
     return SimpleDialog(
       contentPadding: const EdgeInsets.symmetric(vertical: 16),
       title: Text(title),
-      titleTextStyle: Theme.of(context).textTheme.titleMedium,
+      titleTextStyle: Theme.of(context).textTheme.titleSmall,
       children: <Widget>[
         for (OptionsDialogOption option in options)
           SimpleDialogOption(
