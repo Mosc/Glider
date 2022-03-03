@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/scheduler.dart';
 import 'package:glider/models/descendant_id.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
@@ -149,13 +150,14 @@ Future<void> _loadItemTree(Future<Item> Function(int) getItem,
   try {
     final Item item = await getItem(id);
 
-    await Future.wait(
-      item.parts.map((int partId) => _loadItemTree(getItem, id: partId)),
-    );
-
-    await Future.wait(
-      item.kids.map((int kidId) => _loadItemTree(getItem, id: kidId)),
-    );
+    for (final int id in <int>[...item.parts, ...item.kids]) {
+      unawaited(
+        SchedulerBinding.instance!.scheduleTask(
+          () => _loadItemTree(getItem, id: id),
+          Priority.animation,
+        ),
+      );
+    }
   } on ServiceException {
     // Fail silently.
   }
