@@ -52,8 +52,7 @@ class Home extends HookConsumerWidget {
     final bool isDark = Theme.of(context).brightness.isDark;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: isDark ? Colors.black38 : Colors.black26,
+      value: SystemUiOverlayStyle(
         systemNavigationBarColor: isEdgeToEdgeState.value
             ? Colors.transparent
             : isDark

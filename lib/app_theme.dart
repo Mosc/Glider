@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/utils/swipeable_page_route.dart';
@@ -46,6 +47,9 @@ class AppTheme {
         ThemeData.estimateBrightnessForColor(color);
     final Color onColor = colorBrightness.isDark ? Colors.white : Colors.black;
     final Color canvasColor = backgroundColor.lighten(0.05);
+    final Color appBarBackgroundColor =
+        brightness.isDark ? backgroundColor : color;
+    final bool appBarIsDark = brightness.isDark || colorBrightness.isDark;
     final bool useGestures = ref.watch(useGesturesProvider).value ?? true;
 
     return ThemeData(
@@ -101,9 +105,16 @@ class AppTheme {
       dialogBackgroundColor: canvasColor,
       toggleableActiveColor: color,
       appBarTheme: AppBarTheme(
-        backgroundColor: brightness.isDark ? backgroundColor : color,
+        backgroundColor: appBarBackgroundColor,
         iconTheme: IconThemeData(
           color: brightness.isDark ? Colors.white : onColor,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: appBarBackgroundColor,
+          statusBarBrightness:
+              appBarIsDark ? Brightness.dark : Brightness.light,
+          statusBarIconBrightness:
+              appBarIsDark ? Brightness.light : Brightness.dark,
         ),
       ),
       buttonTheme: const ButtonThemeData(

@@ -16,7 +16,7 @@ class SynchronizeDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<bool> loadingState = useState(false);
     final double? titleHeight =
-        Theme.of(context).textTheme.headline6?.scaledFontSize(context);
+        Theme.of(context).textTheme.titleLarge?.scaledFontSize(context);
 
     return AlertDialog(
       title: Row(
