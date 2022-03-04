@@ -67,8 +67,11 @@ class ItemBody extends HookConsumerWidget {
           if (!itemTree.done)
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (_, int index) =>
-                    _buildItemLoading(index, indentation: index == 0 ? 0 : 1),
+                (_, int index) => _buildItemLoading(
+                  itemTree.descendantIds.length + index,
+                  indentation:
+                      itemTree.descendantIds.isEmpty && index == 0 ? 0 : 1,
+                ),
               ),
             ),
         ];
