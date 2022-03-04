@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:glider/app_theme.dart';
+import 'package:glider/providers/persistence_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+class IndentedTile extends HookConsumerWidget {
+  const IndentedTile({Key? key, required this.indentation, required this.child})
+      : super(key: key);
+
+  final int indentation;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (indentation == 0) {
+      return child;
+    }
+
+    final double indentationPadding = indentation.toDouble() * 8;
+
+    Color _determineDividerColor(WidgetRef ref) {
+      final List<Color> colors = AppTheme.themeColors.toList(growable: false);
+      final Color? themeColor = ref.watch(themeColorProvider).value;
+      final int initialOffset =
+          themeColor != null ? colors.indexOf(themeColor) : 0;
+      final int offset =
+          (initialOffset + (indentation - 1) * 2) % colors.length;
+      return colors[offset];
+    }
+
+    return Stack(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: indentationPadding),
+          child: child,
+        ),
+        PositionedDirectional(
+          start: indentationPadding - 1,
+          top: 4,
+          bottom: 4,
+          child: VerticalDivider(
+            width: 1,
+            thickness: 1,
+            color: _determineDividerColor(ref),
+          ),
+        ),
+      ],
+    );
+  }
+}

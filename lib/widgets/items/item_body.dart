@@ -60,13 +60,15 @@ class ItemBody extends HookConsumerWidget {
               id: descendantId.id,
               ancestors: descendantId.ancestors,
               root: firstItem,
-              loading: () => _buildItemLoading(index),
+              loading: ({int indentation = 0}) =>
+                  _buildItemLoading(index, indentation: indentation),
             ),
           ),
           if (!itemTree.done)
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (_, int index) => _buildItemLoading(index),
+                (_, int index) =>
+                    _buildItemLoading(index, indentation: index == 0 ? 0 : 1),
               ),
             ),
         ];
@@ -79,8 +81,10 @@ class ItemBody extends HookConsumerWidget {
     ref.refresh(itemTreeStreamProvider(id));
   }
 
-  Widget _buildItemLoading(int index) {
-    return index == 0 ? const StoryTileLoading() : const CommentTileLoading();
+  Widget _buildItemLoading(int index, {int indentation = 0}) {
+    return index == 0
+        ? const StoryTileLoading()
+        : CommentTileLoading(indentation: indentation);
   }
 
   Widget _buildOpenParent(BuildContext context, int parentId) {

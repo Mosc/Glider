@@ -44,7 +44,7 @@ class ItemSearchBody extends HookConsumerWidget {
             onTap: (_) => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
             ),
-            loading: () => const CommentTileLoading(),
+            loading: ({int? indentation}) => const CommentTileLoading(),
             refreshProvider: provider,
           ),
         ),

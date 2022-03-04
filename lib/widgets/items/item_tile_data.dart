@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:glider/app_theme.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
@@ -13,6 +12,7 @@ import 'package:glider/models/slidable_action.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/url_util.dart';
+import 'package:glider/widgets/common/indented_tile.dart';
 import 'package:glider/widgets/common/menu_actions_bar.dart';
 import 'package:glider/widgets/common/slidable.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
@@ -145,40 +145,7 @@ class ItemTileData extends HookConsumerWidget {
     final int indentation =
         item.type != ItemType.pollopt ? item.indentation : 0;
 
-    if (indentation == 0) {
-      return child;
-    }
-
-    final double indentationPadding = indentation.toDouble() * 8;
-
-    Color _determineDividerColor(WidgetRef ref) {
-      final List<Color> colors = AppTheme.themeColors.toList(growable: false);
-      final Color? themeColor = ref.watch(themeColorProvider).value;
-      final int initialOffset =
-          themeColor != null ? colors.indexOf(themeColor) : 0;
-      final int offset =
-          (initialOffset + (indentation - 1) * 2) % colors.length;
-      return colors[offset];
-    }
-
-    return Stack(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: indentationPadding),
-          child: child,
-        ),
-        PositionedDirectional(
-          start: indentationPadding - 1,
-          top: 4,
-          bottom: 4,
-          child: VerticalDivider(
-            width: 1,
-            thickness: 1,
-            color: _determineDividerColor(ref),
-          ),
-        ),
-      ],
-    );
+    return IndentedTile(indentation: indentation, child: child);
   }
 
   Widget _buildSlidable(BuildContext context, WidgetRef ref,

@@ -23,7 +23,7 @@ class CollapsibleItemTile extends HookConsumerWidget {
   final Iterable<int> ancestors;
   final Item? root;
   final bool fadeable;
-  final Widget Function() loading;
+  final Widget Function({int indentation}) loading;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

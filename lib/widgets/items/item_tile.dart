@@ -26,7 +26,7 @@ class ItemTile extends HookConsumerWidget {
   final bool dense;
   final bool interactive;
   final bool fadeable;
-  final Widget Function() loading;
+  final Widget Function({int indentation}) loading;
   final ProviderBase<Object?>? refreshProvider;
 
   @override
@@ -42,7 +42,7 @@ class ItemTile extends HookConsumerWidget {
 
     return asyncItem.when(
       data: (Item item) => _itemBuilder(context, ref, item),
-      loading: loading,
+      loading: () => loading(indentation: indentation),
       error: (_, __) => const SizedBox.shrink(),
     );
   }

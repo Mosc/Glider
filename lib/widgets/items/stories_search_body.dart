@@ -46,7 +46,7 @@ class StoriesSearchBody extends HookConsumerWidget {
             ),
             dense: true,
             fadeable: true,
-            loading: () => const StoryTileLoading(),
+            loading: ({int? indentation}) => const StoryTileLoading(),
             refreshProvider: provider,
           ),
         ),

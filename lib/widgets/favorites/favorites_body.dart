@@ -34,7 +34,7 @@ class FavoritesBody extends HookConsumerWidget {
             onTap: (BuildContext context) => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
             ),
-            loading: () => _buildItemLoading(index),
+            loading: ({int? indentation}) => _buildItemLoading(index),
             refreshProvider: provider,
           ),
         ),

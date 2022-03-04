@@ -11,7 +11,6 @@ import 'package:glider/commands/item_options_command.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
-import 'package:glider/models/item_type.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
