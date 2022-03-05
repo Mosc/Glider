@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
-import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -49,11 +48,6 @@ class ItemTile extends HookConsumerWidget {
 
   Widget _itemBuilder(BuildContext context, WidgetRef ref, Item item) {
     if (item.time == null) {
-      return const SizedBox.shrink();
-    }
-
-    if (item.by != null &&
-        (ref.watch(blockedProvider(item.by!)).value ?? false)) {
       return const SizedBox.shrink();
     }
 

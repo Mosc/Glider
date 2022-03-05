@@ -77,10 +77,21 @@ class ItemTileMetadata extends HookConsumerWidget {
               style: textTheme.bodyText2
                   ?.copyWith(fontSize: textTheme.bodySmall?.fontSize),
             ),
+            const SizedBox(width: 8),
           ] else if (item.by != null &&
               item.type != ItemType.pollopt) ...<Widget>[
             _buildUsername(context, ref, textTheme,
                 by: item.by!, rootBy: root?.by),
+            const SizedBox(width: 8),
+          ],
+          if (item.by != null &&
+              (ref.watch(blockedProvider(item.by!)).value ??
+                  false)) ...<Widget>[
+            Text(
+              '[${AppLocalizations.of(context).blocked}]',
+              style: textTheme.bodyText2
+                  ?.copyWith(fontSize: textTheme.bodySmall?.fontSize),
+            ),
             const SizedBox(width: 8),
           ],
           if (item.hasOriginalYear)

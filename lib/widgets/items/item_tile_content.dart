@@ -25,9 +25,14 @@ class ItemTileContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bool blocked = item.by != null &&
+        (ref.watch(blockedProvider(item.by!)).value ?? false);
+    final bool showHeader = item.title != null && !blocked;
     final bool showMetadata = !dense ||
         interactive ||
         (ref.watch(showMetadataProvider).value ?? false);
+    final bool showTextAndUrl =
+        (item.text != null || item.url != null) && !blocked;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -38,7 +43,7 @@ class ItemTileContent extends HookConsumerWidget {
             const ItemTilePreview(),
             const SizedBox(height: 12),
           ],
-          if (item.title != null)
+          if (showHeader)
             ItemTileHeader(
               item,
               dense: dense,
@@ -48,7 +53,7 @@ class ItemTileContent extends HookConsumerWidget {
             condition: showMetadata,
             child: Column(
               children: <Widget>[
-                if (item.title != null) const SizedBox(height: 12),
+                if (showHeader) const SizedBox(height: 12),
                 ItemTileMetadata(
                   item,
                   root: root,
@@ -58,7 +63,7 @@ class ItemTileContent extends HookConsumerWidget {
               ],
             ),
           ),
-          if (item.text != null || item.url != null)
+          if (showTextAndUrl)
             SmoothAnimatedSwitcher.vertical(
               condition: !dense,
               child: Column(
