@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,8 +20,22 @@ class App extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ValueNotifier<bool> useStretchAndroidOverscrollIndicatorState =
+        useState(true);
+
     if (Platform.isAndroid) {
       useMemoized(FlutterDisplayMode.setHighRefreshRate);
+      useMemoized(
+        () async {
+          if (Platform.isAndroid) {
+            final AndroidDeviceInfo androidInfo =
+                await DeviceInfoPlugin().androidInfo;
+            useStretchAndroidOverscrollIndicatorState.value =
+                androidInfo.version.sdkInt != null &&
+                    androidInfo.version.sdkInt! >= 31;
+          }
+        },
+      );
     }
 
     useMemoized(
@@ -47,7 +62,12 @@ class App extends HookConsumerWidget {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
+      scrollBehavior: MaterialScrollBehavior(
+        androidOverscrollIndicator:
+            useStretchAndroidOverscrollIndicatorState.value
+                ? AndroidOverscrollIndicator.stretch
+                : AndroidOverscrollIndicator.glow,
+      ).copyWith(
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
     );
