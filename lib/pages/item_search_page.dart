@@ -1,6 +1,5 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,19 +30,6 @@ class ItemSearchPage extends HookConsumerWidget {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.colorScheme.brightness.isDark;
 
-    final ValueNotifier<bool> speedDialVisibleState = useState(true);
-    final ScrollController scrollController = useScrollController();
-    useEffect(
-      () {
-        void onScrollForwardListener() => speedDialVisibleState.value =
-            scrollController.position.userScrollDirection ==
-                ScrollDirection.forward;
-        scrollController.addListener(onScrollForwardListener);
-        return () => scrollController.removeListener(onScrollForwardListener);
-      },
-      <Object>[scrollController],
-    );
-
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> itemSearchQueryStateController =
         ref.watch(itemSearchQueryStateProvider.state);
@@ -69,7 +55,6 @@ class ItemSearchPage extends HookConsumerWidget {
       ),
       child: Scaffold(
         body: FloatingAppBarScrollView(
-          controller: scrollController,
           title: TextField(
             controller: queryController,
             decoration: InputDecoration(

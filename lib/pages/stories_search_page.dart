@@ -1,6 +1,5 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -53,25 +52,12 @@ class StoriesSearchPage extends HookConsumerWidget {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.colorScheme.brightness.isDark;
 
-    final ValueNotifier<bool> speedDialVisibleState = useState(true);
-    final ScrollController scrollController = useScrollController();
-    useEffect(
-      () {
-        void onScrollForwardListener() => speedDialVisibleState.value =
-            scrollController.position.userScrollDirection ==
-                ScrollDirection.forward;
-        scrollController.addListener(onScrollForwardListener);
-        return () => scrollController.removeListener(onScrollForwardListener);
-      },
-      <Object>[scrollController],
-    );
-
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> storySearchQueryStateController =
         ref.watch(storySearchQueryStateProvider.state);
     final StateController<SearchRange?> storySearchRangeStateController =
         ref.watch(storySearchRangeStateProvider.state);
-    final StateController<SearchOrder> searchStoryTypeStateController =
+    final StateController<SearchOrder> storySearchOrderStateController =
         ref.watch(storySearchOrderStateProvider.state);
     useMemoized(
       () => Future<void>.microtask(
@@ -109,7 +95,6 @@ class StoriesSearchPage extends HookConsumerWidget {
       ),
       child: Scaffold(
         body: FloatingAppBarScrollView(
-          controller: scrollController,
           title: enableSearch
               ? TextField(
                   controller: queryController,
@@ -141,7 +126,7 @@ class StoriesSearchPage extends HookConsumerWidget {
                   ),
               ],
               onSelected: (SearchOrder searchOrder) =>
-                  searchStoryTypeStateController.update((_) => searchOrder),
+                  storySearchOrderStateController.update((_) => searchOrder),
               tooltip: AppLocalizations.of(context).sort,
               icon: const Icon(FluentIcons.arrow_sort_down_lines_16_regular),
             ),
