@@ -1,0 +1,6 @@
+• Add favorites search option
+• Allow blocking of users
+• Move speed dial functionality to app bar menu
+• Improve performance of opening large discussions
+• Increase distance between lines of text
+• Make various styling tweaks, such as making the status bar match the app bar
