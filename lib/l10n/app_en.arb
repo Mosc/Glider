@@ -33,6 +33,7 @@
   "byDate": "By date",
   "byRelevance": "By relevance",
   "favorites": "Favorites",
+  "favoritesOnlyStoriesSearched": "Favorite comments can not be searched due to technical limitations",
   "submit": "Submit",
   "submitNotLoggedIn": "Log in to submit",
   "reply": "Reply",

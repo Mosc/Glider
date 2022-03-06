@@ -16,12 +16,21 @@ class SearchParameters with _$SearchParameters {
     int? maxResults,
   }) = _StoriesSearchParameters;
 
-  factory SearchParameters.children({
+  factory SearchParameters.item({
     required String query,
     SearchRange? range,
     DateTimeRange? customDateTimeRange,
     @Default(SearchOrder.byRelevance) SearchOrder order,
     required int parentStoryId,
     int? maxResults,
-  }) = _ChildrenSearchParameters;
+  }) = _ItemSearchParameters;
+
+  factory SearchParameters.favorites({
+    required String query,
+    SearchRange? range,
+    DateTimeRange? customDateTimeRange,
+    @Default(SearchOrder.byRelevance) SearchOrder order,
+    required Iterable<int> favoriteIds,
+    int? maxResults,
+  }) = _FavoritesSearchParameters;
 }

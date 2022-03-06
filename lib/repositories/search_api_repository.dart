@@ -19,8 +19,10 @@ class SearchApiRepository {
       searchParameters,
       tags: searchParameters.when(
         stories: (_, __, ___, ____, _____) => '(story,poll)',
-        children: (_, __, ___, ____, int parentStoryId, _____) =>
+        item: (_, __, ___, ____, int parentStoryId, _____) =>
             'story_$parentStoryId',
+        favorites: (_, __, ___, ____, Iterable<int> ids, _____) =>
+            '(story,poll),(${ids.map((int id) => 'story_$id').join(',')})',
       ),
     );
   }

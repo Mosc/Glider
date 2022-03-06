@@ -33,6 +33,7 @@
   "byDate": "Op datum",
   "byRelevance": "Op relevantie",
   "favorites": "Favorieten",
+  "favoritesOnlyStoriesSearched": "Favoriete reacties kunnen niet doorzocht worden vanwege technische beperkingen",
   "submit": "Indienen",
   "submitNotLoggedIn": "Log in om in te dienen",
   "reply": "Reageren",
