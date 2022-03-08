@@ -4,63 +4,52 @@ import 'package:glider/models/dark_theme.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final AutoDisposeFutureProvider<ThemeMode?> themeModeProvider =
-    FutureProvider.autoDispose<ThemeMode?>(
-  (AutoDisposeFutureProviderRef<ThemeMode?> ref) =>
+final FutureProvider<ThemeMode?> themeModeProvider = FutureProvider<ThemeMode?>(
+  (FutureProviderRef<ThemeMode?> ref) =>
       ref.read(storageRepositoryProvider).themeMode,
 );
 
-final AutoDisposeFutureProvider<DarkTheme?> darkThemeProvider =
-    FutureProvider.autoDispose<DarkTheme?>(
-  (AutoDisposeFutureProviderRef<DarkTheme?> ref) =>
+final FutureProvider<DarkTheme?> darkThemeProvider = FutureProvider<DarkTheme?>(
+  (FutureProviderRef<DarkTheme?> ref) =>
       ref.read(storageRepositoryProvider).darkTheme,
 );
 
-final AutoDisposeFutureProvider<Color?> themeColorProvider =
-    FutureProvider.autoDispose<Color?>(
-  (AutoDisposeFutureProviderRef<Color?> ref) =>
+final FutureProvider<Color?> themeColorProvider = FutureProvider<Color?>(
+  (FutureProviderRef<Color?> ref) =>
       ref.read(storageRepositoryProvider).themeColor,
 );
 
-final AutoDisposeFutureProvider<bool> showUrlProvider =
-    FutureProvider.autoDispose<bool>(
-  (AutoDisposeFutureProviderRef<bool> ref) =>
-      ref.read(storageRepositoryProvider).showUrl,
+final FutureProvider<bool> showUrlProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) => ref.read(storageRepositoryProvider).showUrl,
 );
 
-final AutoDisposeFutureProvider<bool> showFaviconProvider =
-    FutureProvider.autoDispose<bool>(
-  (AutoDisposeFutureProviderRef<bool> ref) =>
+final FutureProvider<bool> showFaviconProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
       ref.read(storageRepositoryProvider).showFavicon,
 );
 
-final AutoDisposeFutureProvider<bool> showMetadataProvider =
-    FutureProvider.autoDispose<bool>(
-  (AutoDisposeFutureProviderRef<bool> ref) =>
+final FutureProvider<bool> showMetadataProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
       ref.read(storageRepositoryProvider).showMetadata,
 );
 
-final AutoDisposeFutureProvider<bool> useCustomTabsProvider =
-    FutureProvider.autoDispose<bool>(
-  (AutoDisposeFutureProviderRef<bool> ref) =>
+final FutureProvider<bool> useCustomTabsProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
       ref.read(storageRepositoryProvider).useCustomTabs,
 );
 
-final AutoDisposeFutureProvider<bool> useGesturesProvider =
-    FutureProvider.autoDispose<bool>(
-  (AutoDisposeFutureProviderRef<bool> ref) =>
+final FutureProvider<bool> useGesturesProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
       ref.read(storageRepositoryProvider).useGestures,
 );
 
-final AutoDisposeFutureProvider<bool> completedWalkthroughProvider =
-    FutureProvider.autoDispose<bool>(
-  (AutoDisposeFutureProviderRef<bool> ref) =>
+final FutureProvider<bool> completedWalkthroughProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
       ref.read(storageRepositoryProvider).completedWalkthrough,
 );
 
-final AutoDisposeFutureProviderFamily<bool, int> visitedProvider =
-    FutureProvider.autoDispose.family(
-  (AutoDisposeFutureProviderRef<bool> ref, int id) =>
+final FutureProviderFamily<bool, int> visitedProvider = FutureProvider.family(
+  (FutureProviderRef<bool> ref, int id) =>
       ref.read(storageRepositoryProvider).visited(id: id),
 );
 
@@ -69,33 +58,27 @@ final FutureProviderFamily<bool, int> collapsedProvider = FutureProvider.family(
       ref.read(storageRepositoryProvider).collapsed(id: id),
 );
 
-final AutoDisposeFutureProviderFamily<bool, String> blockedProvider =
-    FutureProvider.autoDispose.family(
-  (AutoDisposeFutureProviderRef<bool> ref, String id) =>
+final FutureProviderFamily<bool, String> blockedProvider =
+    FutureProvider.family(
+  (FutureProviderRef<bool> ref, String id) =>
       ref.read(storageRepositoryProvider).blocked(id: id),
 );
 
-final AutoDisposeFutureProvider<bool> loggedInProvider =
-    FutureProvider.autoDispose<bool>(
-  (AutoDisposeFutureProviderRef<bool> ref) =>
-      ref.read(authRepositoryProvider).loggedIn,
+final FutureProvider<bool> loggedInProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) => ref.read(authRepositoryProvider).loggedIn,
 );
 
-final AutoDisposeFutureProvider<String?> usernameProvider =
-    FutureProvider.autoDispose<String?>(
-  (AutoDisposeFutureProviderRef<String?> ref) =>
-      ref.read(authRepositoryProvider).username,
+final FutureProvider<String?> usernameProvider = FutureProvider<String?>(
+  (FutureProviderRef<String?> ref) => ref.read(authRepositoryProvider).username,
 );
 
-final AutoDisposeFutureProviderFamily<bool, int> favoritedProvider =
-    FutureProvider.autoDispose.family(
-  (AutoDisposeFutureProviderRef<bool> ref, int id) =>
+final FutureProviderFamily<bool, int> favoritedProvider = FutureProvider.family(
+  (FutureProviderRef<bool> ref, int id) =>
       ref.read(storageRepositoryProvider).favorited(id: id),
 );
 
-final AutoDisposeFutureProviderFamily<bool, int> upvotedProvider =
-    FutureProvider.autoDispose.family(
-  (AutoDisposeFutureProviderRef<bool> ref, int id) =>
+final FutureProviderFamily<bool, int> upvotedProvider = FutureProvider.family(
+  (FutureProviderRef<bool> ref, int id) =>
       ref.read(storageRepositoryProvider).upvoted(id: id),
 );
 
