@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:glider/providers/persistence_provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum StoryType {
   topStories,
@@ -9,9 +11,24 @@ enum StoryType {
   bestStories,
   askStories,
   showStories,
+  jobStories,
 }
 
 extension StoryTypeExtension on StoryType {
+  bool visible(BuildContext context, WidgetRef ref) {
+    switch (this) {
+      case StoryType.topStories:
+      case StoryType.newTopStories:
+      case StoryType.newStories:
+      case StoryType.bestStories:
+      case StoryType.askStories:
+      case StoryType.showStories:
+        return true;
+      case StoryType.jobStories:
+        return ref.watch(showJobsProvider).value ?? true;
+    }
+  }
+
   String title(BuildContext context) {
     switch (this) {
       case StoryType.topStories:
@@ -26,6 +43,8 @@ extension StoryTypeExtension on StoryType {
         return AppLocalizations.of(context).askHn;
       case StoryType.showStories:
         return AppLocalizations.of(context).showHn;
+      case StoryType.jobStories:
+        return AppLocalizations.of(context).jobs;
     }
   }
 
@@ -43,6 +62,8 @@ extension StoryTypeExtension on StoryType {
         return 'askstories';
       case StoryType.showStories:
         return 'showstories';
+      case StoryType.jobStories:
+        return 'jobstories';
     }
 
     throw UnsupportedError('$this does not have an API path');

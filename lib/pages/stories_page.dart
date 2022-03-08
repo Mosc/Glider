@@ -62,10 +62,11 @@ class StoriesPage extends HookConsumerWidget {
           PopupMenuButton<StoryType>(
             itemBuilder: (_) => <PopupMenuEntry<StoryType>>[
               for (StoryType storyType in StoryType.values)
-                PopupMenuItem<StoryType>(
-                  value: storyType,
-                  child: Text(storyType.title(context)),
-                ),
+                if (storyType.visible(context, ref))
+                  PopupMenuItem<StoryType>(
+                    value: storyType,
+                    child: Text(storyType.title(context)),
+                  ),
             ],
             onSelected: (StoryType storyType) =>
                 storyTypeStateController.update((_) => storyType),

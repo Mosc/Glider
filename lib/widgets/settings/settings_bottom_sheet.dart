@@ -27,6 +27,12 @@ class SettingsBottomSheet extends HookConsumerWidget {
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setUseGestures(value: value),
         ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context).showJobs,
+          provider: showJobsProvider,
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setShowJobs(value: value),
+        ),
       ],
     );
   }

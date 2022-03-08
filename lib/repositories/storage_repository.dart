@@ -15,6 +15,7 @@ class StorageRepository {
   static const String _showMetadataKey = 'show_metadata';
   static const String _useCustomTabsKey = 'use_custom_tabs';
   static const String _useGesturesKey = 'use_gestures';
+  static const String _showJobs = 'show_jobs';
   static const String _completedWalkthroughKey = 'completed_walkthrough';
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
@@ -82,6 +83,12 @@ class StorageRepository {
 
   Future<void> setUseGestures({required bool value}) async =>
       (await _sharedPreferences).setBool(_useGesturesKey, value);
+
+  Future<bool> get showJobs async =>
+      (await _sharedPreferences).getBool(_showJobs) ?? true;
+
+  Future<void> setShowJobs({required bool value}) async =>
+      (await _sharedPreferences).setBool(_showJobs, value);
 
   Future<bool> get completedWalkthrough async =>
       (await _sharedPreferences).getBool(_completedWalkthroughKey) ?? false;
