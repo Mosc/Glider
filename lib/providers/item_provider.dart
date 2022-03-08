@@ -52,11 +52,9 @@ class StoryIdsNotifier extends BaseNotifier<Iterable<int>> {
     final ApiRepository apiRepository = read(apiRepositoryProvider);
 
     if (storyType == StoryType.newTopStories) {
-      final Iterable<int> newStoryIds =
-          await apiRepository.getStoryIds(StoryType.newStories);
       final Iterable<int> topStoryIds =
           await apiRepository.getStoryIds(StoryType.topStories);
-      return newStoryIds.toSet().intersection(topStoryIds.toSet());
+      return topStoryIds.toList()..sort((int a, int b) => b.compareTo(a));
     } else {
       return apiRepository.getStoryIds(storyType);
     }
