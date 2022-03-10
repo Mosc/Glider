@@ -33,6 +33,11 @@ final FutureProvider<bool> showMetadataProvider = FutureProvider<bool>(
       ref.read(storageRepositoryProvider).showMetadata,
 );
 
+final FutureProvider<double?> textScaleFactorProvider = FutureProvider<double?>(
+  (FutureProviderRef<double?> ref) =>
+      ref.read(storageRepositoryProvider).textScaleFactor,
+);
+
 final FutureProvider<bool> useCustomTabsProvider = FutureProvider<bool>(
   (FutureProviderRef<bool> ref) =>
       ref.read(storageRepositoryProvider).useCustomTabs,

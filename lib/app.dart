@@ -12,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:glider/app_theme.dart';
 import 'package:glider/home.dart';
 import 'package:glider/models/dark_theme.dart';
+import 'package:glider/models/text_size.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -52,6 +53,14 @@ class App extends HookConsumerWidget {
       home: const Home(),
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context).appName,
+      builder: (BuildContext context, Widget? child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          textScaleFactor: MediaQuery.textScaleFactorOf(context) *
+              (ref.watch(textScaleFactorProvider).value ??
+                  TextSize.medium.scaleFactor),
+        ),
+        child: child!,
+      ),
       theme: AppTheme.lightTheme(ref, themeColor),
       darkTheme: darkTheme.theme(ref, themeColor),
       themeMode: themeMode,

@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/app_theme.dart';
 import 'package:glider/models/dark_theme.dart';
+import 'package:glider/models/text_size.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/animation_util.dart';
@@ -39,6 +40,44 @@ class AppearanceBottomSheet extends HookConsumerWidget {
           provider: showMetadataProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowMetadata(value: value),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    AppLocalizations.of(context).textSize,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+              Slider(
+                value: ref.watch(textScaleFactorProvider).value ??
+                    TextSize.medium.scaleFactor,
+                min: TextSize.small.scaleFactor,
+                max: TextSize.large.scaleFactor,
+                divisions: TextSize.values.length - 1,
+                label: TextSize.values
+                    .singleWhere(
+                      (TextSize textSize) =>
+                          textSize.scaleFactor ==
+                          ref.watch(textScaleFactorProvider).value,
+                      orElse: () => TextSize.medium,
+                    )
+                    .title(context),
+                onChanged: (double textScaleFactor) {
+                  ref
+                      .read(storageRepositoryProvider)
+                      .setTextScaleFactor(textScaleFactor: textScaleFactor);
+                  ref.refresh(textScaleFactorProvider);
+                },
+              ),
+            ],
+          ),
         ),
         _buildTitledButtons(
           context,
