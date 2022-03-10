@@ -133,6 +133,11 @@ class AppTheme {
           ),
         ),
       ),
+      sliderTheme: SliderThemeData(
+        valueIndicatorTextStyle: TextStyle(
+          color: brightness.isDark ? Colors.black : Colors.white,
+        ),
+      ),
     );
   }
 }
