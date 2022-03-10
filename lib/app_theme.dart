@@ -126,25 +126,13 @@ class AppTheme {
         labelStyle: const TextStyle(),
       ).copyWith(
         backgroundColor: backgroundColor,
-        side: StateBorderSide(selectedColor: color, defaultColor: surfaceColor),
+        side: MaterialStateBorderSide.resolveWith(
+          (Set<MaterialState> states) => BorderSide(
+            color:
+                states.contains(MaterialState.selected) ? color : surfaceColor,
+          ),
+        ),
       ),
-    );
-  }
-}
-
-class StateBorderSide extends MaterialStateBorderSide {
-  const StateBorderSide(
-      {required this.selectedColor, required this.defaultColor});
-
-  final Color selectedColor;
-  final Color defaultColor;
-
-  @override
-  BorderSide resolve(Set<MaterialState> states) {
-    return BorderSide(
-      color: states.contains(MaterialState.selected)
-          ? selectedColor
-          : defaultColor,
     );
   }
 }

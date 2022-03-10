@@ -9,7 +9,6 @@ import 'package:glider/models/text_size.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/animation_util.dart';
-import 'package:glider/utils/color_extension.dart';
 import 'package:glider/utils/theme_mode_extension.dart';
 import 'package:glider/widgets/common/provider_switch_list_tile.dart';
 import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
@@ -151,13 +150,14 @@ class _ThemeModeButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeMode themeMode =
+    final ThemeMode selectedMode =
         ref.watch(themeModeProvider).value ?? ThemeMode.system;
+    final bool selected = mode == selectedMode;
     final Color color = mode.color(context, ref);
 
     useMemoized(
       () => Future<void>.microtask(() {
-        if (mode == themeMode) {
+        if (selected) {
           Scrollable.ensureVisible(
             context,
             duration: AnimationUtil.defaultDuration,
@@ -170,29 +170,26 @@ class _ThemeModeButton extends HookConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: ElevatedButton(
-        onPressed: () async {
-          await ref.read(storageRepositoryProvider).setThemeMode(mode);
-          ref.refresh(themeModeProvider);
-        },
-        style: ElevatedButton.styleFrom(
-          primary: color,
-          onPrimary: color.isDark ? Colors.white : Colors.black,
-          shape: const StadiumBorder(),
-          minimumSize: const Size(40, 40),
+      child: ChipTheme(
+        data: ChipThemeData.fromDefaults(
+          brightness: ThemeData.estimateBrightnessForColor(color),
+          secondaryColor: color,
+          labelStyle: const TextStyle(),
+        ).copyWith(
+          backgroundColor: color,
+          secondaryLabelStyle:
+              TextStyle(color: Theme.of(context).colorScheme.primary),
+          side: selected
+              ? BorderSide(color: Theme.of(context).colorScheme.primary)
+              : const BorderSide(color: Colors.transparent),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SmoothAnimatedSwitcher.horizontal(
-              condition: mode == themeMode,
-              child: const Icon(FluentIcons.checkmark_24_regular),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(mode.title(context)),
-            ),
-          ],
+        child: ChoiceChip(
+          onSelected: (_) async {
+            await ref.read(storageRepositoryProvider).setThemeMode(mode);
+            ref.refresh(themeModeProvider);
+          },
+          selected: selected,
+          label: Text(mode.title(context)),
         ),
       ),
     );
@@ -200,18 +197,20 @@ class _ThemeModeButton extends HookConsumerWidget {
 }
 
 class DarkThemeButton extends HookConsumerWidget {
-  const DarkThemeButton(this.base, {Key? key}) : super(key: key);
+  const DarkThemeButton(this.darkTheme, {Key? key}) : super(key: key);
 
-  final DarkTheme base;
+  final DarkTheme darkTheme;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DarkTheme darkTheme =
+    final DarkTheme selectedDarkTheme =
         ref.watch(darkThemeProvider).value ?? DarkTheme.grey;
+    final bool selected = darkTheme == selectedDarkTheme;
+    final Color color = darkTheme.color;
 
     useMemoized(
       () => Future<void>.microtask(() {
-        if (base == darkTheme) {
+        if (selected) {
           Scrollable.ensureVisible(
             context,
             duration: AnimationUtil.defaultDuration,
@@ -221,32 +220,29 @@ class DarkThemeButton extends HookConsumerWidget {
         }
       }),
     );
-
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: ElevatedButton(
-        onPressed: () async {
-          await ref.read(storageRepositoryProvider).setDarkTheme(base);
-          ref.refresh(darkThemeProvider);
-        },
-        style: ElevatedButton.styleFrom(
-          primary: base.color,
-          onPrimary: base.color.isDark ? Colors.white : Colors.black,
-          shape: const StadiumBorder(),
-          minimumSize: const Size(40, 40),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+      child: ChipTheme(
+        data: ChipThemeData.fromDefaults(
+          brightness: ThemeData.estimateBrightnessForColor(color),
+          secondaryColor: color,
+          labelStyle: const TextStyle(),
+        ).copyWith(
+          backgroundColor: color,
+          secondaryLabelStyle:
+              TextStyle(color: Theme.of(context).colorScheme.primary),
+          side: selected
+              ? BorderSide(color: Theme.of(context).colorScheme.primary)
+              : const BorderSide(color: Colors.transparent),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SmoothAnimatedSwitcher.horizontal(
-              condition: base == darkTheme,
-              child: const Icon(FluentIcons.checkmark_24_regular),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(base.title(context)),
-            ),
-          ],
+        child: ChoiceChip(
+          onSelected: (_) async {
+            await ref.read(storageRepositoryProvider).setDarkTheme(darkTheme);
+            ref.refresh(darkThemeProvider);
+          },
+          selected: selected,
+          label: Text(darkTheme.title(context)),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
       ),
     );
@@ -260,12 +256,13 @@ class _ThemeColorButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Color themeColor =
+    final Color selectedColor =
         ref.watch(themeColorProvider).value ?? AppTheme.defaultColor;
+    final bool selected = color == selectedColor;
 
     useMemoized(
       () => Future<void>.microtask(() {
-        if (color == themeColor) {
+        if (selected) {
           Scrollable.ensureVisible(
             context,
             duration: AnimationUtil.defaultDuration,
@@ -276,20 +273,34 @@ class _ThemeColorButton extends HookConsumerWidget {
       }),
     );
 
-    return ElevatedButton(
-      onPressed: () async {
-        await ref.read(storageRepositoryProvider).setThemeColor(color);
-        ref.refresh(themeColorProvider);
-      },
-      style: ElevatedButton.styleFrom(
-        primary: color,
-        minimumSize: const Size(40, 40),
-        shape: const CircleBorder(),
-        padding: EdgeInsets.zero,
-      ),
-      child: SmoothAnimatedSwitcher(
-        condition: color == themeColor,
-        child: const Icon(FluentIcons.checkmark_24_regular),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: ChipTheme(
+        data: ChipThemeData.fromDefaults(
+          brightness: ThemeData.estimateBrightnessForColor(color),
+          secondaryColor: color,
+          labelStyle: const TextStyle(),
+        ).copyWith(
+          backgroundColor: color,
+          labelPadding: EdgeInsets.zero,
+          side: selected
+              ? BorderSide(color: color)
+              : const BorderSide(color: Colors.transparent),
+        ),
+        child: ChoiceChip(
+          onSelected: (_) async {
+            await ref.read(storageRepositoryProvider).setThemeColor(color);
+            ref.refresh(themeColorProvider);
+          },
+          selected: selected,
+          label: Icon(
+            FluentIcons.checkmark_24_regular,
+            color: selected ? color : Colors.transparent,
+          ),
+          visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+          ),
+        ),
       ),
     );
   }
