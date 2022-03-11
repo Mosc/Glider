@@ -14,6 +14,7 @@
   "walkthroughStep1": "Most important actions in {appName} are performed using gestures. That includes upvoting, replying and opening links. For instance, try swiping this walkthrough {startToEnd}.\n\nOr dismiss this walkthrough at any point by swiping {endToStart}.",
   "walkthroughStep2": "You've cast an upvote!\n\nAll actions can be performed with long-presses. Use this method to simulate adding this walkthrough to your favorites. When logged in, favorites are added to your Hacker News account as well.",
   "walkthroughStep3": "Great! Keep in mind that both upvotes and favorites can be undone using the mentioned interactions as well.\n\nComplete this walkthrough by swiping {endToStart}.",
+  "loadNextPage": "Load page {nextPage}",
   "storyType": "Story type",
   "topStories": "Top stories",
   "newTopStories": "New top stories",
@@ -68,6 +69,7 @@
   "settings": "Settings",
   "useCustomTabs": "Open links in custom tabs",
   "useGestures": "Use gestures within the app",
+  "useInfiniteScroll": "Use infinite scroll",
   "showJobs": "Show job posts",
   "account": "Account",
   "register": "Register",
@@ -177,6 +179,13 @@
     "placeholders": {
       "endToStart": {
         "type": "String"
+      }
+    }
+  },
+  "@loadNextPage": {
+    "placeholders": {
+      "nextPage": {
+        "type": "int"
       }
     }
   },

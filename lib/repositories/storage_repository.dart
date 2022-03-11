@@ -16,6 +16,7 @@ class StorageRepository {
   static const String _textScaleFactorKey = 'text_scale_factor';
   static const String _useCustomTabsKey = 'use_custom_tabs';
   static const String _useGesturesKey = 'use_gestures';
+  static const String _useInfiniteScroll = 'use_infinite_scroll';
   static const String _showJobs = 'show_jobs';
   static const String _completedWalkthroughKey = 'completed_walkthrough';
   static const String _usernameKey = 'username';
@@ -91,6 +92,12 @@ class StorageRepository {
 
   Future<void> setUseGestures({required bool value}) async =>
       (await _sharedPreferences).setBool(_useGesturesKey, value);
+
+  Future<bool> get useInfiniteScroll async =>
+      (await _sharedPreferences).getBool(_useInfiniteScroll) ?? true;
+
+  Future<void> setUseInfiniteScroll({required bool value}) async =>
+      (await _sharedPreferences).setBool(_useInfiniteScroll, value);
 
   Future<bool> get showJobs async =>
       (await _sharedPreferences).getBool(_showJobs) ?? true;

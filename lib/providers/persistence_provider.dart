@@ -48,6 +48,11 @@ final FutureProvider<bool> useGesturesProvider = FutureProvider<bool>(
       ref.read(storageRepositoryProvider).useGestures,
 );
 
+final FutureProvider<bool> useInfiniteScrollProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
+      ref.read(storageRepositoryProvider).useInfiniteScroll,
+);
+
 final FutureProvider<bool> showJobsProvider = FutureProvider<bool>(
   (FutureProviderRef<bool> ref) => ref.read(storageRepositoryProvider).showJobs,
 );

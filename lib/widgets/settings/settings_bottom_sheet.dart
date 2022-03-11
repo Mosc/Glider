@@ -28,6 +28,13 @@ class SettingsBottomSheet extends HookConsumerWidget {
               ref.read(storageRepositoryProvider).setUseGestures(value: value),
         ),
         ProviderSwitchListTile(
+          title: AppLocalizations.of(context).useInfiniteScroll,
+          provider: useInfiniteScrollProvider,
+          onSave: (bool value) => ref
+              .read(storageRepositoryProvider)
+              .setUseInfiniteScroll(value: value),
+        ),
+        ProviderSwitchListTile(
           title: AppLocalizations.of(context).showJobs,
           provider: showJobsProvider,
           onSave: (bool value) =>
