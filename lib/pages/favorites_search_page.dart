@@ -28,8 +28,6 @@ class FavoritesSearchPage extends HookConsumerWidget {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.colorScheme.brightness.isDark;
 
-    final ScrollController scrollController = useScrollController();
-
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> favoriteSearchQueryStateController =
         ref.watch(favoriteSearchQueryStateProvider.state);
@@ -55,7 +53,6 @@ class FavoritesSearchPage extends HookConsumerWidget {
       ),
       child: Scaffold(
         body: FloatingAppBarScrollView(
-          controller: scrollController,
           title: TextField(
             controller: queryController,
             decoration: InputDecoration(

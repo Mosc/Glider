@@ -5,14 +5,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class FloatingAppBarScrollView extends HookConsumerWidget {
   const FloatingAppBarScrollView({
     Key? key,
-    this.controller,
     this.title,
     this.actions,
     this.bottom,
     required this.body,
   }) : super(key: key);
 
-  final ScrollController? controller;
   final Widget? title;
   final List<Widget>? actions;
   final PreferredSizeWidget? bottom;
@@ -21,7 +19,6 @@ class FloatingAppBarScrollView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return NestedScrollView(
-      controller: controller,
       headerSliverBuilder: (_, bool innerBoxIsScrolled) => <Widget>[
         SliverAppBar(
           leading: _buildFluentIconsLeading(context),
