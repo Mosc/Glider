@@ -23,7 +23,6 @@ class StoriesSearchBody extends HookConsumerWidget {
         customDateTimeRange:
             ref.watch(storySearchCustomDateTimeRangeStateProvider),
         order: ref.watch(storySearchOrderStateProvider),
-        maxResults: 50,
       ),
     );
 

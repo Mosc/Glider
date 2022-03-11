@@ -18,10 +18,9 @@ class SearchApiRepository {
     return _searchIds(
       searchParameters,
       tags: searchParameters.when(
-        stories: (_, __, ___, ____, _____) => '(story,poll)',
-        item: (_, __, ___, ____, int parentStoryId, _____) =>
-            'story_$parentStoryId',
-        favorites: (_, __, ___, ____, Iterable<int> ids, _____) =>
+        stories: (_, __, ___, ____) => '(story,poll)',
+        item: (_, __, ___, ____, int parentStoryId) => 'story_$parentStoryId',
+        favorites: (_, __, ___, ____, Iterable<int> ids) =>
             '(story,poll),(${ids.map((int id) => 'story_$id').join(',')})',
       ),
     );
@@ -43,10 +42,9 @@ class SearchApiRepository {
                   'created_at_i<${dateTimeRange.end.secondsSinceEpoch}',
         'attributesToRetrieve': '',
         'attributesToHighlight': '',
-        if (searchParameters.maxResults != null)
-          'hitsPerPage': searchParameters.maxResults!.toString(),
-        'typoTolerance': 'false',
-        'analytics': 'false',
+        'hitsPerPage': 1000.toString(),
+        'typoTolerance': false.toString(),
+        'analytics': false.toString(),
       },
     );
 

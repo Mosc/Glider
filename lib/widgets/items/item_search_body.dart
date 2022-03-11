@@ -23,7 +23,6 @@ class ItemSearchBody extends HookConsumerWidget {
         query: ref.watch(itemSearchQueryStateProvider),
         order: ref.watch(itemSearchOrderStateProvider),
         parentStoryId: storyId,
-        maxResults: 50,
       ),
     );
 

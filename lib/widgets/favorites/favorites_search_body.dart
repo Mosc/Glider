@@ -26,7 +26,6 @@ class FavoritesSearchBody extends HookConsumerWidget {
         query: ref.watch(favoriteSearchQueryStateProvider),
         order: ref.watch(favoriteSearchOrderStateProvider),
         favoriteIds: ref.watch(favoriteIdsNotifierProvider).value ?? <int>[],
-        maxResults: 50,
       ),
     );
 
