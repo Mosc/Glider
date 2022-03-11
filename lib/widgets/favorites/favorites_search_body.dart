@@ -6,6 +6,7 @@ import 'package:glider/models/search_parameters.dart';
 import 'package:glider/pages/favorites_search_page.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
+import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
@@ -19,7 +20,7 @@ class FavoritesSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeStateNotifierProvider<ItemIdsSearchNotifier,
+    final AutoDisposeStateNotifierProvider<AsyncNotifier<Iterable<int>>,
         AsyncValue<Iterable<int>>> provider = itemIdsSearchNotifierProvider(
       SearchParameters.favorites(
         query: ref.watch(favoriteSearchQueryStateProvider),

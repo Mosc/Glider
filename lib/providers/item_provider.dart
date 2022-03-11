@@ -8,109 +8,84 @@ import 'package:glider/models/search_parameters.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/api_repository.dart';
-import 'package:glider/utils/base_notifier.dart';
+import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final StateProvider<int> previewIdStateProvider =
     StateProvider<int>((StateProviderRef<int> ref) => -1);
 
-final AutoDisposeStateNotifierProvider<FavoriteIdsNotifier,
+final AutoDisposeStateNotifierProvider<AsyncNotifier<Iterable<int>>,
         AsyncValue<Iterable<int>>> favoriteIdsNotifierProvider =
     StateNotifierProvider.autoDispose(
-  (AutoDisposeStateNotifierProviderRef<FavoriteIdsNotifier,
+  (AutoDisposeStateNotifierProviderRef<AsyncNotifier<Iterable<int>>,
               AsyncValue<Iterable<int>>>
           ref) =>
-      FavoriteIdsNotifier(ref.read),
+      AsyncNotifier<Iterable<int>>(
+    () => ref.read(storageRepositoryProvider).favoriteIds,
+  ),
 );
 
-class FavoriteIdsNotifier extends BaseNotifier<Iterable<int>> {
-  FavoriteIdsNotifier(Reader read) : super(read);
-
-  @override
-  Future<Iterable<int>> getData() =>
-      read(storageRepositoryProvider).favoriteIds;
-}
-
-final AutoDisposeStateNotifierProviderFamily<StoryIdsNotifier,
+final AutoDisposeStateNotifierProviderFamily<AsyncNotifier<Iterable<int>>,
         AsyncValue<Iterable<int>>, StoryType> storyIdsNotifierProvider =
     StateNotifierProvider.autoDispose.family(
-  (AutoDisposeStateNotifierProviderRef<StoryIdsNotifier,
+  (AutoDisposeStateNotifierProviderRef<AsyncNotifier<Iterable<int>>,
                   AsyncValue<Iterable<int>>>
               ref,
           StoryType storyType) =>
-      StoryIdsNotifier(ref.read, storyType),
+      AsyncNotifier<Iterable<int>>(
+    () async {
+      final ApiRepository apiRepository = ref.read(apiRepositoryProvider);
+
+      if (storyType == StoryType.newTopStories) {
+        final Iterable<int> topStoryIds =
+            await apiRepository.getStoryIds(StoryType.topStories);
+        return topStoryIds.toList()..sort((int a, int b) => b.compareTo(a));
+      } else {
+        return apiRepository.getStoryIds(storyType);
+      }
+    },
+  ),
 );
 
-class StoryIdsNotifier extends BaseNotifier<Iterable<int>> {
-  StoryIdsNotifier(Reader read, this.storyType) : super(read);
-
-  final StoryType storyType;
-
-  @override
-  Future<Iterable<int>> getData() async {
-    final ApiRepository apiRepository = read(apiRepositoryProvider);
-
-    if (storyType == StoryType.newTopStories) {
-      final Iterable<int> topStoryIds =
-          await apiRepository.getStoryIds(StoryType.topStories);
-      return topStoryIds.toList()..sort((int a, int b) => b.compareTo(a));
-    } else {
-      return apiRepository.getStoryIds(storyType);
-    }
-  }
-}
-
-final AutoDisposeStateNotifierProviderFamily<ItemIdsSearchNotifier,
+final AutoDisposeStateNotifierProviderFamily<AsyncNotifier<Iterable<int>>,
         AsyncValue<Iterable<int>>, SearchParameters>
     itemIdsSearchNotifierProvider = StateNotifierProvider.autoDispose.family(
-  (AutoDisposeStateNotifierProviderRef<ItemIdsSearchNotifier,
+  (AutoDisposeStateNotifierProviderRef<AsyncNotifier<Iterable<int>>,
                   AsyncValue<Iterable<int>>>
               ref,
           SearchParameters searchParameters) =>
-      ItemIdsSearchNotifier(ref.read, searchParameters),
+      AsyncNotifier<Iterable<int>>(
+    () => ref.read(searchApiRepositoryProvider).searchItemIds(searchParameters),
+  ),
 );
 
-class ItemIdsSearchNotifier extends BaseNotifier<Iterable<int>> {
-  ItemIdsSearchNotifier(Reader read, this.searchParameters) : super(read);
-
-  final SearchParameters searchParameters;
-
-  @override
-  Future<Iterable<int>> getData() =>
-      read(searchApiRepositoryProvider).searchItemIds(searchParameters);
-}
-
-final StateNotifierProviderFamily<ItemNotifier, AsyncValue<Item>, int>
+final StateNotifierProviderFamily<AsyncNotifier<Item>, AsyncValue<Item>, int>
     itemNotifierProvider = StateNotifierProvider.family(
-  (StateNotifierProviderRef<ItemNotifier, AsyncValue<Item>> ref, int id) =>
-      ItemNotifier(ref.read, id: id),
+  (StateNotifierProviderRef<AsyncNotifier<Item>, AsyncValue<Item>> ref,
+          int id) =>
+      AsyncNotifier<Item>(
+    () => ref.read(apiRepositoryProvider).getItem(id),
+  ),
 );
-
-class ItemNotifier extends BaseNotifier<Item> {
-  ItemNotifier(Reader read, {required this.id}) : super(read);
-
-  final int id;
-
-  @override
-  Future<Item> getData() => read(apiRepositoryProvider).getItem(id);
-}
 
 final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
-    StreamProvider.autoDispose
-        .family((AutoDisposeStreamProviderRef<ItemTree> ref, int id) async* {
-  unawaited(loadItemTree(ref.read, id: id));
+    StreamProvider.autoDispose.family(
+  (AutoDisposeStreamProviderRef<ItemTree> ref, int id) async* {
+    unawaited(loadItemTree(ref.read, id: id));
 
-  final Stream<DescendantId> descendantIdStream = _itemStream(ref.read, id: id);
-  final List<DescendantId> descendantIds = <DescendantId>[];
+    final Stream<DescendantId> descendantIdStream =
+        _itemStream(ref.read, id: id);
+    final List<DescendantId> descendantIds = <DescendantId>[];
 
-  await for (final DescendantId descendantId in descendantIdStream) {
-    descendantIds.add(descendantId);
-    yield ItemTree(descendantIds: descendantIds, done: false);
-  }
+    await for (final DescendantId descendantId in descendantIdStream) {
+      descendantIds.add(descendantId);
+      yield ItemTree(descendantIds: descendantIds, done: false);
+    }
 
-  yield ItemTree(descendantIds: descendantIds, done: true);
-});
+    yield ItemTree(descendantIds: descendantIds, done: true);
+  },
+);
 
 Stream<DescendantId> _itemStream(Reader read,
     {required int id, Iterable<int> ancestors = const <int>[]}) async* {

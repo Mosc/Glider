@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/user_provider.dart';
+import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
@@ -18,8 +19,8 @@ class UserBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final StateNotifierProvider<UserNotifier, AsyncValue<User>> provider =
-        userNotifierProvider(id);
+    final StateNotifierProvider<AsyncNotifier<User>, AsyncValue<User>>
+        provider = userNotifierProvider(id);
 
     return RefreshableBody<User>(
       provider: provider,

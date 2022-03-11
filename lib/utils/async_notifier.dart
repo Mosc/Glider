@@ -1,13 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-abstract class BaseNotifier<T> extends StateNotifier<AsyncValue<T>> {
-  BaseNotifier(this.read) : super(AsyncValue<T>.loading()) {
+class AsyncNotifier<T> extends StateNotifier<AsyncValue<T>> {
+  AsyncNotifier(this.getData) : super(AsyncValue<T>.loading()) {
     load();
   }
 
-  final Reader read;
-
-  Future<T> getData();
+  final Future<T> Function() getData;
 
   void setData(T data) => state = AsyncValue<T>.data(data);
 

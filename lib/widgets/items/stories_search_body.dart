@@ -3,6 +3,7 @@ import 'package:glider/models/search_parameters.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/providers/item_provider.dart';
+import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';
 import 'package:glider/widgets/items/item_tile.dart';
@@ -14,7 +15,7 @@ class StoriesSearchBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeStateNotifierProvider<ItemIdsSearchNotifier,
+    final AutoDisposeStateNotifierProvider<AsyncNotifier<Iterable<int>>,
         AsyncValue<Iterable<int>>> provider = itemIdsSearchNotifierProvider(
       SearchParameters.stories(
         query: ref.watch(storySearchQueryStateProvider),

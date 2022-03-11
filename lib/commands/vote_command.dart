@@ -10,6 +10,7 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
+import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -27,7 +28,7 @@ class VoteCommand with CommandMixin {
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final ItemNotifier itemNotifier =
+      final AsyncNotifier<Item> itemNotifier =
           ref.read(itemNotifierProvider(id).notifier);
       unawaited(_vote(authRepository, itemNotifier));
     } else {
@@ -49,7 +50,7 @@ class VoteCommand with CommandMixin {
   }
 
   Future<void> _vote(
-      AuthRepository authRepository, ItemNotifier itemNotifier) async {
+      AuthRepository authRepository, AsyncNotifier<Item> itemNotifier) async {
     final bool success = await authRepository.vote(
       id: id,
       upvote: upvote,
