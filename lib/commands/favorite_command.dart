@@ -22,7 +22,7 @@ class FavoriteCommand with CommandMixin {
             id: id,
             favorite: favorite,
             onUpdate: () {
-              ref.refresh(favoritedProvider(id));
+              ref.invalidate(favoritedProvider(id));
               ref.read(favoriteIdsNotifierProvider.notifier).forceLoad();
             },
           ),

@@ -55,7 +55,7 @@ class CollapsibleItemTile extends HookConsumerWidget {
     await ref
         .read(storageRepositoryProvider)
         .setCollapsed(id: id, collapsed: collapsed);
-    ref.refresh(collapsedProvider(id));
+    ref.invalidate(collapsedProvider(id));
   }
 
   Future<void> _scrollToTop(BuildContext context) async {

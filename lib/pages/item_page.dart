@@ -58,7 +58,7 @@ class ItemPage extends HookConsumerWidget {
 
   Future<void> _setVisited(WidgetRef ref) async {
     await ref.read(storageRepositoryProvider).setVisited(id: id);
-    ref.refresh(visitedProvider(id));
+    ref.invalidate(visitedProvider(id));
   }
 
   Future<void> _searchSelected(BuildContext context) {

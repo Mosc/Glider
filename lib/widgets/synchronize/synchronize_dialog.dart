@@ -69,10 +69,10 @@ class SynchronizeDialog extends HookConsumerWidget {
   Future<void> _synchronize(BuildContext context, WidgetRef ref) async {
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
     final bool success = await authRepository.fetchUpvoted(
-          onUpdate: (int id) => ref.refresh(upvotedProvider(id)),
+          onUpdate: (int id) => ref.invalidate(upvotedProvider(id)),
         ) &&
         await authRepository.fetchFavorited(
-          onUpdate: (int id) => ref.refresh(favoritedProvider(id)),
+          onUpdate: (int id) => ref.invalidate(favoritedProvider(id)),
         );
 
     if (success) {

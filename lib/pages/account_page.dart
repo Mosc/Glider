@@ -60,7 +60,7 @@ class AccountPage extends HookConsumerWidget {
   Future<void> _logOutSelected(WidgetRef ref) async {
     await ref.read(authRepositoryProvider).logout();
     ref
-      ..refresh(loggedInProvider)
-      ..refresh(usernameProvider);
+      ..invalidate(loggedInProvider)
+      ..invalidate(usernameProvider);
   }
 }

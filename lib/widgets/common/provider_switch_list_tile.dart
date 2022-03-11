@@ -20,7 +20,7 @@ class ProviderSwitchListTile extends HookConsumerWidget {
       value: ref.watch(provider).value ?? false,
       onChanged: (bool newValue) async {
         await onSave(newValue);
-        ref.refresh(provider);
+        ref.invalidate(provider);
       },
     );
   }

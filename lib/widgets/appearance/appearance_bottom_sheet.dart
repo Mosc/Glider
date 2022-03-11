@@ -72,7 +72,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
                   ref
                       .read(storageRepositoryProvider)
                       .setTextScaleFactor(textScaleFactor: textScaleFactor);
-                  ref.refresh(textScaleFactorProvider);
+                  ref.invalidate(textScaleFactorProvider);
                 },
               ),
             ],
@@ -186,7 +186,7 @@ class _ThemeModeButton extends HookConsumerWidget {
         child: ChoiceChip(
           onSelected: (_) async {
             await ref.read(storageRepositoryProvider).setThemeMode(mode);
-            ref.refresh(themeModeProvider);
+            ref.invalidate(themeModeProvider);
           },
           selected: selected,
           label: Text(mode.title(context)),
@@ -238,7 +238,7 @@ class DarkThemeButton extends HookConsumerWidget {
         child: ChoiceChip(
           onSelected: (_) async {
             await ref.read(storageRepositoryProvider).setDarkTheme(darkTheme);
-            ref.refresh(darkThemeProvider);
+            ref.invalidate(darkThemeProvider);
           },
           selected: selected,
           label: Text(darkTheme.title(context)),
@@ -290,7 +290,7 @@ class _ThemeColorButton extends HookConsumerWidget {
         child: ChoiceChip(
           onSelected: (_) async {
             await ref.read(storageRepositoryProvider).setThemeColor(color);
-            ref.refresh(themeColorProvider);
+            ref.invalidate(themeColorProvider);
           },
           selected: selected,
           label: Icon(

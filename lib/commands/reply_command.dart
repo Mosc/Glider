@@ -41,7 +41,7 @@ class ReplyCommand with CommandMixin {
           false;
 
       if (success && rootId != null) {
-        ref.refresh(itemTreeStreamProvider(rootId!));
+        ref.invalidate(itemTreeStreamProvider(rootId!));
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context).processingInfo),
@@ -49,7 +49,7 @@ class ReplyCommand with CommandMixin {
               label: AppLocalizations.of(context).refresh,
               onPressed: () async {
                 await reloadItemTree(ref.read, id: rootId!);
-                ref.refresh(itemTreeStreamProvider(rootId!));
+                ref.invalidate(itemTreeStreamProvider(rootId!));
               },
             ),
           ),

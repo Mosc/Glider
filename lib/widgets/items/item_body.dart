@@ -81,7 +81,7 @@ class ItemBody extends HookConsumerWidget {
 
   Future<void> _refresh(WidgetRef ref) async {
     await reloadItemTree(ref.read, id: id);
-    ref.refresh(itemTreeStreamProvider(id));
+    ref.invalidate(itemTreeStreamProvider(id));
   }
 
   Widget _buildItemLoading(int index, {int indentation = 0}) {

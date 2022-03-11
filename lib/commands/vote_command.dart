@@ -53,7 +53,7 @@ class VoteCommand with CommandMixin {
     final bool success = await authRepository.vote(
       id: id,
       upvote: upvote,
-      onUpdate: () => ref.refresh(upvotedProvider(id)),
+      onUpdate: () => ref.invalidate(upvotedProvider(id)),
     );
 
     if (success) {

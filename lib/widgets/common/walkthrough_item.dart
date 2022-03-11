@@ -100,7 +100,7 @@ class WalkthoughItem extends HookConsumerWidget {
       ),
       onDismiss: (_) async {
         await ref.read(storageRepositoryProvider).setCompletedWalkthrough();
-        ref.refresh(completedWalkthroughProvider);
+        ref.invalidate(completedWalkthroughProvider);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

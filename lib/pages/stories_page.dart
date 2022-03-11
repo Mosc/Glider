@@ -159,8 +159,7 @@ class StoriesPage extends HookConsumerWidget {
             action: SnackBarAction(
               label: AppLocalizations.of(context).refresh,
               onPressed: () => ref
-                  .refresh(
-                      storyIdsNotifierProvider(StoryType.newStories).notifier)
+                  .read(storyIdsNotifierProvider(StoryType.newStories).notifier)
                   .forceLoad(),
             ),
           ),

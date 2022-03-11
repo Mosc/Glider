@@ -35,7 +35,7 @@ class BlockCommand with CommandMixin {
           TextButton(
             onPressed: () async {
               await storageRepository.setBlocked(id: id);
-              ref.refresh(blockedProvider(id));
+              ref.invalidate(blockedProvider(id));
               Navigator.of(context).pop();
             },
             child: Text(

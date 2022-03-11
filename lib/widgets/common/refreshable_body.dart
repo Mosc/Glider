@@ -23,7 +23,7 @@ class RefreshableBody<T> extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final EdgeInsets padding = MediaQuery.of(context).padding;
     return RefreshIndicator(
-      onRefresh: onRefresh ?? () async => ref.refresh(provider),
+      onRefresh: onRefresh ?? () async => ref.invalidate(provider),
       child: CustomScrollView(
         slivers: ref.watch(provider).when(
               data: (T data) => <Widget>[
