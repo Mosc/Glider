@@ -20,7 +20,7 @@ class FavoriteCommand with CommandMixin {
     unawaited(
       ref.read(authRepositoryProvider).favorite(
             id: id,
-            favorite: favorite,
+            value: favorite,
             onUpdate: () {
               ref.invalidate(favoritedProvider(id));
               ref.read(favoriteIdsNotifierProvider.notifier).forceLoad();

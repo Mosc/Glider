@@ -36,8 +36,8 @@ class StorageRepository {
     return themeModeValue != null ? ThemeMode.values[themeModeValue] : null;
   }
 
-  Future<void> setThemeMode(ThemeMode themeMode) async =>
-      (await _sharedPreferences).setInt(_themeModeKey, themeMode.index);
+  Future<void> setThemeMode(ThemeMode value) async =>
+      (await _sharedPreferences).setInt(_themeModeKey, value.index);
 
   Future<DarkTheme?> get darkTheme async {
     final int? darkThemeValue =
@@ -45,16 +45,16 @@ class StorageRepository {
     return darkThemeValue != null ? DarkTheme.values[darkThemeValue] : null;
   }
 
-  Future<void> setDarkTheme(DarkTheme darkTheme) async =>
-      (await _sharedPreferences).setInt(_darkThemeKey, darkTheme.index);
+  Future<void> setDarkTheme(DarkTheme value) async =>
+      (await _sharedPreferences).setInt(_darkThemeKey, value.index);
 
   Future<Color?> get themeColor async {
     final int? colorValue = (await _sharedPreferences).getInt(_themeColorKey);
     return colorValue != null ? Color(colorValue) : null;
   }
 
-  Future<void> setThemeColor(Color color) async =>
-      (await _sharedPreferences).setInt(_themeColorKey, color.value);
+  Future<void> setThemeColor(Color value) async =>
+      (await _sharedPreferences).setInt(_themeColorKey, value.value);
 
   Future<bool> get showUrl async =>
       (await _sharedPreferences).getBool(_showUrlKey) ?? true;
@@ -77,9 +77,8 @@ class StorageRepository {
   Future<double?> get textScaleFactor async =>
       (await _sharedPreferences).getDouble(_textScaleFactorKey);
 
-  Future<void> setTextScaleFactor({required double textScaleFactor}) async =>
-      (await _sharedPreferences)
-          .setDouble(_textScaleFactorKey, textScaleFactor);
+  Future<void> setTextScaleFactor({required double value}) async =>
+      (await _sharedPreferences).setDouble(_textScaleFactorKey, value);
 
   Future<bool> get useCustomTabs async =>
       (await _sharedPreferences).getBool(_useCustomTabsKey) ?? true;
@@ -108,8 +107,8 @@ class StorageRepository {
   Future<bool> get completedWalkthrough async =>
       (await _sharedPreferences).getBool(_completedWalkthroughKey) ?? false;
 
-  Future<void> setCompletedWalkthrough() async =>
-      (await _sharedPreferences).setBool(_completedWalkthroughKey, true);
+  Future<void> setCompletedWalkthrough({required bool value}) async =>
+      (await _sharedPreferences).setBool(_completedWalkthroughKey, value);
 
   Future<bool> get loggedIn async => await username != null;
 
@@ -138,10 +137,10 @@ class StorageRepository {
   Future<bool> favorited({required int id}) async =>
       (await _sharedPreferences).containsElement(_favoritedKey, id.toString());
 
-  Future<void> setFavorited({required int id, required bool favorite}) async {
+  Future<void> setFavorited({required int id, required bool value}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
-    if (favorite) {
+    if (value) {
       await sharedPreferences.addElement(_favoritedKey, id.toString());
     } else {
       await sharedPreferences.removeElement(_favoritedKey, id.toString());
@@ -149,10 +148,10 @@ class StorageRepository {
   }
 
   Future<void> setFavoriteds(
-      {required Iterable<int> ids, required bool favorite}) async {
+      {required Iterable<int> ids, required bool value}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
-    if (favorite) {
+    if (value) {
       await sharedPreferences.addElements(
           _favoritedKey, ids.map((int id) => id.toString()));
     } else {
@@ -167,10 +166,10 @@ class StorageRepository {
   Future<bool> upvoted({required int id}) async =>
       (await _sharedPreferences).containsElement(_upvotedKey, id.toString());
 
-  Future<void> setUpvoted({required int id, required bool upvote}) async {
+  Future<void> setUpvoted({required int id, required bool value}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
-    if (upvote) {
+    if (value) {
       await sharedPreferences.addElement(_upvotedKey, id.toString());
     } else {
       await sharedPreferences.removeElement(_upvotedKey, id.toString());
@@ -178,10 +177,10 @@ class StorageRepository {
   }
 
   Future<void> setUpvoteds(
-      {required Iterable<int> ids, required bool upvote}) async {
+      {required Iterable<int> ids, required bool value}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
-    if (upvote) {
+    if (value) {
       await sharedPreferences.addElements(
           _upvotedKey, ids.map((int id) => id.toString()));
     } else {
@@ -196,16 +195,23 @@ class StorageRepository {
   Future<bool> visited({required int id}) async =>
       (await _sharedPreferences).containsElement(_visitedKey, id.toString());
 
-  Future<void> setVisited({required int id}) async =>
-      (await _sharedPreferences).addElement(_visitedKey, id.toString());
+  Future<void> setVisited({required int id, required bool value}) async {
+    final SharedPreferences sharedPreferences = await _sharedPreferences;
+
+    if (value) {
+      await sharedPreferences.addElement(_visitedKey, id.toString());
+    } else {
+      await sharedPreferences.removeElement(_visitedKey, id.toString());
+    }
+  }
 
   Future<bool> collapsed({required int id}) async =>
       (await _sharedPreferences).containsElement(_collapsedKey, id.toString());
 
-  Future<void> setCollapsed({required int id, required bool collapsed}) async {
+  Future<void> setCollapsed({required int id, required bool value}) async {
     final SharedPreferences sharedPreferences = await _sharedPreferences;
 
-    if (collapsed) {
+    if (value) {
       await sharedPreferences.addElement(_collapsedKey, id.toString());
     } else {
       await sharedPreferences.removeElement(_collapsedKey, id.toString());
@@ -215,6 +221,13 @@ class StorageRepository {
   Future<bool> blocked({required String id}) async =>
       (await _sharedPreferences).containsElement(_blockedKey, id);
 
-  Future<void> setBlocked({required String id}) async =>
-      (await _sharedPreferences).addElement(_blockedKey, id);
+  Future<void> setBlocked({required String id, required bool value}) async {
+    final SharedPreferences sharedPreferences = await _sharedPreferences;
+
+    if (value) {
+      await sharedPreferences.addElement(_blockedKey, id);
+    } else {
+      await sharedPreferences.removeElement(_blockedKey, id);
+    }
+  }
 }

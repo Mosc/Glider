@@ -79,7 +79,7 @@ class FlagCommand implements CommandMixin {
       AuthRepository authRepository, AsyncNotifier<Item> itemNotifier) async {
     await authRepository.flag(
       id: id,
-      flag: flag,
+      value: flag,
     );
     final Item item = await itemNotifier.load();
     itemNotifier.setData(item.copyWith(dead: flag));

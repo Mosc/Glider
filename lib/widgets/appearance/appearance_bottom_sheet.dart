@@ -71,7 +71,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
                 onChanged: (double textScaleFactor) {
                   ref
                       .read(storageRepositoryProvider)
-                      .setTextScaleFactor(textScaleFactor: textScaleFactor);
+                      .setTextScaleFactor(value: textScaleFactor);
                   ref.invalidate(textScaleFactorProvider);
                 },
               ),

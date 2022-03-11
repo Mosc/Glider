@@ -99,7 +99,9 @@ class WalkthoughItem extends HookConsumerWidget {
         iconColor: Theme.of(context).colorScheme.onError,
       ),
       onDismiss: (_) async {
-        await ref.read(storageRepositoryProvider).setCompletedWalkthrough();
+        await ref
+            .read(storageRepositoryProvider)
+            .setCompletedWalkthrough(value: true);
         ref.invalidate(completedWalkthroughProvider);
       },
       child: Padding(

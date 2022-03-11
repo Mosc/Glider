@@ -53,7 +53,7 @@ class VoteCommand with CommandMixin {
       AuthRepository authRepository, AsyncNotifier<Item> itemNotifier) async {
     final bool success = await authRepository.vote(
       id: id,
-      upvote: upvote,
+      value: upvote,
       onUpdate: () => ref.invalidate(upvotedProvider(id)),
     );
 
