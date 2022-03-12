@@ -1,0 +1,4 @@
+• Added a text size setting
+• Implemented pagination as an alternative to infinite scroll
+• Allowed hiding of job posts
+• Improved performance a bit
