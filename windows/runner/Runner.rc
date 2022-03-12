@@ -52,13 +52,13 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_APP_ICON              ICON                    "resources//app_icon.ico"
-IDI_APP_ICON_32              ICON                    "resources//app_icon_32.ico"
-IDI_APP_ICON_64              ICON                    "resources//app_icon_64.ico"
-IDI_APP_ICON_128              ICON                    "resources//app_icon_128.ico"
-IDI_APP_ICON_256              ICON                    "resources//app_icon_256.ico"
-IDI_APP_ICON_512              ICON                    "resources//app_icon_512.ico"
-IDI_APP_ICON_1024              ICON                    "resources//app_icon_1024.ico"
+IDI_APP_ICON            ICON                    "resources\\app_icon.ico"
+IDI_APP_ICON_32            ICON                    "resources\\app_icon_32.ico"
+IDI_APP_ICON_64            ICON                    "resources\\app_icon_64.ico"
+IDI_APP_ICON_128            ICON                    "resources\\app_icon_128.ico"
+IDI_APP_ICON_256            ICON                    "resources\\app_icon_256.ico"
+IDI_APP_ICON_512            ICON                    "resources\\app_icon_512.ico"
+IDI_APP_ICON_1024            ICON                    "resources\\app_icon_1024.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ BEGIN
             VALUE "FileDescription", "Glider" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "Glider" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 Viter Apps. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 Viter Apps. All rights reserved." "\0"
             VALUE "OriginalFilename", "glider.exe" "\0"
             VALUE "ProductName", "Glider" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
