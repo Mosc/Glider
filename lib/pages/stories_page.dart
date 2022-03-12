@@ -14,6 +14,7 @@ import 'package:glider/pages/submit_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
+import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/widgets/appearance/appearance_bottom_sheet.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
@@ -26,17 +27,23 @@ final AutoDisposeStateProvider<StoryType> storyTypeStateProvider =
   (AutoDisposeStateProviderRef<StoryType> ref) => StoryType.topStories,
 );
 
-class StoriesPage extends HookConsumerWidget {
+final AutoDisposeStateProvider<int> storyPaginationStateProvider =
+    StateProvider.autoDispose<int>(
+  (AutoDisposeStateProviderRef<int> ref) => PaginationMixin.initialPage,
+);
+
+class StoriesPage extends HookConsumerWidget with PaginationMixin {
   const StoriesPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final StateController<StoryType> storyTypeStateController =
-        ref.watch(storyTypeStateProvider.state);
+  AutoDisposeStateProvider<int> get paginationStateProvider =>
+      storyPaginationStateProvider;
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: FloatingAppBarScrollView(
-        title: Text(storyTypeStateController.state.title(context)),
+        title: Text(ref.watch(storyTypeStateProvider).title(context)),
         actions: <Widget>[
           IconButton(
             icon: const Icon(FluentIcons.search_24_regular),
@@ -52,8 +59,10 @@ class StoriesPage extends HookConsumerWidget {
                     child: Text(storyType.title(context)),
                   ),
             ],
-            onSelected: (StoryType storyType) =>
-                storyTypeStateController.update((_) => storyType),
+            onSelected: (StoryType storyType) {
+              resetPagination(ref);
+              ref.read(storyTypeStateProvider.state).update((_) => storyType);
+            },
             tooltip: AppLocalizations.of(context).storyType,
             icon: const Icon(FluentIcons.filter_24_regular),
           ),
