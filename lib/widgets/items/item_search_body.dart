@@ -28,7 +28,7 @@ class ItemSearchBody extends HookConsumerWidget {
 
     return RefreshableBody<Iterable<int>>(
       provider: provider,
-      onRefresh: () => ref.read(provider.notifier).forceLoad(),
+      onRefresh: () async => ref.read(provider.notifier).forceLoad(),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

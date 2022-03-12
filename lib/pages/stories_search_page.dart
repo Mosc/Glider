@@ -8,6 +8,7 @@ import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_range.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
+import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -33,7 +34,12 @@ final AutoDisposeStateProvider<SearchOrder> storySearchOrderStateProvider =
   (AutoDisposeStateProviderRef<SearchOrder> ref) => SearchOrder.byRelevance,
 );
 
-class StoriesSearchPage extends HookConsumerWidget {
+final AutoDisposeStateProvider<int> storySearchPaginationStateProvider =
+    StateProvider.autoDispose<int>(
+  (AutoDisposeStateProviderRef<int> ref) => PaginationMixin.initialPage,
+);
+
+class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
   const StoriesSearchPage({Key? key})
       : initialSearchRange = SearchRange.pastYear,
         enableSearch = true,
@@ -46,6 +52,10 @@ class StoriesSearchPage extends HookConsumerWidget {
 
   final SearchRange? initialSearchRange;
   final bool enableSearch;
+
+  @override
+  AutoDisposeStateProvider<int> get paginationStateProvider =>
+      storySearchPaginationStateProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -103,8 +113,10 @@ class StoriesSearchPage extends HookConsumerWidget {
                   ),
                   textInputAction: TextInputAction.search,
                   autofocus: true,
-                  onChanged: (String value) =>
-                      storySearchQueryStateController.update((_) => value),
+                  onChanged: (String value) {
+                    resetPagination(ref);
+                    storySearchQueryStateController.update((_) => value);
+                  },
                 )
               : Text(AppLocalizations.of(context).catchUp),
           actions: <Widget>[
@@ -113,6 +125,7 @@ class StoriesSearchPage extends HookConsumerWidget {
                 icon: const Icon(FluentIcons.dismiss_24_regular),
                 tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 onPressed: () {
+                  resetPagination(ref);
                   queryController.clear();
                   storySearchQueryStateController.update((_) => '');
                 },
@@ -125,8 +138,10 @@ class StoriesSearchPage extends HookConsumerWidget {
                     child: Text(searchOrder.title(context)),
                   ),
               ],
-              onSelected: (SearchOrder searchOrder) =>
-                  storySearchOrderStateController.update((_) => searchOrder),
+              onSelected: (SearchOrder searchOrder) {
+                resetPagination(ref);
+                storySearchOrderStateController.update((_) => searchOrder);
+              },
               tooltip: AppLocalizations.of(context).sort,
               icon: const Icon(FluentIcons.arrow_sort_down_lines_16_regular),
             ),
@@ -172,29 +187,31 @@ class StoriesSearchPage extends HookConsumerWidget {
   }
 }
 
-class _SearchRangeChip extends HookConsumerWidget {
+class _SearchRangeChip extends HookConsumerWidget with PaginationMixin {
   const _SearchRangeChip({Key? key, required this.searchRange})
       : super(key: key);
 
   final SearchRange searchRange;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final StateController<SearchRange?> storySearchRangeStateController =
-        ref.watch(storySearchRangeStateProvider.state);
-    final StateController<DateTimeRange?>
-        storySearchCustomDateTimeRangeStateController =
-        ref.watch(storySearchCustomDateTimeRangeStateProvider.state);
+  AutoDisposeStateProvider<int> get paginationStateProvider =>
+      storySearchPaginationStateProvider;
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return ChoiceChip(
-      label: Text(searchRange.title(
-          context, storySearchCustomDateTimeRangeStateController.state)),
-      selected: storySearchRangeStateController.state == searchRange,
+      label: Text(
+        searchRange.title(
+          context,
+          ref.watch(storySearchCustomDateTimeRangeStateProvider),
+        ),
+      ),
+      selected: ref.watch(storySearchRangeStateProvider) == searchRange,
       onSelected: (bool selected) async {
-        final StateController<DateTimeRange?>
-            customDateTimeRangeStateController = ref
-                .read(storySearchCustomDateTimeRangeStateProvider.state)
-              ..update((_) => null);
+        resetPagination(ref);
+        ref
+            .read(storySearchCustomDateTimeRangeStateProvider.state)
+            .update((_) => null);
 
         if (searchRange == SearchRange.custom && selected) {
           final DateTimeRange? dateTimeRange = await showDateRangePicker(
@@ -202,14 +219,18 @@ class _SearchRangeChip extends HookConsumerWidget {
             firstDate: DateTime.fromMillisecondsSinceEpoch(0),
             lastDate: DateTime.now(),
           );
-          customDateTimeRangeStateController.update((_) => dateTimeRange);
+          ref
+              .read(storySearchCustomDateTimeRangeStateProvider.state)
+              .update((_) => dateTimeRange);
 
-          if (customDateTimeRangeStateController.state == null) {
+          if (ref.read(storySearchCustomDateTimeRangeStateProvider) == null) {
             return;
           }
         }
 
-        storySearchRangeStateController
+        resetPagination(ref);
+        ref
+            .read(storySearchRangeStateProvider.state)
             .update((_) => selected ? searchRange : null);
       },
     );

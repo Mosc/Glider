@@ -30,7 +30,7 @@ class ItemBody extends HookConsumerWidget {
 
     return RefreshableBody<ItemTree>(
       provider: itemTreeStreamProvider(id),
-      onRefresh: () => _refresh(ref),
+      onRefresh: () async => _refresh(ref),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

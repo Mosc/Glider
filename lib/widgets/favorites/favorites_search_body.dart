@@ -7,16 +7,20 @@ import 'package:glider/pages/favorites_search_page.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/utils/async_notifier.dart';
+import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/block.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
-import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FavoritesSearchBody extends HookConsumerWidget {
+class FavoritesSearchBody extends HookConsumerWidget with PaginationMixin {
   const FavoritesSearchBody({Key? key}) : super(key: key);
+
+  @override
+  AutoDisposeStateProvider<int> get paginationStateProvider =>
+      favoritesSearchPaginationStateProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +35,10 @@ class FavoritesSearchBody extends HookConsumerWidget {
 
     return RefreshableBody<Iterable<int>>(
       provider: provider,
-      onRefresh: () => ref.read(provider.notifier).forceLoad(),
+      onRefresh: () async {
+        resetPagination(ref);
+        await ref.read(provider.notifier).forceLoad();
+      },
       loadingBuilder: () => <Widget>[
         SliverToBoxAdapter(child: _buildOnlyStoriesSearched(context)),
         SliverList(
@@ -42,7 +49,9 @@ class FavoritesSearchBody extends HookConsumerWidget {
       ],
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverToBoxAdapter(child: _buildOnlyStoriesSearched(context)),
-        SliverSmoothAnimatedList<int>(
+        ...buildPaginationSlivers<int>(
+          context,
+          ref,
           items: ids,
           builder: (_, int id, __) => ItemTile(
             id: id,

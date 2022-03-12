@@ -1,9 +1,15 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:glider/models/user_menu_action.dart';
+import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/users/user_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final AutoDisposeStateProvider<int> userPaginationStateProvider =
+    StateProvider.autoDispose<int>(
+  (AutoDisposeStateProviderRef<int> ref) => PaginationMixin.initialPage,
+);
 
 class UserPage extends HookConsumerWidget {
   const UserPage({Key? key, required this.id}) : super(key: key);

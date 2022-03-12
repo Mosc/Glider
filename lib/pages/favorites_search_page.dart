@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/search_order.dart';
 import 'package:glider/utils/color_extension.dart';
+import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/favorites/favorites_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,8 +21,17 @@ final AutoDisposeStateProvider<SearchOrder> favoriteSearchOrderStateProvider =
   (AutoDisposeStateProviderRef<SearchOrder> ref) => SearchOrder.byRelevance,
 );
 
-class FavoritesSearchPage extends HookConsumerWidget {
+final AutoDisposeStateProvider<int> favoritesSearchPaginationStateProvider =
+    StateProvider.autoDispose<int>(
+  (AutoDisposeStateProviderRef<int> ref) => PaginationMixin.initialPage,
+);
+
+class FavoritesSearchPage extends HookConsumerWidget with PaginationMixin {
   const FavoritesSearchPage({Key? key}) : super(key: key);
+
+  @override
+  AutoDisposeStateProvider<int> get paginationStateProvider =>
+      favoritesSearchPaginationStateProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,10 +39,6 @@ class FavoritesSearchPage extends HookConsumerWidget {
     final bool isDark = theme.colorScheme.brightness.isDark;
 
     final TextEditingController queryController = useTextEditingController();
-    final StateController<String> favoriteSearchQueryStateController =
-        ref.watch(favoriteSearchQueryStateProvider.state);
-    final StateController<SearchOrder> favoriteSearchOrderStateController =
-        ref.watch(favoriteSearchOrderStateProvider.state);
 
     return Theme(
       data: theme.copyWith(
@@ -60,17 +66,24 @@ class FavoritesSearchPage extends HookConsumerWidget {
             ),
             textInputAction: TextInputAction.search,
             autofocus: true,
-            onChanged: (String value) =>
-                favoriteSearchQueryStateController.update((_) => value),
+            onChanged: (String value) {
+              resetPagination(ref);
+              ref
+                  .read(favoriteSearchQueryStateProvider.state)
+                  .update((_) => value);
+            },
           ),
           actions: <Widget>[
-            if (favoriteSearchQueryStateController.state.isNotEmpty)
+            if (ref.watch(favoriteSearchQueryStateProvider).isNotEmpty)
               IconButton(
                 icon: const Icon(FluentIcons.dismiss_24_regular),
                 tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 onPressed: () {
+                  resetPagination(ref);
                   queryController.clear();
-                  favoriteSearchQueryStateController.update((_) => '');
+                  ref
+                      .read(favoriteSearchQueryStateProvider.state)
+                      .update((_) => '');
                 },
               ),
             PopupMenuButton<SearchOrder>(
@@ -81,8 +94,12 @@ class FavoritesSearchPage extends HookConsumerWidget {
                     child: Text(searchOrder.title(context)),
                   ),
               ],
-              onSelected: (SearchOrder searchOrder) =>
-                  favoriteSearchOrderStateController.update((_) => searchOrder),
+              onSelected: (SearchOrder searchOrder) {
+                resetPagination(ref);
+                ref
+                    .read(favoriteSearchOrderStateProvider.state)
+                    .update((_) => searchOrder);
+              },
               tooltip: AppLocalizations.of(context).sort,
               icon: const Icon(FluentIcons.arrow_sort_down_lines_16_regular),
             ),

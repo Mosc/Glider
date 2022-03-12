@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/pages/item_page.dart';
+import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/user_provider.dart';
 import 'package:glider/utils/async_notifier.dart';
+import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
-import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
 import 'package:glider/widgets/items/item_tile.dart';
 import 'package:glider/widgets/items/story_tile_loading.dart';
@@ -12,10 +13,14 @@ import 'package:glider/widgets/users/user_tile_data.dart';
 import 'package:glider/widgets/users/user_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserBody extends HookConsumerWidget {
+class UserBody extends HookConsumerWidget with PaginationMixin {
   const UserBody({Key? key, required this.id}) : super(key: key);
 
   final String id;
+
+  @override
+  AutoDisposeStateProvider<int> get paginationStateProvider =>
+      userPaginationStateProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +29,10 @@ class UserBody extends HookConsumerWidget {
 
     return RefreshableBody<User>(
       provider: provider,
-      onRefresh: () => ref.read(provider.notifier).forceLoad(),
+      onRefresh: () async {
+        resetPagination(ref);
+        await ref.read(provider.notifier).forceLoad();
+      },
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -34,7 +42,9 @@ class UserBody extends HookConsumerWidget {
       ],
       dataBuilder: (User user) => <Widget>[
         SliverToBoxAdapter(child: UserTileData(user)),
-        SliverSmoothAnimatedList<int>(
+        ...buildPaginationSlivers<int>(
+          context,
+          ref,
           items: user.submitted,
           builder: (_, int id, int index) => ItemTile(
             id: id,
