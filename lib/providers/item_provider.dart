@@ -7,7 +7,6 @@ import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/search_parameters.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/providers/repository_provider.dart';
-import 'package:glider/repositories/api_repository.dart';
 import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,17 +33,7 @@ final AutoDisposeStateNotifierProviderFamily<AsyncNotifier<Iterable<int>>,
               ref,
           StoryType storyType) =>
       AsyncNotifier<Iterable<int>>(
-    () async {
-      final ApiRepository apiRepository = ref.read(apiRepositoryProvider);
-
-      if (storyType == StoryType.newTopStories) {
-        final Iterable<int> topStoryIds =
-            await apiRepository.getStoryIds(StoryType.topStories);
-        return topStoryIds.toList()..sort((int a, int b) => b.compareTo(a));
-      } else {
-        return apiRepository.getStoryIds(storyType);
-      }
-    },
+    () => ref.read(apiRepositoryProvider).getStoryIds(storyType),
   ),
 );
 

@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum StoryType {
   topStories,
-  newTopStories,
   newStories,
   bestStories,
   askStories,
@@ -18,7 +17,6 @@ extension StoryTypeExtension on StoryType {
   bool visible(BuildContext context, WidgetRef ref) {
     switch (this) {
       case StoryType.topStories:
-      case StoryType.newTopStories:
       case StoryType.newStories:
       case StoryType.bestStories:
       case StoryType.askStories:
@@ -33,8 +31,6 @@ extension StoryTypeExtension on StoryType {
     switch (this) {
       case StoryType.topStories:
         return AppLocalizations.of(context).topStories;
-      case StoryType.newTopStories:
-        return AppLocalizations.of(context).newTopStories;
       case StoryType.newStories:
         return AppLocalizations.of(context).newStories;
       case StoryType.bestStories:
@@ -52,8 +48,6 @@ extension StoryTypeExtension on StoryType {
     switch (this) {
       case StoryType.topStories:
         return 'topstories';
-      case StoryType.newTopStories:
-        break;
       case StoryType.newStories:
         return 'newstories';
       case StoryType.bestStories:
@@ -65,7 +59,5 @@ extension StoryTypeExtension on StoryType {
       case StoryType.jobStories:
         return 'jobstories';
     }
-
-    throw UnsupportedError('$this does not have an API path');
   }
 }
