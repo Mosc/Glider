@@ -101,6 +101,7 @@
   "deleteConfirm": "Are you sure you want to delete this?",
   "block": "Block",
   "blockConfirm": "Are you sure you want to block this user?",
+  "selectText": "Select text",
   "copy": "Copy...",
   "share": "Share...",
   "text": "Text",
