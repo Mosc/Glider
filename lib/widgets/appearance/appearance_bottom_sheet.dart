@@ -221,7 +221,7 @@ class DarkThemeButton extends HookConsumerWidget {
       }),
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
       child: ChipTheme(
         data: ChipThemeData.fromDefaults(
           brightness: ThemeData.estimateBrightnessForColor(color),

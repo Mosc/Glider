@@ -30,7 +30,7 @@ class DeleteCommand implements CommandMixin {
 
       await showDialog<void>(
         context: context,
-        builder: (_) => AlertDialog(
+        builder: (BuildContext context) => AlertDialog(
           content: Text(AppLocalizations.of(context).deleteConfirm),
           actions: <Widget>[
             TextButton(
@@ -40,7 +40,7 @@ class DeleteCommand implements CommandMixin {
               ),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 unawaited(_delete(authRepository, itemNotifier));
                 Navigator.of(context).pop();
               },

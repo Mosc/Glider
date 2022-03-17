@@ -6,16 +6,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
-import 'package:glider/models/item_menu_action.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/indented_tile.dart';
-import 'package:glider/widgets/common/menu_actions_bar.dart';
 import 'package:glider/widgets/common/slidable.dart';
-import 'package:glider/widgets/common/smooth_animated_switcher.dart';
+import 'package:glider/widgets/items/item_bottom_sheet.dart';
 import 'package:glider/widgets/items/item_tile_content.dart';
 import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,10 +21,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 AutoDisposeStateProviderFamily<bool?, int> _delayedUpvoteStateProvider =
     StateProvider.family.autoDispose(
   (AutoDisposeStateProviderRef<bool?> ref, int id) => null,
-);
-
-StateProviderFamily<bool, int> _longPressStateProvider = StateProvider.family(
-  (StateProviderRef<bool> ref, int id) => false,
 );
 
 class ItemTileData extends HookConsumerWidget {
@@ -49,13 +43,7 @@ class ItemTileData extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Widget child = Column(
-      children: <Widget>[
-        _buildContent(context, ref),
-        _buildMenuActionsBar(ref, context),
-      ],
-    );
-
+    Widget child = _buildContent(context, ref);
     child = _buildFaded(context, ref, child: child);
     child = _buildTappable(context, ref, child: child);
     child = _buildIndented(ref, child: child);
@@ -78,26 +66,6 @@ class ItemTileData extends HookConsumerWidget {
         interactive: interactive,
       );
     }
-  }
-
-  SmoothAnimatedSwitcher _buildMenuActionsBar(
-      WidgetRef ref, BuildContext context) {
-    return SmoothAnimatedSwitcher.vertical(
-      condition: ref.watch(_longPressStateProvider(item.id)),
-      child: MenuActionsBar(
-        children: <IconButton>[
-          for (ItemMenuAction menuAction in ItemMenuAction.values)
-            if (menuAction.visible(context, ref, id: item.id))
-              IconButton(
-                icon: Icon(menuAction.icon(context, ref, id: item.id)),
-                tooltip: menuAction.title(context, ref, id: item.id),
-                onPressed: () => menuAction
-                    .command(context, ref, id: item.id, rootId: root?.id)
-                    .execute(),
-              ),
-        ],
-      ),
-    );
   }
 
   Widget _buildFaded(BuildContext context, WidgetRef ref,
@@ -134,9 +102,11 @@ class ItemTileData extends HookConsumerWidget {
                     ),
               ).execute()
           : onTap,
-      onLongPress: () => ref
-          .read(_longPressStateProvider(item.id).state)
-          .update((bool state) => !state),
+      onLongPress: () => showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => ItemBottomSheet(id: item.id),
+      ),
       child: child,
     );
   }

@@ -23,7 +23,7 @@ class BlockCommand with CommandMixin {
 
     await showDialog<void>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         content: Text(AppLocalizations.of(context).blockConfirm),
         actions: <Widget>[
           TextButton(
@@ -34,8 +34,7 @@ class BlockCommand with CommandMixin {
           ),
           TextButton(
             onPressed: () async {
-              await storageRepository.setBlocked(id: id, value: true);
-              ref.invalidate(blockedProvider(id));
+              unawaited(_block(storageRepository));
               Navigator.of(context).pop();
             },
             child: Text(
@@ -45,5 +44,10 @@ class BlockCommand with CommandMixin {
         ],
       ),
     );
+  }
+
+  Future<void> _block(StorageRepository storageRepository) async {
+    await storageRepository.setBlocked(id: id, value: true);
+    ref.invalidate(blockedProvider(id));
   }
 }

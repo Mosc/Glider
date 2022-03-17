@@ -33,7 +33,7 @@ class FlagCommand implements CommandMixin {
       if (flag) {
         await showDialog<void>(
           context: context,
-          builder: (_) => AlertDialog(
+          builder: (BuildContext context) => AlertDialog(
             content: Text(AppLocalizations.of(context).flagConfirm),
             actions: <Widget>[
               TextButton(
@@ -43,7 +43,7 @@ class FlagCommand implements CommandMixin {
                 ),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   unawaited(_flag(authRepository, itemNotifier));
                   Navigator.of(context).pop();
                 },

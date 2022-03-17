@@ -93,31 +93,31 @@ extension ItemMenuActionExtension on ItemMenuAction {
       case ItemMenuAction.vote:
         final bool upvoted = ref.watch(upvotedProvider(id)).value ?? false;
         return upvoted
-            ? FluentIcons.arrow_undo_20_regular
-            : FluentIcons.arrow_up_20_regular;
+            ? FluentIcons.arrow_undo_24_regular
+            : FluentIcons.arrow_up_24_regular;
       case ItemMenuAction.reply:
-        return FluentIcons.arrow_reply_20_regular;
+        return FluentIcons.arrow_reply_24_regular;
       case ItemMenuAction.favorite:
         final bool favorited = ref.watch(favoritedProvider(id)).value ?? false;
         return favorited
-            ? FluentIcons.star_off_20_regular
-            : FluentIcons.star_20_regular;
+            ? FluentIcons.star_off_24_regular
+            : FluentIcons.star_24_regular;
       case ItemMenuAction.flag:
         final bool flagged =
             ref.watch(itemNotifierProvider(id)).value?.dead ?? false;
         return flagged
-            ? FluentIcons.flag_off_20_regular
-            : FluentIcons.flag_20_regular;
+            ? FluentIcons.flag_off_24_regular
+            : FluentIcons.flag_24_regular;
       case ItemMenuAction.edit:
-        return FluentIcons.edit_20_regular;
+        return FluentIcons.edit_24_regular;
       case ItemMenuAction.delete:
-        return FluentIcons.delete_20_regular;
+        return FluentIcons.delete_24_regular;
       case ItemMenuAction.copy:
         return Directionality.of(context) == TextDirection.rtl
-            ? FluentIcons.clipboard_text_rtl_20_regular
-            : FluentIcons.clipboard_text_ltr_20_regular;
+            ? FluentIcons.clipboard_text_rtl_24_regular
+            : FluentIcons.clipboard_text_ltr_24_regular;
       case ItemMenuAction.share:
-        return FluentIcons.share_20_regular;
+        return FluentIcons.share_24_regular;
     }
   }
 

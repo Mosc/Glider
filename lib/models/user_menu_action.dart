@@ -28,13 +28,13 @@ extension UserMenuActionExtension on UserMenuAction {
   IconData icon(BuildContext context) {
     switch (this) {
       case UserMenuAction.block:
-        return FluentIcons.person_prohibited_20_regular;
+        return FluentIcons.person_prohibited_24_regular;
       case UserMenuAction.copy:
         return Directionality.of(context) == TextDirection.rtl
-            ? FluentIcons.clipboard_text_rtl_20_regular
-            : FluentIcons.clipboard_text_ltr_20_regular;
+            ? FluentIcons.clipboard_text_rtl_24_regular
+            : FluentIcons.clipboard_text_ltr_24_regular;
       case UserMenuAction.share:
-        return FluentIcons.share_20_regular;
+        return FluentIcons.share_24_regular;
     }
   }
 
