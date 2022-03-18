@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/models/user.dart';
 import 'package:glider/widgets/common/decorated_html.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
+import 'package:glider/widgets/common/metadata_username.dart';
 import 'package:glider/widgets/users/user_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -38,14 +39,7 @@ class UserTileData extends HookConsumerWidget {
                   icon: FluentIcons.comment_24_regular,
                   text: user.submitted.length.toString(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 1),
-                  child: Text(
-                    user.id,
-                    style: textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary),
-                  ),
-                ),
+                MetadataUsername(username: user.id),
                 const SizedBox(width: 8),
                 const Spacer(),
                 Text(

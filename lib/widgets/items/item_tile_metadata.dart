@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
-import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:glider/widgets/common/metadata_item.dart';
+import 'package:glider/widgets/common/metadata_username.dart';
 import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -80,8 +80,7 @@ class ItemTileMetadata extends HookConsumerWidget {
             const SizedBox(width: 8),
           ] else if (item.by != null &&
               item.type != ItemType.pollopt) ...<Widget>[
-            _buildUsername(context, ref, textTheme,
-                by: item.by!, rootBy: root?.by),
+            MetadataUsername(username: item.by!, rootUsername: root?.by),
             const SizedBox(width: 8),
           ],
           if (item.by != null &&
@@ -119,47 +118,6 @@ class ItemTileMetadata extends HookConsumerWidget {
       icon: FluentIcons.arrow_up_24_regular,
       text: item.score?.toString(),
       highlight: upvoted,
-    );
-  }
-
-  Widget _buildUsername(
-      BuildContext context, WidgetRef ref, TextTheme textTheme,
-      {required String by, String? rootBy}) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final bool byLoggedInUser = item.by == ref.watch(usernameProvider).value;
-    final bool byRoot = item.by == rootBy;
-
-    return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => UserPage(id: by),
-        ),
-      ),
-      child: byLoggedInUser || byRoot
-          ? Container(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
-              decoration: BoxDecoration(
-                color: byLoggedInUser ? colorScheme.primary : null,
-                border: Border.all(color: colorScheme.primary),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                by,
-                style: textTheme.bodySmall?.copyWith(
-                  color: byLoggedInUser
-                      ? colorScheme.onPrimary
-                      : colorScheme.primary,
-                ),
-              ),
-            )
-          : Padding(
-              padding: const EdgeInsets.symmetric(vertical: 1),
-              child: Text(
-                by,
-                style:
-                    textTheme.bodySmall?.copyWith(color: colorScheme.primary),
-              ),
-            ),
     );
   }
 

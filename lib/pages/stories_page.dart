@@ -77,17 +77,17 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
             onSelected: (StoriesMenuAction menuAction) async {
               switch (menuAction) {
                 case StoriesMenuAction.catchUp:
-                  return _catchUpSelected(context);
+                  return _openCatchUp(context);
                 case StoriesMenuAction.favorites:
-                  return _favoritesSelected(context);
+                  return _openFavorites(context);
                 case StoriesMenuAction.submit:
-                  return _submitSelected(context, ref);
+                  return _openSubmit(context, ref);
                 case StoriesMenuAction.appearance:
-                  return _appearanceSelected(context);
+                  return _openAppearance(context);
                 case StoriesMenuAction.settings:
-                  return _settingsSelected(context);
+                  return _openSettings(context);
                 case StoriesMenuAction.account:
-                  return _accountSelected(context);
+                  return _openAccount(context);
               }
             },
             icon: const Icon(FluentIcons.more_vertical_24_regular),
@@ -109,7 +109,7 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
     );
   }
 
-  Future<void> _catchUpSelected(BuildContext context) {
+  Future<void> _openCatchUp(BuildContext context) {
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => const StoriesSearchPage.catchUp(),
@@ -117,7 +117,7 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
     );
   }
 
-  Future<void> _favoritesSelected(BuildContext context) {
+  Future<void> _openFavorites(BuildContext context) {
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => const FavoritesPage(),
@@ -125,7 +125,7 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
     );
   }
 
-  Future<void> _submitSelected(BuildContext context, WidgetRef ref) async {
+  Future<void> _openSubmit(BuildContext context, WidgetRef ref) async {
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
@@ -175,7 +175,7 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
     }
   }
 
-  Future<void> _appearanceSelected(BuildContext context) async {
+  Future<void> _openAppearance(BuildContext context) async {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -183,7 +183,7 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
     );
   }
 
-  Future<void> _settingsSelected(BuildContext context) async {
+  Future<void> _openSettings(BuildContext context) async {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -191,7 +191,7 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
     );
   }
 
-  Future<void> _accountSelected(BuildContext context) {
+  Future<void> _openAccount(BuildContext context) {
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => const AccountPage(),

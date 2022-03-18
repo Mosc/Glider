@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/app_theme.dart';
 import 'package:glider/models/dark_theme.dart';
 import 'package:glider/models/text_size.dart';
+import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/animation_util.dart';
@@ -17,6 +18,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AppearanceBottomSheet extends HookConsumerWidget {
   const AppearanceBottomSheet({Key? key}) : super(key: key);
+
+  static const int _avatarDescriptionItemId = 30668207;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,6 +42,20 @@ class AppearanceBottomSheet extends HookConsumerWidget {
           provider: showMetadataProvider,
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowMetadata(value: value),
+        ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context).showAvatar,
+          trailing: IconButton(
+            icon: const Icon(FluentIcons.info_24_regular),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const ItemPage(id: _avatarDescriptionItemId),
+              ),
+            ),
+          ),
+          provider: showAvatarProvider,
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setShowAvatar(value: value),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),

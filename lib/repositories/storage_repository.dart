@@ -13,6 +13,7 @@ class StorageRepository {
   static const String _showUrlKey = 'show_url';
   static const String _showFaviconKey = 'show_favicon';
   static const String _showMetadataKey = 'show_metadata';
+  static const String _showAvatarKey = 'show_avatar';
   static const String _textScaleFactorKey = 'text_scale_factor';
   static const String _useCustomTabsKey = 'use_custom_tabs';
   static const String _useGesturesKey = 'use_gestures';
@@ -73,6 +74,12 @@ class StorageRepository {
 
   Future<void> setShowMetadata({required bool value}) async =>
       (await _sharedPreferences).setBool(_showMetadataKey, value);
+
+  Future<bool> get showAvatar async =>
+      (await _sharedPreferences).getBool(_showAvatarKey) ?? false;
+
+  Future<void> setShowAvatar({required bool value}) async =>
+      (await _sharedPreferences).setBool(_showAvatarKey, value);
 
   Future<double?> get textScaleFactor async =>
       (await _sharedPreferences).getDouble(_textScaleFactorKey);
