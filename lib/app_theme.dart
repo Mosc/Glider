@@ -55,7 +55,6 @@ class AppTheme {
     return ThemeData(
       brightness: brightness,
       visualDensity: VisualDensity.standard,
-      useMaterial3: true,
       colorScheme: brightness.isDark
           ? ColorScheme.dark(
               primary: color,
