@@ -22,6 +22,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           flutter-version: 2.11.0-0.1.pre
+          channel: beta
       - name: Cache pub
         uses: actions/cache@v2
         with:
