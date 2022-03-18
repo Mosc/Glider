@@ -51,7 +51,8 @@ jobs:
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
       - name: Build Android APK
         run: flutter build apk
-      - uses: actions/upload-artifact@v1
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v1
         with:
           name: app-release.apk
           path: build/app/outputs/apk/release/app-release.apk

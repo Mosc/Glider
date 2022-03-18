@@ -47,7 +47,8 @@ jobs:
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
       - name: Build Android App Bundle
         run: flutter build appbundle
-      - uses: actions/upload-artifact@v1
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v1
         with:
           name: app-release.aab
           path: build/app/outputs/apk/release/app-release.aab
