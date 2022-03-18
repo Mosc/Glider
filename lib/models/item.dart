@@ -49,7 +49,7 @@ class Item with _$Item {
           .replaceAll(_yearRegExp, '')
       : null;
 
-  late final String? urlHost = url != null ? Uri.parse(url!).host : null;
+  late final String? urlHost = url != null ? Uri.tryParse(url!)?.host : null;
 
   late final DateTime? timeDate =
       time != null ? DateTimeExtension.fromSecondsSinceEpoch(time!) : null;

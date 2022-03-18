@@ -52,7 +52,7 @@ class ItemTileTitle extends HookConsumerWidget {
             text: item.formattedTitle,
             style: textTheme.titleMedium,
           ),
-          if (item.url != null && showUrl) ...<InlineSpan>[
+          if (item.urlHost != null && showUrl) ...<InlineSpan>[
             TextSpan(
               text: '​ ',
               style: textTheme.titleMedium,

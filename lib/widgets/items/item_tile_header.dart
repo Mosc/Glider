@@ -37,7 +37,7 @@ class ItemTileHeader extends HookConsumerWidget {
               interactive: interactive,
             ),
           ),
-          if (item.url != null)
+          if (item.urlHost != null)
             SmoothAnimatedSwitcher.all(
               condition: showFavicon,
               child: Row(
