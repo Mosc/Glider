@@ -39,7 +39,7 @@ class UserTileData extends HookConsumerWidget {
                   icon: FluentIcons.comment_24_regular,
                   text: user.submitted.length.toString(),
                 ),
-                MetadataUsername(username: user.id),
+                MetadataUsername(by: user.id),
                 const SizedBox(width: 8),
                 const Spacer(),
                 Text(

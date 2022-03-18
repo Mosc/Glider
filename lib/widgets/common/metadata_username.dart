@@ -7,23 +7,23 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MetadataUsername extends HookConsumerWidget {
-  const MetadataUsername({Key? key, required this.username, this.rootUsername})
+  const MetadataUsername({Key? key, required this.by, this.rootBy})
       : super(key: key);
 
-  final String username;
-  final String? rootUsername;
+  final String by;
+  final String? rootBy;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final bool byLoggedInUser = username == ref.watch(usernameProvider).value;
-    final bool byRoot = username == rootUsername;
+    final bool byLoggedInUser = by == ref.watch(usernameProvider).value;
+    final bool byRoot = by == rootBy;
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
-          builder: (_) => UserPage(id: username),
+          builder: (_) => UserPage(id: by),
         ),
       ),
       child: Row(
@@ -46,7 +46,7 @@ class MetadataUsername extends HookConsumerWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                username,
+                by,
                 style: textTheme.bodySmall?.copyWith(
                   color: byLoggedInUser
                       ? colorScheme.onPrimary
@@ -58,7 +58,7 @@ class MetadataUsername extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: Text(
-                username,
+                by,
                 style:
                     textTheme.bodySmall?.copyWith(color: colorScheme.primary),
               ),
@@ -75,7 +75,7 @@ class MetadataUsername extends HookConsumerWidget {
 
     return CustomPaint(
       painter: _AvatarPainter(
-        username: username,
+        by: by,
         pixelSize: pixelSize,
         scaleFactor: scaleFactor,
       ),
@@ -86,24 +86,27 @@ class MetadataUsername extends HookConsumerWidget {
 
 // Algorithm based on https://news.ycombinator.com/item?id=30668207 by tomxor.
 class _AvatarPainter extends CustomPainter {
-  const _AvatarPainter(
-      {required this.username, required this.pixelSize, this.scaleFactor = 1});
+  const _AvatarPainter({
+    required this.by,
+    required this.pixelSize,
+    this.scaleFactor = 1,
+  });
 
-  final String username;
+  final String by;
   final double pixelSize;
   final double scaleFactor;
 
   @override
   void paint(Canvas canvas, Size size) {
     const int seedSteps = 28;
-    final Offset start = Offset(scaleFactor, scaleFactor);
+    final Offset offset = Offset(scaleFactor, scaleFactor);
     final List<Offset> points = <Offset>[];
     final Paint paint = Paint()..strokeWidth = pixelSize;
     int seed = 1;
 
-    for (int i = seedSteps + username.length - 1; i >= seedSteps; i--) {
+    for (int i = seedSteps + by.length - 1; i >= seedSteps; i--) {
       seed = _xorShift32(seed);
-      seed += username.codeUnitAt(i - seedSteps);
+      seed += by.codeUnitAt(i - seedSteps);
     }
 
     paint.color = Color(seed >> 8 | 0xff000000);
@@ -116,8 +119,8 @@ class _AvatarPainter extends CustomPainter {
 
       if (seed.toUnsigned(32) >> seedSteps + 1 > x * x / 3 + y / 2) {
         points
-          ..add(Offset(pixelSize * 3 + pixelSize * x, pixelSize * y) + start)
-          ..add(Offset(pixelSize * 3 - pixelSize * x, pixelSize * y) + start);
+          ..add(Offset(pixelSize * 3 + pixelSize * x, pixelSize * y) + offset)
+          ..add(Offset(pixelSize * 3 - pixelSize * x, pixelSize * y) + offset);
       }
     }
 
