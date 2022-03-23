@@ -22,6 +22,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_web_browser: ^0.17.0
   flutter_widget_from_html_core: ^0.8.5+1
+  form_builder_validators: ^7.7.0
   freezed_annotation: ^1.1.0
   hooks_riverpod: ^2.0.0-dev.4
   html: ^0.15.0

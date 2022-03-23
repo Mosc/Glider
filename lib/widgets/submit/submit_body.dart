@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/submit_type.dart';
@@ -14,7 +15,6 @@ import 'package:glider/repositories/web_repository.dart';
 import 'package:glider/utils/date_time_extension.dart';
 import 'package:glider/utils/formatting_util.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
-import 'package:glider/utils/validators.dart';
 import 'package:glider/widgets/common/experimental.dart';
 import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,7 +22,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class SubmitBody extends HookConsumerWidget {
   const SubmitBody({Key? key}) : super(key: key);
 
-  static const int _maxTitleLength = 80;
+  static const int _titleMaxLength = 80;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,12 +91,17 @@ class SubmitBody extends HookConsumerWidget {
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   autofocus: true,
-                  maxLines: null,
-                  maxLength: _maxTitleLength,
+                  maxLength: _titleMaxLength,
                   maxLengthEnforcement: MaxLengthEnforcement.none,
-                  validator: (String? value) =>
-                      Validators.notEmpty(context, value) ??
-                      Validators.maxLength(context, value, _maxTitleLength),
+                  validator: FormBuilderValidators.compose(
+                    <FormFieldValidator<String>>[
+                      FormBuilderValidators.required(context),
+                      FormBuilderValidators.maxLength(
+                        context,
+                        _titleMaxLength,
+                      ),
+                    ],
+                  ),
                   enabled: !loadingState.value,
                 ),
                 if (submitTypeState.value == SubmitType.link)
@@ -106,10 +111,12 @@ class SubmitBody extends HookConsumerWidget {
                       labelText: AppLocalizations.of(context).link,
                     ),
                     keyboardType: TextInputType.url,
-                    maxLines: null,
-                    validator: (String? value) =>
-                        Validators.notEmpty(context, value) ??
-                        Validators.url(context, value),
+                    validator: FormBuilderValidators.compose(
+                      <FormFieldValidator<String>>[
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.url(context),
+                      ],
+                    ),
                     enabled: !loadingState.value,
                   ),
                 if (submitTypeState.value == SubmitType.text)
@@ -121,8 +128,7 @@ class SubmitBody extends HookConsumerWidget {
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
                     maxLines: null,
-                    validator: (String? value) =>
-                        Validators.notEmpty(context, value),
+                    validator: FormBuilderValidators.required(context),
                     enabled: !loadingState.value,
                   ),
                 const SizedBox(height: 16),
@@ -195,7 +201,13 @@ class SubmitBody extends HookConsumerWidget {
   }
 
   bool _isUrl(BuildContext context, String? url) =>
-      Validators.url(context, url) == null;
+      FormBuilderValidators.compose(
+        <FormFieldValidator<String>>[
+          FormBuilderValidators.required(context),
+          FormBuilderValidators.url(context),
+        ],
+      ).call(url) ==
+      null;
 
   Future<void> _autofillTitle(BuildContext context, WidgetRef ref,
       TextEditingController titleController,

@@ -112,9 +112,7 @@
   "copySuccess": "{option} has been copied",
   "openParent": "Open the parent of this single thread",
   "experimentalDescription": "This feature is experimental. Things may go wrong.",
-  "notEmptyError": "This field cannot be empty.",
-  "maxLengthError": "Value must have a length less than or equal to {maxLength}.",
-  "urlError": "This field requires a valid URL address.",
+  "usernamePatternError": "Value should only contain letters, digits, dashes and underscores.",
   "genericError": "Something went wrong",
   "wittyError": "It doesn't look like anything to me",
 
@@ -201,13 +199,6 @@
     "placeholders": {
       "option": {
         "type": "String"
-      }
-    }
-  },
-  "@maxLengthError": {
-    "placeholders": {
-      "maxLength": {
-        "type": "int"
       }
     }
   }

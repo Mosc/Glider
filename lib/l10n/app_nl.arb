@@ -112,9 +112,7 @@
   "copySuccess": "{option} is gekopieerd",
   "openParent": "Open de bovenliggende discussie",
   "experimentalDescription": "Deze functie is experimenteel. Er kunnen dingen misgaan.",
-  "notEmptyError": "Dit veld mag niet leeg zijn.",
-  "maxLengthError": "Waarde moet een lengte gelijk aan of kleiner dan {maxLength} hebben.",
-  "urlError": "Dit veld vereist een geldig URL-adres.",
+  "usernamePatternError": "Waarde mag alleen letters, cijfers, streepjes en underscores bevatten.",
   "genericError": "Er ging iets mis",
   "wittyError": "Drommels, drommels, en nog eens drommels"
 }

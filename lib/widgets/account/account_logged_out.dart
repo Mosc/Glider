@@ -1,20 +1,25 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
-import 'package:glider/utils/validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedOut extends HookConsumerWidget {
   const AccountLoggedOut({Key? key}) : super(key: key);
+
+  static const int _usernameMinLength = 2;
+  static const int _usernameMaxLength = 15;
+  static const String _usernamePattern = r'^[A-Za-z0-9\-_]+$';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,8 +44,27 @@ class AccountLoggedOut extends HookConsumerWidget {
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context).username,
                     ),
-                    validator: (String? value) =>
-                        Validators.notEmpty(context, value),
+                    maxLength: _usernameMaxLength,
+                    maxLengthEnforcement: MaxLengthEnforcement.none,
+                    validator: FormBuilderValidators.compose(
+                      <FormFieldValidator<String>>[
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.minLength(
+                          context,
+                          _usernameMinLength,
+                        ),
+                        FormBuilderValidators.maxLength(
+                          context,
+                          _usernameMaxLength,
+                        ),
+                        FormBuilderValidators.match(
+                          context,
+                          _usernamePattern,
+                          errorText:
+                              AppLocalizations.of(context).usernamePatternError,
+                        ),
+                      ],
+                    ),
                     autofocus: true,
                     enabled: !loadingState.value,
                   ),
@@ -51,8 +75,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context).password,
                     ),
-                    validator: (String? value) =>
-                        Validators.notEmpty(context, value),
+                    validator: FormBuilderValidators.required(context),
                     enabled: !loadingState.value,
                   ),
                 ],
