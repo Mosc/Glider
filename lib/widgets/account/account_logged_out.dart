@@ -12,6 +12,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:glider/utils/url_util.dart';
+import 'package:glider/widgets/common/avatar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedOut extends HookConsumerWidget {
@@ -26,6 +27,8 @@ class AccountLoggedOut extends HookConsumerWidget {
     final ValueNotifier<bool> loadingState = useState(false);
     final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
     final TextEditingController usernameController = useTextEditingController();
+    final TextEditingValue usernameListenable =
+        useValueListenable(usernameController);
     final TextEditingController passwordController = useTextEditingController();
     final ValueNotifier<bool> synchronizeState = useState(false);
 
@@ -43,6 +46,10 @@ class AccountLoggedOut extends HookConsumerWidget {
                     controller: usernameController,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context).username,
+                      suffix: (ref.watch(showAvatarProvider).value ?? false) &&
+                              usernameListenable.text.isNotEmpty
+                          ? Avatar(by: usernameListenable.text)
+                          : null,
                     ),
                     maxLength: _usernameMaxLength,
                     maxLengthEnforcement: MaxLengthEnforcement.none,
