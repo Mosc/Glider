@@ -76,7 +76,7 @@ class StorageRepository {
       (await _sharedPreferences).setBool(_showMetadataKey, value);
 
   Future<bool> get showAvatar async =>
-      (await _sharedPreferences).getBool(_showAvatarKey) ?? false;
+      (await _sharedPreferences).getBool(_showAvatarKey) ?? true;
 
   Future<void> setShowAvatar({required bool value}) async =>
       (await _sharedPreferences).setBool(_showAvatarKey, value);
