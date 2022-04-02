@@ -114,7 +114,7 @@ Future<void> _loadItemTree(Future<Item> Function(int) getItem,
 
     for (final int id in <int>[...item.parts, ...item.kids]) {
       unawaited(
-        SchedulerBinding.instance!.scheduleTask(
+        SchedulerBinding.instance.scheduleTask(
           () => _loadItemTree(getItem, id: id),
           Priority.animation,
         ),
