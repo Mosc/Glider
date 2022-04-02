@@ -63,6 +63,7 @@ class ItemBody extends HookConsumerWidget {
               loading: ({int indentation = 0}) =>
                   _buildItemLoading(index, indentation: indentation),
             ),
+            equalityChecker: (DescendantId a, DescendantId b) => a.id == b.id,
           ),
           if (!itemTree.done)
             SliverList(

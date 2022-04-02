@@ -1,47 +1,41 @@
 import 'package:diffutil_dart/diffutil.dart';
 import 'package:flutter/widgets.dart';
-import 'package:glider/utils/animation_util.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-typedef ItemBuilder<T> = Widget Function(BuildContext, T, int);
+typedef DiffUtilWidgetBuilder<T> = Widget Function(BuildContext, T, int);
+typedef AnimatedDiffUtilWidgetBuilder = Widget Function(
+    BuildContext, Animation<double>, Widget);
 typedef EqualityChecker<T> = bool Function(T, T);
 
-class SliverSmoothAnimatedList<T> extends StatefulHookConsumerWidget {
-  SliverSmoothAnimatedList({
+class DiffUtilSliverList<T> extends StatefulHookConsumerWidget {
+  const DiffUtilSliverList({
     Key? key,
-    required Iterable<T> items,
-    required ItemBuilder<T> builder,
+    required this.items,
+    required this.builder,
+    required this.animationBuilder,
+    required this.animationDuration,
     this.equalityChecker,
-  })  : items = items.toList(growable: false),
-        builder = ((BuildContext context, T item, int index,
-                Animation<double> animation) =>
-            AnimationUtil.verticalFadeTransitionBuilder(
-              builder(context, item, index),
-              CurvedAnimation(
-                parent: animation,
-                curve: AnimationUtil.defaultCurve,
-              ),
-            )),
-        super(key: key);
+  }) : super(key: key);
 
   final List<T> items;
-  final Widget Function(BuildContext, T, int, Animation<double>) builder;
+  final DiffUtilWidgetBuilder<T> builder;
+  final AnimatedDiffUtilWidgetBuilder animationBuilder;
+  final Duration animationDuration;
   final EqualityChecker<T>? equalityChecker;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _SliverSmoothAnimatedListState<T>();
+      _DiffUtilSliverListState<T>();
 }
 
-class _SliverSmoothAnimatedListState<T>
-    extends ConsumerState<SliverSmoothAnimatedList<T>> {
+class _DiffUtilSliverListState<T> extends ConsumerState<DiffUtilSliverList<T>> {
   final GlobalKey<SliverAnimatedListState> listKey =
       GlobalKey<SliverAnimatedListState>();
 
   late List<T?> tempList;
 
   @override
-  void didUpdateWidget(SliverSmoothAnimatedList<T> oldWidget) {
+  void didUpdateWidget(DiffUtilSliverList<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     final List<T> tempList = oldWidget.items;
     final List<T> newList = widget.items;
@@ -60,7 +54,11 @@ class _SliverSmoothAnimatedListState<T>
       key: listKey,
       itemBuilder:
           (BuildContext context, int index, Animation<double> animation) =>
-              widget.builder(context, widget.items[index], index, animation),
+              widget.animationBuilder(
+        context,
+        animation,
+        widget.builder(context, widget.items[index], index),
+      ),
       initialItemCount: widget.items.length,
     );
   }
@@ -78,8 +76,7 @@ class _SliverSmoothAnimatedListState<T>
     for (int index = position; index < position + count; index++) {
       listKey.currentState!.insertItem(
         index,
-        // ignore: avoid_redundant_argument_values
-        duration: AnimationUtil.defaultDuration,
+        duration: widget.animationDuration,
       );
     }
     tempList.insertAll(position, List<T?>.filled(count, null));
@@ -91,9 +88,12 @@ class _SliverSmoothAnimatedListState<T>
       listKey.currentState!.removeItem(
         position,
         (BuildContext context, Animation<double> animation) =>
-            widget.builder(context, oldItem, index, animation),
-        // ignore: avoid_redundant_argument_values
-        duration: AnimationUtil.defaultDuration,
+            widget.animationBuilder(
+          context,
+          animation,
+          widget.builder(context, oldItem, index),
+        ),
+        duration: widget.animationDuration,
       );
     }
     tempList.removeRange(position, position + count);
@@ -110,5 +110,5 @@ class _SliverSmoothAnimatedListState<T>
   }
 
   void _onMoved(int from, int to) =>
-      throw UnimplementedError('Moves are currently not supported');
+      throw UnimplementedError('moves are currently not supported');
 }
