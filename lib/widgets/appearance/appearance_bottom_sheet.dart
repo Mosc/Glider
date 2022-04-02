@@ -110,7 +110,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
             title: AppLocalizations.of(context).darkTheme,
             children: <Widget>[
               for (DarkTheme darkTheme in DarkTheme.values)
-                DarkThemeButton(darkTheme),
+                _DarkThemeButton(darkTheme),
             ],
           ),
         ),
@@ -213,8 +213,8 @@ class _ThemeModeButton extends HookConsumerWidget {
   }
 }
 
-class DarkThemeButton extends HookConsumerWidget {
-  const DarkThemeButton(this.darkTheme, {Key? key}) : super(key: key);
+class _DarkThemeButton extends HookConsumerWidget {
+  const _DarkThemeButton(this.darkTheme, {Key? key}) : super(key: key);
 
   final DarkTheme darkTheme;
 
@@ -253,12 +253,12 @@ class DarkThemeButton extends HookConsumerWidget {
               : const BorderSide(color: Colors.transparent),
         ),
         child: ChoiceChip(
+          label: Text(darkTheme.title(context)),
+          selected: selected,
           onSelected: (_) async {
             await ref.read(storageRepositoryProvider).setDarkTheme(darkTheme);
             ref.invalidate(darkThemeProvider);
           },
-          selected: selected,
-          label: Text(darkTheme.title(context)),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
       ),
@@ -305,15 +305,15 @@ class _ThemeColorButton extends HookConsumerWidget {
               : const BorderSide(color: Colors.transparent),
         ),
         child: ChoiceChip(
-          onSelected: (_) async {
-            await ref.read(storageRepositoryProvider).setThemeColor(color);
-            ref.invalidate(themeColorProvider);
-          },
-          selected: selected,
           label: Icon(
             FluentIcons.checkmark_24_regular,
             color: selected ? color : Colors.transparent,
           ),
+          selected: selected,
+          onSelected: (_) async {
+            await ref.read(storageRepositoryProvider).setThemeColor(color);
+            ref.invalidate(themeColorProvider);
+          },
           visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,
           ),

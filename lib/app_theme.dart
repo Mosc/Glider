@@ -125,6 +125,7 @@ class AppTheme {
         labelStyle: const TextStyle(),
       ).copyWith(
         backgroundColor: backgroundColor,
+        selectedColor: surfaceColor,
         side: MaterialStateBorderSide.resolveWith(
           (Set<MaterialState> states) => BorderSide(
             color:

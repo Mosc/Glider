@@ -45,8 +45,7 @@ class ItemBody extends HookConsumerWidget {
         if (itemTree.descendantIds.isNotEmpty) {
           firstItem = ref
               .watch(itemNotifierProvider(itemTree.descendantIds.first.id))
-              .asData
-              ?.value;
+              .value;
           parentId = firstItem?.parent ?? firstItem?.poll;
         }
 
