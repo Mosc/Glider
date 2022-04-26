@@ -54,7 +54,7 @@ class ReplyBody extends HookConsumerWidget {
                   textCapitalization: TextCapitalization.sentences,
                   autofocus: true,
                   maxLines: null,
-                  validator: FormBuilderValidators.required(context),
+                  validator: FormBuilderValidators.required(),
                   enabled: !loadingState.value,
                 ),
                 const SizedBox(height: 16),

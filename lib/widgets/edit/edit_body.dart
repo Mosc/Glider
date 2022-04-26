@@ -66,11 +66,8 @@ class EditBody extends HookConsumerWidget {
                     maxLengthEnforcement: MaxLengthEnforcement.none,
                     validator: FormBuilderValidators.compose(
                       <FormFieldValidator<String>>[
-                        FormBuilderValidators.required(context),
-                        FormBuilderValidators.maxLength(
-                          context,
-                          _titleMaxLength,
-                        ),
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.maxLength(_titleMaxLength),
                       ],
                     ),
                     enabled: !loadingState.value,
@@ -89,7 +86,7 @@ class EditBody extends HookConsumerWidget {
                     textCapitalization: TextCapitalization.sentences,
                     autofocus: true,
                     maxLines: null,
-                    validator: FormBuilderValidators.required(context),
+                    validator: FormBuilderValidators.required(),
                     enabled: !loadingState.value,
                   ),
                   const SizedBox(height: 16),

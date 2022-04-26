@@ -7,7 +7,7 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:native_launcher/native_launcher.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class UrlUtil {
   UrlUtil._();
@@ -66,8 +66,8 @@ class UrlUtil {
   }
 
   static Future<bool> _tryLaunchPlatform(String urlString) async {
-    if (await canLaunch(urlString)) {
-      return launch(urlString);
+    if (await canLaunchUrlString(urlString)) {
+      return launchUrlString(urlString);
     }
 
     return false;

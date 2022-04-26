@@ -74,6 +74,7 @@ class App extends HookConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       scrollBehavior: MaterialScrollBehavior(
+        // ignore: deprecated_member_use
         androidOverscrollIndicator:
             useStretchAndroidOverscrollIndicatorState.value
                 ? AndroidOverscrollIndicator.stretch

@@ -55,17 +55,10 @@ class AccountLoggedOut extends HookConsumerWidget {
                     maxLengthEnforcement: MaxLengthEnforcement.none,
                     validator: FormBuilderValidators.compose(
                       <FormFieldValidator<String>>[
-                        FormBuilderValidators.required(context),
-                        FormBuilderValidators.minLength(
-                          context,
-                          _usernameMinLength,
-                        ),
-                        FormBuilderValidators.maxLength(
-                          context,
-                          _usernameMaxLength,
-                        ),
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(_usernameMinLength),
+                        FormBuilderValidators.maxLength(_usernameMaxLength),
                         FormBuilderValidators.match(
-                          context,
                           _usernamePattern,
                           errorText:
                               AppLocalizations.of(context).usernamePatternError,
@@ -82,7 +75,7 @@ class AccountLoggedOut extends HookConsumerWidget {
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context).password,
                     ),
-                    validator: FormBuilderValidators.required(context),
+                    validator: FormBuilderValidators.required(),
                     enabled: !loadingState.value,
                   ),
                 ],
