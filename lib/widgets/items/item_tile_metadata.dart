@@ -11,6 +11,7 @@ import 'package:glider/widgets/common/metadata_username.dart';
 import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:relative_time/relative_time.dart';
 
 class ItemTileMetadata extends HookConsumerWidget {
   const ItemTileMetadata(
@@ -105,7 +106,10 @@ class ItemTileMetadata extends HookConsumerWidget {
           if (interactive) _buildCollapsedIndicator(),
           if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
             const Spacer(),
-            Text(item.timeAgo!, style: textTheme.bodySmall),
+            Text(
+              item.timeDate!.relativeTime(context: context),
+              style: textTheme.bodySmall,
+            ),
           ],
         ],
       ),

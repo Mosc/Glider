@@ -16,6 +16,7 @@ import 'package:glider/models/dark_theme.dart';
 import 'package:glider/models/text_size.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:relative_time/relative_time.dart';
 
 class App extends HookConsumerWidget {
   const App({Key? key}) : super(key: key);
@@ -68,6 +69,7 @@ class App extends HookConsumerWidget {
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         AppLocalizations.delegate,
         FormBuilderLocalizations.delegate,
+        RelativeTimeLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],

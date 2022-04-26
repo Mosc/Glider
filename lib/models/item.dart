@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/utils/date_time_extension.dart';
 import 'package:html_unescape/html_unescape_small.dart';
-import 'package:jiffy/jiffy.dart';
 
 part 'item.freezed.dart';
 part 'item.g.dart';
@@ -53,9 +52,6 @@ class Item with _$Item {
 
   late final DateTime? timeDate =
       time != null ? DateTimeExtension.fromSecondsSinceEpoch(time!) : null;
-
-  late final String? timeAgo =
-      timeDate != null ? Jiffy(timeDate).fromNow() : null;
 
   String? faviconUrl(int size) => urlHost != null
       ? Uri.https(
