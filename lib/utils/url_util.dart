@@ -67,7 +67,10 @@ class UrlUtil {
 
   static Future<bool> _tryLaunchPlatform(String urlString) async {
     if (await canLaunchUrlString(urlString)) {
-      return launchUrlString(urlString);
+      return launchUrlString(
+        urlString,
+        mode: LaunchMode.externalApplication,
+      );
     }
 
     return false;
