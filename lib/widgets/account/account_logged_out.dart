@@ -40,45 +40,56 @@ class AccountLoggedOut extends HookConsumerWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    controller: usernameController,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).username,
-                      suffix: (ref.watch(showAvatarProvider).value ?? false) &&
-                              usernameListenable.text.isNotEmpty
-                          ? Avatar(by: usernameListenable.text)
-                          : null,
-                    ),
-                    maxLength: _usernameMaxLength,
-                    maxLengthEnforcement: MaxLengthEnforcement.none,
-                    validator: FormBuilderValidators.compose(
-                      <FormFieldValidator<String>>[
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.minLength(_usernameMinLength),
-                        FormBuilderValidators.maxLength(_usernameMaxLength),
-                        FormBuilderValidators.match(
-                          _usernamePattern,
-                          errorText:
-                              AppLocalizations.of(context).usernamePatternError,
-                        ),
+              child: AutofillGroup(
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).username,
+                        suffix:
+                            (ref.watch(showAvatarProvider).value ?? false) &&
+                                    usernameListenable.text.isNotEmpty
+                                ? Avatar(by: usernameListenable.text)
+                                : null,
+                      ),
+                      maxLength: _usernameMaxLength,
+                      maxLengthEnforcement: MaxLengthEnforcement.none,
+                      validator: FormBuilderValidators.compose(
+                        <FormFieldValidator<String>>[
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.minLength(_usernameMinLength),
+                          FormBuilderValidators.maxLength(_usernameMaxLength),
+                          FormBuilderValidators.match(
+                            _usernamePattern,
+                            errorText: AppLocalizations.of(context)
+                                .usernamePatternError,
+                          ),
+                        ],
+                      ),
+                      autofocus: true,
+                      enabled: !loadingState.value,
+                      autofillHints: const <String>[
+                        AutofillHints.username,
+                        AutofillHints.newUsername,
                       ],
                     ),
-                    autofocus: true,
-                    enabled: !loadingState.value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).password,
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).password,
+                      ),
+                      validator: FormBuilderValidators.required(),
+                      enabled: !loadingState.value,
+                      autofillHints: const <String>[
+                        AutofillHints.password,
+                        AutofillHints.newPassword,
+                      ],
                     ),
-                    validator: FormBuilderValidators.required(),
-                    enabled: !loadingState.value,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             SwitchListTile(
