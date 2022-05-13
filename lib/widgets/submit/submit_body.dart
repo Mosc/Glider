@@ -20,14 +20,14 @@ import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SubmitBody extends HookConsumerWidget {
-  const SubmitBody({Key? key}) : super(key: key);
+  const SubmitBody({super.key});
 
   static const int _titleMaxLength = 80;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<bool> loadingState = useState(false);
-    final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
+    final GlobalKey<FormState> formKey = useMemoized(GlobalKey.new);
     final ValueNotifier<SubmitType> submitTypeState = useState(SubmitType.link);
     final TextEditingController titleController = useTextEditingController();
     final TextEditingValue titleListenable =

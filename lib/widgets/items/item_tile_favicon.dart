@@ -10,10 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
 class ItemTileFavicon extends HookConsumerWidget {
-  const ItemTileFavicon(
-    this.item, {
-    Key? key,
-  }) : super(key: key);
+  const ItemTileFavicon(this.item, {super.key});
 
   final Item item;
 

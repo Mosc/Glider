@@ -10,7 +10,7 @@ import 'package:glider/utils/uni_links_handler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Home extends HookConsumerWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

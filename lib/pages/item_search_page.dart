@@ -21,7 +21,7 @@ final AutoDisposeStateProvider<SearchOrder> itemSearchOrderStateProvider =
 );
 
 class ItemSearchPage extends HookConsumerWidget {
-  const ItemSearchPage({Key? key, required this.storyId}) : super(key: key);
+  const ItemSearchPage({super.key, required this.storyId});
 
   final int storyId;
 

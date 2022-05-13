@@ -16,7 +16,7 @@ import 'package:glider/widgets/items/item_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FavoritesSearchBody extends HookConsumerWidget with PaginationMixin {
-  const FavoritesSearchBody({Key? key}) : super(key: key);
+  const FavoritesSearchBody({super.key});
 
   @override
   AutoDisposeStateProvider<int> get paginationStateProvider =>

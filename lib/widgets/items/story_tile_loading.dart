@@ -7,7 +7,7 @@ import 'package:glider/widgets/items/item_tile_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class StoryTileLoading extends HookConsumerWidget {
-  const StoryTileLoading({Key? key}) : super(key: key);
+  const StoryTileLoading({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

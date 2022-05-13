@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Avatar extends HookConsumerWidget {
-  const Avatar({Key? key, required this.by}) : super(key: key);
+  const Avatar({super.key, required this.by});
 
   final String by;
 

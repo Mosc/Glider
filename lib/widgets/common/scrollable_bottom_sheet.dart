@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ScrollableBottomSheet extends HookConsumerWidget {
-  const ScrollableBottomSheet({Key? key, required this.children})
-      : super(key: key);
+  const ScrollableBottomSheet({super.key, required this.children});
 
   final List<Widget> children;
 

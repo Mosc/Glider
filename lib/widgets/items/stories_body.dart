@@ -13,7 +13,7 @@ import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class StoriesBody extends HookConsumerWidget with PaginationMixin {
-  const StoriesBody({Key? key}) : super(key: key);
+  const StoriesBody({super.key});
 
   @override
   AutoDisposeStateProvider<int> get paginationStateProvider =>

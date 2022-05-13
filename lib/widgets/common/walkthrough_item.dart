@@ -32,7 +32,7 @@ final AutoDisposeStateProvider<bool> _walkthroughFavoritedStateProvider =
 );
 
 class WalkthoughItem extends HookConsumerWidget {
-  const WalkthoughItem({Key? key}) : super(key: key);
+  const WalkthoughItem({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

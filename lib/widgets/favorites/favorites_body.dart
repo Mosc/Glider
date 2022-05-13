@@ -15,7 +15,7 @@ final AutoDisposeStateProvider<int> favoritesPaginationStateProvider =
 );
 
 class FavoritesBody extends HookConsumerWidget with PaginationMixin {
-  const FavoritesBody({Key? key}) : super(key: key);
+  const FavoritesBody({super.key});
 
   @override
   AutoDisposeStateProvider<int> get paginationStateProvider =>

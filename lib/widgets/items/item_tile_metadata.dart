@@ -16,11 +16,11 @@ import 'package:relative_time/relative_time.dart';
 class ItemTileMetadata extends HookConsumerWidget {
   const ItemTileMetadata(
     this.item, {
-    Key? key,
+    super.key,
     this.root,
     this.dense = false,
     this.interactive = false,
-  }) : super(key: key);
+  });
 
   final Item item;
   final Item? root;

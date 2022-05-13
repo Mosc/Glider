@@ -5,7 +5,7 @@ import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UserTileLoading extends HookConsumerWidget {
-  const UserTileLoading({Key? key}) : super(key: key);
+  const UserTileLoading({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -6,7 +6,7 @@ import 'package:glider/widgets/users/user_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedIn extends HookConsumerWidget {
-  const AccountLoggedIn({Key? key}) : super(key: key);
+  const AccountLoggedIn({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

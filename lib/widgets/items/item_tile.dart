@@ -8,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemTile extends HookConsumerWidget {
   const ItemTile({
-    Key? key,
+    super.key,
     required this.id,
     this.indentation = 0,
     this.root,
@@ -18,7 +18,7 @@ class ItemTile extends HookConsumerWidget {
     this.fadeable = false,
     required this.loading,
     this.refreshProvider,
-  }) : super(key: key);
+  });
 
   final int id;
   final int indentation;

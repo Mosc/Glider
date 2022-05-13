@@ -6,7 +6,7 @@ import 'package:glider/widgets/submit/submit_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SubmitPage extends HookConsumerWidget {
-  const SubmitPage({Key? key}) : super(key: key);
+  const SubmitPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

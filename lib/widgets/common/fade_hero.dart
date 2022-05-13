@@ -3,10 +3,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FadeHero extends HookConsumerWidget {
   const FadeHero({
-    Key? key,
+    super.key,
     required this.tag,
     required this.child,
-  }) : super(key: key);
+  });
 
   final String tag;
   final Widget child;

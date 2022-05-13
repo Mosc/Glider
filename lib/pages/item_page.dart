@@ -16,7 +16,7 @@ import 'package:glider/widgets/items/item_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemPage extends HookConsumerWidget {
-  const ItemPage({Key? key, required this.id}) : super(key: key);
+  const ItemPage({super.key, required this.id});
 
   final int id;
 

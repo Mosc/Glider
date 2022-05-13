@@ -20,7 +20,7 @@ import 'package:glider/widgets/items/story_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemBody extends HookConsumerWidget {
-  const ItemBody({Key? key, required this.id}) : super(key: key);
+  const ItemBody({super.key, required this.id});
 
   final int id;
 

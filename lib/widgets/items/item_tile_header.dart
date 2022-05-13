@@ -10,10 +10,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ItemTileHeader extends HookConsumerWidget {
   const ItemTileHeader(
     this.item, {
-    Key? key,
+    super.key,
     this.dense = false,
     this.interactive = false,
-  }) : super(key: key);
+  });
 
   final Item item;
   final bool dense;

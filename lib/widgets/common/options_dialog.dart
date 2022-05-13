@@ -29,17 +29,15 @@ class OptionsDialogOption {
 }
 
 class OptionsDialog extends HookConsumerWidget {
-  OptionsDialog.copy(BuildContext context, {Key? key, required this.options})
+  OptionsDialog.copy(BuildContext context, {super.key, required this.options})
       : title = AppLocalizations.of(context).copy,
-        action = _copyAction,
-        super(key: key);
+        action = _copyAction;
 
   OptionsDialog.share(BuildContext context,
-      {Key? key, required this.options, String? subject})
+      {super.key, required this.options, String? subject})
       : title = AppLocalizations.of(context).share,
         action = ((BuildContext context, OptionsDialogOption option) =>
-            _shareAction(context, option, subject)),
-        super(key: key);
+            _shareAction(context, option, subject));
 
   final String title;
   final Iterable<OptionsDialogOption> options;

@@ -17,7 +17,7 @@ import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EditBody extends HookConsumerWidget {
-  const EditBody({Key? key, required this.item}) : super(key: key);
+  const EditBody({super.key, required this.item});
 
   final Item item;
 
@@ -26,7 +26,7 @@ class EditBody extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<bool> loadingState = useState(false);
-    final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
+    final GlobalKey<FormState> formKey = useMemoized(GlobalKey.new);
     final TextEditingController titleController = useTextEditingController();
     final TextEditingValue titleListenable =
         useValueListenable(titleController);

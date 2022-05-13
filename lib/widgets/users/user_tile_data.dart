@@ -10,7 +10,7 @@ import 'package:glider/widgets/users/user_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UserTileData extends HookConsumerWidget {
-  const UserTileData(this.user, {Key? key}) : super(key: key);
+  const UserTileData(this.user, {super.key});
 
   final User user;
 

@@ -4,12 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FloatingAppBarScrollView extends HookConsumerWidget {
   const FloatingAppBarScrollView({
-    Key? key,
+    super.key,
     this.title,
     this.actions,
     this.bottom,
     required this.body,
-  }) : super(key: key);
+  });
 
   final Widget? title;
   final List<Widget>? actions;

@@ -33,7 +33,7 @@ final AutoDisposeStateProvider<int> storyPaginationStateProvider =
 );
 
 class StoriesPage extends HookConsumerWidget with PaginationMixin {
-  const StoriesPage({Key? key}) : super(key: key);
+  const StoriesPage({super.key});
 
   @override
   AutoDisposeStateProvider<int> get paginationStateProvider =>

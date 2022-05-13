@@ -6,7 +6,7 @@ import 'package:glider/utils/text_style_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Error extends HookConsumerWidget {
-  const Error({Key? key}) : super(key: key);
+  const Error({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

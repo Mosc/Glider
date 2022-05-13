@@ -8,12 +8,11 @@ import 'package:html/dom.dart' as dom;
 class DecoratedHtml extends HookConsumerWidget {
   const DecoratedHtml(
     String html, {
-    Key? key,
+    super.key,
     bool prependParagraphTag = true,
   })  
   // Hacker News prefixes every paragraph with a tag except the first one.
-  : _html = prependParagraphTag ? '<p>$html' : html,
-        super(key: key);
+  : _html = prependParagraphTag ? '<p>$html' : html;
 
   final String _html;
 

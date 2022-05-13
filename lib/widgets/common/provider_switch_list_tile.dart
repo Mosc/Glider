@@ -3,12 +3,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProviderSwitchListTile extends HookConsumerWidget {
   const ProviderSwitchListTile({
-    Key? key,
+    super.key,
     required this.title,
     this.trailing,
     required this.provider,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget? trailing;

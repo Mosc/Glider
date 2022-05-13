@@ -99,11 +99,11 @@ mixin SwipeablePageRouteMixin<T> on PageRoute<T> {
 
 class _SwipeableBackGestureDetector<T> extends StatefulWidget {
   const _SwipeableBackGestureDetector({
-    Key? key,
+    super.key,
     required this.enabledCallback,
     required this.onStartPopGesture,
     required this.child,
-  }) : super(key: key);
+  });
 
   final ValueGetter<bool> enabledCallback;
   final ValueGetter<_SwipeableBackGestureController<T>> onStartPopGesture;

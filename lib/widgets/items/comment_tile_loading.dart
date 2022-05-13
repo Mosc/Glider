@@ -6,7 +6,7 @@ import 'package:glider/widgets/common/tile_loading_block.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CommentTileLoading extends HookConsumerWidget {
-  const CommentTileLoading({Key? key, this.indentation = 0}) : super(key: key);
+  const CommentTileLoading({super.key, this.indentation = 0});
 
   final int indentation;
 

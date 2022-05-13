@@ -7,8 +7,7 @@ import 'package:glider/widgets/reply/reply_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReplyPage extends HookConsumerWidget {
-  const ReplyPage({Key? key, required this.parent, this.root})
-      : super(key: key);
+  const ReplyPage({super.key, required this.parent, this.root});
 
   final Item parent;
   final Item? root;

@@ -4,36 +4,32 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SmoothAnimatedSwitcher extends HookConsumerWidget {
   const SmoothAnimatedSwitcher({
-    Key? key,
+    super.key,
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.fadeTransitionBuilder,
-        super(key: key);
+  })  : transitionBuilder = AnimationUtil.fadeTransitionBuilder;
 
   const SmoothAnimatedSwitcher.vertical({
-    Key? key,
+    super.key,
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.verticalFadeTransitionBuilder,
-        super(key: key);
+  })  : transitionBuilder = AnimationUtil.verticalFadeTransitionBuilder;
 
   const SmoothAnimatedSwitcher.horizontal({
-    Key? key,
+    super.key,
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.horizontalFadeTransitionBuilder,
-        super(key: key);
+  })  : transitionBuilder = AnimationUtil.horizontalFadeTransitionBuilder;
 
   const SmoothAnimatedSwitcher.all({
-    Key? key,
+    super.key,
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.allFadeTransitionBuilder,
-        super(key: key);
+  })  : transitionBuilder = AnimationUtil.allFadeTransitionBuilder;
 
   final bool condition;
   final Widget child;

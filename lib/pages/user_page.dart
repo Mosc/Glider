@@ -12,7 +12,7 @@ final AutoDisposeStateProvider<int> userPaginationStateProvider =
 );
 
 class UserPage extends HookConsumerWidget {
-  const UserPage({Key? key, required this.id}) : super(key: key);
+  const UserPage({super.key, required this.id});
 
   final String id;
 

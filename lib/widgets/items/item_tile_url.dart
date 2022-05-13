@@ -8,10 +8,7 @@ import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemTileUrl extends HookConsumerWidget {
-  const ItemTileUrl(
-    this.item, {
-    Key? key,
-  }) : super(key: key);
+  const ItemTileUrl(this.item, {super.key});
 
   final Item item;
 

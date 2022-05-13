@@ -9,10 +9,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ItemTileContentPollOption extends HookConsumerWidget {
   const ItemTileContentPollOption(
     this.item, {
-    Key? key,
+    super.key,
     this.root,
     this.interactive = false,
-  }) : super(key: key);
+  });
 
   final Item item;
   final Item? root;

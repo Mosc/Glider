@@ -13,7 +13,7 @@ import 'package:glider/widgets/synchronize/synchronize_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountPage extends HookConsumerWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  const AccountPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

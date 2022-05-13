@@ -7,12 +7,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RefreshableBody<T> extends HookConsumerWidget {
   const RefreshableBody({
-    Key? key,
+    super.key,
     required this.provider,
     this.onRefresh,
     required this.loadingBuilder,
     required this.dataBuilder,
-  }) : super(key: key);
+  });
 
   final ProviderBase<AsyncValue<T>> provider;
   final Future<void> Function()? onRefresh;

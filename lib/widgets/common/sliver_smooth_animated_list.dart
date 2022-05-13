@@ -8,7 +8,7 @@ typedef EqualityChecker<T> = bool Function(T, T);
 
 class SliverSmoothAnimatedList<T> extends StatefulHookConsumerWidget {
   SliverSmoothAnimatedList({
-    Key? key,
+    super.key,
     required Iterable<T> items,
     required ItemBuilder<T> builder,
     this.equalityChecker,
@@ -21,8 +21,7 @@ class SliverSmoothAnimatedList<T> extends StatefulHookConsumerWidget {
                 parent: animation,
                 curve: AnimationUtil.defaultCurve,
               ),
-            )),
-        super(key: key);
+            ));
 
   final List<T> items;
   final Widget Function(BuildContext, T, int, Animation<double>) builder;

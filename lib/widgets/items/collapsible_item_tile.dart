@@ -11,13 +11,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CollapsibleItemTile extends HookConsumerWidget {
   const CollapsibleItemTile({
-    Key? key,
+    super.key,
     required this.id,
     this.ancestors = const <int>[],
     this.root,
     this.fadeable = false,
     required this.loading,
-  }) : super(key: key);
+  });
 
   final int id;
   final Iterable<int> ancestors;

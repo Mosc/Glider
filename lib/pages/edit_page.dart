@@ -7,7 +7,7 @@ import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/edit/edit_body.dart';
 
 class EditPage extends HookWidget {
-  const EditPage({Key? key, required this.item}) : super(key: key);
+  const EditPage({super.key, required this.item});
 
   final Item item;
 

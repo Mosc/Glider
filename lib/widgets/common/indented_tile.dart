@@ -4,8 +4,11 @@ import 'package:glider/providers/persistence_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class IndentedTile extends HookConsumerWidget {
-  const IndentedTile({Key? key, required this.indentation, required this.child})
-      : super(key: key);
+  const IndentedTile({
+    super.key,
+    required this.indentation,
+    required this.child,
+  });
 
   final int indentation;
   final Widget child;

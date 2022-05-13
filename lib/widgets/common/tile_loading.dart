@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TileLoading extends HookConsumerWidget {
-  const TileLoading({Key? key, required this.child}) : super(key: key);
+  const TileLoading({super.key, required this.child});
 
   final Widget child;
 

@@ -12,11 +12,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ItemTileContent extends HookConsumerWidget {
   const ItemTileContent(
     this.item, {
-    Key? key,
+    super.key,
     this.root,
     this.dense = false,
     this.interactive = false,
-  }) : super(key: key);
+  });
 
   final Item item;
   final Item? root;

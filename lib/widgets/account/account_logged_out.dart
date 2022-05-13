@@ -16,7 +16,7 @@ import 'package:glider/widgets/common/avatar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AccountLoggedOut extends HookConsumerWidget {
-  const AccountLoggedOut({Key? key}) : super(key: key);
+  const AccountLoggedOut({super.key});
 
   static const int _usernameMinLength = 2;
   static const int _usernameMaxLength = 15;
@@ -25,7 +25,7 @@ class AccountLoggedOut extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<bool> loadingState = useState(false);
-    final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
+    final GlobalKey<FormState> formKey = useMemoized(GlobalKey.new);
     final TextEditingController usernameController = useTextEditingController();
     final TextEditingValue usernameListenable =
         useValueListenable(usernameController);

@@ -26,13 +26,13 @@ AutoDisposeStateProviderFamily<bool?, int> _delayedUpvoteStateProvider =
 class ItemTileData extends HookConsumerWidget {
   const ItemTileData(
     this.item, {
-    Key? key,
+    super.key,
     this.root,
     this.onTap,
     this.dense = false,
     this.interactive = false,
     this.fadeable = false,
-  }) : super(key: key);
+  });
 
   final Item item;
   final Item? root;

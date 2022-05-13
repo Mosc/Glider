@@ -11,10 +11,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ItemTileTitle extends HookConsumerWidget {
   const ItemTileTitle(
     this.item, {
-    Key? key,
+    super.key,
     this.dense = false,
     this.interactive = false,
-  }) : super(key: key);
+  });
 
   final Item item;
   final bool dense;

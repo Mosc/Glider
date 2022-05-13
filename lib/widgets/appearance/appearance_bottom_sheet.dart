@@ -17,7 +17,7 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AppearanceBottomSheet extends HookConsumerWidget {
-  const AppearanceBottomSheet({Key? key}) : super(key: key);
+  const AppearanceBottomSheet({super.key});
 
   static const int _avatarDescriptionItemId = 30668207;
 
@@ -100,7 +100,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
           title: AppLocalizations.of(context).themeMode,
           children: <Widget>[
             for (ThemeMode themeMode in ThemeMode.values)
-              _ThemeModeButton(themeMode),
+              ThemeModeButton(themeMode),
           ],
         ),
         SmoothAnimatedSwitcher.vertical(
@@ -110,7 +110,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
             title: AppLocalizations.of(context).darkTheme,
             children: <Widget>[
               for (DarkTheme darkTheme in DarkTheme.values)
-                _DarkThemeButton(darkTheme),
+                DarkThemeButton(darkTheme),
             ],
           ),
         ),
@@ -118,7 +118,7 @@ class AppearanceBottomSheet extends HookConsumerWidget {
           context,
           children: <Widget>[
             for (Color themeColor in AppTheme.themeColors)
-              _ThemeColorButton(themeColor),
+              ThemeColorButton(themeColor),
           ],
         ),
       ],
@@ -160,8 +160,8 @@ class AppearanceBottomSheet extends HookConsumerWidget {
   }
 }
 
-class _ThemeModeButton extends HookConsumerWidget {
-  const _ThemeModeButton(this.mode, {Key? key}) : super(key: key);
+class ThemeModeButton extends HookConsumerWidget {
+  const ThemeModeButton(this.mode, {super.key});
 
   final ThemeMode mode;
 
@@ -213,8 +213,8 @@ class _ThemeModeButton extends HookConsumerWidget {
   }
 }
 
-class _DarkThemeButton extends HookConsumerWidget {
-  const _DarkThemeButton(this.darkTheme, {Key? key}) : super(key: key);
+class DarkThemeButton extends HookConsumerWidget {
+  const DarkThemeButton(this.darkTheme, {super.key});
 
   final DarkTheme darkTheme;
 
@@ -266,8 +266,8 @@ class _DarkThemeButton extends HookConsumerWidget {
   }
 }
 
-class _ThemeColorButton extends HookConsumerWidget {
-  const _ThemeColorButton(this.color, {Key? key}) : super(key: key);
+class ThemeColorButton extends HookConsumerWidget {
+  const ThemeColorButton(this.color, {super.key});
 
   final Color color;
 

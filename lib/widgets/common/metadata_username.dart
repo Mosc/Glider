@@ -6,8 +6,7 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MetadataUsername extends HookConsumerWidget {
-  const MetadataUsername({Key? key, required this.by, this.rootBy})
-      : super(key: key);
+  const MetadataUsername({super.key, required this.by, this.rootBy});
 
   final String by;
   final String? rootBy;

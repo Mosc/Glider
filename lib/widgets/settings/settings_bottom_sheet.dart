@@ -8,7 +8,7 @@ import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsBottomSheet extends HookConsumerWidget {
-  const SettingsBottomSheet({Key? key}) : super(key: key);
+  const SettingsBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

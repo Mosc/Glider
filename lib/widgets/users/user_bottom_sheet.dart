@@ -6,7 +6,7 @@ import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UserBottomSheet extends HookConsumerWidget {
-  const UserBottomSheet({Key? key, required this.id}) : super(key: key);
+  const UserBottomSheet({super.key, required this.id});
 
   final String id;
 

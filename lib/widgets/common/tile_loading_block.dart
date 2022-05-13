@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TileLoadingBlock extends HookConsumerWidget {
-  const TileLoadingBlock({Key? key, this.width, this.height, this.color})
-      : super(key: key);
+  const TileLoadingBlock({super.key, this.width, this.height, this.color});
 
   final double? width;
   final double? height;

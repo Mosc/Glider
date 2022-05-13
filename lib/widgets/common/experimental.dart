@@ -7,7 +7,7 @@ import 'package:glider/widgets/common/block.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Experimental extends HookConsumerWidget {
-  const Experimental({Key? key}) : super(key: key);
+  const Experimental({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

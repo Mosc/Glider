@@ -11,7 +11,7 @@ import 'package:glider/widgets/items/item_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemSearchBody extends HookConsumerWidget {
-  const ItemSearchBody({Key? key, required this.storyId}) : super(key: key);
+  const ItemSearchBody({super.key, required this.storyId});
 
   final int storyId;
 

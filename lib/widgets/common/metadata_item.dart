@@ -4,8 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MetadataItem extends HookConsumerWidget {
   const MetadataItem(
-      {Key? key, required this.icon, this.text, this.highlight = false})
-      : super(key: key);
+      {super.key, required this.icon, this.text, this.highlight = false});
 
   final IconData icon;
   final String? text;

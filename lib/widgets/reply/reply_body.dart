@@ -17,8 +17,7 @@ import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReplyBody extends HookConsumerWidget {
-  const ReplyBody({Key? key, required this.parent, this.root})
-      : super(key: key);
+  const ReplyBody({super.key, required this.parent, this.root});
 
   final Item parent;
   final Item? root;
@@ -26,7 +25,7 @@ class ReplyBody extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<bool> loadingState = useState(false);
-    final GlobalKey<FormState> formKey = useMemoized(() => GlobalKey());
+    final GlobalKey<FormState> formKey = useMemoized(GlobalKey.new);
     final ValueNotifier<bool> parentCollapsedState = useState(true);
     final TextEditingController commentController = useTextEditingController();
     final TextEditingValue commentListenable =

@@ -4,10 +4,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SmoothAnimatedSize extends HookConsumerWidget {
   const SmoothAnimatedSize({
-    Key? key,
+    super.key,
     required this.child,
     this.duration,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final Duration? duration;

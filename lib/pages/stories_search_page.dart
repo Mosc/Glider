@@ -40,15 +40,13 @@ final AutoDisposeStateProvider<int> storySearchPaginationStateProvider =
 );
 
 class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
-  const StoriesSearchPage({Key? key})
+  const StoriesSearchPage({super.key})
       : initialSearchRange = SearchRange.pastYear,
-        enableSearch = true,
-        super(key: key);
+        enableSearch = true;
 
-  const StoriesSearchPage.catchUp({Key? key})
+  const StoriesSearchPage.catchUp({super.key})
       : initialSearchRange = SearchRange.pastWeek,
-        enableSearch = false,
-        super(key: key);
+        enableSearch = false;
 
   final SearchRange? initialSearchRange;
   final bool enableSearch;
@@ -175,7 +173,7 @@ class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
                   for (SearchRange searchRange in SearchRange.values)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: _SearchRangeChip(searchRange: searchRange),
+                      child: SearchRangeChip(searchRange: searchRange),
                     ),
                 ],
               ),
@@ -187,9 +185,8 @@ class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
   }
 }
 
-class _SearchRangeChip extends HookConsumerWidget with PaginationMixin {
-  const _SearchRangeChip({Key? key, required this.searchRange})
-      : super(key: key);
+class SearchRangeChip extends HookConsumerWidget with PaginationMixin {
+  const SearchRangeChip({super.key, required this.searchRange});
 
   final SearchRange searchRange;
 

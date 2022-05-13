@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Block extends HookConsumerWidget {
-  const Block({Key? key, required this.child}) : super(key: key);
+  const Block({super.key, required this.child});
 
   final Widget child;
 

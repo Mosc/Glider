@@ -14,7 +14,7 @@ import 'package:glider/widgets/users/user_tile_loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UserBody extends HookConsumerWidget with PaginationMixin {
-  const UserBody({Key? key, required this.id}) : super(key: key);
+  const UserBody({super.key, required this.id});
 
   final String id;
 

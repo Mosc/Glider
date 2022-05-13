@@ -6,10 +6,7 @@ import 'package:glider/widgets/common/smooth_animated_size.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ItemTileText extends HookConsumerWidget {
-  const ItemTileText(
-    this.item, {
-    Key? key,
-  }) : super(key: key);
+  const ItemTileText(this.item, {super.key});
 
   final Item item;
 
