@@ -32,6 +32,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    namespace 'nl.viter.glider'
+
     compileSdkVersion 32
 
     compileOptions {
