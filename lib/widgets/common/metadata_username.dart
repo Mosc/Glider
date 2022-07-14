@@ -6,10 +6,16 @@ import 'package:glider/widgets/common/smooth_animated_switcher.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MetadataUsername extends HookConsumerWidget {
-  const MetadataUsername({super.key, required this.by, this.rootBy});
+  const MetadataUsername({
+    super.key,
+    required this.by,
+    this.rootBy,
+    this.tappable = true,
+  });
 
   final String by;
   final String? rootBy;
+  final bool tappable;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,11 +25,13 @@ class MetadataUsername extends HookConsumerWidget {
     final bool byRoot = by == rootBy;
 
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => UserPage(id: by),
-        ),
-      ),
+      onTap: tappable
+          ? () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => UserPage(id: by),
+                ),
+              )
+          : null,
       child: Row(
         children: <Widget>[
           SmoothAnimatedSwitcher.horizontal(

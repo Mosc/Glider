@@ -81,7 +81,11 @@ class ItemTileMetadata extends HookConsumerWidget {
             const SizedBox(width: 8),
           ] else if (item.by != null &&
               item.type != ItemType.pollopt) ...<Widget>[
-            MetadataUsername(by: item.by!, rootBy: root?.by),
+            MetadataUsername(
+              by: item.by!,
+              rootBy: root?.by,
+              tappable: !item.preview,
+            ),
             const SizedBox(width: 8),
           ],
           if (item.by != null &&
