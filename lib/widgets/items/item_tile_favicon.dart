@@ -24,27 +24,25 @@ class ItemTileFavicon extends HookConsumerWidget {
       onTap: () => UrlUtil.tryLaunch(context, ref, item.url!),
       child: FadeHero(
         tag: 'item_${item.id}_favicon',
-        child: item.preview
-            ? _placeholderBuilder(context, size: size)
-            : OctoImage(
-                image: ref.read(imageProvider(item.faviconUrl(64)!)),
-                imageBuilder: (_, Widget child) => ClipRRect(
-                  borderRadius: _borderRadius,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    color: Theme.of(context).colorScheme.surface,
-                    child: child,
-                  ),
-                ),
-                placeholderBuilder: (BuildContext context) =>
-                    _placeholderBuilder(context, size: size),
-                errorBuilder: (_, __, ___) => Icon(
-                  FluentIcons.chevron_right_24_regular,
-                  size: size,
-                ),
-                width: size,
-                height: size,
-              ),
+        child: OctoImage(
+          image: ref.read(imageProvider(item.faviconUrl(64)!)),
+          imageBuilder: (_, Widget child) => ClipRRect(
+            borderRadius: _borderRadius,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              color: Theme.of(context).colorScheme.surface,
+              child: child,
+            ),
+          ),
+          placeholderBuilder: (BuildContext context) =>
+              _placeholderBuilder(context, size: size),
+          errorBuilder: (_, __, ___) => Icon(
+            FluentIcons.chevron_right_24_regular,
+            size: size,
+          ),
+          width: size,
+          height: size,
+        ),
       ),
     );
   }
