@@ -9,6 +9,7 @@ import 'package:glider/models/stories_menu_action.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/favorites_page.dart';
+import 'package:glider/pages/settings_page.dart';
 import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/pages/submit_page.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -16,10 +17,8 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
-import 'package:glider/widgets/appearance/appearance_bottom_sheet.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
 import 'package:glider/widgets/items/stories_body.dart';
-import 'package:glider/widgets/settings/settings_bottom_sheet.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final AutoDisposeStateProvider<StoryType> storyTypeStateProvider =
@@ -82,8 +81,6 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
                   return _openFavorites(context);
                 case StoriesMenuAction.submit:
                   return _openSubmit(context, ref);
-                case StoriesMenuAction.appearance:
-                  return _openAppearance(context);
                 case StoriesMenuAction.settings:
                   return _openSettings(context);
                 case StoriesMenuAction.account:
@@ -175,19 +172,11 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
     }
   }
 
-  Future<void> _openAppearance(BuildContext context) async {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => const AppearanceBottomSheet(),
-    );
-  }
-
   Future<void> _openSettings(BuildContext context) async {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => const SettingsBottomSheet(),
+    return Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => const SettingsPage(),
+      ),
     );
   }
 

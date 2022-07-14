@@ -5,26 +5,103 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/app_theme.dart';
 import 'package:glider/models/dark_theme.dart';
+import 'package:glider/models/item.dart';
+import 'package:glider/models/item_type.dart';
 import 'package:glider/models/text_size.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/animation_util.dart';
+import 'package:glider/utils/date_time_extension.dart';
 import 'package:glider/utils/theme_mode_extension.dart';
 import 'package:glider/widgets/common/provider_switch_list_tile.dart';
-import 'package:glider/widgets/common/scrollable_bottom_sheet.dart';
 import 'package:glider/widgets/common/smooth_animated_switcher.dart';
+import 'package:glider/widgets/items/item_tile_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AppearanceBottomSheet extends HookConsumerWidget {
-  const AppearanceBottomSheet({super.key});
+class SettingsBody extends HookConsumerWidget {
+  const SettingsBody({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListView(
+      padding: MediaQuery.of(context).padding.copyWith(top: 0),
+      children: const <Widget>[
+        PreviewSection(),
+        SizedBox(height: 16),
+        AppearanceSection(),
+        SizedBox(height: 16),
+        BehaviorSection(),
+      ],
+    );
+  }
+}
+
+class PreviewSection extends HookConsumerWidget {
+  const PreviewSection({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context).preview,
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
+        ),
+        ItemTileData(
+          Item(
+            id: 0x7fffffff,
+            type: ItemType.story,
+            by: 'this_user_does_not_exist',
+            time: DateTime.now().secondsSinceEpoch,
+            url: 'https://github.com/Mosc/Glider',
+            score: 3154,
+            title: 'Glider is an opinionated Hacker News client',
+            descendants: 322,
+            preview: true,
+          ),
+          dense: true,
+        ),
+        ItemTileData(
+          Item(
+            id: 0x7ffffffe,
+            type: ItemType.comment,
+            by: 'neither_does_this_user',
+            time: DateTime.now().secondsSinceEpoch,
+            text: "That's <i>awesome</i>.",
+            indentation: 1,
+            preview: true,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AppearanceSection extends HookConsumerWidget {
+  const AppearanceSection({super.key});
 
   static const int _avatarDescriptionItemId = 30668207;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ScrollableBottomSheet(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context).appearance,
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
+        ),
         ProviderSwitchListTile(
           title: AppLocalizations.of(context).showUrl,
           provider: showUrlProvider,
@@ -156,6 +233,54 @@ class AppearanceBottomSheet extends HookConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(children: children),
       ),
+    );
+  }
+}
+
+class BehaviorSection extends HookConsumerWidget {
+  const BehaviorSection({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context).behavior,
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
+        ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context).useCustomTabs,
+          provider: useCustomTabsProvider,
+          onSave: (bool value) => ref
+              .read(storageRepositoryProvider)
+              .setUseCustomTabs(value: value),
+        ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context).useGestures,
+          provider: useGesturesProvider,
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setUseGestures(value: value),
+        ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context).useInfiniteScroll,
+          provider: useInfiniteScrollProvider,
+          onSave: (bool value) => ref
+              .read(storageRepositoryProvider)
+              .setUseInfiniteScroll(value: value),
+        ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context).showJobs,
+          provider: showJobsProvider,
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setShowJobs(value: value),
+        ),
+      ],
     );
   }
 }
