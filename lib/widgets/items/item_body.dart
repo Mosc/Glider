@@ -72,6 +72,9 @@ class ItemBody extends HookConsumerWidget {
                   indentation:
                       itemTree.descendantIds.isEmpty && index == 0 ? 0 : 1,
                 ),
+                childCount: firstItem?.descendants != null
+                    ? firstItem!.descendants! - itemTree.descendantIds.length
+                    : null,
               ),
             ),
         ];
