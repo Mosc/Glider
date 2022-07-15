@@ -7,6 +7,6 @@ part 'descendant_id.freezed.dart';
 class DescendantId with _$DescendantId {
   factory DescendantId({
     required int id,
-    required Iterable<int> ancestors,
+    @Default(<int>[]) Iterable<int> ancestors,
   }) = _DescendantId;
 }

@@ -72,7 +72,7 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
       yield ItemTree(descendantIds: descendantIds, done: false);
     }
 
-    yield ItemTree(descendantIds: descendantIds, done: true);
+    yield ItemTree(descendantIds: descendantIds);
   },
 );
 

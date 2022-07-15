@@ -8,6 +8,6 @@ part 'item_tree.freezed.dart';
 class ItemTree with _$ItemTree {
   factory ItemTree({
     required Iterable<DescendantId> descendantIds,
-    required bool done,
+    @Default(true) bool done,
   }) = _ItemTree;
 }
