@@ -10,7 +10,7 @@ class DecoratedHtml extends HookConsumerWidget {
     String html, {
     super.key,
     bool prependParagraphTag = true,
-  })  
+  })
   // Hacker News prefixes every paragraph with a tag except the first one.
   : _html = prependParagraphTag ? '<p>$html' : html;
 

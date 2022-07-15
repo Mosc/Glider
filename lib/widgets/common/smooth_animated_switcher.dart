@@ -8,28 +8,28 @@ class SmoothAnimatedSwitcher extends HookConsumerWidget {
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.fadeTransitionBuilder;
+  }) : transitionBuilder = AnimationUtil.fadeTransitionBuilder;
 
   const SmoothAnimatedSwitcher.vertical({
     super.key,
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.verticalFadeTransitionBuilder;
+  }) : transitionBuilder = AnimationUtil.verticalFadeTransitionBuilder;
 
   const SmoothAnimatedSwitcher.horizontal({
     super.key,
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.horizontalFadeTransitionBuilder;
+  }) : transitionBuilder = AnimationUtil.horizontalFadeTransitionBuilder;
 
   const SmoothAnimatedSwitcher.all({
     super.key,
     required this.condition,
     required this.child,
     this.duration,
-  })  : transitionBuilder = AnimationUtil.allFadeTransitionBuilder;
+  }) : transitionBuilder = AnimationUtil.allFadeTransitionBuilder;
 
   final bool condition;
   final Widget child;
