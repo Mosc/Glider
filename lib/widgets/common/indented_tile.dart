@@ -21,7 +21,7 @@ class IndentedTile extends HookConsumerWidget {
 
     final double indentationPadding = indentation.toDouble() * 8;
 
-    Color _determineDividerColor(WidgetRef ref) {
+    Color determineDividerColor(WidgetRef ref) {
       final List<Color> colors = AppTheme.themeColors.toList(growable: false);
       final Color? themeColor = ref.watch(themeColorProvider).value;
       final int initialOffset =
@@ -44,7 +44,7 @@ class IndentedTile extends HookConsumerWidget {
           child: VerticalDivider(
             width: 1,
             thickness: 1,
-            color: _determineDividerColor(ref),
+            color: determineDividerColor(ref),
           ),
         ),
       ],

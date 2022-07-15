@@ -27,13 +27,13 @@ class CollapsibleItemTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool _collapsed(int id) => ref.watch(collapsedProvider(id)).value ?? false;
+    bool isCollapsed(int id) => ref.watch(collapsedProvider(id)).value ?? false;
 
-    final bool collapsed = _collapsed(id);
+    final bool collapsed = isCollapsed(id);
 
     return SmoothAnimatedSwitcher.vertical(
       condition: !ancestors.any(
-        (int ancestor) => ancestor != root?.id && _collapsed(ancestor),
+        (int ancestor) => ancestor != root?.id && isCollapsed(ancestor),
       ),
       child: ItemTile(
         id: id,
