@@ -111,7 +111,7 @@ class ItemTileMetadata extends HookConsumerWidget {
           if (item.type != ItemType.pollopt && item.time != null) ...<Widget>[
             const Spacer(),
             Text(
-              item.timeDate!.relativeTime(context: context),
+              item.timeDate!.relativeTime(context),
               style: textTheme.bodySmall,
             ),
           ],
