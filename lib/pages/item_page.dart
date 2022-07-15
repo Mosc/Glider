@@ -12,6 +12,7 @@ import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
+import 'package:glider/widgets/common/scroll_to_top_scaffold.dart';
 import 'package:glider/widgets/items/item_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -27,7 +28,7 @@ class ItemPage extends HookConsumerWidget {
     final AsyncData<Item>? itemData =
         ref.watch(itemNotifierProvider(id)).asData;
 
-    return Scaffold(
+    return ScrollToTopScaffold(
       body: FloatingAppBarScrollView(
         actions: <Widget>[
           if (itemData != null && itemData.value.parent == null)

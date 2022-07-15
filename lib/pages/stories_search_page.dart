@@ -10,6 +10,7 @@ import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
+import 'package:glider/widgets/common/scroll_to_top_scaffold.dart';
 import 'package:glider/widgets/items/stories_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -74,7 +75,7 @@ class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
     );
 
     final AnimationController animationController = useAnimationController(
-      duration: const Duration(milliseconds: 400),
+      duration: AnimationUtil.defaultDuration,
     );
     final double bottomHeightFactor = useAnimation(
       CurvedAnimation(
@@ -101,7 +102,7 @@ class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
         inputDecorationTheme:
             theme.inputDecorationTheme.copyWith(border: InputBorder.none),
       ),
-      child: Scaffold(
+      child: ScrollToTopScaffold(
         body: FloatingAppBarScrollView(
           title: enableSearch
               ? TextField(

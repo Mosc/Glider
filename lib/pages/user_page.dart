@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:glider/models/user_menu_action.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
+import 'package:glider/widgets/common/scroll_to_top_scaffold.dart';
 import 'package:glider/widgets/users/user_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,7 +19,7 @@ class UserPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
+    return ScrollToTopScaffold(
       body: FloatingAppBarScrollView(
         title: Text(id),
         actions: <Widget>[

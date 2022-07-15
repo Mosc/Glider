@@ -8,6 +8,7 @@ import 'package:glider/models/search_order.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
+import 'package:glider/widgets/common/scroll_to_top_scaffold.dart';
 import 'package:glider/widgets/favorites/favorites_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -57,7 +58,7 @@ class FavoritesSearchPage extends HookConsumerWidget with PaginationMixin {
         inputDecorationTheme:
             theme.inputDecorationTheme.copyWith(border: InputBorder.none),
       ),
-      child: Scaffold(
+      child: ScrollToTopScaffold(
         body: FloatingAppBarScrollView(
           title: TextField(
             controller: queryController,

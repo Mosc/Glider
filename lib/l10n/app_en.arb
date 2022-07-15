@@ -15,6 +15,7 @@
   "walkthroughStep2": "You've cast an upvote!\n\nAll actions can be performed with long-presses. Use this method to simulate adding this walkthrough to your favorites. When logged in, favorites are added to your Hacker News account as well.",
   "walkthroughStep3": "Great! Keep in mind that both upvotes and favorites can be undone using the mentioned interactions as well.\n\nComplete this walkthrough by swiping {endToStart}.",
   "loadNextPage": "Load page {nextPage}",
+  "scrollToTop": "Scroll to top",
   "storyType": "Story type",
   "topStories": "Top stories",
   "newStories": "New stories",

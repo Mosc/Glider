@@ -7,6 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/search_order.dart';
 import 'package:glider/utils/color_extension.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
+import 'package:glider/widgets/common/scroll_to_top_scaffold.dart';
 import 'package:glider/widgets/items/item_search_body.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -53,7 +54,7 @@ class ItemSearchPage extends HookConsumerWidget {
         inputDecorationTheme:
             theme.inputDecorationTheme.copyWith(border: InputBorder.none),
       ),
-      child: Scaffold(
+      child: ScrollToTopScaffold(
         body: FloatingAppBarScrollView(
           title: TextField(
             controller: queryController,
