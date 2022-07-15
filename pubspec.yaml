@@ -12,6 +12,7 @@ dependencies:
   diffutil_dart: ^3.0.0
   dio: ^4.0.6
   dio_smart_retry: ^1.2.0
+  equatable: ^2.0.3
   fluentui_system_icons: ^1.1.175
   flutter:
     sdk: flutter

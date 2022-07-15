@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -26,7 +27,7 @@ class Avatar extends HookConsumerWidget {
 }
 
 // Algorithm based on https://news.ycombinator.com/item?id=30668207 by tomxor.
-class _AvatarPainter extends CustomPainter {
+class _AvatarPainter extends CustomPainter with EquatableMixin {
   const _AvatarPainter({
     required this.by,
     required this.pixelSize,
@@ -69,7 +70,11 @@ class _AvatarPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) =>
+      oldDelegate != this;
+
+  @override
+  List<Object?> get props => <Object?>[by, pixelSize, scaleFactor];
 
   static int _xorShift32(int number) {
     int result = number;
