@@ -4,8 +4,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:glider/models/descendant_id.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
+import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_parameters.dart';
+import 'package:glider/models/search_result.dart';
 import 'package:glider/models/story_type.dart';
+import 'package:glider/models/user.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/utils/service_exception.dart';
@@ -47,6 +50,37 @@ final AutoDisposeStateNotifierProviderFamily<AsyncNotifier<Iterable<int>>,
       AsyncNotifier<Iterable<int>>(
     () => ref.read(searchApiRepositoryProvider).searchItemIds(searchParameters),
   ),
+);
+final AutoDisposeStateNotifierProviderFamily<
+        AsyncNotifier<Iterable<DescendantId>>,
+        AsyncValue<Iterable<DescendantId>>,
+        String> itemRepliesNotifierProvider =
+    StateNotifierProvider.autoDispose.family(
+  (AutoDisposeStateNotifierProviderRef<AsyncNotifier<Iterable<DescendantId>>,
+                  AsyncValue<Iterable<DescendantId>>>
+              ref,
+          String username) =>
+      AsyncNotifier<Iterable<DescendantId>>(() async {
+    final User user = await ref.read(apiRepositoryProvider).getUser(username);
+    final SearchResult searchResult =
+        await ref.read(searchApiRepositoryProvider).searchItems(
+              SearchParameters.replies(
+                order: SearchOrder.byDate,
+                parentIds: user.submitted,
+              ),
+            );
+
+    return <DescendantId>[
+      for (final SearchResultHit hit in searchResult.hits)
+        if (hit.parentId != null) ...<DescendantId>[
+          DescendantId(id: hit.parentId!),
+          DescendantId(
+            id: int.parse(hit.id),
+            ancestors: <int>[hit.parentId!],
+          ),
+        ]
+    ];
+  }),
 );
 
 final StateNotifierProviderFamily<AsyncNotifier<Item>, AsyncValue<Item>, int>

@@ -26,11 +26,19 @@ class ItemBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useMemoized(() => _refresh(ref));
+    final AutoDisposeStreamProvider<ItemTree> provider =
+        itemTreeStreamProvider(id);
+
+    Future<void> refresh(WidgetRef ref) async {
+      await reloadItemTree(ref.read, id: id);
+      ref.invalidate(provider);
+    }
+
+    useMemoized(() => refresh(ref));
 
     return RefreshableBody<ItemTree>(
-      provider: itemTreeStreamProvider(id),
-      onRefresh: () async => _refresh(ref),
+      provider: provider,
+      onRefresh: () async => refresh(ref),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -80,11 +88,6 @@ class ItemBody extends HookConsumerWidget {
         ];
       },
     );
-  }
-
-  Future<void> _refresh(WidgetRef ref) async {
-    await reloadItemTree(ref.read, id: id);
-    ref.invalidate(itemTreeStreamProvider(id));
   }
 
   Widget _buildItemLoading(int index, {int indentation = 0}) {

@@ -4,6 +4,7 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
   errors:
+    invalid_annotation_target: ignore
     missing_required_param: warning
     missing_return: warning
   exclude:

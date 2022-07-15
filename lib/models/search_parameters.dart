@@ -9,14 +9,14 @@ part 'search_parameters.freezed.dart';
 @freezed
 class SearchParameters with _$SearchParameters {
   factory SearchParameters.stories({
-    required String query,
+    String? query,
     SearchRange? range,
     DateTimeRange? customDateTimeRange,
     @Default(SearchOrder.byRelevance) SearchOrder order,
   }) = _StoriesSearchParameters;
 
   factory SearchParameters.item({
-    required String query,
+    String? query,
     SearchRange? range,
     DateTimeRange? customDateTimeRange,
     @Default(SearchOrder.byRelevance) SearchOrder order,
@@ -24,10 +24,18 @@ class SearchParameters with _$SearchParameters {
   }) = _ItemSearchParameters;
 
   factory SearchParameters.favorites({
-    required String query,
+    String? query,
     SearchRange? range,
     DateTimeRange? customDateTimeRange,
     @Default(SearchOrder.byRelevance) SearchOrder order,
     required Iterable<int> favoriteIds,
   }) = _FavoritesSearchParameters;
+
+  factory SearchParameters.replies({
+    String? query,
+    SearchRange? range,
+    DateTimeRange? customDateTimeRange,
+    @Default(SearchOrder.byRelevance) SearchOrder order,
+    required Iterable<int> parentIds,
+  }) = _RepliesSearchParameters;
 }

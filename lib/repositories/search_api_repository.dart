@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_parameters.dart';
 import 'package:glider/models/search_range.dart';
+import 'package:glider/models/search_result.dart';
 import 'package:glider/utils/date_time_extension.dart';
 import 'package:glider/utils/service_exception.dart';
 
@@ -15,32 +16,64 @@ class SearchApiRepository {
   final Dio _dio;
 
   Future<Iterable<int>> searchItemIds(SearchParameters searchParameters) async {
-    return _searchIds(
-      searchParameters,
-      tags: searchParameters.when(
-        stories: (_, __, ___, ____) => '(story,poll)',
-        item: (_, __, ___, ____, int parentStoryId) => 'story_$parentStoryId',
-        favorites: (_, __, ___, ____, Iterable<int> ids) =>
-            '(story,poll),(${ids.map((int id) => 'story_$id').join(',')})',
+    final SearchResult searchResult = await searchItems(searchParameters);
+    return searchResult.hits.map((SearchResultHit hit) => int.parse(hit.id));
+  }
+
+  Future<SearchResult> searchItems(SearchParameters searchParameters) async {
+    final DateTimeRange? dateTimeRange = searchParameters.range
+        ?.dateTimeRange(searchParameters.customDateTimeRange);
+    final Iterable<String> numericFilters = <String>[
+      if (dateTimeRange != null) ...<String>[
+        'created_at_i>=${dateTimeRange.start.secondsSinceEpoch}',
+        'created_at_i<${dateTimeRange.end.secondsSinceEpoch}',
+      ],
+    ];
+
+    return _search(
+      order: searchParameters.order,
+      query: searchParameters.query,
+      tags: searchParameters.whenOrNull(
+        stories: (_, __, ___, ____) => <String>['(story,poll)'],
+        item: (_, __, ___, ____, int parentStoryId) =>
+            <String>['story_$parentStoryId'],
+        favorites: (_, __, ___, ____, Iterable<int> ids) => <String>[
+          '(story,poll)',
+          '(${ids.map((int id) => 'story_$id').join(',')})',
+        ],
+      ),
+      numericFilters: searchParameters.maybeWhen(
+        replies: (_, __, ___, ____, Iterable<int> parentIds) => <String>[
+          ...numericFilters,
+          // Limit parent IDs to prevent HTTP status 414 URI Too Long.
+          '(${parentIds.take(300).map(
+                (int parentId) => 'parent_id=$parentId',
+              ).join(',')})',
+        ],
+        orElse: () => numericFilters,
+      ),
+      attributesToRetrieve: searchParameters.whenOrNull(
+        replies: (_, __, ___, ____, _____) => <String>['parent_id'],
       ),
     );
   }
 
-  Future<Iterable<int>> _searchIds(SearchParameters searchParameters,
-      {String? tags}) async {
-    final DateTimeRange? dateTimeRange = searchParameters.range
-        ?.dateTimeRange(searchParameters.customDateTimeRange);
+  Future<SearchResult> _search({
+    SearchOrder order = SearchOrder.byRelevance,
+    String? query,
+    Iterable<String>? tags,
+    Iterable<String>? numericFilters,
+    Iterable<String>? attributesToRetrieve,
+  }) async {
     final Uri uri = Uri.https(
       authority,
-      '$basePath/${searchParameters.order.apiPath}',
+      '$basePath/${order.apiPath}',
       <String, String>{
-        if (searchParameters.query.isNotEmpty) 'query': searchParameters.query,
-        if (tags != null) 'tags': tags,
-        if (dateTimeRange != null)
-          'numericFilters':
-              'created_at_i>=${dateTimeRange.start.secondsSinceEpoch},'
-                  'created_at_i<${dateTimeRange.end.secondsSinceEpoch}',
-        'attributesToRetrieve': '',
+        if (query?.isNotEmpty ?? false) 'query': query!,
+        if (tags?.isNotEmpty ?? false) 'tags': tags!.join(','),
+        if (numericFilters?.isNotEmpty ?? false)
+          'numericFilters': numericFilters!.join(','),
+        'attributesToRetrieve': attributesToRetrieve?.join(',') ?? '',
         'attributesToHighlight': '',
         'hitsPerPage': 1000.toString(),
         'typoTolerance': false.toString(),
@@ -51,12 +84,12 @@ class SearchApiRepository {
     try {
       final Response<Map<String, dynamic>> response =
           await _dio.getUri<Map<String, dynamic>>(uri);
-      final List<dynamic> hits = response.data?['hits'] as List<dynamic>;
-      return hits.map((dynamic hit) {
-        final Map<String, dynamic> hitMap = hit as Map<String, dynamic>;
-        final String objectId = hitMap['objectID'] as String;
-        return int.parse(objectId);
-      }).toList();
+
+      if (response.data == null) {
+        throw ServiceException();
+      }
+
+      return SearchResult.fromJson(response.data!);
     } on DioError catch (e) {
       throw ServiceException(e.message);
     }

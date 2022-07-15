@@ -9,6 +9,7 @@ import 'package:glider/models/stories_menu_action.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/account_page.dart';
 import 'package:glider/pages/favorites_page.dart';
+import 'package:glider/pages/inbox_page.dart';
 import 'package:glider/pages/settings_page.dart';
 import 'package:glider/pages/stories_search_page.dart';
 import 'package:glider/pages/submit_page.dart';
@@ -79,6 +80,8 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
                   return _openCatchUp(context);
                 case StoriesMenuAction.favorites:
                   return _openFavorites(context);
+                case StoriesMenuAction.inbox:
+                  return _openInbox(context, ref);
                 case StoriesMenuAction.submit:
                   return _openSubmit(context, ref);
                 case StoriesMenuAction.settings:
@@ -120,6 +123,32 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
         builder: (_) => const FavoritesPage(),
       ),
     );
+  }
+
+  Future<void> _openInbox(BuildContext context, WidgetRef ref) async {
+    final AuthRepository authRepository = ref.read(authRepositoryProvider);
+
+    if (await authRepository.loggedIn) {
+      return Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => const InboxPage(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).replaceSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).inboxNotLoggedIn),
+          action: SnackBarAction(
+            label: AppLocalizations.of(context).logIn,
+            onPressed: () => Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(
+                builder: (_) => const AccountPage(),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> _openSubmit(BuildContext context, WidgetRef ref) async {

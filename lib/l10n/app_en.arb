@@ -35,6 +35,8 @@
   "byRelevance": "By relevance",
   "favorites": "Favorites",
   "favoritesOnlyStoriesSearched": "Favorite comments can not be searched due to technical limitations",
+  "inbox": "Inbox",
+  "inboxNotLoggedIn": "Log in to view inbox",
   "submit": "Submit",
   "submitNotLoggedIn": "Log in to submit",
   "reply": "Reply",

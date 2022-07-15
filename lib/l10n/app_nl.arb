@@ -35,6 +35,8 @@
   "byRelevance": "Op relevantie",
   "favorites": "Favorieten",
   "favoritesOnlyStoriesSearched": "Favoriete reacties kunnen niet doorzocht worden vanwege technische beperkingen",
+  "inbox": "Postvak",
+  "inboxNotLoggedIn": "Log in om postvak in te zien",
   "submit": "Indienen",
   "submitNotLoggedIn": "Log in om in te dienen",
   "reply": "Reageren",
