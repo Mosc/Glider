@@ -8,7 +8,7 @@ mixin PostDataMixin {
   Map<String, dynamic> toJson();
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class RegisterPostData with _$RegisterPostData, PostDataMixin {
   factory RegisterPostData({
     required String acct,
@@ -16,24 +16,18 @@ class RegisterPostData with _$RegisterPostData, PostDataMixin {
     required String creating,
     required String goto,
   }) = _RegisterPostData;
-
-  factory RegisterPostData.fromJson(Map<String, dynamic> json) =>
-      _$RegisterPostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class LoginPostData with _$LoginPostData, PostDataMixin {
   factory LoginPostData({
     required String acct,
     required String pw,
     required String goto,
   }) = _LoginPostData;
-
-  factory LoginPostData.fromJson(Map<String, dynamic> json) =>
-      _$LoginPostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class FavoritePostData with _$FavoritePostData, PostDataMixin {
   factory FavoritePostData({
     required String acct,
@@ -41,12 +35,9 @@ class FavoritePostData with _$FavoritePostData, PostDataMixin {
     required int id,
     String? un,
   }) = _FavoritePostData;
-
-  factory FavoritePostData.fromJson(Map<String, dynamic> json) =>
-      _$FavoritePostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class VotePostData with _$VotePostData, PostDataMixin {
   factory VotePostData({
     required String acct,
@@ -54,12 +45,9 @@ class VotePostData with _$VotePostData, PostDataMixin {
     required int id,
     required String how,
   }) = _VotePostData;
-
-  factory VotePostData.fromJson(Map<String, dynamic> json) =>
-      _$VotePostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class FlagPostData with _$FlagPostData, PostDataMixin {
   factory FlagPostData({
     required String acct,
@@ -67,12 +55,9 @@ class FlagPostData with _$FlagPostData, PostDataMixin {
     required int id,
     String? un,
   }) = _FlagPostData;
-
-  factory FlagPostData.fromJson(Map<String, dynamic> json) =>
-      _$FlagPostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class CommentPostData with _$CommentPostData, PostDataMixin {
   factory CommentPostData({
     required String acct,
@@ -80,12 +65,9 @@ class CommentPostData with _$CommentPostData, PostDataMixin {
     required int parent,
     required String text,
   }) = _CommentPostData;
-
-  factory CommentPostData.fromJson(Map<String, dynamic> json) =>
-      _$CommentPostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class EditPostData with _$EditPostData, PostDataMixin {
   factory EditPostData({
     required String hmac,
@@ -93,24 +75,18 @@ class EditPostData with _$EditPostData, PostDataMixin {
     String? title,
     String? text,
   }) = _EditPostData;
-
-  factory EditPostData.fromJson(Map<String, dynamic> json) =>
-      _$EditPostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class DeletePostData with _$DeletePostData, PostDataMixin {
   factory DeletePostData({
     required String hmac,
     required int id,
     required String d,
   }) = _DeletePostData;
-
-  factory DeletePostData.fromJson(Map<String, dynamic> json) =>
-      _$DeletePostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class SubmitPostData with _$SubmitPostData, PostDataMixin {
   factory SubmitPostData({
     required String fnid,
@@ -119,19 +95,13 @@ class SubmitPostData with _$SubmitPostData, PostDataMixin {
     String? url,
     String? text,
   }) = _SubmitPostData;
-
-  factory SubmitPostData.fromJson(Map<String, dynamic> json) =>
-      _$SubmitPostDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: false, toJson: true)
 class FormPostData with _$FormPostData, PostDataMixin {
   factory FormPostData({
     required String acct,
     required String pw,
     int? id,
   }) = _FormPostData;
-
-  factory FormPostData.fromJson(Map<String, dynamic> json) =>
-      _$FormPostDataFromJson(json);
 }

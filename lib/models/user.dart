@@ -5,7 +5,7 @@ import 'package:glider/utils/date_time_extension.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
-@freezed
+@Freezed(toJson: false)
 class User with _$User {
   factory User({
     required String id,

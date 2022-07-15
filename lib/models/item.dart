@@ -7,7 +7,7 @@ import 'package:html_unescape/html_unescape_small.dart';
 part 'item.freezed.dart';
 part 'item.g.dart';
 
-@freezed
+@Freezed(toJson: false)
 class Item with _$Item {
   factory Item({
     required int id,
