@@ -117,11 +117,13 @@ class EditBody extends HookConsumerWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
+        ListTile(
+          title: Text(
             AppLocalizations.of(context).preview,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
         ),
         if (username != null)
