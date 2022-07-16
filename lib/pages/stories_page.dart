@@ -4,7 +4,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:glider/models/search_range.dart';
 import 'package:glider/models/stories_menu_action.dart';
 import 'package:glider/models/story_type.dart';
 import 'package:glider/pages/account_page.dart';
@@ -100,9 +99,6 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
   }
 
   Future<void> _searchSelected(BuildContext context, WidgetRef ref) {
-    ref
-        .read(storySearchRangeStateProvider.state)
-        .update((_) => SearchRange.pastYear);
     return Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => const StoriesSearchPage(),

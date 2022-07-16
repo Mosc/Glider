@@ -42,7 +42,7 @@ final AutoDisposeStateProvider<int> storySearchPaginationStateProvider =
 
 class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
   const StoriesSearchPage({super.key})
-      : initialSearchRange = SearchRange.pastYear,
+      : initialSearchRange = null,
         enableSearch = true;
 
   const StoriesSearchPage.catchUp({super.key})
