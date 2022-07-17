@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'descendant_id.freezed.dart';
+part 'item_tree_id.freezed.dart';
 
 @freezed
-class DescendantId with _$DescendantId {
-  factory DescendantId({
+class ItemTreeId with _$ItemTreeId {
+  factory ItemTreeId({
     required int id,
     @Default(<int>[]) Iterable<int> ancestors,
-  }) = _DescendantId;
+  }) = _ItemTreeId;
 }

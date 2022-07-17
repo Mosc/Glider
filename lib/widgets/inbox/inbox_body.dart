@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glider/models/descendant_id.dart';
+import 'package:glider/models/item_tree_id.dart';
 import 'package:glider/pages/inbox_page.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -33,12 +33,11 @@ class InboxBody extends HookConsumerWidget with PaginationMixin {
 
   Widget _inboxDataBuilder(BuildContext context, WidgetRef ref,
       {required String username}) {
-    final AutoDisposeStateNotifierProvider<
-            AsyncNotifier<Iterable<DescendantId>>,
-            AsyncValue<Iterable<DescendantId>>> provider =
+    final AutoDisposeStateNotifierProvider<AsyncNotifier<Iterable<ItemTreeId>>,
+            AsyncValue<Iterable<ItemTreeId>>> provider =
         itemRepliesNotifierProvider(username);
 
-    return RefreshableBody<Iterable<DescendantId>>(
+    return RefreshableBody<Iterable<ItemTreeId>>(
       provider: provider,
       onRefresh: () async {
         resetPagination(ref);
@@ -51,17 +50,17 @@ class InboxBody extends HookConsumerWidget with PaginationMixin {
           ),
         ),
       ],
-      dataBuilder: (Iterable<DescendantId> descendantIds) => <Widget>[
-        ...buildPaginationSlivers<DescendantId>(
+      dataBuilder: (Iterable<ItemTreeId> itemTreeIds) => <Widget>[
+        ...buildPaginationSlivers<ItemTreeId>(
           context,
           ref,
-          items: descendantIds,
-          builder: (_, DescendantId descendantId, __) => ItemTile(
-            id: descendantId.id,
-            indentation: descendantId.ancestors.length,
+          items: itemTreeIds,
+          builder: (_, ItemTreeId itemTreeId, __) => ItemTile(
+            id: itemTreeId.id,
+            indentation: itemTreeId.ancestors.length,
             onTap: (_) => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                  builder: (_) => ItemPage(id: descendantId.id)),
+                  builder: (_) => ItemPage(id: itemTreeId.id)),
             ),
             loading: ({int indentation = 0}) =>
                 CommentTileLoading(indentation: indentation),

@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
-import 'package:glider/models/descendant_id.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
+import 'package:glider/models/item_tree_id.dart';
 import 'package:glider/models/search_order.dart';
 import 'package:glider/models/search_parameters.dart';
 import 'package:glider/models/search_result.dart';
@@ -52,15 +52,15 @@ final AutoDisposeStateNotifierProviderFamily<AsyncNotifier<Iterable<int>>,
   ),
 );
 final AutoDisposeStateNotifierProviderFamily<
-        AsyncNotifier<Iterable<DescendantId>>,
-        AsyncValue<Iterable<DescendantId>>,
+        AsyncNotifier<Iterable<ItemTreeId>>,
+        AsyncValue<Iterable<ItemTreeId>>,
         String> itemRepliesNotifierProvider =
     StateNotifierProvider.autoDispose.family(
-  (AutoDisposeStateNotifierProviderRef<AsyncNotifier<Iterable<DescendantId>>,
-                  AsyncValue<Iterable<DescendantId>>>
+  (AutoDisposeStateNotifierProviderRef<AsyncNotifier<Iterable<ItemTreeId>>,
+                  AsyncValue<Iterable<ItemTreeId>>>
               ref,
           String username) =>
-      AsyncNotifier<Iterable<DescendantId>>(() async {
+      AsyncNotifier<Iterable<ItemTreeId>>(() async {
     final User user = await ref.read(apiRepositoryProvider).getUser(username);
     final SearchResult searchResult =
         await ref.read(searchApiRepositoryProvider).searchItems(
@@ -70,11 +70,11 @@ final AutoDisposeStateNotifierProviderFamily<
               ),
             );
 
-    return <DescendantId>[
+    return <ItemTreeId>[
       for (final SearchResultHit hit in searchResult.hits)
-        if (hit.parentId != null) ...<DescendantId>[
-          DescendantId(id: hit.parentId!),
-          DescendantId(
+        if (hit.parentId != null) ...<ItemTreeId>[
+          ItemTreeId(id: hit.parentId!),
+          ItemTreeId(
             id: int.parse(hit.id),
             ancestors: <int>[hit.parentId!],
           ),
@@ -97,23 +97,22 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
   (AutoDisposeStreamProviderRef<ItemTree> ref, int id) async* {
     unawaited(loadItemTree(ref.read, id: id));
 
-    final Stream<DescendantId> descendantIdStream =
-        _itemStream(ref.read, id: id);
-    final List<DescendantId> descendantIds = <DescendantId>[];
+    final Stream<ItemTreeId> itemTreeIdStream = _itemStream(ref.read, id: id);
+    final List<ItemTreeId> itemTreeIds = <ItemTreeId>[];
 
-    await for (final DescendantId descendantId in descendantIdStream) {
-      descendantIds.add(descendantId);
-      yield ItemTree(descendantIds: descendantIds, done: false);
+    await for (final ItemTreeId itemTreeId in itemTreeIdStream) {
+      itemTreeIds.add(itemTreeId);
+      yield ItemTree(itemTreeIds: itemTreeIds, done: false);
     }
 
-    yield ItemTree(descendantIds: descendantIds);
+    yield ItemTree(itemTreeIds: itemTreeIds);
   },
 );
 
-Stream<DescendantId> _itemStream(Reader read,
+Stream<ItemTreeId> _itemStream(Reader read,
     {required int id, Iterable<int> ancestors = const <int>[]}) async* {
   try {
-    yield DescendantId(id: id, ancestors: ancestors);
+    yield ItemTreeId(id: id, ancestors: ancestors);
 
     final Item item = await read(itemNotifierProvider(id).notifier).load();
 
