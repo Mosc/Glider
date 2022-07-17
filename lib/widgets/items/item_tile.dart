@@ -11,6 +11,7 @@ class ItemTile extends HookConsumerWidget {
     super.key,
     required this.id,
     this.indentation = 0,
+    this.descendants,
     this.root,
     this.onTap,
     this.dense = false,
@@ -22,6 +23,7 @@ class ItemTile extends HookConsumerWidget {
 
   final int id;
   final int indentation;
+  final int? descendants;
   final Item? root;
   final void Function(BuildContext)? onTap;
   final bool dense;
@@ -59,7 +61,10 @@ class ItemTile extends HookConsumerWidget {
     }
 
     return ItemTileData(
-      item.copyWith(indentation: indentation),
+      item.copyWith(
+        indentation: indentation,
+        descendants: descendants ?? item.descendants,
+      ),
       key: ValueKey<String>('item_$id'),
       root: root,
       onTap: () => onTap?.call(context),

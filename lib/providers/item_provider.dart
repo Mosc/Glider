@@ -76,7 +76,7 @@ final AutoDisposeStateNotifierProviderFamily<
           ItemTreeId(id: hit.parentId!),
           ItemTreeId(
             id: int.parse(hit.id),
-            ancestors: <int>[hit.parentId!],
+            ancestorIds: <int>[hit.parentId!],
           ),
         ]
     ];
@@ -98,10 +98,23 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
     unawaited(loadItemTree(ref.read, id: id));
 
     final Stream<ItemTreeId> itemTreeIdStream = _itemStream(ref.read, id: id);
-    final List<ItemTreeId> itemTreeIds = <ItemTreeId>[];
+    Iterable<ItemTreeId> itemTreeIds = <ItemTreeId>[];
 
-    await for (final ItemTreeId itemTreeId in itemTreeIdStream) {
-      itemTreeIds.add(itemTreeId);
+    await for (final ItemTreeId newItemTreeId in itemTreeIdStream) {
+      itemTreeIds = <ItemTreeId>[
+        ...itemTreeIds.map(
+          (ItemTreeId itemTreeId) =>
+              newItemTreeId.ancestorIds.contains(itemTreeId.id)
+                  ? itemTreeId.copyWith(
+                      descendantIds: <int>[
+                        ...itemTreeId.descendantIds,
+                        newItemTreeId.id,
+                      ],
+                    )
+                  : itemTreeId,
+        ),
+        newItemTreeId,
+      ];
       yield ItemTree(itemTreeIds: itemTreeIds, done: false);
     }
 
@@ -110,20 +123,20 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
 );
 
 Stream<ItemTreeId> _itemStream(Reader read,
-    {required int id, Iterable<int> ancestors = const <int>[]}) async* {
+    {required int id, Iterable<int> ancestorIds = const <int>[]}) async* {
   try {
-    yield ItemTreeId(id: id, ancestors: ancestors);
+    yield ItemTreeId(id: id, ancestorIds: ancestorIds);
 
     final Item item = await read(itemNotifierProvider(id).notifier).load();
 
-    final Iterable<int> childAncestors = <int>[id, ...ancestors];
+    final Iterable<int> childAncestorIds = <int>[id, ...ancestorIds];
 
     for (final int partId in item.parts) {
-      yield* _itemStream(read, id: partId, ancestors: childAncestors);
+      yield* _itemStream(read, id: partId, ancestorIds: childAncestorIds);
     }
 
     for (final int kidId in item.kids) {
-      yield* _itemStream(read, id: kidId, ancestors: childAncestors);
+      yield* _itemStream(read, id: kidId, ancestorIds: childAncestorIds);
     }
   } on ServiceException {
     // Fail silently.

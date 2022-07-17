@@ -7,6 +7,7 @@ part 'item_tree_id.freezed.dart';
 class ItemTreeId with _$ItemTreeId {
   factory ItemTreeId({
     required int id,
-    @Default(<int>[]) Iterable<int> ancestors,
+    @Default(<int>[]) Iterable<int> ancestorIds,
+    @Default(<int>[]) Iterable<int> descendantIds,
   }) = _ItemTreeId;
 }

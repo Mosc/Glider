@@ -65,7 +65,8 @@ class ItemBody extends HookConsumerWidget {
             builder: (_, ItemTreeId itemTreeId, int index) =>
                 CollapsibleItemTile(
               id: itemTreeId.id,
-              ancestors: itemTreeId.ancestors,
+              ancestorIds: itemTreeId.ancestorIds,
+              descendantIds: itemTreeId.descendantIds,
               root: firstItem,
               loading: ({int indentation = 0}) =>
                   _buildItemLoading(index, indentation: indentation),

@@ -59,7 +59,9 @@ class ItemTileMetadata extends HookConsumerWidget {
               condition: upvotedData.value,
               child: _buildUpvotedMetadata(upvoted: upvotedData.value),
             ),
-          if (item.descendants != null)
+          if (item.descendants != null &&
+              item.type != ItemType.comment &&
+              item.type != ItemType.pollopt)
             SmoothAnimatedSize(
               child: MetadataItem(
                 icon: FluentIcons.comment_24_regular,
@@ -134,8 +136,10 @@ class ItemTileMetadata extends HookConsumerWidget {
       condition: dense,
       child: MetadataItem(
         icon: FluentIcons.add_circle_24_regular,
-        text: item.kids.isNotEmpty && item.id != root?.id
-            ? item.kids.length.toString()
+        text: item.id != root?.id &&
+                item.descendants != null &&
+                item.descendants! > 0
+            ? item.descendants.toString()
             : null,
       ),
     );

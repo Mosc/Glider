@@ -13,14 +13,16 @@ class CollapsibleItemTile extends HookConsumerWidget {
   const CollapsibleItemTile({
     super.key,
     required this.id,
-    this.ancestors = const <int>[],
+    this.ancestorIds = const <int>[],
+    this.descendantIds = const <int>[],
     this.root,
     this.fadeable = false,
     required this.loading,
   });
 
   final int id;
-  final Iterable<int> ancestors;
+  final Iterable<int> ancestorIds;
+  final Iterable<int> descendantIds;
   final Item? root;
   final bool fadeable;
   final Widget Function({int indentation}) loading;
@@ -32,12 +34,13 @@ class CollapsibleItemTile extends HookConsumerWidget {
     final bool collapsed = isCollapsed(id);
 
     return SmoothAnimatedSwitcher.vertical(
-      condition: !ancestors.any(
-        (int ancestor) => ancestor != root?.id && isCollapsed(ancestor),
+      condition: !ancestorIds.any(
+        (int ancestorId) => ancestorId != root?.id && isCollapsed(ancestorId),
       ),
       child: ItemTile(
         id: id,
-        indentation: ancestors.length,
+        indentation: ancestorIds.length,
+        descendants: descendantIds.length,
         root: root,
         onTap: (BuildContext context) async {
           unawaited(_setCollapsed(ref, collapsed: !collapsed));
