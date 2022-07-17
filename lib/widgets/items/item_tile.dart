@@ -37,7 +37,11 @@ class ItemTile extends HookConsumerWidget {
     if (refreshProvider != null) {
       ref.listen<void>(
         refreshProvider!,
-        (_, __) => ref.read(itemNotifierProvider(id).notifier).forceLoad(),
+        (_, __) {
+          if (id > 0) {
+            ref.read(itemNotifierProvider(id).notifier).forceLoad();
+          }
+        },
       );
     }
 
