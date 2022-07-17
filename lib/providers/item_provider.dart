@@ -125,9 +125,11 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
 Stream<ItemTreeId> _itemStream(Reader read,
     {required int id, Iterable<int> ancestorIds = const <int>[]}) async* {
   try {
-    yield ItemTreeId(id: id, ancestorIds: ancestorIds);
-
     final Item item = await read(itemNotifierProvider(id).notifier).load();
+
+    if (!(item.deleted ?? false)) {
+      yield ItemTreeId(id: id, ancestorIds: ancestorIds);
+    }
 
     final Iterable<int> childAncestorIds = <int>[id, ...ancestorIds];
 
