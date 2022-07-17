@@ -225,7 +225,7 @@ class WebsiteRepository {
       uri,
       data,
       cookie: cookie,
-      validateLocation: (String? location) => location == '/newest',
+      validateLocation: (String? location) => location == 'newest',
     );
   }
 
