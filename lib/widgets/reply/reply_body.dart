@@ -101,6 +101,7 @@ class ReplyBody extends HookConsumerWidget {
         ),
         ItemTileData(
           parent.copyWith(kids: <int>[], indentation: 0),
+          root: parent,
           onTap: () => parentCollapsedState.value = !parentCollapsedState.value,
           dense: parentCollapsedState.value,
           interactive: true,
