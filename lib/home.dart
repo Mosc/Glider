@@ -14,11 +14,9 @@ class Home extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useMemoized(() => UniLinksHandler.init(context));
     useEffect(
-      () {
-        UniLinksHandler.init(context);
-        return () => UniLinksHandler.dispose;
-      },
+      () => UniLinksHandler.dispose,
       <Object?>[UniLinksHandler.uriSubscription],
     );
 
