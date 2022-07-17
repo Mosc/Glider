@@ -53,7 +53,7 @@
   "processingInfo": "De verwerking kan even duren, overweeg te verversen voor een bijgewerkt overzicht",
   "settings": "Instellingen",
   "appearance": "Uiterlijk",
-  "showUrl": "Toon URL",
+  "showDomain": "Toon domein",
   "showFavicon": "Toon favicon",
   "showMetadata": "Toon metadata",
   "showAvatar": "Toon avatar",

@@ -53,7 +53,7 @@
   "processingInfo": "Processing may take a moment, consider refreshing for an updated view",
   "settings": "Settings",
   "appearance": "Appearance",
-  "showUrl": "Show URL",
+  "showDomain": "Show domain",
   "showFavicon": "Show favicon",
   "showMetadata": "Show metadata",
   "showAvatar": "Show avatar",

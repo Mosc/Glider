@@ -19,8 +19,9 @@ final FutureProvider<Color?> themeColorProvider = FutureProvider<Color?>(
       ref.read(storageRepositoryProvider).themeColor,
 );
 
-final FutureProvider<bool> showUrlProvider = FutureProvider<bool>(
-  (FutureProviderRef<bool> ref) => ref.read(storageRepositoryProvider).showUrl,
+final FutureProvider<bool> showDomainProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
+      ref.read(storageRepositoryProvider).showDomain,
 );
 
 final FutureProvider<bool> showFaviconProvider = FutureProvider<bool>(

@@ -33,7 +33,7 @@ class ItemTileTitle extends HookConsumerWidget {
   Widget _buildTitleText(BuildContext context, WidgetRef ref,
       {required bool dense}) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final bool showUrl = ref.watch(showUrlProvider).value ?? false;
+    final bool showDomain = ref.watch(showDomainProvider).value ?? false;
 
     return Text.rich(
       TextSpan(
@@ -52,7 +52,7 @@ class ItemTileTitle extends HookConsumerWidget {
             text: item.formattedTitle,
             style: textTheme.titleMedium,
           ),
-          if (item.urlHost != null && showUrl) ...<InlineSpan>[
+          if (item.urlHost != null && showDomain) ...<InlineSpan>[
             TextSpan(
               text: '​ ',
               style: textTheme.titleMedium,

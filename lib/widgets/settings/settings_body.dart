@@ -103,10 +103,10 @@ class AppearanceSection extends HookConsumerWidget {
           ),
         ),
         ProviderSwitchListTile(
-          title: AppLocalizations.of(context).showUrl,
-          provider: showUrlProvider,
+          title: AppLocalizations.of(context).showDomain,
+          provider: showDomainProvider,
           onSave: (bool value) =>
-              ref.read(storageRepositoryProvider).setShowUrl(value: value),
+              ref.read(storageRepositoryProvider).setShowDomain(value: value),
         ),
         ProviderSwitchListTile(
           title: AppLocalizations.of(context).showFavicon,

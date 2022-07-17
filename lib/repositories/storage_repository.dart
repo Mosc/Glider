@@ -10,7 +10,7 @@ class StorageRepository {
   static const String _themeModeKey = 'theme_mode';
   static const String _darkThemeKey = 'dark_theme';
   static const String _themeColorKey = 'theme_color';
-  static const String _showUrlKey = 'show_url';
+  static const String _showDomainKey = 'show_url';
   static const String _showFaviconKey = 'show_favicon';
   static const String _showMetadataKey = 'show_metadata';
   static const String _showAvatarKey = 'show_avatar';
@@ -57,11 +57,11 @@ class StorageRepository {
   Future<void> setThemeColor(Color value) async =>
       (await _sharedPreferences).setInt(_themeColorKey, value.value);
 
-  Future<bool> get showUrl async =>
-      (await _sharedPreferences).getBool(_showUrlKey) ?? true;
+  Future<bool> get showDomain async =>
+      (await _sharedPreferences).getBool(_showDomainKey) ?? true;
 
-  Future<void> setShowUrl({required bool value}) async =>
-      (await _sharedPreferences).setBool(_showUrlKey, value);
+  Future<void> setShowDomain({required bool value}) async =>
+      (await _sharedPreferences).setBool(_showDomainKey, value);
 
   Future<bool> get showFavicon async =>
       (await _sharedPreferences).getBool(_showFaviconKey) ?? true;
