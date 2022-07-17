@@ -40,6 +40,9 @@ class SettingsBody extends HookConsumerWidget {
 class PreviewSection extends HookConsumerWidget {
   const PreviewSection({super.key});
 
+  static const int _previewStoryId = -1 << 31;
+  static const int _previewCommentId = _previewStoryId + 1;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -55,7 +58,7 @@ class PreviewSection extends HookConsumerWidget {
         ),
         ItemTileData(
           Item(
-            id: 0x7fffffff,
+            id: _previewStoryId,
             type: ItemType.story,
             by: 'this_user_does_not_exist',
             time: DateTime.now().secondsSinceEpoch,
@@ -69,7 +72,7 @@ class PreviewSection extends HookConsumerWidget {
         ),
         ItemTileData(
           Item(
-            id: 0x7ffffffe,
+            id: _previewCommentId,
             type: ItemType.comment,
             by: 'neither_does_this_user',
             time: DateTime.now().secondsSinceEpoch,
