@@ -15,12 +15,14 @@ class ItemTileContent extends HookConsumerWidget {
     this.root,
     this.dense = false,
     this.interactive = false,
+    this.opacity = 1,
   });
 
   final Item item;
   final Item? root;
   final bool dense;
   final bool interactive;
+  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,6 +45,7 @@ class ItemTileContent extends HookConsumerWidget {
               item,
               dense: dense,
               interactive: interactive,
+              opacity: opacity,
             ),
           SmoothAnimatedSwitcher.vertical(
             condition: showMetadata,
@@ -54,6 +57,7 @@ class ItemTileContent extends HookConsumerWidget {
                   root: root,
                   dense: dense,
                   interactive: interactive,
+                  opacity: opacity,
                 ),
               ],
             ),
@@ -68,12 +72,14 @@ class ItemTileContent extends HookConsumerWidget {
                     const SizedBox(height: 12),
                     ItemTileText(
                       item,
+                      opacity: opacity,
                     ),
                   ],
                   if (item.url != null) ...<Widget>[
                     const SizedBox(height: 12),
                     ItemTileUrl(
                       item,
+                      opacity: opacity,
                     ),
                   ],
                 ],

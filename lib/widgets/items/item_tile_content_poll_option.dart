@@ -12,11 +12,13 @@ class ItemTileContentPollOption extends HookConsumerWidget {
     super.key,
     this.root,
     this.interactive = false,
+    this.opacity = 1,
   });
 
   final Item item;
   final Item? root;
   final bool interactive;
+  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,11 +40,18 @@ class ItemTileContentPollOption extends HookConsumerWidget {
           ),
           if (item.text != null)
             Expanded(
-              child: ItemTileText(item),
+              child: ItemTileText(
+                item,
+                opacity: opacity,
+              ),
             )
           else
             const Spacer(),
-          ItemTileMetadata(item, root: root),
+          ItemTileMetadata(
+            item,
+            root: root,
+            opacity: opacity,
+          ),
         ],
       ),
     );

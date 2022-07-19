@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/providers/persistence_provider.dart';
+import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/text_style_extension.dart';
 import 'package:glider/widgets/common/fade_hero.dart';
 import 'package:glider/widgets/common/smooth_animated_size.dart';
@@ -14,18 +15,24 @@ class ItemTileTitle extends HookConsumerWidget {
     super.key,
     this.dense = false,
     this.interactive = false,
+    this.opacity = 1,
   });
 
   final Item item;
   final bool dense;
   final bool interactive;
+  final double opacity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FadeHero(
       tag: 'item_${item.id}_title',
-      child: SmoothAnimatedSize(
-        child: _buildTitleText(context, ref, dense: dense),
+      child: AnimatedOpacity(
+        opacity: opacity,
+        duration: AnimationUtil.defaultDuration,
+        child: SmoothAnimatedSize(
+          child: _buildTitleText(context, ref, dense: dense),
+        ),
       ),
     );
   }

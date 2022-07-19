@@ -9,7 +9,6 @@ import 'package:glider/models/item.dart';
 import 'package:glider/models/item_type.dart';
 import 'package:glider/models/slidable_action.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/utils/animation_util.dart';
 import 'package:glider/utils/url_util.dart';
 import 'package:glider/widgets/common/indented_tile.dart';
 import 'package:glider/widgets/common/slidable.dart';
@@ -44,7 +43,6 @@ class ItemTileData extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Widget child = _buildContent(context, ref);
-    child = _buildFaded(context, ref, child: child);
     child = _buildTappable(context, ref, child: child);
     child = _buildIndented(ref, child: child);
     child = _buildSlidable(context, ref, child: child);
@@ -52,11 +50,17 @@ class ItemTileData extends HookConsumerWidget {
   }
 
   Widget _buildContent(BuildContext context, WidgetRef ref) {
+    final double opacity =
+        fadeable && (ref.watch(visitedProvider(item.id)).value ?? false)
+            ? 2 / 3
+            : 1;
+
     if (item.type == ItemType.pollopt) {
       return ItemTileContentPollOption(
         item,
         root: root,
         interactive: interactive,
+        opacity: opacity,
       );
     } else {
       return ItemTileContent(
@@ -64,24 +68,9 @@ class ItemTileData extends HookConsumerWidget {
         root: root,
         dense: dense,
         interactive: interactive,
+        opacity: opacity,
       );
     }
-  }
-
-  Widget _buildFaded(BuildContext context, WidgetRef ref,
-      {required Widget child}) {
-    if (!fadeable) {
-      return child;
-    }
-
-    final double opacity =
-        (ref.watch(visitedProvider(item.id)).value ?? false) ? 2 / 3 : 1;
-
-    return AnimatedOpacity(
-      opacity: opacity,
-      duration: AnimationUtil.defaultDuration,
-      child: child,
-    );
   }
 
   Widget _buildTappable(BuildContext context, WidgetRef ref,
