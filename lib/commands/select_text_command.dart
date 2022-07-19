@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:glider/commands/command.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';

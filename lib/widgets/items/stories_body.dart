@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/stories_page.dart';
 import 'package:glider/providers/item_provider.dart';

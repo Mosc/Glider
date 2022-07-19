@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';

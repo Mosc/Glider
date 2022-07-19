@@ -1,6 +1,5 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glider/pages/favorites_search_page.dart';
 import 'package:glider/widgets/common/floating_app_bar_scroll_view.dart';
