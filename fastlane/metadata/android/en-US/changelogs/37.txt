@@ -1,0 +1,7 @@
+• Added Inbox page with replies to logged in user's posts
+• Made collapsed items show number of total descendants rather than just children
+• Added floating action button for scrolling to top of page
+• Moved Appearance and Settings bottom sheets into Settings page
+• Enabled avatars by default
+• Fixed post submission always reporting an error, even when successful
+• Fixed username and password fields not supporting autofill
