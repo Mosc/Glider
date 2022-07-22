@@ -81,6 +81,7 @@ linter:
     - deprecated_consistency
     # - diagnostic_describe_all_properties # not yet tested
     - directives_ordering
+    # - discarded_futures # not yet tested
     - do_not_use_environment
     - empty_catches
     - empty_constructor_bodies
@@ -91,7 +92,6 @@ linter:
     - flutter_style_todos
     - hash_and_equals
     - implementation_imports
-    - invariant_booleans
     - iterable_contains_unrelated_type
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
@@ -189,6 +189,7 @@ linter:
     - unnecessary_late
     - unnecessary_new
     - unnecessary_null_aware_assignments
+    - unnecessary_null_aware_operator_on_extension_on_nullable
     - unnecessary_null_checks
     - unnecessary_null_in_if_null_operators
     - unnecessary_nullable_for_final_variable_declarations
@@ -199,6 +200,7 @@ linter:
     - unnecessary_string_escapes
     - unnecessary_string_interpolations
     - unnecessary_this
+    - unnecessary_to_list_in_spreads
     - unrelated_type_equality_checks
     - unsafe_html
     # - use_build_context_synchronously # not yet tested
