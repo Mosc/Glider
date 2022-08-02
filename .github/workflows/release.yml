@@ -17,8 +17,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: 3.3.0-0.0.pre
-          channel: beta
+          flutter-version: 3.0.5
+          channel: stable
       - name: Cache pub
         uses: actions/cache@v2
         with:
