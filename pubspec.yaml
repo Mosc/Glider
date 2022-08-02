@@ -13,7 +13,7 @@ dependencies:
   dio: ^4.0.6
   dio_smart_retry: ^1.3.2
   equatable: ^2.0.3
-  fluentui_system_icons: ^1.1.175
+  fluentui_system_icons: ^1.1.177
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.3.0
@@ -24,7 +24,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_web_browser: ^0.17.1
   flutter_widget_from_html_core: ^0.8.5+3
-  form_builder_validators: ^8.2.0
+  form_builder_validators: ^8.3.0
   freezed_annotation: ^2.1.0
   hooks_riverpod: ^2.0.0-dev.9
   html: ^0.15.0
