@@ -118,22 +118,28 @@ class WalkthoughItem extends HookConsumerWidget {
                                 ? AppLocalizations.of(context).unvote
                                 : AppLocalizations.of(context).upvote,
                           ),
-                          onTap: () => upvotedStateController
-                              .update((bool state) => !state),
+                          onTap: () {
+                            upvotedStateController
+                                .update((bool state) => !state);
+                            Navigator.of(context).pop();
+                          },
                         ),
                         ListTile(
                           leading: Icon(
-                            upvotedStateController.state
+                            favoritedStateController.state
                                 ? FluentIcons.star_off_24_regular
                                 : FluentIcons.star_24_regular,
                           ),
                           title: Text(
-                            upvotedStateController.state
+                            favoritedStateController.state
                                 ? AppLocalizations.of(context).unfavorite
                                 : AppLocalizations.of(context).favorite,
                           ),
-                          onTap: () => favoritedStateController
-                              .update((bool state) => !state),
+                          onTap: () {
+                            favoritedStateController
+                                .update((bool state) => !state);
+                            Navigator.of(context).pop();
+                          },
                         ),
                       ],
                     ),
