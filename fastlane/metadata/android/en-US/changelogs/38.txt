@@ -1,0 +1,2 @@
+• Fixed jagged text rendering on some devices
+• Fixed walkthrough not working as intended
