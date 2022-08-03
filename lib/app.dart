@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,30 +14,26 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:relative_time/relative_time.dart';
 
 class App extends HookConsumerWidget {
-  const App({super.key});
+  const App(this._deviceInfo, {super.key});
+
+  final BaseDeviceInfo _deviceInfo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ValueNotifier<bool> useStretchAndroidOverscrollIndicatorState =
-        useState(true);
-
-    if (Platform.isAndroid) {
-      useMemoized(FlutterDisplayMode.setHighRefreshRate);
-      useMemoized(
-        () async {
-          if (Platform.isAndroid) {
-            final AndroidDeviceInfo androidInfo =
-                await DeviceInfoPlugin().androidInfo;
-            useStretchAndroidOverscrollIndicatorState.value =
-                androidInfo.version.sdkInt != null &&
-                    androidInfo.version.sdkInt! >= 31;
+    final AndroidOverscrollIndicator? androidOverscrollIndicator = useMemoized(
+      () {
+        if (_deviceInfo is AndroidDeviceInfo) {
+          final int? androidSdkVersion =
+              (_deviceInfo as AndroidDeviceInfo).version.sdkInt;
+          if (androidSdkVersion != null && androidSdkVersion >= 31) {
+            return AndroidOverscrollIndicator.stretch;
+          } else {
+            return AndroidOverscrollIndicator.glow;
           }
-        },
-      );
-    }
-
-    useMemoized(
-      () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
+        } else {
+          return null;
+        }
+      },
     );
 
     final ThemeMode? themeMode = ref.watch(themeModeProvider).value;
@@ -76,10 +68,7 @@ class App extends HookConsumerWidget {
       debugShowCheckedModeBanner: false,
       scrollBehavior: MaterialScrollBehavior(
         // ignore: deprecated_member_use
-        androidOverscrollIndicator:
-            useStretchAndroidOverscrollIndicatorState.value
-                ? AndroidOverscrollIndicator.stretch
-                : AndroidOverscrollIndicator.glow,
+        androidOverscrollIndicator: androidOverscrollIndicator,
       ).copyWith(
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
