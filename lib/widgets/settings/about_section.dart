@@ -69,6 +69,14 @@ class AboutSection extends HookConsumerWidget {
           trailing: const Icon(FluentIcons.open_24_regular),
           onTap: () => UrlUtil.tryLaunch(context, ref, _issueTrackerUrl),
         ),
+        ListTile(
+          title: Text(MaterialLocalizations.of(context).licensesPageTitle),
+          onTap: () => showLicensePage(
+            context: context,
+            applicationName: AppLocalizations.of(context).appName,
+            applicationVersion: appVersionState.value,
+          ),
+        ),
       ],
     );
   }
