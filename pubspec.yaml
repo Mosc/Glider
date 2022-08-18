@@ -58,6 +58,7 @@ flutter_icons:
     generate: true
   windows:
     generate: true
+    icon_size: 256
   image_path: "assets/icon/icon.png"
   adaptive_icon_background: "#e57373"
   adaptive_icon_foreground: "assets/icon/adaptive_icon.png"
