@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/widgets/settings/about_section.dart';
 import 'package:glider/widgets/settings/appearance_section.dart';
 import 'package:glider/widgets/settings/behavior_section.dart';
 import 'package:glider/widgets/settings/preview_section.dart';
@@ -17,6 +18,8 @@ class SettingsBody extends HookConsumerWidget {
         AppearanceSection(),
         SizedBox(height: 16),
         BehaviorSection(),
+        SizedBox(height: 16),
+        AboutSection(),
       ],
     );
   }
