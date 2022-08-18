@@ -11,6 +11,7 @@ class AboutSection extends HookConsumerWidget {
 
   static const String _privacyPolicyUrl =
       'https://github.com/Mosc/Glider/blob/master/PRIVACY.md';
+  static const String _license = 'MIT';
   static const String _licenseUrl =
       'https://github.com/Mosc/Glider/blob/master/LICENSE';
   static const String _sourceCodeUrl = 'https://github.com/Mosc/Glider';
@@ -40,12 +41,11 @@ class AboutSection extends HookConsumerWidget {
                 ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
         ),
-        ListTile(
-          title: Text(AppLocalizations.of(context).appVersion),
-          subtitle: appVersionState.value != null
-              ? Text(appVersionState.value!)
-              : null,
-        ),
+        if (appVersionState.value != null)
+          ListTile(
+            title: Text(AppLocalizations.of(context).appVersion),
+            subtitle: Text(appVersionState.value!),
+          ),
         ListTile(
           title: Text(AppLocalizations.of(context).privacyPolicy),
           trailing: const Icon(FluentIcons.open_24_regular),
@@ -53,7 +53,7 @@ class AboutSection extends HookConsumerWidget {
         ),
         ListTile(
           title: Text(AppLocalizations.of(context).license),
-          subtitle: const Text('MIT'),
+          subtitle: const Text(_license),
           trailing: const Icon(FluentIcons.open_24_regular),
           onTap: () => UrlUtil.tryLaunch(context, ref, _licenseUrl),
         ),
