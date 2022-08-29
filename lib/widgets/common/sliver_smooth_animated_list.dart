@@ -37,20 +37,32 @@ class _SliverSmoothAnimatedListState<T>
   final GlobalKey<SliverAnimatedListState> listKey =
       GlobalKey<SliverAnimatedListState>();
 
-  late List<T?> tempList;
+  late List<T> oldList;
+
+  @override
+  void initState() {
+    oldList = List<T>.from(widget.items);
+    super.initState();
+  }
 
   @override
   void didUpdateWidget(SliverSmoothAnimatedList<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final List<T> tempList = oldWidget.items;
     final List<T> newList = widget.items;
-    this.tempList = List<T?>.of(tempList);
-    calculateListDiff<T>(
-      tempList,
+    final Iterable<DiffUpdate> diff = calculateListDiff<T>(
+      oldList,
       newList,
       detectMoves: false,
       equalityChecker: widget.equalityChecker,
-    ).getUpdates().forEach(_onDiffUpdate);
+    ).getUpdates();
+
+    final List<T?> tempList = List<T?>.from(oldList);
+
+    for (final DiffUpdate update in diff) {
+      _onDiffUpdate(update, tempList);
+    }
+
+    oldList = List<T>.from(newList);
   }
 
   @override
@@ -64,16 +76,16 @@ class _SliverSmoothAnimatedListState<T>
     );
   }
 
-  void _onDiffUpdate(DiffUpdate update) {
+  void _onDiffUpdate(DiffUpdate update, List<T?> tempList) {
     update.when<void>(
-      insert: _onInserted,
-      remove: _onRemoved,
-      change: _onChanged,
+      insert: (int pos, int count) => _onInserted(pos, count, tempList),
+      remove: (int pos, int count) => _onRemoved(pos, count, tempList),
+      change: (int pos, Object? payload) => _onChanged(pos, payload, tempList),
       move: _onMoved,
     );
   }
 
-  void _onInserted(int position, int count) {
+  void _onInserted(int position, int count, List<T?> tempList) {
     for (int index = position; index < position + count; index++) {
       listKey.currentState!.insertItem(
         index,
@@ -84,7 +96,7 @@ class _SliverSmoothAnimatedListState<T>
     tempList.insertAll(position, List<T?>.filled(count, null));
   }
 
-  void _onRemoved(int position, int count) {
+  void _onRemoved(int position, int count, List<T?> tempList) {
     for (int index = position; index < position + count; index++) {
       final T oldItem = tempList[index] as T;
       listKey.currentState!.removeItem(
@@ -98,14 +110,14 @@ class _SliverSmoothAnimatedListState<T>
     tempList.removeRange(position, position + count);
   }
 
-  void _onChanged(int position, Object? payload) {
+  void _onChanged(int position, Object? payload, List<T?> tempList) {
     listKey.currentState!.removeItem(
       position,
       (BuildContext context, Animation<double> animation) =>
           const SizedBox.shrink(),
       duration: Duration.zero,
     );
-    _onInserted(position, 1);
+    _onInserted(position, 1, tempList);
   }
 
   void _onMoved(int from, int to) =>
