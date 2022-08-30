@@ -112,6 +112,7 @@
   "block": "Block",
   "blockConfirm": "Are you sure you want to block this user?",
   "selectText": "Select text",
+  "showParent": "Show parent",
   "copy": "Copy...",
   "share": "Share...",
   "text": "Text",

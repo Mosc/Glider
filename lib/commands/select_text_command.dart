@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:glider/commands/command.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
-import 'package:glider/utils/async_notifier.dart';
 import 'package:glider/utils/formatting_util.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,9 +16,7 @@ class SelectTextCommand with CommandMixin {
 
   @override
   Future<void> execute() async {
-    final AsyncNotifier<Item> itemNotifier =
-        ref.read(itemNotifierProvider(id).notifier);
-    final Item item = await itemNotifier.load();
+    final Item item = await ref.read(itemNotifierProvider(id).notifier).load();
 
     await showDialog<void>(
       context: context,
@@ -30,9 +27,7 @@ class SelectTextCommand with CommandMixin {
         actions: <Widget>[
           TextButton(
             onPressed: () async => Navigator.of(context).pop(),
-            child: Text(
-              MaterialLocalizations.of(context).okButtonLabel,
-            ),
+            child: Text(MaterialLocalizations.of(context).okButtonLabel),
           ),
         ],
       ),

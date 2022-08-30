@@ -42,10 +42,7 @@ class SynchronizeDialog extends HookConsumerWidget {
         TextButton(
           onPressed:
               loadingState.value ? null : () => Navigator.of(context).pop(),
-          child: Text(
-            MaterialLocalizations.of(context).cancelButtonLabel,
-            textAlign: TextAlign.end,
-          ),
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
           onPressed: loadingState.value
@@ -55,10 +52,7 @@ class SynchronizeDialog extends HookConsumerWidget {
                   await _synchronize(context, ref);
                   loadingState.value = false;
                 },
-          child: Text(
-            MaterialLocalizations.of(context).okButtonLabel,
-            textAlign: TextAlign.end,
-          ),
+          child: Text(MaterialLocalizations.of(context).okButtonLabel),
         ),
       ],
       scrollable: true,

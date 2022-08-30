@@ -37,18 +37,15 @@ class FlagCommand implements CommandMixin {
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(
-                  MaterialLocalizations.of(context).cancelButtonLabel,
-                ),
+                child:
+                    Text(MaterialLocalizations.of(context).cancelButtonLabel),
               ),
               TextButton(
                 onPressed: () async {
                   unawaited(_flag(authRepository, itemNotifier));
                   Navigator.of(context).pop();
                 },
-                child: Text(
-                  MaterialLocalizations.of(context).okButtonLabel,
-                ),
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
               ),
             ],
           ),

@@ -9,6 +9,7 @@ import 'package:glider/commands/flag_command.dart';
 import 'package:glider/commands/item_options_command.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/select_text_command.dart';
+import 'package:glider/commands/show_parent_command.dart';
 import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -23,6 +24,7 @@ enum ItemMenuAction {
   edit,
   delete,
   selectText,
+  showParent,
   copy,
   share,
 }
@@ -54,6 +56,8 @@ extension ItemMenuActionExtension on ItemMenuAction {
             ref.watch(usernameProvider).value == item.by;
       case ItemMenuAction.selectText:
         return item != null && item.text != null;
+      case ItemMenuAction.showParent:
+        return item != null && item.parent != null;
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
         return true;
@@ -86,6 +90,8 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return AppLocalizations.of(context).delete;
       case ItemMenuAction.selectText:
         return AppLocalizations.of(context).selectText;
+      case ItemMenuAction.showParent:
+        return AppLocalizations.of(context).showParent;
       case ItemMenuAction.copy:
         return AppLocalizations.of(context).copy;
       case ItemMenuAction.share:
@@ -119,6 +125,8 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return FluentIcons.delete_24_regular;
       case ItemMenuAction.selectText:
         return FluentIcons.split_vertical_24_regular;
+      case ItemMenuAction.showParent:
+        return FluentIcons.fluid_24_regular;
       case ItemMenuAction.copy:
         return Directionality.of(context) == TextDirection.rtl
             ? FluentIcons.clipboard_text_rtl_24_regular
@@ -149,6 +157,8 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return DeleteCommand(context, ref, id: id);
       case ItemMenuAction.selectText:
         return SelectTextCommand(context, ref, id: id);
+      case ItemMenuAction.showParent:
+        return ShowParentCommand(context, ref, id: id);
       case ItemMenuAction.copy:
         return ItemOptionsCommand.copy(context, ref, id: id);
       case ItemMenuAction.share:
