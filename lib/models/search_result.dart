@@ -6,7 +6,7 @@ part 'search_result.g.dart';
 @Freezed(toJson: false)
 class SearchResult with _$SearchResult {
   factory SearchResult({
-    required Iterable<SearchResultHit> hits,
+    @Default(<SearchResultHit>[]) Iterable<SearchResultHit> hits,
   }) = _SearchResult;
 
   SearchResult._();

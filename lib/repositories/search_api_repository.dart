@@ -29,6 +29,16 @@ class SearchApiRepository {
         'created_at_i<${dateTimeRange.end.secondsSinceEpoch}',
       ],
     ];
+    final bool skipSearch = searchParameters.maybeWhen(
+      favorites: (_, __, ___, ____, Iterable<int> favoriteIds) =>
+          favoriteIds.isEmpty,
+      replies: (_, __, ___, ____, Iterable<int> parentIds) => parentIds.isEmpty,
+      orElse: () => false,
+    );
+
+    if (skipSearch) {
+      return SearchResult();
+    }
 
     return _search(
       order: searchParameters.order,
@@ -37,18 +47,16 @@ class SearchApiRepository {
         stories: (_, __, ___, ____) => <String>['(story,poll)'],
         item: (_, __, ___, ____, int parentStoryId) =>
             <String>['story_$parentStoryId'],
-        favorites: (_, __, ___, ____, Iterable<int> ids) => <String>[
+        favorites: (_, __, ___, ____, Iterable<int> favoriteIds) => <String>[
           '(story,poll)',
-          '(${ids.map((int id) => 'story_$id').join(',')})',
+          '(${favoriteIds.map((int id) => 'story_$id').join(',')})',
         ],
       ),
       numericFilters: searchParameters.maybeWhen(
         replies: (_, __, ___, ____, Iterable<int> parentIds) => <String>[
           ...numericFilters,
           // Limit parent IDs to prevent HTTP status 414 URI Too Long.
-          '(${parentIds.take(300).map(
-                (int parentId) => 'parent_id=$parentId',
-              ).join(',')})',
+          '(${parentIds.take(300).map((int id) => 'parent_id=$id').join(',')})',
         ],
         orElse: () => numericFilters,
       ),
