@@ -33,7 +33,8 @@ class ItemTileContent extends HookConsumerWidget {
         interactive ||
         (ref.watch(showMetadataProvider).value ?? false);
     final bool showTextAndUrl =
-        (item.text != null || item.url != null) && !blocked;
+        ((item.text?.isNotEmpty ?? false) || (item.url?.isNotEmpty ?? false)) &&
+            !blocked;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -68,14 +69,14 @@ class ItemTileContent extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  if (item.text != null) ...<Widget>[
+                  if (item.text?.isNotEmpty ?? false) ...<Widget>[
                     const SizedBox(height: 12),
                     ItemTileText(
                       item,
                       opacity: opacity,
                     ),
                   ],
-                  if (item.url != null) ...<Widget>[
+                  if (item.url?.isNotEmpty ?? false) ...<Widget>[
                     const SizedBox(height: 12),
                     ItemTileUrl(
                       item,

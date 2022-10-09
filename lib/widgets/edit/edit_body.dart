@@ -73,7 +73,7 @@ class EditBody extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                 ],
-                if (item.text != null) ...<Widget>[
+                if (item.text?.isNotEmpty ?? false) ...<Widget>[
                   TextFormField(
                     controller: textController,
                     decoration: InputDecoration(

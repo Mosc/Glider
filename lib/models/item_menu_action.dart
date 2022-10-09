@@ -55,7 +55,7 @@ extension ItemMenuActionExtension on ItemMenuAction {
             item.deletable &&
             ref.watch(usernameProvider).value == item.by;
       case ItemMenuAction.selectText:
-        return item != null && item.text != null;
+        return item != null && (item.text?.isNotEmpty ?? false);
       case ItemMenuAction.showParent:
         return item != null && item.parent != null;
       case ItemMenuAction.copy:

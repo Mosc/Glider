@@ -38,7 +38,7 @@ class ItemTileContentPollOption extends HookConsumerWidget {
                 : null,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          if (item.text != null)
+          if (item.text?.isNotEmpty ?? false)
             Expanded(
               child: ItemTileText(
                 item,

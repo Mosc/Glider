@@ -157,7 +157,7 @@ class ItemTileData extends HookConsumerWidget {
                 )
           : null,
       endToStartAction: dense
-          ? item.url != null
+          ? item.url?.isNotEmpty ?? false
               ? SlidableAction(
                   action: () async {
                     unawaited(UrlUtil.tryLaunch(context, ref, item.url!));

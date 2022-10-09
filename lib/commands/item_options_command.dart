@@ -34,12 +34,12 @@ class ItemOptionsCommand with CommandMixin {
 
     final List<OptionsDialogOption> optionsDialogOptions =
         <OptionsDialogOption>[
-      if (item.text != null)
+      if (item.text?.isNotEmpty ?? false)
         OptionsDialogOption(
           title: AppLocalizations.of(context).text,
           text: FormattingUtil.convertHtmlToHackerNews(item.text!),
         ),
-      if (item.url != null)
+      if (item.url?.isNotEmpty ?? false)
         OptionsDialogOption(
           title: AppLocalizations.of(context).link,
           text: item.url!,
