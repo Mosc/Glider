@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/providers/persistence_provider.dart';
 import 'package:glider/widgets/common/sliver_smooth_animated_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,6 +19,8 @@ mixin PaginationMixin {
     required Iterable<T> items,
     required Widget Function(BuildContext, T, int) builder,
   }) {
+    useMemoized(() => resetPagination(ref));
+
     final bool useInfiniteScroll =
         ref.watch(useInfiniteScrollProvider).value ?? true;
     final StateController<int> paginationStateController =
