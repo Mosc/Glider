@@ -3,7 +3,7 @@ import 'package:glider/models/user.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/user_page.dart';
 import 'package:glider/providers/user_provider.dart';
-import 'package:glider/utils/async_notifier.dart';
+import 'package:glider/utils/async_state_notifier.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
@@ -24,7 +24,7 @@ class UserBody extends HookConsumerWidget with PaginationMixin {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final StateNotifierProvider<AsyncNotifier<User>, AsyncValue<User>>
+    final StateNotifierProvider<AsyncStateNotifier<User>, AsyncValue<User>>
         provider = userNotifierProvider(id);
 
     return RefreshableBody<User>(

@@ -3,7 +3,7 @@ import 'package:glider/pages/item_page.dart';
 import 'package:glider/pages/stories_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/utils/async_notifier.dart';
+import 'package:glider/utils/async_state_notifier.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/common/walkthrough_item.dart';
@@ -22,7 +22,7 @@ class StoriesBody extends HookConsumerWidget with PaginationMixin {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool completedWalkthrough =
         ref.watch(completedWalkthroughProvider).value ?? true;
-    final AutoDisposeStateNotifierProvider<AsyncNotifier<Iterable<int>>,
+    final AutoDisposeStateNotifierProvider<AsyncStateNotifier<Iterable<int>>,
             AsyncValue<Iterable<int>>> provider =
         storyIdsNotifierProvider(ref.watch(storyTypeStateProvider));
 

@@ -4,7 +4,7 @@ import 'package:glider/pages/inbox_page.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/persistence_provider.dart';
-import 'package:glider/utils/async_notifier.dart';
+import 'package:glider/utils/async_state_notifier.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/error.dart';
 import 'package:glider/widgets/common/loading.dart';
@@ -33,7 +33,8 @@ class InboxBody extends HookConsumerWidget with PaginationMixin {
 
   Widget _inboxDataBuilder(BuildContext context, WidgetRef ref,
       {required String username}) {
-    final AutoDisposeStateNotifierProvider<AsyncNotifier<Iterable<ItemTreeId>>,
+    final AutoDisposeStateNotifierProvider<
+            AsyncStateNotifier<Iterable<ItemTreeId>>,
             AsyncValue<Iterable<ItemTreeId>>> provider =
         itemRepliesNotifierProvider(username);
 

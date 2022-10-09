@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/item_tree_id.dart';
@@ -28,16 +25,9 @@ class ItemBody extends HookConsumerWidget {
     final AutoDisposeStreamProvider<ItemTree> provider =
         itemTreeStreamProvider(id);
 
-    Future<void> refresh(WidgetRef ref) async {
-      await reloadItemTree(ref.read, id: id);
-      ref.invalidate(provider);
-    }
-
-    useMemoized(() => refresh(ref));
-
     return RefreshableBody<ItemTree>(
       provider: provider,
-      onRefresh: () async => refresh(ref),
+      onRefresh: () async => ref.invalidate(provider),
       loadingBuilder: () => <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(

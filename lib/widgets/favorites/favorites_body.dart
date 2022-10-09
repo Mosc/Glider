@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
-import 'package:glider/utils/async_notifier.dart';
+import 'package:glider/utils/async_state_notifier.dart';
 import 'package:glider/utils/pagination_mixin.dart';
 import 'package:glider/widgets/common/refreshable_body.dart';
 import 'package:glider/widgets/items/comment_tile_loading.dart';
@@ -23,7 +23,7 @@ class FavoritesBody extends HookConsumerWidget with PaginationMixin {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AutoDisposeStateNotifierProvider<AsyncNotifier<Iterable<int>>,
+    final AutoDisposeStateNotifierProvider<AsyncStateNotifier<Iterable<int>>,
         AsyncValue<Iterable<int>>> provider = favoriteIdsNotifierProvider;
 
     return RefreshableBody<Iterable<int>>(

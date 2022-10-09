@@ -46,10 +46,8 @@ class ReplyCommand with CommandMixin {
             content: Text(AppLocalizations.of(context).processingInfo),
             action: SnackBarAction(
               label: AppLocalizations.of(context).refresh,
-              onPressed: () async {
-                await reloadItemTree(ref.read, id: rootId!);
-                ref.invalidate(itemTreeStreamProvider(rootId!));
-              },
+              onPressed: () async =>
+                  ref.invalidate(itemTreeStreamProvider(rootId!)),
             ),
           ),
         );

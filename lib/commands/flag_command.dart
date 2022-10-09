@@ -8,7 +8,7 @@ import 'package:glider/pages/account_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/repositories/auth_repository.dart';
-import 'package:glider/utils/async_notifier.dart';
+import 'package:glider/utils/async_state_notifier.dart';
 import 'package:glider/utils/scaffold_messenger_state_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -26,7 +26,7 @@ class FlagCommand implements CommandMixin {
     final AuthRepository authRepository = ref.read(authRepositoryProvider);
 
     if (await authRepository.loggedIn) {
-      final AsyncNotifier<Item> itemNotifier =
+      final AsyncStateNotifier<Item> itemNotifier =
           ref.read(itemNotifierProvider(id).notifier);
 
       if (flag) {
@@ -71,8 +71,8 @@ class FlagCommand implements CommandMixin {
     }
   }
 
-  Future<void> _flag(
-      AuthRepository authRepository, AsyncNotifier<Item> itemNotifier) async {
+  Future<void> _flag(AuthRepository authRepository,
+      AsyncStateNotifier<Item> itemNotifier) async {
     await authRepository.flag(
       id: id,
       value: flag,
