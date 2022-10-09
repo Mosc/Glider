@@ -75,10 +75,10 @@ class ItemTileMetadata extends HookConsumerWidget {
               ),
             SmoothAnimatedSwitcher.horizontal(
               key: ValueKey<String>('item_${item.id}_dead_${item.dead}'),
-              condition: item.dead ?? false,
+              condition: item.dead,
               child: const MetadataItem(icon: FluentIcons.flag_24_regular),
             ),
-            if (item.deleted ?? false) ...<Widget>[
+            if (item.deleted) ...<Widget>[
               const MetadataItem(icon: FluentIcons.delete_24_regular),
               Text(
                 '[${AppLocalizations.of(context).deleted}]',

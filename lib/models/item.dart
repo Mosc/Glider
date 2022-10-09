@@ -10,12 +10,12 @@ part 'item.g.dart';
 class Item with _$Item {
   factory Item({
     required int id,
-    bool? deleted,
+    @Default(false) bool deleted,
     ItemType? type,
     String? by,
     int? time,
     String? text,
-    bool? dead,
+    @Default(false) bool dead,
     int? parent,
     int? poll,
     @Default(<int>[]) Iterable<int> kids,

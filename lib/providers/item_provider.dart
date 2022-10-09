@@ -125,7 +125,7 @@ Stream<ItemTreeId> _itemStream(Ref<AsyncValue<ItemTree>> ref,
   try {
     final Item item = await ref.read(itemNotifierProvider(id).notifier).load();
 
-    if (!(item.deleted ?? false)) {
+    if (!item.deleted) {
       yield ItemTreeId(id: id, ancestorIds: ancestorIds);
     }
 
