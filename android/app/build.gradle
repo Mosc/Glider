@@ -52,7 +52,7 @@ android {
     defaultConfig {
         applicationId 'nl.viter.glider'
         minSdkVersion 18
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         resConfigs 'en', 'nl'
