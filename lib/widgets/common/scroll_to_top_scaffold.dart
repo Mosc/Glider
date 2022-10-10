@@ -17,7 +17,14 @@ class ScrollToTopScaffold extends HookConsumerWidget {
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification notification) {
-          showFloatingActionButtonState.value = notification.metrics.pixels > 0;
+          if (notification is ScrollUpdateNotification &&
+              notification.scrollDelta != null &&
+              notification.scrollDelta! != 0) {
+            showFloatingActionButtonState.value =
+                notification.scrollDelta!.isNegative &&
+                    notification.metrics.pixels >
+                        notification.metrics.minScrollExtent;
+          }
           return false;
         },
         child: body,
