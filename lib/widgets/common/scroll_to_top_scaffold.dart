@@ -6,36 +6,25 @@ import 'package:glider/utils/animation_util.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ScrollToTopScaffold extends HookConsumerWidget {
-  const ScrollToTopScaffold({super.key, this.body});
+  const ScrollToTopScaffold({super.key, required this.body});
 
-  final Widget? body;
+  final Widget body;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<bool> showFloatingActionButtonState = useState(false);
 
-    final ScrollController? scrollController =
-        PrimaryScrollController.of(context);
-
-    useEffect(
-      () {
-        void onScrollListener() =>
-            showFloatingActionButtonState.value = scrollController != null &&
-                scrollController.hasClients &&
-                scrollController.position.hasPixels &&
-                scrollController.position.pixels > 0;
-
-        scrollController?.addListener(onScrollListener);
-        return () => scrollController?.removeListener(onScrollListener);
-      },
-      <Object?>[scrollController],
-    );
-
     return Scaffold(
-      body: body,
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          showFloatingActionButtonState.value = notification.metrics.pixels > 0;
+          return false;
+        },
+        child: body,
+      ),
       floatingActionButton: showFloatingActionButtonState.value
           ? FloatingActionButton.small(
-              onPressed: () => scrollController?.animateTo(
+              onPressed: () => PrimaryScrollController.of(context)?.animateTo(
                 0,
                 duration: AnimationUtil.defaultDuration,
                 curve: AnimationUtil.defaultCurve,
