@@ -51,3 +51,6 @@ app.*.map.json
 
 # Flutter generate generated files
 **/l10n/*.dart
+
+# FVM
+.fvm/flutter_sdk
