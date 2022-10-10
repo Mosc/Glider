@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/item_tree_id.dart';
@@ -24,6 +25,8 @@ class ItemBody extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AutoDisposeStreamProvider<ItemTree> provider =
         itemTreeStreamProvider(id);
+
+    useMemoized(() => ref.invalidate(provider));
 
     return RefreshableBody<ItemTree>(
       provider: provider,
