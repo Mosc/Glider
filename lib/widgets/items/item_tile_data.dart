@@ -17,10 +17,8 @@ import 'package:glider/widgets/items/item_tile_content.dart';
 import 'package:glider/widgets/items/item_tile_content_poll_option.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-AutoDisposeStateProviderFamily<bool?, int> _delayedUpvoteStateProvider =
-    StateProvider.family.autoDispose(
-  (AutoDisposeStateProviderRef<bool?> ref, int id) => null,
-);
+StateProviderFamily<bool?, int> _delayedUpvoteStateProvider =
+    StateProvider.family((StateProviderRef<bool?> ref, int id) => null);
 
 class ItemTileData extends HookConsumerWidget {
   const ItemTileData(
