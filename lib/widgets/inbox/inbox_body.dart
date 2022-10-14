@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glider/models/item_tree_id.dart';
+import 'package:glider/models/tree_item.dart';
 import 'package:glider/pages/inbox_page.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -34,11 +34,11 @@ class InboxBody extends HookConsumerWidget with PaginationMixin {
   Widget _inboxDataBuilder(BuildContext context, WidgetRef ref,
       {required String username}) {
     final AutoDisposeStateNotifierProvider<
-            AsyncStateNotifier<Iterable<ItemTreeId>>,
-            AsyncValue<Iterable<ItemTreeId>>> provider =
+            AsyncStateNotifier<Iterable<TreeItem>>,
+            AsyncValue<Iterable<TreeItem>>> provider =
         itemRepliesNotifierProvider(username);
 
-    return RefreshableBody<Iterable<ItemTreeId>>(
+    return RefreshableBody<Iterable<TreeItem>>(
       provider: provider,
       onRefresh: () async {
         resetPagination(ref);
@@ -51,17 +51,17 @@ class InboxBody extends HookConsumerWidget with PaginationMixin {
           ),
         ),
       ],
-      dataBuilder: (Iterable<ItemTreeId> itemTreeIds) => <Widget>[
-        ...buildPaginationSlivers<ItemTreeId>(
+      dataBuilder: (Iterable<TreeItem> treeItems) => <Widget>[
+        ...buildPaginationSlivers<TreeItem>(
           context,
           ref,
-          items: itemTreeIds,
-          builder: (_, ItemTreeId itemTreeId, __) => ItemTile(
-            id: itemTreeId.id,
-            indentation: itemTreeId.ancestorIds.length,
+          items: treeItems,
+          builder: (_, TreeItem treeItem, __) => ItemTile(
+            id: treeItem.id,
+            indentation: treeItem.ancestorIds.length,
             onTap: (_) => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                  builder: (_) => ItemPage(id: itemTreeId.id)),
+                  builder: (_) => ItemPage(id: treeItem.id)),
             ),
             loading: ({int indentation = 0}) =>
                 CommentTileLoading(indentation: indentation),

@@ -7,7 +7,9 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  async: ^2.9.0
   cached_network_image: ^3.2.2
+  collection: ^1.16.0
   device_info_plus: ^6.0.0
   diffutil_dart: ^3.0.0
   dio: ^4.0.6

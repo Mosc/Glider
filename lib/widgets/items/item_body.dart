@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
-import 'package:glider/models/item_tree_id.dart';
+import 'package:glider/models/tree_item.dart';
 import 'package:glider/pages/item_page.dart';
 import 'package:glider/providers/item_provider.dart';
 import 'package:glider/utils/text_style_extension.dart';
@@ -42,9 +42,9 @@ class ItemBody extends HookConsumerWidget {
         Item? firstItem;
         int? parentId;
 
-        if (itemTree.itemTreeIds.isNotEmpty) {
+        if (itemTree.treeItems.isNotEmpty) {
           firstItem = ref
-              .watch(itemNotifierProvider(itemTree.itemTreeIds.first.id))
+              .watch(itemNotifierProvider(itemTree.treeItems.first.id))
               .value;
           parentId = firstItem?.parent ?? firstItem?.poll;
         }
@@ -52,29 +52,27 @@ class ItemBody extends HookConsumerWidget {
         return <Widget>[
           if (parentId != null)
             SliverToBoxAdapter(child: _buildOpenParent(context, parentId)),
-          SliverSmoothAnimatedList<ItemTreeId>(
-            items: itemTree.itemTreeIds,
-            builder: (_, ItemTreeId itemTreeId, int index) =>
-                CollapsibleItemTile(
-              id: itemTreeId.id,
-              ancestorIds: itemTreeId.ancestorIds,
-              descendantIds: itemTreeId.descendantIds,
+          SliverSmoothAnimatedList<TreeItem>(
+            items: itemTree.treeItems,
+            builder: (_, TreeItem treeItem, int index) => CollapsibleItemTile(
+              id: treeItem.id,
+              ancestorIds: treeItem.ancestorIds,
+              descendantIds: treeItem.descendantIds,
               root: firstItem,
               loading: ({int indentation = 0}) =>
                   _buildItemLoading(index, indentation: indentation),
             ),
-            equalityChecker: (ItemTreeId a, ItemTreeId b) => a.id == b.id,
+            equalityChecker: (TreeItem a, TreeItem b) => a.id == b.id,
           ),
           if (!itemTree.done)
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (_, int index) => _buildItemLoading(
-                  itemTree.itemTreeIds.length + index,
-                  indentation:
-                      itemTree.itemTreeIds.isEmpty && index == 0 ? 0 : 1,
+                  itemTree.treeItems.length + index,
+                  indentation: itemTree.treeItems.isEmpty && index == 0 ? 0 : 1,
                 ),
                 childCount: firstItem?.descendants != null
-                    ? firstItem!.descendants! - itemTree.itemTreeIds.length + 1
+                    ? firstItem!.descendants! - itemTree.treeItems.length + 1
                     : null,
               ),
             ),
