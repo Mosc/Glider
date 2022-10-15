@@ -61,7 +61,7 @@ class ItemTileTitle extends HookConsumerWidget {
           ),
           if (item.urlHost != null && showDomain) ...<InlineSpan>[
             TextSpan(
-              text: '​ ',
+              text: ' ',
               style: textTheme.titleMedium,
             ),
             TextSpan(
@@ -70,7 +70,7 @@ class ItemTileTitle extends HookConsumerWidget {
             ),
             // Attach zero-width space of title style to enforce height.
             TextSpan(
-              text: '​\u200b',
+              text: '\u200b',
               style: textTheme.titleMedium,
             ),
           ],
