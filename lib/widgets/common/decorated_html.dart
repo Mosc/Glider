@@ -52,6 +52,7 @@ class _DecoratedWidgetFactory extends WidgetFactory {
         TextBit(
           tree,
           bit.data.replaceAll(_unescapedQuoteRegex, ''),
+          tsb: bit.tsb,
         ).insertBefore(bit);
         bit.detach();
       }
