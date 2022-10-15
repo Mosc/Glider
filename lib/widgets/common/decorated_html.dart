@@ -21,7 +21,6 @@ class DecoratedHtml extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return HtmlWidget(
       _html,
-      enableCaching: false,
       buildAsync: false,
       factoryBuilder: _DecoratedWidgetFactory.new,
       onTapUrl: (String url) => UrlUtil.tryLaunch(context, ref, url),
