@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/search_order.dart';
@@ -131,13 +132,16 @@ Stream<TreeItem> _itemStream(Ref<AsyncValue<ItemTree>> ref,
       final List<int> childIds = <int>[...item.parts, ...item.kids];
       final List<int> childAncestorIds = <int>[id, ...ancestorIds];
 
-      yield TreeItem(
-        id: id,
-        childTreeItems: <TreeItem>[
-          for (final int childId in childIds)
-            TreeItem(id: childId, ancestorIds: childAncestorIds),
-        ],
-        ancestorIds: ancestorIds,
+      yield await SchedulerBinding.instance.scheduleTask(
+        () => TreeItem(
+          id: id,
+          childTreeItems: <TreeItem>[
+            for (final int childId in childIds)
+              TreeItem(id: childId, ancestorIds: childAncestorIds),
+          ],
+          ancestorIds: ancestorIds,
+        ),
+        Priority.animation,
       );
 
       yield* StreamGroup.merge(
