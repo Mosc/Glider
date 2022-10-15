@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:glider/utils/url_util.dart';
@@ -16,46 +17,65 @@ class DecoratedHtml extends HookConsumerWidget {
 
   final String _html;
 
-  static final RegExp _quoteRegex = RegExp(r'^\s?(&gt;)+');
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return HtmlWidget(
       _html,
+      enableCaching: false,
       buildAsync: false,
-      customStylesBuilder: (dom.Element element) {
-        if (_isQuote(element)) {
-          return <String, String>{'margin': '0'};
-        }
-
-        return null;
-      },
-      customWidgetBuilder: (dom.Element element) {
-        if (_isQuote(element)) {
-          element.innerHtml = _trimQuote(element).trimLeft();
-
-          if (element.innerHtml.isNotEmpty) {
-            return Block(
-              child: DecoratedHtml(
-                element.outerHtml,
-                prependParagraphTag: false,
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }
-
-        return null;
-      },
+      factoryBuilder: _DecoratedWidgetFactory.new,
       onTapUrl: (String url) => UrlUtil.tryLaunch(context, ref, url),
       textStyle: Theme.of(context).textTheme.bodyMedium,
     );
   }
+}
 
-  static bool _isQuote(dom.Element element) =>
-      element.innerHtml.startsWith(_quoteRegex);
+class _DecoratedWidgetFactory extends WidgetFactory {
+  static final RegExp _quoteRegex = RegExp(r'\s*(&gt;)+\s*');
+  static final RegExp _unescapedQuoteRegex = RegExp(r'\s*>+\s*');
 
-  static String _trimQuote(dom.Element element) =>
-      element.innerHtml.replaceFirst(_quoteRegex, '');
+  @override
+  void parse(BuildMetadata meta) {
+    if (meta.element.innerHtml.startsWith(_quoteRegex)) {
+      meta.register(_quoteOp);
+    } else {
+      super.parse(meta);
+    }
+  }
+
+  late final BuildOp _quoteOp = BuildOp(
+    defaultStyles: (dom.Element element) => <String, String>{'margin': '0'},
+    onTree: (BuildMetadata meta, BuildTree tree) {
+      final BuildBit<dynamic, dynamic>? bit = tree.bits.firstOrNull;
+
+      if (bit is TextBit) {
+        TextBit(
+          tree,
+          bit.data.replaceAll(_unescapedQuoteRegex, ''),
+        ).insertBefore(bit);
+        bit.detach();
+      }
+    },
+    onWidgets: (
+      BuildMetadata meta,
+      Iterable<WidgetPlaceholder<dynamic>> widgets,
+    ) =>
+        listOrNull(
+      buildColumnPlaceholder(meta, widgets)!.wrapWith(
+        (_, Widget child) {
+          final Iterable<RegExpMatch> matches =
+              _quoteRegex.allMatches(meta.element.innerHtml);
+
+          for (final RegExpMatch _ in matches) {
+            child = Block(child: child);
+          }
+
+          return SizedBox(
+            width: double.infinity,
+            child: child,
+          );
+        },
+      ),
+    ),
+  );
 }
