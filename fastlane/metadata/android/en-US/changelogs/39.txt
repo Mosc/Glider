@@ -1,0 +1,7 @@
+• Added long-press option to show parent story or comment
+• Added tags next to usernames for noteworthy YC employees
+• Added monochrome icon as part of adaptive icon
+• Added licenses page in settings
+• Changed behavior of verbatim blocks to wrap
+• Improved reliability of story comment tree loading
+• Fixed scroll-to-top button behavior to only show on scrolling up
