@@ -36,7 +36,7 @@ jobs:
         run: flutter analyze
       - name: Get Android keystore
         id: android_keystore
-        uses: timheuer/base64-to-file@v1
+        uses: timheuer/base64-to-file@v1.2
         with:
           fileName: key.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
