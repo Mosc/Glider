@@ -19,12 +19,13 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.3.4
           channel: stable
+          cache: true
       - name: Cache pub
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ env.FLUTTER_HOME }}/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
@@ -52,7 +53,7 @@ jobs:
       - name: Build Android APK
         run: flutter build apk
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: app-release.apk
           path: build/app/outputs/apk/release/app-release.apk
