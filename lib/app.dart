@@ -23,13 +23,9 @@ class App extends HookConsumerWidget {
     final AndroidOverscrollIndicator? androidOverscrollIndicator = useMemoized(
       () {
         if (_deviceInfo is AndroidDeviceInfo) {
-          final int? androidSdkVersion =
-              (_deviceInfo as AndroidDeviceInfo).version.sdkInt;
-          if (androidSdkVersion != null && androidSdkVersion >= 31) {
-            return AndroidOverscrollIndicator.stretch;
-          } else {
-            return AndroidOverscrollIndicator.glow;
-          }
+          return (_deviceInfo as AndroidDeviceInfo).version.sdkInt >= 31
+              ? AndroidOverscrollIndicator.stretch
+              : AndroidOverscrollIndicator.glow;
         } else {
           return null;
         }
@@ -43,7 +39,7 @@ class App extends HookConsumerWidget {
         ref.watch(themeColorProvider).value ?? AppTheme.defaultColor;
 
     return MaterialApp(
-      home: const Home(),
+      home: Home(_deviceInfo),
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context).appName,
       builder: (BuildContext context, Widget? child) => MediaQuery(
