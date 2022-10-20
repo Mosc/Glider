@@ -37,6 +37,7 @@ dependencies:
     path: packages/native_launcher
   octo_image: ^1.0.2
   package_info_plus: ^3.0.0
+  queue: ^3.1.0+1
   relative_time: ^2.2.0
   share_plus: ^6.0.0
   shared_preferences: ^2.0.15

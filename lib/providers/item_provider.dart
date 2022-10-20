@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/models/item_tree.dart';
 import 'package:glider/models/search_order.dart';
@@ -15,6 +14,7 @@ import 'package:glider/providers/repository_provider.dart';
 import 'package:glider/utils/async_state_notifier.dart';
 import 'package:glider/utils/service_exception.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:queue/queue.dart';
 
 final StateProvider<int> previewIdStateProvider =
     StateProvider<int>((StateProviderRef<int> ref) => -1);
@@ -97,7 +97,9 @@ final StateNotifierProviderFamily<AsyncStateNotifier<Item>, AsyncValue<Item>,
 final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
     StreamProvider.autoDispose.family(
   (AutoDisposeStreamProviderRef<ItemTree> ref, int id) async* {
-    final Stream<TreeItem> treeItemStream = _itemStream(ref, id: id);
+    final Queue queue = Queue(parallel: 8);
+    final Stream<TreeItem> treeItemStream =
+        _itemStream(ref, id: id, queue: queue);
     final List<TreeItem> treeItems = <TreeItem>[TreeItem(id: id)];
 
     yield ItemTree(treeItems: treeItems, done: false);
@@ -122,32 +124,41 @@ final AutoDisposeStreamProviderFamily<ItemTree, int> itemTreeStreamProvider =
   },
 );
 
-Stream<TreeItem> _itemStream(Ref<AsyncValue<ItemTree>> ref,
-    {required int id, Iterable<int> ancestorIds = const <int>[]}) async* {
+Stream<TreeItem> _itemStream(
+  Ref<AsyncValue<ItemTree>> ref, {
+  required int id,
+  Iterable<int> ancestorIds = const <int>[],
+  Queue? queue,
+}) async* {
   try {
-    final Item item =
-        await ref.read(itemNotifierProvider(id).notifier).forceLoad();
+    final AsyncStateNotifier<Item> itemNotifier =
+        ref.read(itemNotifierProvider(id).notifier);
+    final Item item = queue != null
+        ? await queue.add(itemNotifier.forceLoad)
+        : await itemNotifier.forceLoad();
 
     if (!item.deleted) {
       final List<int> childIds = <int>[...item.parts, ...item.kids];
       final List<int> childAncestorIds = <int>[id, ...ancestorIds];
 
-      yield await SchedulerBinding.instance.scheduleTask(
-        () => TreeItem(
-          id: id,
-          childTreeItems: <TreeItem>[
-            for (final int childId in childIds)
-              TreeItem(id: childId, ancestorIds: childAncestorIds),
-          ],
-          ancestorIds: ancestorIds,
-        ),
-        Priority.animation,
+      yield TreeItem(
+        id: id,
+        childTreeItems: <TreeItem>[
+          for (final int childId in childIds)
+            TreeItem(id: childId, ancestorIds: childAncestorIds),
+        ],
+        ancestorIds: ancestorIds,
       );
 
       yield* StreamGroup.merge(
         <Stream<TreeItem>>[
           for (final int childId in childIds)
-            _itemStream(ref, id: childId, ancestorIds: childAncestorIds)
+            _itemStream(
+              ref,
+              id: childId,
+              ancestorIds: childAncestorIds,
+              queue: queue,
+            ),
         ],
       );
     }
