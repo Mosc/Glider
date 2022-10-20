@@ -35,25 +35,15 @@ class _DecoratedWidgetFactory extends WidgetFactory {
 
   @override
   void parse(BuildMetadata meta) {
-    if (meta.element.localName == 'pre') {
-      meta.register(_preOp);
-    } else if (meta.element.innerHtml.startsWith(_quoteRegex)) {
+    if (meta.element.innerHtml.startsWith(_quoteRegex)) {
       meta.register(_quoteOp);
     } else {
       super.parse(meta);
     }
   }
 
-  late final BuildOp _preOp = BuildOp(
-    defaultStyles: (dom.Element element) => <String, String>{
-      'white-space': 'pre-wrap',
-    },
-  );
-
   late final BuildOp _quoteOp = BuildOp(
-    defaultStyles: (dom.Element element) => <String, String>{
-      'margin': '0',
-    },
+    defaultStyles: (dom.Element element) => <String, String>{'margin': '0'},
     onTree: (BuildMetadata meta, BuildTree tree) {
       final BuildBit<dynamic, dynamic>? bit = tree.bits.firstOrNull;
 
