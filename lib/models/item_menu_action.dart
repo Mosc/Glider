@@ -173,7 +173,7 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return ItemOptionsCommand.share(context, ref, id: id);
       case ItemMenuAction.toggleVisited:
         final bool visited = ref.read(visitedProvider(id)).value ?? false;
-        return ToggleVisitedCommand(context, ref, id: id, visited: visited);
+        return ToggleVisitedCommand(context, ref, id: id, currentVisitedState: visited);
     }
   }
 }
