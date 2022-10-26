@@ -91,7 +91,7 @@ class Item with _$Item {
       active && type != ItemType.job && type != ItemType.pollopt;
 
   late final bool visitable =
-      active && type != ItemType.job && type != ItemType.pollopt;
+      active && type != ItemType.comment && type != ItemType.pollopt;
 
   bool get editable {
     final num? timeAgoHours = _timeAgoHours;
