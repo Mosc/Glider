@@ -101,7 +101,10 @@ extension ItemMenuActionExtension on ItemMenuAction {
       case ItemMenuAction.share:
         return AppLocalizations.of(context).share;
       case ItemMenuAction.toggleVisited:
-        return AppLocalizations.of(context).toggleVisited;
+        final bool visited = ref.read(visitedProvider(id)).value ?? false;
+        return visited
+            ? AppLocalizations.of(context).markUnRead
+            : AppLocalizations.of(context).markRead;
     }
   }
 
@@ -140,7 +143,10 @@ extension ItemMenuActionExtension on ItemMenuAction {
       case ItemMenuAction.share:
         return FluentIcons.share_24_regular;
       case ItemMenuAction.toggleVisited:
-        return FluentIcons.eye_24_regular;
+        final bool visited = ref.read(visitedProvider(id)).value ?? false;
+        return visited
+            ? FluentIcons.eye_off_24_regular
+            : FluentIcons.eye_24_regular;
     }
   }
 
@@ -172,10 +178,9 @@ extension ItemMenuActionExtension on ItemMenuAction {
       case ItemMenuAction.share:
         return ItemOptionsCommand.share(context, ref, id: id);
       case ItemMenuAction.toggleVisited:
-        final bool currentVisitedState =
-            ref.read(visitedProvider(id)).value ?? false;
+        final bool visited = ref.read(visitedProvider(id)).value ?? false;
         return ToggleVisitedCommand(context, ref,
-            id: id, newVisitedState: !currentVisitedState);
+            id: id, newVisitedState: !visited);
     }
   }
 }

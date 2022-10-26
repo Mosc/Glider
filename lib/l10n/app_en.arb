@@ -124,12 +124,13 @@
   "threadLink": "Thread link",
   "userLink": "User link",
   "copySuccess": "{option} has been copied",
+  "markRead": "Mark read",
+  "markUnRead": "Mark unread",
   "openParent": "Open the parent of this single thread",
   "experimentalDescription": "This feature is experimental. Things may go wrong.",
   "usernamePatternError": "Value should only contain letters, digits, dashes and underscores.",
   "genericError": "Something went wrong",
   "wittyError": "It doesn't look like anything to me",
-  "toggleVisited": "Toggle Visited",
 
   "@dateRange": {
     "placeholders": {
