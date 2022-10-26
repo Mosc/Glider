@@ -16,11 +16,10 @@ class ToggleVisitedCommand with CommandMixin {
 
   @override
   Future<void> execute() async {
-    unawaited(
-      ref.read(storageRepositoryProvider).setVisited(
-        id: id,
-        value: !currentVisitedState,
-      ).then((_) => ref.invalidate(visitedProvider(id))),
-    );
+    await ref.read(storageRepositoryProvider).setVisited(
+          id: id,
+          value: !currentVisitedState,
+        );
+    ref.invalidate(visitedProvider(id));
   }
 }
