@@ -103,7 +103,7 @@ extension ItemMenuActionExtension on ItemMenuAction {
       case ItemMenuAction.toggleVisited:
         final bool visited = ref.read(visitedProvider(id)).value ?? false;
         return visited
-            ? AppLocalizations.of(context).markUnRead
+            ? AppLocalizations.of(context).markUnread
             : AppLocalizations.of(context).markRead;
     }
   }

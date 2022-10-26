@@ -125,7 +125,7 @@
   "userLink": "User link",
   "copySuccess": "{option} has been copied",
   "markRead": "Mark read",
-  "markUnRead": "Mark unread",
+  "markUnread": "Mark unread",
   "openParent": "Open the parent of this single thread",
   "experimentalDescription": "This feature is experimental. Things may go wrong.",
   "usernamePatternError": "Value should only contain letters, digits, dashes and underscores.",
