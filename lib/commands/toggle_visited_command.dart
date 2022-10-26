@@ -8,17 +8,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ToggleVisitedCommand with CommandMixin {
   const ToggleVisitedCommand(BuildContext _, this.ref,
-      {required this.id, required this.currentVisitedState});
+      {required this.id, required this.newVisitedState});
 
   final WidgetRef ref;
   final int id;
-  final bool currentVisitedState;
+  final bool newVisitedState;
 
   @override
   Future<void> execute() async {
     await ref.read(storageRepositoryProvider).setVisited(
           id: id,
-          value: !currentVisitedState,
+          value: newVisitedState,
         );
     ref.invalidate(visitedProvider(id));
   }
