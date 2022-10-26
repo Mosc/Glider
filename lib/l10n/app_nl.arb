@@ -125,7 +125,7 @@
   "userLink": "Gebruikerslink",
   "copySuccess": "{option} is gekopieerd",
   "markRead": "Markeer als gelezen",
-  "markUnRead": "Markeer als ongelezen",
+  "markUnread": "Markeer als ongelezen",
   "openParent": "Open de bovenliggende discussie",
   "experimentalDescription": "Deze functie is experimenteel. Er kunnen dingen misgaan.",
   "usernamePatternError": "Waarde mag alleen letters, cijfers, streepjes en underscores bevatten.",
