@@ -90,6 +90,9 @@ class Item with _$Item {
   late final bool flaggable =
       active && type != ItemType.job && type != ItemType.pollopt;
 
+  late final bool visitable =
+      active && type == ItemType.story;
+
   bool get editable {
     final num? timeAgoHours = _timeAgoHours;
     return active &&

@@ -129,6 +129,7 @@
   "usernamePatternError": "Value should only contain letters, digits, dashes and underscores.",
   "genericError": "Something went wrong",
   "wittyError": "It doesn't look like anything to me",
+  "toggleVisited": "Toggle Visited",
 
   "@dateRange": {
     "placeholders": {

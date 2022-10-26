@@ -10,6 +10,7 @@ import 'package:glider/commands/item_options_command.dart';
 import 'package:glider/commands/reply_command.dart';
 import 'package:glider/commands/select_text_command.dart';
 import 'package:glider/commands/show_parent_command.dart';
+import 'package:glider/commands/toggle_visited_command.dart';
 import 'package:glider/commands/vote_command.dart';
 import 'package:glider/models/item.dart';
 import 'package:glider/providers/item_provider.dart';
@@ -27,6 +28,7 @@ enum ItemMenuAction {
   showParent,
   copy,
   share,
+  toggleVisited,
 }
 
 extension ItemMenuActionExtension on ItemMenuAction {
@@ -61,6 +63,8 @@ extension ItemMenuActionExtension on ItemMenuAction {
       case ItemMenuAction.copy:
       case ItemMenuAction.share:
         return true;
+      case ItemMenuAction.toggleVisited:
+        return item != null && item.visitable;
     }
   }
 
@@ -96,6 +100,8 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return AppLocalizations.of(context).copy;
       case ItemMenuAction.share:
         return AppLocalizations.of(context).share;
+      case ItemMenuAction.toggleVisited:
+        return AppLocalizations.of(context).toggleVisited;
     }
   }
 
@@ -133,6 +139,8 @@ extension ItemMenuActionExtension on ItemMenuAction {
             : FluentIcons.clipboard_text_ltr_24_regular;
       case ItemMenuAction.share:
         return FluentIcons.share_24_regular;
+      case ItemMenuAction.toggleVisited:
+        return FluentIcons.eye_24_regular;
     }
   }
 
@@ -163,6 +171,9 @@ extension ItemMenuActionExtension on ItemMenuAction {
         return ItemOptionsCommand.copy(context, ref, id: id);
       case ItemMenuAction.share:
         return ItemOptionsCommand.share(context, ref, id: id);
+      case ItemMenuAction.toggleVisited:
+        final bool visited = ref.read(visitedProvider(id)).value ?? false;
+        return ToggleVisitedCommand(context, ref, id: id, visited: visited);
     }
   }
 }
