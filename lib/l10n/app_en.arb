@@ -121,7 +121,7 @@
   "share": "Share...",
   "text": "Text",
   "link": "Link",
-  "threadLink": "Thread link",
+  "threadLink": "Comments link",
   "userLink": "User link",
   "copySuccess": "{option} has been copied",
   "markRead": "Mark read",
