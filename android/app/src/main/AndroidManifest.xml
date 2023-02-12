@@ -43,17 +43,11 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="http"
-                    android:host="news.ycombinator.com"
-                    android:pathPrefix="/item" />
-                <data
                     android:scheme="https"
                     android:host="news.ycombinator.com"
                     android:pathPrefix="/item" />
                 <data
                     android:scheme="http"
-                    android:host="news.ycombinator.com"
-                    android:pathPrefix="/user" />
-                <data
                     android:scheme="https"
                     android:host="news.ycombinator.com"
                     android:pathPrefix="/user" />
@@ -64,8 +58,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="http"
-                    android:host="hackernewsletter.us1.list-manage.com" />
-                <data
                     android:scheme="https"
                     android:host="hackernewsletter.us1.list-manage.com" />
             </intent-filter>
