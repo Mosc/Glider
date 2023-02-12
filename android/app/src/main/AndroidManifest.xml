@@ -58,6 +58,17 @@
                     android:host="news.ycombinator.com"
                     android:pathPrefix="/user" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="hackernewsletter.us1.list-manage.com" />
+                <data
+                    android:scheme="https"
+                    android:host="hackernewsletter.us1.list-manage.com" />
+            </intent-filter>
         </activity>
         <meta-data
             android:name="flutterEmbedding"
