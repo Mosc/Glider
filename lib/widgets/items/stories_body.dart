@@ -52,7 +52,7 @@ class StoriesBody extends HookConsumerWidget with PaginationMixin {
           context,
           ref,
           items: ids,
-          builder: (_, int id, __) => ItemTile(
+          builder: (_, int id, int position) => ItemTile(
             id: id,
             onTap: (BuildContext context) => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
