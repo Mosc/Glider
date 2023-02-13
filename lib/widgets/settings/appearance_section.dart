@@ -65,6 +65,12 @@ class AppearanceSection extends HookConsumerWidget {
           onSave: (bool value) =>
               ref.read(storageRepositoryProvider).setShowAvatar(value: value),
         ),
+        ProviderSwitchListTile(
+          title: AppLocalizations.of(context).showPosition,
+          provider: showPositionProvider,
+          onSave: (bool value) =>
+              ref.read(storageRepositoryProvider).setShowPosition(value: value),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
           child: Row(

@@ -37,6 +37,7 @@ class PreviewSection extends HookConsumerWidget {
             descendants: 322,
             preview: true,
           ),
+          position: 41,
           dense: true,
         ),
         ItemTileData(

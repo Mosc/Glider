@@ -39,8 +39,9 @@ class ItemSearchBody extends HookConsumerWidget {
       dataBuilder: (Iterable<int> ids) => <Widget>[
         SliverSmoothAnimatedList<int>(
           items: ids,
-          builder: (_, int id, __) => ItemTile(
+          builder: (_, int id, int position) => ItemTile(
             id: id,
+            position: position,
             onTap: (_) => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
             ),

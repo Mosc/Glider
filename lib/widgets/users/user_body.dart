@@ -48,6 +48,7 @@ class UserBody extends HookConsumerWidget with PaginationMixin {
           items: user.submitted,
           builder: (_, int id, int index) => ItemTile(
             id: id,
+            position: index,
             onTap: (BuildContext context) => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
             ),

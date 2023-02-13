@@ -56,8 +56,9 @@ class InboxBody extends HookConsumerWidget with PaginationMixin {
           context,
           ref,
           items: treeItems,
-          builder: (_, TreeItem treeItem, __) => ItemTile(
+          builder: (_, TreeItem treeItem, int position) => ItemTile(
             id: treeItem.id,
+            position: position,
             indentation: treeItem.ancestorIds.length,
             onTap: (_) => Navigator.of(context).push(
               MaterialPageRoute<void>(

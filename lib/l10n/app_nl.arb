@@ -61,6 +61,7 @@
   "showFavicon": "Toon favicon",
   "showMetadata": "Toon metadata",
   "showAvatar": "Toon avatar",
+  "showPosition": "Toon position",
   "textSize": "Tekstgrootte",
   "small": "Klein",
   "medium": "Gemiddeld",

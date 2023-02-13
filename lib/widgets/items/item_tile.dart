@@ -10,6 +10,7 @@ class ItemTile extends HookConsumerWidget {
   const ItemTile({
     super.key,
     required this.id,
+    this.position,
     this.indentation = 0,
     this.descendants,
     this.root,
@@ -22,6 +23,7 @@ class ItemTile extends HookConsumerWidget {
   });
 
   final int id;
+  final int? position;
   final int indentation;
   final int? descendants;
   final Item? root;
@@ -69,6 +71,7 @@ class ItemTile extends HookConsumerWidget {
         indentation: indentation,
         descendants: descendants ?? item.descendants,
       ),
+      position: position,
       key: ValueKey<String>('item_$id'),
       root: root,
       onTap: () => onTap?.call(context),

@@ -39,6 +39,11 @@ final FutureProvider<bool> showAvatarProvider = FutureProvider<bool>(
       ref.read(storageRepositoryProvider).showAvatar,
 );
 
+final FutureProvider<bool> showPositionProvider = FutureProvider<bool>(
+  (FutureProviderRef<bool> ref) =>
+      ref.read(storageRepositoryProvider).showPosition,
+);
+
 final FutureProvider<double?> textScaleFactorProvider = FutureProvider<double?>(
   (FutureProviderRef<double?> ref) =>
       ref.read(storageRepositoryProvider).textScaleFactor,

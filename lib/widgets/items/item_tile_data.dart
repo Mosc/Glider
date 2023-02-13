@@ -24,6 +24,7 @@ class ItemTileData extends HookConsumerWidget {
   const ItemTileData(
     this.item, {
     super.key,
+    this.position,
     this.root,
     this.onTap,
     this.dense = false,
@@ -32,6 +33,7 @@ class ItemTileData extends HookConsumerWidget {
   });
 
   final Item item;
+  final int? position;
   final Item? root;
   final void Function()? onTap;
   final bool dense;
@@ -64,6 +66,7 @@ class ItemTileData extends HookConsumerWidget {
       return ItemTileContent(
         item,
         root: root,
+        position: position,
         dense: dense,
         interactive: interactive,
         opacity: opacity,

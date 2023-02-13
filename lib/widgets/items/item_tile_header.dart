@@ -11,12 +11,14 @@ class ItemTileHeader extends HookConsumerWidget {
   const ItemTileHeader(
     this.item, {
     super.key,
+    this.position,
     this.dense = false,
     this.interactive = false,
     this.opacity = 1,
   });
 
   final Item item;
+  final int? position;
   final bool dense;
   final bool interactive;
   final double opacity;
@@ -24,6 +26,8 @@ class ItemTileHeader extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool showFavicon = ref.watch(showFaviconProvider).value ?? false;
+    final bool showPosition =
+        (ref.watch(showPositionProvider).value ?? false) && (position != null);
 
     return ConstrainedBox(
       constraints: showFavicon
@@ -32,6 +36,21 @@ class ItemTileHeader extends HookConsumerWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          SmoothAnimatedSwitcher.all(
+            condition: showPosition,
+            child: Row(
+              children: <Widget>[
+                const SizedBox(width: 6),
+                Center(
+                  child: Text(
+                    '${(position ?? -2) + 1}.',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                const SizedBox(width: 6),
+              ],
+            ),
+          ),
           Expanded(
             child: ItemTileTitle(
               item,

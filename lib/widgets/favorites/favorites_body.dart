@@ -46,6 +46,7 @@ class FavoritesBody extends HookConsumerWidget with PaginationMixin {
           items: ids,
           builder: (_, int id, int index) => ItemTile(
             id: id,
+            position: index,
             onTap: (BuildContext context) => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => ItemPage(id: id)),
             ),

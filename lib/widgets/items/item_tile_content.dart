@@ -12,6 +12,7 @@ class ItemTileContent extends HookConsumerWidget {
   const ItemTileContent(
     this.item, {
     super.key,
+    this.position,
     this.root,
     this.dense = false,
     this.interactive = false,
@@ -19,6 +20,7 @@ class ItemTileContent extends HookConsumerWidget {
   });
 
   final Item item;
+  final int? position;
   final Item? root;
   final bool dense;
   final bool interactive;
@@ -44,6 +46,7 @@ class ItemTileContent extends HookConsumerWidget {
           if (showHeader)
             ItemTileHeader(
               item,
+              position: position,
               dense: dense,
               interactive: interactive,
               opacity: opacity,
