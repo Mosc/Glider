@@ -7,9 +7,11 @@ import 'package:glider/widgets/items/item_tile_favicon.dart';
 import 'package:glider/widgets/items/item_tile_title.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../utils/animation_util.dart';
+import '../common/smooth_animated_size.dart';
+
 class ItemTileHeader extends HookConsumerWidget {
-  const ItemTileHeader(
-    this.item, {
+  const ItemTileHeader(this.item, {
     super.key,
     this.position,
     this.dense = false,
@@ -25,9 +27,13 @@ class ItemTileHeader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool showFavicon = ref.watch(showFaviconProvider).value ?? false;
+    final bool showFavicon = ref
+        .watch(showFaviconProvider)
+        .value ?? false;
     final bool showPosition =
-        (ref.watch(showPositionProvider).value ?? false) && (position != null);
+        (ref
+            .watch(showPositionProvider)
+            .value ?? false) && (position != null);
 
     return ConstrainedBox(
       constraints: showFavicon
@@ -42,10 +48,19 @@ class ItemTileHeader extends HookConsumerWidget {
               children: <Widget>[
                 const SizedBox(width: 6),
                 Center(
-                  child: Text(
-                    '${(position ?? -2) + 1}.',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+                    child: AnimatedOpacity(
+                      opacity: opacity,
+                      duration: AnimationUtil.defaultDuration,
+                      child: SmoothAnimatedSize(
+                        child: Text(
+                          '${(position ?? -2) + 1}.',
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleMedium,
+                        ),
+                      ),
+                    )
                 ),
                 const SizedBox(width: 6),
               ],
@@ -79,7 +94,11 @@ class ItemTileHeader extends HookConsumerWidget {
 
   static double? calculateHeight(BuildContext context) {
     final double? lineHeight =
-        Theme.of(context).textTheme.titleMedium?.lineHeight(context);
+    Theme
+        .of(context)
+        .textTheme
+        .titleMedium
+        ?.lineHeight(context);
     return lineHeight != null ? lineHeight * 2 : null;
   }
 }
