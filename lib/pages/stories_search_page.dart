@@ -62,11 +62,11 @@ class StoriesSearchPage extends HookConsumerWidget with PaginationMixin {
 
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> storySearchQueryStateController =
-        ref.watch(storySearchQueryStateProvider.state);
+        ref.watch(storySearchQueryStateProvider.notifier);
     final StateController<SearchRange?> storySearchRangeStateController =
-        ref.watch(storySearchRangeStateProvider.state);
+        ref.watch(storySearchRangeStateProvider.notifier);
     final StateController<SearchOrder> storySearchOrderStateController =
-        ref.watch(storySearchOrderStateProvider.state);
+        ref.watch(storySearchOrderStateProvider.notifier);
     useMemoized(
       () => Future<void>.microtask(
         () => storySearchRangeStateController.update((_) => initialSearchRange),
@@ -207,7 +207,7 @@ class SearchRangeChip extends HookConsumerWidget with PaginationMixin {
       onSelected: (bool selected) async {
         resetPagination(ref);
         ref
-            .read(storySearchCustomDateTimeRangeStateProvider.state)
+            .read(storySearchCustomDateTimeRangeStateProvider.notifier)
             .update((_) => null);
 
         if (searchRange == SearchRange.custom && selected) {
@@ -217,7 +217,7 @@ class SearchRangeChip extends HookConsumerWidget with PaginationMixin {
             lastDate: DateTime.now(),
           );
           ref
-              .read(storySearchCustomDateTimeRangeStateProvider.state)
+              .read(storySearchCustomDateTimeRangeStateProvider.notifier)
               .update((_) => dateTimeRange);
 
           if (ref.read(storySearchCustomDateTimeRangeStateProvider) == null) {
@@ -227,7 +227,7 @@ class SearchRangeChip extends HookConsumerWidget with PaginationMixin {
 
         resetPagination(ref);
         ref
-            .read(storySearchRangeStateProvider.state)
+            .read(storySearchRangeStateProvider.notifier)
             .update((_) => selected ? searchRange : null);
       },
     );

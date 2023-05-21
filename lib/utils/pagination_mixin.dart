@@ -24,7 +24,7 @@ mixin PaginationMixin {
     final bool useInfiniteScroll =
         ref.watch(useInfiniteScrollProvider).value ?? true;
     final StateController<int> paginationStateController =
-        ref.watch(paginationStateProvider.state);
+        ref.watch(paginationStateProvider.notifier);
 
     return <Widget>[
       SliverSmoothAnimatedList<T>(
@@ -55,5 +55,5 @@ mixin PaginationMixin {
   }
 
   void resetPagination(WidgetRef ref) =>
-      ref.read(paginationStateProvider.state).update((_) => initialPage);
+      ref.read(paginationStateProvider.notifier).update((_) => initialPage);
 }

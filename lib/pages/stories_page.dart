@@ -60,7 +60,9 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
             ],
             onSelected: (StoryType storyType) {
               resetPagination(ref);
-              ref.read(storyTypeStateProvider.state).update((_) => storyType);
+              ref
+                  .read(storyTypeStateProvider.notifier)
+                  .update((_) => storyType);
             },
             tooltip: AppLocalizations.of(context).storyType,
             icon: const Icon(FluentIcons.filter_24_regular),
@@ -166,7 +168,7 @@ class StoriesPage extends HookConsumerWidget with PaginationMixin {
               .forceLoad(),
         );
         ref
-            .read(storyTypeStateProvider.state)
+            .read(storyTypeStateProvider.notifier)
             .update((_) => StoryType.newStories);
         ScaffoldMessenger.of(context).replaceSnackBar(
           SnackBar(

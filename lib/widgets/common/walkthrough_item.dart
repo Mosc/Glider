@@ -36,11 +36,11 @@ class WalkthoughItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final StateController<WalkthroughStep> stepStateController =
-        ref.watch(_walkthroughStepStateProvider.state);
+        ref.watch(_walkthroughStepStateProvider.notifier);
     final StateController<bool> upvotedStateController =
-        ref.watch(_walkthroughUpvotedStateProvider.state);
+        ref.watch(_walkthroughUpvotedStateProvider.notifier);
     final StateController<bool> favoritedStateController =
-        ref.watch(_walkthroughFavoritedStateProvider.state);
+        ref.watch(_walkthroughFavoritedStateProvider.notifier);
 
     Future<void>.microtask(() {
       switch (stepStateController.state) {

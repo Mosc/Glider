@@ -31,7 +31,7 @@ class ScrollToTopScaffold extends HookConsumerWidget {
       ),
       floatingActionButton: showFloatingActionButtonState.value
           ? FloatingActionButton.small(
-              onPressed: () => PrimaryScrollController.of(context)?.animateTo(
+              onPressed: () => PrimaryScrollController.of(context).animateTo(
                 0,
                 duration: AnimationUtil.defaultDuration,
                 curve: AnimationUtil.defaultCurve,

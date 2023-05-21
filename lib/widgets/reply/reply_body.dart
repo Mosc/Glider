@@ -137,7 +137,7 @@ class ReplyBody extends HookConsumerWidget {
 
     if (success) {
       final StateController<int> previewIdStateController =
-          ref.read(previewIdStateProvider.state);
+          ref.read(previewIdStateProvider.notifier);
       final int previewId = previewIdStateController.state;
 
       // Make comment preview available.

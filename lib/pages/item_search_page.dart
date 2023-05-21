@@ -32,9 +32,9 @@ class ItemSearchPage extends HookConsumerWidget {
 
     final TextEditingController queryController = useTextEditingController();
     final StateController<String> itemSearchQueryStateController =
-        ref.watch(itemSearchQueryStateProvider.state);
+        ref.watch(itemSearchQueryStateProvider.notifier);
     final StateController<SearchOrder> itemStoryTypeStateController =
-        ref.watch(itemSearchOrderStateProvider.state);
+        ref.watch(itemSearchOrderStateProvider.notifier);
 
     return Theme(
       data: theme.copyWith(

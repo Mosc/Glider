@@ -82,7 +82,7 @@ class ItemTileMetadata extends HookConsumerWidget {
               const MetadataItem(icon: FluentIcons.delete_24_regular),
               Text(
                 '[${AppLocalizations.of(context).deleted}]',
-                style: textTheme.bodyText2
+                style: textTheme.bodyMedium
                     ?.copyWith(fontSize: textTheme.bodySmall?.fontSize),
               ),
               const SizedBox(width: 8),
@@ -100,7 +100,7 @@ class ItemTileMetadata extends HookConsumerWidget {
                     false)) ...<Widget>[
               Text(
                 '[${AppLocalizations.of(context).blocked}]',
-                style: textTheme.bodyText2
+                style: textTheme.bodyMedium
                     ?.copyWith(fontSize: textTheme.bodySmall?.fontSize),
               ),
               const SizedBox(width: 8),

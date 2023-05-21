@@ -102,7 +102,6 @@ class AppTheme {
             )
           : null,
       dialogBackgroundColor: canvasColor,
-      toggleableActiveColor: color,
       appBarTheme: AppBarTheme(
         backgroundColor: appBarBackgroundColor,
         iconTheme: IconThemeData(

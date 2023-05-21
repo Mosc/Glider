@@ -69,7 +69,7 @@ class FavoritesSearchPage extends HookConsumerWidget with PaginationMixin {
             onChanged: (String value) {
               resetPagination(ref);
               ref
-                  .read(favoriteSearchQueryStateProvider.state)
+                  .read(favoriteSearchQueryStateProvider.notifier)
                   .update((_) => value);
             },
           ),
@@ -82,7 +82,7 @@ class FavoritesSearchPage extends HookConsumerWidget with PaginationMixin {
                   resetPagination(ref);
                   queryController.clear();
                   ref
-                      .read(favoriteSearchQueryStateProvider.state)
+                      .read(favoriteSearchQueryStateProvider.notifier)
                       .update((_) => '');
                 },
               ),
@@ -97,7 +97,7 @@ class FavoritesSearchPage extends HookConsumerWidget with PaginationMixin {
               onSelected: (SearchOrder searchOrder) {
                 resetPagination(ref);
                 ref
-                    .read(favoriteSearchOrderStateProvider.state)
+                    .read(favoriteSearchOrderStateProvider.notifier)
                     .update((_) => searchOrder);
               },
               tooltip: AppLocalizations.of(context).sort,

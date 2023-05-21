@@ -238,7 +238,9 @@ class SubmitBody extends HookConsumerWidget {
 
     if (success) {
       // Decrement preview ID to prevent duplicates.
-      ref.read(previewIdStateProvider.state).update((int state) => state - 1);
+      ref
+          .read(previewIdStateProvider.notifier)
+          .update((int state) => state - 1);
 
       Navigator.of(context).pop(true);
     } else {

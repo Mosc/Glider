@@ -65,7 +65,7 @@ class CollapsibleItemTile extends HookConsumerWidget {
     final RenderObject? renderObject = context.findRenderObject();
 
     if (renderObject != null) {
-      return Scrollable.of(context)?.position.ensureVisible(
+      return Scrollable.of(context).position.ensureVisible(
             renderObject,
             duration: AnimationUtil.defaultDuration,
             curve: AnimationUtil.defaultCurve,
