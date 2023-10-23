@@ -236,7 +236,7 @@ class _SettingsBody extends StatelessWidget {
           if (state.appVersion case final appVersion?)
             ListTile(
               title: Text(context.l10n.appVersion),
-              subtitle: Text(appVersion),
+              subtitle: Text(appVersion.canonicalizedVersion),
               enabled: false,
             ),
           ListTile(
@@ -269,7 +269,7 @@ class _SettingsBody extends StatelessWidget {
             onTap: () => showLicensePage(
               context: context,
               applicationName: context.l10n.appName,
-              applicationVersion: state.appVersion,
+              applicationVersion: state.appVersion?.canonicalizedVersion,
             ),
           ),
         ],

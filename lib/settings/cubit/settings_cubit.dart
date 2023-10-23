@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:material_color_utilities/scheme/variant.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:share_plus/share_plus.dart';
 
 part 'settings_state.dart';

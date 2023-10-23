@@ -1,5 +1,6 @@
 import 'package:glider_data/glider_data.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 class PackageRepository {
   const PackageRepository(
@@ -10,11 +11,15 @@ class PackageRepository {
   final SharedPreferencesService _sharedPreferencesService;
   final PackageInfo _packageInfo;
 
-  String getVersion() => _packageInfo.version;
+  Version getVersion() => Version.parse(_packageInfo.version);
 
-  Future<String?> getLastVersion() async =>
-      _sharedPreferencesService.getLastVersion();
+  Future<Version?> getLastVersion() async {
+    final lastVersion = await _sharedPreferencesService.getLastVersion();
+    return lastVersion != null ? Version.parse(lastVersion) : null;
+  }
 
-  Future<bool?> setLastVersion({required String value}) async =>
-      _sharedPreferencesService.setLastVersion(value: value);
+  Future<bool?> setLastVersion({required Version value}) async =>
+      _sharedPreferencesService.setLastVersion(
+        value: value.canonicalizedVersion,
+      );
 }

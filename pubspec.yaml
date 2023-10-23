@@ -36,6 +36,7 @@ dependencies:
   material_color_utilities: any
   package_info_plus: ^4.2.0
   path_provider: ^2.1.1
+  pub_semver: ^2.1.4
   relative_time: ^4.0.1
   rxdart: ^0.28.0-dev.0
   scrollview_observer: ^1.16.5

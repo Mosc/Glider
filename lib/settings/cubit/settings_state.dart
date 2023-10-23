@@ -21,7 +21,7 @@ class SettingsState with EquatableMixin {
   final bool usePureBackground;
   final bool showJobs;
   final bool useThreadNavigation;
-  final String? appVersion;
+  final Version? appVersion;
 
   SettingsState copyWith({
     bool Function()? useLargeStoryStyle,
@@ -32,7 +32,7 @@ class SettingsState with EquatableMixin {
     bool Function()? usePureBackground,
     bool Function()? showJobs,
     bool Function()? useThreadNavigation,
-    String? Function()? appVersion,
+    Version? Function()? appVersion,
   }) =>
       SettingsState(
         useLargeStoryStyle: useLargeStoryStyle != null

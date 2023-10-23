@@ -13,6 +13,7 @@ dependencies:
   html: ^0.15.4
   material_color_utilities: any
   package_info_plus: ^4.2.0
+  pub_semver: ^2.1.4
   rxdart: ^0.28.0-dev.0
 
 dev_dependencies:
