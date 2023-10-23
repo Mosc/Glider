@@ -1,0 +1,5 @@
+exclude:
+  - packages/**
+
+ignore:
+  - flutter_gen

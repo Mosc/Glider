@@ -1,0 +1,34 @@
+name: glider
+
+ide:
+  intellij:
+    enabled: false
+
+packages:
+  - .
+  - packages/*
+
+scripts:
+  lint:
+    run: melos run analyze && melos run format-check && melos run dependency-validate
+    description: Run all static analysis checks.
+
+  analyze:
+    exec: dart analyze . --fatal-infos
+    description: Run `dart analyze` in all packages.
+
+  format:
+    exec: dart format . --fix
+    description: Run `dart format` for all packages.
+
+  format-check:
+    exec: dart format . --set-exit-if-changed
+    description: Run `dart format` checks for all packages.
+
+  dependency-validate:
+    exec: flutter pub run dependency_validator
+    description: Run `flutter pub run dependency_validator` for all packages.
+
+  outdated:
+    exec: flutter pub outdated
+    description: Run `flutter pub outdated` for all packages.

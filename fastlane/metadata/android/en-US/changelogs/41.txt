@@ -1,0 +1,9 @@
+- Rewrote the app internals
+- Revamped the UI based on Material 3
+- Resolved numerous issues
+    - Added top level comment navigation (#19)
+    - Removed gestures, due to general bugginess (#36)
+    - Fixed auth issues by fetching cookie from webview (#63, #91)
+    - Added support for favorites exporting (#75)
+    - Fixed thread loading glitches (#84, #86)
+    - Fixed incorrect detection of nested quote blocks (#85)

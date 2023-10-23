@@ -1,0 +1,57 @@
+part of 'user_cubit.dart';
+
+class UserState with DataMixin<User>, EquatableMixin {
+  const UserState({
+    this.status = Status.initial,
+    this.data,
+    this.blocked = false,
+    this.synchronizing = false,
+    this.exception,
+  });
+
+  factory UserState.fromJson(Map<String, dynamic> json) => UserState(
+        status: Status.values.byName(json['status'] as String),
+        data: User.fromJson(json['data'] as Map<String, dynamic>),
+        blocked: json['blocked'] as bool? ?? false,
+      );
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'status': status.name,
+        'data': data?.toJson(),
+        'blocked': blocked,
+      };
+
+  @override
+  final Status status;
+  @override
+  final User? data;
+  final bool blocked;
+  final bool synchronizing;
+  @override
+  final Object? exception;
+
+  UserState copyWith({
+    Status Function()? status,
+    User? Function()? data,
+    bool Function()? blocked,
+    bool Function()? synchronizing,
+    Object? Function()? exception,
+  }) =>
+      UserState(
+        status: status != null ? status() : this.status,
+        data: data != null ? data() : this.data,
+        blocked: blocked != null ? blocked() : this.blocked,
+        synchronizing:
+            synchronizing != null ? synchronizing() : this.synchronizing,
+        exception: exception != null ? exception() : this.exception,
+      );
+
+  @override
+  List<Object?> get props => [
+        status,
+        data,
+        blocked,
+        synchronizing,
+        exception,
+      ];
+}

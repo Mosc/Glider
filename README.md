@@ -9,7 +9,7 @@ Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
 - Catch up on and search stories from any period
 - Log in using an existing or new Hacker News account
 - Vote on and favorite stories and comments
-- Write replies and submit new stories (experimental)
+- Write replies and submit new stories
 - Collapse comment trees
 - No ads, no telemetry
 - Extensive theming
@@ -22,14 +22,6 @@ Glider is an opinionated Hacker News client. Ad-free, open-source, no-nonsense.
   <img width="164px" src="./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png">
   <img width="164px" src="./fastlane/metadata/android/en-US/images/phoneScreenshots/5.png">
 </p>
-
-## Development
-
-Glider is built with the latest stable version of Flutter. Code that can be generated is not included in the repository. Generate it by running `build_runner`:
-
-```sh
-flutter pub run build_runner build -d
-```
 
 [play store]: https://play.google.com/store/apps/details?id=nl.viter.glider
 [f-droid]: https://f-droid.org/packages/nl.viter.glider

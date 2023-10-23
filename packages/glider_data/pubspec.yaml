@@ -1,0 +1,18 @@
+name: glider_data
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  collection: any
+  compute: ^1.0.2
+  flutter_secure_storage: ^9.0.0
+  html: ^0.15.4
+  http: ^1.1.0
+  shared_preferences: ^2.2.1
+
+dev_dependencies:
+  dependency_validator: ^3.2.3
+  leancode_lint: ^6.0.0

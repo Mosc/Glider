@@ -1,0 +1,167 @@
+{
+    "@@locale": "en",
+    "appName": "Glider",
+    "empty": "\"It's quiet... too quiet'\"",
+    "failure": "Something went wrong",
+    "confirm": "Are you sure?",
+    "retry": "Retry",
+    "search": "Search",
+    "clear": "Clear",
+    "whatsNew": "What's new",
+    "whatsNewDescription": "> “It’s important to remember that when you start from scratch there is *absolutely no reason* to believe that you are going to do a better job than you did the first time.” — *Joel Spolsky*\n\nWelcome to the new Glider for Hacker News!\n\nDefying rationality, this update is the result of a *Thing You Should Never Do* [0]: rewriting the code from scratch. Accompanying this change is a UI overhaul, based on the Material 3 design system.\n\nLogin and registration is now deferred to the Hacker News website for increased security and reliability. This unfortunately neccesitates logging in again, once.\n\nOverall, most users should feel at home quickly, although not every feature survived the metamorphosis, for varying reasons. Please provide feature requests and bug reports through the issue tracker [1].\n---\n[0]: https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/\n\n[1]: https://github.com/Mosc/Glider/issues",
+    "explore": "Explore",
+    "settings": "Settings",
+    "appearance": "Appearance",
+    "behavior": "Behavior",
+    "about": "About",
+    "largeStoryStyle": "Large stories",
+    "largeStoryStyleDescription": "Shows URL and larger title",
+    "storyMetadata": "Story metadata",
+    "storyMetadataDescription": "Always shows on some pages",
+    "dynamicTheme": "Dynamic theme",
+    "dynamicThemeDescription": "Uses system color scheme",
+    "themeColor": "Theme color",
+    "themeVariant": "Theme variant",
+    "pureBackground": "Pure background",
+    "pureBackgroundDescription": "White on light theme, black on dark theme",
+    "showJobs": "Show job stories",
+    "showJobsDescription": "Always shown on jobs tab",
+    "threadNavigation": "Thread navigation",
+    "threadNavigationDescription": "Allows jumps between top-level comments",
+    "data": "Data",
+    "exportFavorites": "Export favorites",
+    "exportFavoritesDescription": "Shares favorites as IDs in JSON format",
+    "appVersion": "App version",
+    "privacyPolicy": "Privacy policy",
+    "privacyPolicyYc": "Privacy policy (YC)",
+    "license": "License",
+    "sourceCode": "Source code",
+    "issueTracker": "Issue tracker",
+    "account": "Account",
+    "authDescription": "Log in or register on Hacker News below. The session cookie will be securely saved and used for requests that require authentication. This app will not have access to your password.",
+    "termsOfUseYc": "Terms of use (YC)",
+    "logout": "Log out",
+    "showMore": "Show more",
+    "stories": "Frontpage",
+    "storyTypeTop": "Top",
+    "storyTypeNew": "New",
+    "storyTypeBest": "Best",
+    "storyTypeAsk": "Ask",
+    "storyTypeShow": "Show",
+    "storyTypeJob": "Jobs",
+    "submit": "Submit",
+    "catchUp": "Catch up",
+    "favorites": "Favorites",
+    "inbox": "Inbox",
+    "upvote": "Upvote",
+    "unvote": "Unvote",
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "flag": "Flag",
+    "unflag": "Unflag",
+    "edit": "Edit",
+    "delete": "Delete",
+    "reply": "Reply",
+    "select": "Select",
+    "copy": "Copy",
+    "share": "Share",
+    "title": "Title",
+    "text": "Text",
+    "link": "Link",
+    "itemLink": "Discussion link",
+    "synchronize": "Synchronize",
+    "synchronizing": "Synchronizing...",
+    "synchronizeDescription": "Interactions performed from within Glider are pushed to your account, but it is not aware of changes made through other channels, such as the website itself.\n\n\"Synchronize\" manually pulls the votes, favorites and flags from your account and updates the app accordingly.\n\nNote that any local-only favorites created before logging in will be overwritten.",
+    "block": "Block",
+    "unblock": "Unblock",
+    "username": "Username",
+    "about": "About",
+    "userLink": "User link",
+    "autofillTitle": "Autofill title",
+    "emptyError": "This field cannot be empty.",
+    "bothEmptyError": "This field and {otherField} cannot both be empty.",
+    "@bothEmptyError": {
+        "placeholders": {
+            "otherField": {
+                "type": "String"
+            }
+        }
+    },
+    "tooLongError": "Value must have a length less than or equal to {maxLength}",
+    "@tooLongError": {
+        "placeholders": {
+            "maxLength": {
+                "type": "int"
+            }
+        }
+    },
+    "invalidUrlError": "This field requires a valid URL address.",
+    "blocked": "[blocked]",
+    "deleted": "[deleted]",
+    "fromYear": "from {year}",
+    "@fromYear": {
+        "placeholders": {
+            "year": {
+                "type": "String"
+            }
+        }
+    },
+    "sinceDate": "since {date}",
+    "@sinceDate": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMMMMd"
+            }
+        }
+    },
+    "loadParent": "Load parent",
+    "goToParent": "Go to parent",
+    "previousRootChild": "Previous top-level comment",
+    "nextRootChild": "Next top-level comment",
+    "similarDiscussions": "Similar discussions",
+    "newDescendants": "{count} new {count, plural, one{comment} other{comments}}",
+    "@newDescendants": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "preview": "Preview",
+    "quoteParent": "Quote parent",
+    "dateRangeCustom": "Custom",
+    "dateRangeCustomSingle": "{date}",
+    "@dateRangeCustomSingle": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMMMd"
+            }
+        }
+    },
+    "dateRangeCustomMulti": "{startDate} to {endDate}",
+    "@dateRangeCustomMulti": {
+        "placeholders": {
+            "startDate": {
+                "type": "DateTime",
+                "format": "yMMMd"
+            },
+                "endDate": {
+                "type": "DateTime",
+                "format": "yMMMd"
+            }
+        }
+    },
+    "dateRangePastDay": "Past day",
+    "dateRangePast3Days": "Past 3 days",
+    "dateRangePastWeek": "Past week",
+    "dateRangePastMonth": "Past month",
+    "dateRangePastYear": "Past year",
+    "founder": "founder",
+    "ceo": "ceo",
+    "moderator": "mod",
+    "exModerator": "ex-mod",
+    "bot": "bot",
+    "purrfect": "purrfect"
+}

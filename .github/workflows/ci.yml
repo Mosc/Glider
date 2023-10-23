@@ -1,5 +1,4 @@
 name: CI
-
 on:
   push:
     branches:
@@ -7,53 +6,38 @@ on:
     tags-ignore:
       - 'v*'
   pull_request:
-    branches:
-      - '**'
 jobs:
-  ci:
-    name: CI
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - name: Parse FVM config
+        id: fvm-config-action
+        uses: kuhnroyal/flutter-fvm-config-action@v2.0
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.3.4
-          channel: stable
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: any
           cache: true
-      - name: Cache pub
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.FLUTTER_HOME }}/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: ${{ runner.os }}-pub-
-      - name: Get pub
-        run: flutter pub get
-      - name: Generate code
-        run: flutter pub run build_runner build -d
-      - name: Check formatting
-        run: flutter format -n --set-exit-if-changed .
-      - name: Analyze code
-        run: flutter analyze
-      - name: Get Android keystore
-        id: android_keystore
-        uses: timheuer/base64-to-file@v1
-        with:
-          fileName: key.jks
-          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      - name: Create key.properties
-        run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
-      - name: Build Android APK
-        run: flutter build apk
-      - name: Upload APK artifact
+      - name: Setup Melos
+        uses: bluefireteam/melos-action@v2
+      - name: Run static analysis checks
+        run: melos lint
+      - name: Build Android APK (profile)
+        run: flutter build apk --profile
+      - name: Upload APK (profile) artifact
         uses: actions/upload-artifact@v3
         with:
-          name: app-release.apk
-          path: build/app/outputs/apk/release/app-release.apk
+          name: app-profile.apk
+          path: build/app/outputs/apk/profile/app-profile.apk

@@ -1,65 +1,118 @@
 name: Release
-
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
 jobs:
-  play-store:
-    name: Play Store
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - name: Get Android keystore
+        id: android-keystore
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: keystore.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - name: Create key.properties
+        uses: GuillaumeFalourd/write-java-properties-file@v1
+        with:
+          file_path: ./android/key.properties
+          property: |
+            storeFile
+            storePassword
+            keyPassword
+            keyAlias
+          value: |
+            ${{ steps.android-keystore.outputs.filePath }}
+            ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+            ${{ secrets.ANDROID_KEY_PASSWORD }}
+            ${{ secrets.ANDROID_KEY_ALIAS }}
+      - name: Parse FVM config
+        id: fvm-config-action
+        uses: kuhnroyal/flutter-fvm-config-action@v2.0
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.3.4
-          channel: stable
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: any
           cache: true
-      - name: Cache pub
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.FLUTTER_HOME }}/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: ${{ runner.os }}-pub-
-      - name: Get pub
-        run: flutter pub get
-      - name: Generate code
-        run: flutter pub run build_runner build -d
-      - name: Check formatting
-        run: flutter format -n --set-exit-if-changed .
-      - name: Analyze code
-        run: flutter analyze
-      - name: Get Android keystore
-        id: android_keystore
-        uses: timheuer/base64-to-file@v1
-        with:
-          fileName: key.jks
-          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      - name: Create key.properties
-        run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+      - name: Setup Melos
+        uses: bluefireteam/melos-action@v2
+      - name: Build Android APK
+        run: flutter build apk
       - name: Build Android App Bundle
         run: flutter build appbundle
-      - name: Upload AAB artifact
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: build/app/outputs/apk/release/app-release.apk
+      - name: Upload App Bundle artifact
         uses: actions/upload-artifact@v3
         with:
           name: app-release.aab
           path: build/app/outputs/bundle/release/app-release.aab
+  release-github:
+    name: Release to GitHub
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Parse pubspec
+        id: pubspec
+        uses: altive/pubspec-metadata@v1
+      - name: Get artifact
+        id: download-artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-release.apk
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: fastlane/metadata/android/en-US/changelogs/${{ steps.pubspec.outputs.build-number }}.txt
+          files: app-release.apk
+  release-play-store:
+    name: Release to Play Store
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1
+          ruby-version: 3.2
           bundler-cache: true
+      - name: Get artifact
+        id: download-artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-release.aab
       - name: Release to Google Play
+        uses: maierj/fastlane-action@v3.0.0
+        with:
+          lane: supply
+          options: '{ "aab": "app-release.aab" }'
         env:
           SUPPLY_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
           SUPPLY_JSON_KEY_DATA: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-        run: bundle exec fastlane run supply aab:build/app/outputs/bundle/release/app-release.aab
