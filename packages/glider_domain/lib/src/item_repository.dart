@@ -105,7 +105,7 @@ class ItemRepository {
 
     if (userDto.submitted case final submitted?) {
       // Limit ID count to prevent running into HTTP status 414 URI Too Long.
-      final dto = await _algoliaApiService.getUserReplies(submitted.take(300));
+      final dto = await _algoliaApiService.getUserReplies(submitted.take(30));
       final items = await compute(
         (hits) =>
             hits.map(Item.fromAlgoliaSearchHitDto).toList(growable: false),
