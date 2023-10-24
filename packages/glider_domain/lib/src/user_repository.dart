@@ -4,7 +4,6 @@ import 'package:compute/compute.dart';
 import 'package:glider_data/glider_data.dart';
 import 'package:glider_domain/src/entities/user.dart';
 import 'package:glider_domain/src/extensions/behavior_subject_map_extension.dart';
-import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
 class UserRepository {
@@ -14,7 +13,7 @@ class UserRepository {
 
   final Map<String, BehaviorSubject<User>> _userStreamControllers;
 
-  ValueStream<User> getUserStream(String username) => _userStreamControllers
+  Stream<User> getUserStream(String username) => _userStreamControllers
       .getOrAdd(username, asyncSeed: () async => getUser(username))
       .stream;
 

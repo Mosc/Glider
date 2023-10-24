@@ -10,7 +10,7 @@ import 'package:glider/stories_search/models/search_range.dart';
 import 'package:glider/stories_search/models/search_type.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/transformers.dart';
 
 part 'stories_search_event.dart';
 part 'stories_search_state.dart';

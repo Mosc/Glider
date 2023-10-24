@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:glider_data/glider_data.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 class ItemInteractionRepository {
   ItemInteractionRepository(
@@ -25,14 +25,13 @@ class ItemInteractionRepository {
       BehaviorSubject();
   final BehaviorSubject<List<int>> _flaggedStreamController = BehaviorSubject();
 
-  ValueStream<List<int>> get visitedStream => _visitedStreamController.stream;
+  Stream<List<int>> get visitedStream => _visitedStreamController.stream;
 
-  ValueStream<List<int>> get upvotedStream => _upvotedStreamController.stream;
+  Stream<List<int>> get upvotedStream => _upvotedStreamController.stream;
 
-  ValueStream<List<int>> get favoritedStream =>
-      _favoritedStreamController.stream;
+  Stream<List<int>> get favoritedStream => _favoritedStreamController.stream;
 
-  ValueStream<List<int>> get flaggedStream => _flaggedStreamController.stream;
+  Stream<List<int>> get flaggedStream => _flaggedStreamController.stream;
 
   Future<List<int>> getVisitedIds() async {
     try {

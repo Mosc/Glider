@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:glider_data/glider_data.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 class UserInteractionRepository {
   UserInteractionRepository(
@@ -21,11 +21,9 @@ class UserInteractionRepository {
   final BehaviorSubject<bool> _synchronizingStreamController =
       BehaviorSubject.seeded(false);
 
-  ValueStream<List<String>> get blockedStream =>
-      _blockedStreamController.stream;
+  Stream<List<String>> get blockedStream => _blockedStreamController.stream;
 
-  ValueStream<bool> get synchronizingStream =>
-      _synchronizingStreamController.stream;
+  Stream<bool> get synchronizingStream => _synchronizingStreamController.stream;
 
   Future<List<String>> getBlockedUsernames() async {
     try {

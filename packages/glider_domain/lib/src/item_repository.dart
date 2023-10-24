@@ -5,7 +5,8 @@ import 'package:glider_data/glider_data.dart';
 import 'package:glider_domain/src/entities/item.dart';
 import 'package:glider_domain/src/entities/item_descendant.dart';
 import 'package:glider_domain/src/extensions/behavior_subject_map_extension.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/streams.dart';
+import 'package:rxdart/subjects.dart';
 
 class ItemRepository {
   ItemRepository(
@@ -122,7 +123,7 @@ class ItemRepository {
     }
   }
 
-  ValueStream<Item> getItemStream(int id) =>
+  Stream<Item> getItemStream(int id) =>
       _itemStreamControllers.getOrAdd(id, asyncSeed: () => getItem(id)).stream;
 
   Future<Item> getItem(int id) async {

@@ -6,7 +6,7 @@ import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/transformers.dart';
 
 part 'user_item_search_event.dart';
 part 'user_item_search_state.dart';
