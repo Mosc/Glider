@@ -49,7 +49,7 @@ dev_dependencies:
   dependency_validator: ^3.2.3
   flutter_launcher_icons: ^0.13.1
   leancode_lint: ^6.0.0
-  melos: ^3.1.1
+  melos: ^3.2.0
 
 dependency_overrides:
   material_color_utilities: ^0.8.0
