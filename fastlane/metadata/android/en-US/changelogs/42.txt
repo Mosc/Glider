@@ -1,0 +1,3 @@
+- Added action buttons setting to upvote and favorite without long-pressing
+- Fixed inbox page for users with a large number of replies
+- Made various minor tweaks
