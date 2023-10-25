@@ -5,8 +5,8 @@ extension BehaviorSubjectExtension<T> on BehaviorSubject<T> {
     try {
       final value = await asyncValue();
       add(value);
-    } on Object catch (e) {
-      addError(e);
+    } on Object catch (e, s) {
+      addError(e, s);
     }
   }
 }

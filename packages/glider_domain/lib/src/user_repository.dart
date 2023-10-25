@@ -23,8 +23,8 @@ class UserRepository {
       final user = await compute(User.fromDto, dto);
       _userStreamControllers.getOrAdd(username).add(user);
       return user;
-    } on Object catch (e) {
-      _userStreamControllers.getOrAdd(username).addError(e);
+    } on Object catch (e, s) {
+      _userStreamControllers.getOrAdd(username).addError(e, s);
       rethrow;
     }
   }
