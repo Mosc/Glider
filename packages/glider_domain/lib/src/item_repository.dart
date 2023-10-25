@@ -105,7 +105,8 @@ class ItemRepository {
     final userDto = await _hackerNewsApiService.getUser(username);
 
     if (userDto.submitted case final submitted?) {
-      // Limit ID count to prevent running into HTTP status 414 URI Too Long.
+      // Limit ID count to prevent running into HTTP status 414 URI Too Long or
+      // Algolia internal server errors.
       final dto = await _algoliaApiService.getUserReplies(submitted.take(30));
       final items = await compute(
         (hits) =>
