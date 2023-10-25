@@ -30,7 +30,7 @@ class ItemDataTile extends StatelessWidget {
     this.favorited = false,
     this.flagged = false,
     this.blocked = false,
-    this.cached = false,
+    this.failed = false,
     this.collapsedCount,
     this.useLargeStoryStyle = true,
     this.showMetadata = true,
@@ -49,7 +49,7 @@ class ItemDataTile extends StatelessWidget {
   final bool favorited;
   final bool flagged;
   final bool blocked;
-  final bool cached;
+  final bool failed;
   final int? collapsedCount;
   final bool useLargeStoryStyle;
   final bool showMetadata;
@@ -302,10 +302,10 @@ class ItemDataTile extends StatelessWidget {
               ),
           ] else
             const Spacer(),
-          if (cached)
+          if (failed)
             Hero(
-              tag: 'item_tile_stale_${item.id}',
-              child: const MetadataWidget(icon: Icons.cached_outlined),
+              tag: 'item_tile_failed_${item.id}',
+              child: const MetadataWidget(icon: Icons.error_outline_outlined),
             ),
           if (item.dateTime case final dateTime?)
             Hero(

@@ -125,7 +125,7 @@ class _ItemTileState extends State<ItemTile>
                 favorited: state.favorited,
                 flagged: state.flagged,
                 blocked: state.blocked,
-                cached: state.cached,
+                failed: state.status == Status.failure,
                 collapsedCount: widget.collapsedCount,
                 useLargeStoryStyle: widget.useLargeStoryStyle,
                 showMetadata: widget.showMetadata,

@@ -43,7 +43,6 @@ class ItemCubit extends HydratedCubit<ItemState> {
           state.copyWith(
             status: () => Status.success,
             data: () => item,
-            cached: () => false,
             exception: () => null,
           ),
         );
@@ -52,7 +51,6 @@ class ItemCubit extends HydratedCubit<ItemState> {
       onError: (Object exception) => safeEmit(
         state.copyWith(
           status: () => Status.failure,
-          cached: () => true,
           exception: () => exception,
         ),
       ),

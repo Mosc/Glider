@@ -9,7 +9,6 @@ class ItemState with DataMixin<Item>, EquatableMixin {
     this.favorited = false,
     this.flagged = false,
     this.blocked = false,
-    this.cached = false,
     this.exception,
   });
 
@@ -21,7 +20,6 @@ class ItemState with DataMixin<Item>, EquatableMixin {
         favorited: json['favorited'] as bool? ?? false,
         flagged: json['flagged'] as bool? ?? false,
         blocked: json['blocked'] as bool? ?? false,
-        cached: true,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -42,7 +40,6 @@ class ItemState with DataMixin<Item>, EquatableMixin {
   final bool favorited;
   final bool flagged;
   final bool blocked;
-  final bool cached;
   @override
   final Object? exception;
 
@@ -54,7 +51,6 @@ class ItemState with DataMixin<Item>, EquatableMixin {
     bool Function()? favorited,
     bool Function()? flagged,
     bool Function()? blocked,
-    bool Function()? cached,
     bool Function()? highlighted,
     Object? Function()? exception,
   }) =>
@@ -66,7 +62,6 @@ class ItemState with DataMixin<Item>, EquatableMixin {
         favorited: favorited != null ? favorited() : this.favorited,
         flagged: flagged != null ? flagged() : this.flagged,
         blocked: blocked != null ? blocked() : this.blocked,
-        cached: cached != null ? cached() : this.cached,
         exception: exception != null ? exception() : this.exception,
       );
 
@@ -79,7 +74,6 @@ class ItemState with DataMixin<Item>, EquatableMixin {
         favorited,
         flagged,
         blocked,
-        cached,
         exception,
       ];
 }
