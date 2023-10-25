@@ -149,7 +149,12 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
             );
 
         if (valueAction != null) {
-          await itemCubit.share(valueAction.value(itemCubit)!);
+          await itemCubit.share(
+            valueAction.value(itemCubit)!,
+            subject: valueAction != ItemValue.title
+                ? ItemValue.title.value(itemCubit)
+                : null,
+          );
         }
     }
   }

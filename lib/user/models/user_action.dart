@@ -97,7 +97,12 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
             );
 
         if (valueAction != null) {
-          await userCubit.share(valueAction.value(userCubit)!);
+          await userCubit.share(
+            valueAction.value(userCubit)!,
+            subject: valueAction != UserValue.username
+                ? UserValue.username.value(userCubit)
+                : null,
+          );
         }
       case UserAction.logout:
         await authCubit.logout();

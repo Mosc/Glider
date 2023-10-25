@@ -86,8 +86,8 @@ class UserCubit extends HydratedCubit<UserState> {
     await Clipboard.setData(ClipboardData(text: text));
   }
 
-  Future<void> share(String text) async {
-    await Share.share(text);
+  Future<void> share(String text, {String? subject}) async {
+    await Share.share(text, subject: subject);
   }
 
   @override
