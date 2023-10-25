@@ -9,7 +9,7 @@ class SettingsState with EquatableMixin {
     this.themeColor = const Color(0xff6750a4),
     this.themeVariant = Variant.tonalSpot,
     this.usePureBackground = false,
-    this.showJobs = false,
+    this.showJobs = true,
     this.useThreadNavigation = true,
     this.appVersion,
   });
