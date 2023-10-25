@@ -288,7 +288,8 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
       builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
         bloc: widget._settingsCubit,
         buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle,
+            previous.useLargeStoryStyle != current.useLargeStoryStyle ||
+            previous.useActionButtons != current.useActionButtons,
         builder: (context, settingsState) => SliverAppBar(
           flexibleSpace: AppBarProgressIndicator(widget._itemTreeCubit),
           bottom: PreferredSize(
@@ -326,6 +327,7 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
                     loadingType: ItemType.story,
                     showVisited: false,
                     useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                    useActionButtons: settingsState.useActionButtons,
                     // It's redundant to show a URL host in the title when view is
                     // scrolled, because the full URL should be visible below it.
                     style: hasOverlap ? ItemStyle.overview : ItemStyle.primary,
@@ -459,62 +461,56 @@ class _SliverItemBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ItemCubit, ItemState>(
       bloc: _itemCubit,
-      builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
-        bloc: _settingsCubit,
-        buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle,
-        builder: (context, settingsState) => state.whenOrDefaultSlivers(
-          loading: () => SliverMainAxisGroup(
-            slivers: [
-              SliverToBoxAdapter(
-                child: ItemLoadingTile(
-                  type: ItemType.story,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  style: ItemStyle.secondary,
-                  padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
-                ),
+      builder: (context, state) => state.whenOrDefaultSlivers(
+        loading: () => SliverMainAxisGroup(
+          slivers: [
+            SliverToBoxAdapter(
+              child: ItemLoadingTile(
+                type: ItemType.story,
+                style: ItemStyle.secondary,
+                padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
               ),
-              SliverList.builder(
-                itemBuilder: (context, index) =>
-                    const ItemLoadingTile(type: ItemType.comment),
-              ),
-            ],
-          ),
-          success: () => SliverMainAxisGroup(
-            slivers: [
-              SliverToBoxAdapter(
-                child: ItemTile(
-                  _itemCubit,
-                  _authCubit,
-                  loadingType: state.data!.type ?? ItemType.story,
-                  showVisited: false,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  style: ItemStyle.secondary,
-                  padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
-                ),
-              ),
-              if (state.data!.type == ItemType.story)
-                SliverAnimatedPaintExtent(
-                  duration: AppAnimation.emphasized.duration,
-                  curve: AppAnimation.emphasized.easing,
-                  child: SliverStorySimilarBody(
-                    _storySimilarCubit,
-                    _itemCubitFactory,
-                    _authCubit,
-                    storyUsername: state.data?.storyUsername,
-                  ),
-                ),
-              SliverItemTreeBody(
-                _itemTreeCubit,
-                _itemCubitFactory,
-                _authCubit,
-                childCount: state.data?.childIds?.length,
-                storyUsername: state.data?.storyUsername,
-              ),
-            ],
-          ),
-          onRetry: () async => _itemCubit.load(),
+            ),
+            SliverList.builder(
+              itemBuilder: (context, index) =>
+                  const ItemLoadingTile(type: ItemType.comment),
+            ),
+          ],
         ),
+        success: () => SliverMainAxisGroup(
+          slivers: [
+            SliverToBoxAdapter(
+              child: ItemTile(
+                _itemCubit,
+                _authCubit,
+                loadingType: state.data!.type ?? ItemType.story,
+                showVisited: false,
+                style: ItemStyle.secondary,
+                padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
+              ),
+            ),
+            if (state.data!.type == ItemType.story)
+              SliverAnimatedPaintExtent(
+                duration: AppAnimation.emphasized.duration,
+                curve: AppAnimation.emphasized.easing,
+                child: SliverStorySimilarBody(
+                  _storySimilarCubit,
+                  _itemCubitFactory,
+                  _authCubit,
+                  storyUsername: state.data?.storyUsername,
+                ),
+              ),
+            SliverItemTreeBody(
+              _itemTreeCubit,
+              _itemCubitFactory,
+              _authCubit,
+              _settingsCubit,
+              childCount: state.data?.childIds?.length,
+              storyUsername: state.data?.storyUsername,
+            ),
+          ],
+        ),
+        onRetry: () async => _itemCubit.load(),
       ),
     );
   }

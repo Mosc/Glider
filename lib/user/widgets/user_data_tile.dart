@@ -63,23 +63,23 @@ class UserDataTile extends StatelessWidget {
   Widget _buildPrimary(BuildContext context) {
     return Row(
       children: [
-        AnimatedSize(
-          alignment: AlignmentDirectional.centerStart,
-          duration: AppAnimation.standard.duration,
-          curve: AppAnimation.standard.easing,
-          child: Hero(
-            tag: 'user_tile_karma_${user.username}',
+        Hero(
+          tag: 'user_tile_karma_${user.username}',
+          child: AnimatedSize(
+            alignment: AlignmentDirectional.centerStart,
+            duration: AppAnimation.standard.duration,
+            curve: AppAnimation.standard.easing,
             child: MetadataWidget(
               icon: Icons.arrow_upward_outlined,
               label: Text(user.karma.toString()),
             ),
           ),
         ),
-        AnimatedVisibility(
-          visible: user.submittedIds != null,
-          padding: MetadataWidget.horizontalPadding,
-          child: Hero(
-            tag: 'user_tile_submitted_${user.username}',
+        Hero(
+          tag: 'user_tile_submitted_${user.username}',
+          child: AnimatedVisibility(
+            visible: user.submittedIds != null,
+            padding: MetadataWidget.horizontalPadding,
             child: MetadataWidget(
               icon: Icons.chat_bubble_outline_outlined,
               label: user.submittedIds != null
@@ -88,11 +88,11 @@ class UserDataTile extends StatelessWidget {
             ),
           ),
         ),
-        AnimatedVisibility(
-          visible: blocked,
-          padding: MetadataWidget.horizontalPadding,
-          child: Hero(
-            tag: 'user_tile_blocked_${user.username}',
+        Hero(
+          tag: 'user_tile_blocked_${user.username}',
+          child: AnimatedVisibility(
+            visible: blocked,
+            padding: MetadataWidget.horizontalPadding,
             child: MetadataWidget(
               icon: Icons.block_outlined,
               label: Text(context.l10n.blocked),

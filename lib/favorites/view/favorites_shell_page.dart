@@ -127,7 +127,7 @@ class _SliverFavoritesBody extends StatelessWidget {
         bloc: _settingsCubit,
         buildWhen: (previous, current) =>
             previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.showStoryMetadata != current.showStoryMetadata,
+            previous.useActionButtons != current.useActionButtons,
         builder: (context, settingsState) => state.whenOrDefaultSlivers(
           loading: () => SliverList.builder(
             itemBuilder: (context, index) => ItemLoadingTile(
@@ -145,6 +145,7 @@ class _SliverFavoritesBody extends StatelessWidget {
                   id: id,
                   loadingType: ItemType.story,
                   useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                  useActionButtons: settingsState.useActionButtons,
                   onTap: (context, item) async => context.push(
                     AppRoute.item.location(parameters: {'id': id}),
                   ),

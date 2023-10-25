@@ -12,13 +12,15 @@ import 'package:glider/item/widgets/item_loading_tile.dart';
 import 'package:glider/item/widgets/item_tile.dart';
 import 'package:glider/item_tree/cubit/item_tree_cubit.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 
 class SliverItemTreeBody extends StatefulWidget {
   const SliverItemTreeBody(
     this._itemTreeCubit,
     this._itemCubitFactory,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
     this.childCount,
     this.storyUsername,
@@ -27,6 +29,7 @@ class SliverItemTreeBody extends StatefulWidget {
   final ItemTreeCubit _itemTreeCubit;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final int? childCount;
   final String? storyUsername;
 
@@ -77,26 +80,35 @@ class _SliverItemTreeBodyState extends State<SliverItemTreeBody> {
           );
         }
       },
-      builder: (context, state) => state.whenOrDefaultSlivers(
-        loading: () => SliverList.builder(
-          itemBuilder: (context, index) => const IndentedWidget(
-            depth: 1,
-            child: ItemLoadingTile(type: ItemType.comment),
+      builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
+        bloc: widget._settingsCubit,
+        buildWhen: (previous, current) =>
+            previous.useActionButtons != current.useActionButtons,
+        builder: (context, settingsState) => state.whenOrDefaultSlivers(
+          loading: () => SliverList.builder(
+            itemBuilder: (context, index) => const IndentedWidget(
+              depth: 1,
+              child: ItemLoadingTile(type: ItemType.comment),
+            ),
+            itemCount: widget.childCount,
           ),
-          itemCount: widget.childCount,
+          nonEmpty: () => SliverList.list(
+            children: [
+              for (final descendant in state.viewableData!)
+                _buildItemTile(descendant, state, settingsState),
+            ],
+          ),
+          onRetry: () async => widget._itemTreeCubit.load(),
         ),
-        nonEmpty: () => SliverList.list(
-          children: [
-            for (final descendant in state.viewableData!)
-              _buildItemTile(descendant, state),
-          ],
-        ),
-        onRetry: () async => widget._itemTreeCubit.load(),
       ),
     );
   }
 
-  Widget _buildItemTile(ItemDescendant descendant, ItemTreeState state) {
+  Widget _buildItemTile(
+    ItemDescendant descendant,
+    ItemTreeState state,
+    SettingsState settingsState,
+  ) {
     return IndentedWidget(
       depth: descendant.isPart ? 0 : descendant.depth,
       child: ItemTile(
@@ -105,6 +117,7 @@ class _SliverItemTreeBodyState extends State<SliverItemTreeBody> {
         key: ValueKey(descendant.id),
         storyUsername: widget.storyUsername,
         loadingType: ItemType.comment,
+        useActionButtons: settingsState.useActionButtons,
         collapsedCount: state.collapsedIds.contains(descendant.id)
             ? state.getDescendants(descendant)?.length
             : null,

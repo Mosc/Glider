@@ -20,6 +20,12 @@ class SettingsRepository {
   Future<bool> setShowStoryMetadata({required bool value}) async =>
       _sharedPreferencesService.setShowStoryMetadata(value: value);
 
+  Future<bool?> getUseActionButtons() async =>
+      _sharedPreferencesService.getUseActionButtons();
+
+  Future<bool> setUseActionButtons({required bool value}) async =>
+      _sharedPreferencesService.setUseActionButtons(value: value);
+
   Future<bool?> getUseDynamicTheme() async =>
       _sharedPreferencesService.getUseDynamicTheme();
 

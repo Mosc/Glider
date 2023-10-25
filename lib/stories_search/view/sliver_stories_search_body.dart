@@ -36,7 +36,8 @@ class SliverStoriesSearchBody extends StatelessWidget {
         bloc: _settingsCubit,
         buildWhen: (previous, current) =>
             previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.showStoryMetadata != current.showStoryMetadata,
+            previous.showStoryMetadata != current.showStoryMetadata ||
+            previous.useActionButtons != current.useActionButtons,
         builder: (context, settingsState) => state.whenOrDefaultSlivers(
           loading: () => SliverList.builder(
             itemBuilder: (context, index) => ItemLoadingTile(
@@ -59,6 +60,7 @@ class SliverStoriesSearchBody extends StatelessWidget {
                       loadingType: ItemType.story,
                       useLargeStoryStyle: settingsState.useLargeStoryStyle,
                       showMetadata: settingsState.showStoryMetadata,
+                      useActionButtons: settingsState.useActionButtons,
                       style: ItemStyle.overview,
                       onTap: (context, item) async => context.push(
                         AppRoute.item.location(parameters: {'id': id}),

@@ -18,6 +18,8 @@
     "largeStoryStyleDescription": "Shows URL and larger title",
     "storyMetadata": "Story metadata",
     "storyMetadataDescription": "Always shows on some pages",
+    "actionButtons": "Action buttons",
+    "actionButtonsDescription": "Makes some metadata interactive",
     "dynamicTheme": "Dynamic theme",
     "dynamicThemeDescription": "Uses system color scheme",
     "themeColor": "Theme color",

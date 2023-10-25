@@ -29,6 +29,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     final useLargeStoryStyle =
         await _settingsRepository.getUseLargeStoryStyle();
     final showStoryMetadata = await _settingsRepository.getShowStoryMetadata();
+    final useActionButtons = await _settingsRepository.getUseActionButtons();
     final useDynamicTheme = await _settingsRepository.getUseDynamicTheme();
     final themeColor = await _settingsRepository.getThemeColor();
     final themeVariant = await _settingsRepository.getThemeVariant();
@@ -41,6 +42,8 @@ class SettingsCubit extends Cubit<SettingsState> {
             useLargeStoryStyle != null ? () => useLargeStoryStyle : null,
         showStoryMetadata:
             showStoryMetadata != null ? () => showStoryMetadata : null,
+        useActionButtons:
+            useActionButtons != null ? () => useActionButtons : null,
         useDynamicTheme: useDynamicTheme != null ? () => useDynamicTheme : null,
         themeColor: themeColor != null ? () => themeColor : null,
         themeVariant: themeVariant != null ? () => themeVariant : null,
@@ -72,6 +75,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (showStoryMetadata != null) {
       safeEmit(
         state.copyWith(showStoryMetadata: () => showStoryMetadata),
+      );
+    }
+  }
+
+  Future<void> setUseActionButtons(bool value) async {
+    await _settingsRepository.setUseActionButtons(value: value);
+    final useActionButtons = await _settingsRepository.getUseActionButtons();
+
+    if (useActionButtons != null) {
+      safeEmit(
+        state.copyWith(useActionButtons: () => useActionButtons),
       );
     }
   }

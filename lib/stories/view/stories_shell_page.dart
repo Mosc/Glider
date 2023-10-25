@@ -217,6 +217,7 @@ class _SliverStoriesBody extends StatelessWidget {
         buildWhen: (previous, current) =>
             previous.useLargeStoryStyle != current.useLargeStoryStyle ||
             previous.showStoryMetadata != current.showStoryMetadata ||
+            previous.useActionButtons != current.useActionButtons ||
             previous.showJobs != current.showJobs,
         builder: (context, settingsState) => state.whenOrDefaultSlivers(
           loading: () => SliverList.builder(
@@ -240,6 +241,7 @@ class _SliverStoriesBody extends StatelessWidget {
                       loadingType: ItemType.story,
                       useLargeStoryStyle: settingsState.useLargeStoryStyle,
                       showMetadata: settingsState.showStoryMetadata,
+                      useActionButtons: settingsState.useActionButtons,
                       showJobs: settingsState.showJobs ||
                           state.storyType == StoryType.jobStories,
                       style: ItemStyle.overview,

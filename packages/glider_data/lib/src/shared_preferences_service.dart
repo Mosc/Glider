@@ -7,6 +7,7 @@ class SharedPreferencesService {
 
   static const String _useLargeStoryStyleKey = 'use_large_story_style';
   static const String _showStoryMetadataKey = 'show_story_metadata';
+  static const String _getUseActionButtons = 'use_action_buttons';
   static const String _useDynamicThemeKey = 'use_dynamic_theme';
   static const String _themeColorKey = 'theme_color';
   static const String _themeVariantKey = 'theme_variant';
@@ -31,6 +32,12 @@ class SharedPreferencesService {
 
   Future<bool> setShowStoryMetadata({required bool value}) async =>
       _sharedPreferences.setBool(_showStoryMetadataKey, value);
+
+  Future<bool?> getUseActionButtons() async =>
+      _sharedPreferences.getBool(_getUseActionButtons);
+
+  Future<bool> setUseActionButtons({required bool value}) async =>
+      _sharedPreferences.setBool(_getUseActionButtons, value);
 
   Future<bool?> getUseDynamicTheme() async =>
       _sharedPreferences.getBool(_useDynamicThemeKey);

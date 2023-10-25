@@ -128,7 +128,7 @@ class _SliverInboxBody extends StatelessWidget {
         bloc: _settingsCubit,
         buildWhen: (previous, current) =>
             previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.showStoryMetadata != current.showStoryMetadata,
+            previous.useActionButtons != current.useActionButtons,
         builder: (context, settingsState) => state.whenOrDefaultSlivers(
           loading: () => SliverList.builder(
             itemBuilder: (context, index) =>
@@ -144,6 +144,7 @@ class _SliverInboxBody extends StatelessWidget {
                   id: parentId,
                   loadingType: ItemType.story,
                   useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                  useActionButtons: settingsState.useActionButtons,
                   onTap: (context, item) async => context.push(
                     AppRoute.item.location(parameters: {'id': id}),
                   ),
@@ -157,6 +158,7 @@ class _SliverInboxBody extends StatelessWidget {
                     id: id,
                     loadingType: ItemType.comment,
                     useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                    useActionButtons: settingsState.useActionButtons,
                     onTap: (context, item) async => context.push(
                       AppRoute.item.location(parameters: {'id': id}),
                     ),

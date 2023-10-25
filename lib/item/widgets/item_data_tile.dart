@@ -39,6 +39,8 @@ class ItemDataTile extends StatelessWidget {
     this.padding = AppSpacing.defaultTilePadding,
     this.onTap,
     this.onLongPress,
+    this.onTapFavorite,
+    this.onTapUpvote,
   });
 
   final Item item;
@@ -56,6 +58,8 @@ class ItemDataTile extends StatelessWidget {
   final EdgeInsets padding;
   final ItemCallback? onTap;
   final ItemCallback? onLongPress;
+  final VoidCallback? onTapUpvote;
+  final VoidCallback? onTapFavorite;
 
   int get _faviconSize =>
       min(useLargeStoryStyle ? 2 * 24 : 20, _faviconRequestSize);
@@ -167,143 +171,154 @@ class ItemDataTile extends StatelessWidget {
                 ),
             ].spaced(width: AppSpacing.xl),
           ),
-        if (showMetadata)
-          Row(
-            children: [
-              AnimatedVisibility(
-                visible: collapsedCount != null,
-                padding: MetadataWidget.horizontalPadding,
-                child: Hero(
-                  tag: 'item_tile_collapsed_${item.id}',
-                  child: MetadataWidget(
-                    icon: Icons.add_circle_outline_outlined,
-                    label: collapsedCount != null && collapsedCount! > 0
-                        ? Text(collapsedCount.toString())
-                        : null,
-                  ),
-                ),
-              ),
-              AnimatedVisibility(
-                visible: favorited,
-                padding: MetadataWidget.horizontalPadding,
-                child: Hero(
-                  tag: 'item_tile_favorited_${item.id}',
-                  child: MetadataWidget(
-                    icon: Icons.favorite_outline_outlined,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-              ),
-              AnimatedVisibility(
-                visible:
-                    item.score != null && item.type != ItemType.job || upvoted,
-                padding: MetadataWidget.horizontalPadding,
-                child: Hero(
-                  tag: 'item_tile_score_${item.id}',
-                  child: MetadataWidget(
-                    icon: Icons.arrow_upward_outlined,
-                    label: item.score != null
-                        ? Text((item.score!).toString())
-                        : null,
-                    color:
-                        upvoted ? Theme.of(context).colorScheme.tertiary : null,
-                  ),
-                ),
-              ),
-              AnimatedVisibility(
-                visible: item.descendantCount != null,
-                padding: MetadataWidget.horizontalPadding,
-                child: Hero(
-                  tag: 'item_tile_descendants_${item.id}',
-                  child: MetadataWidget(
-                    icon: Icons.mode_comment_outlined,
-                    label: item.descendantCount != null
-                        ? Text(item.descendantCount!.toString())
-                        : null,
-                  ),
-                ),
-              ),
-              AnimatedVisibility(
-                visible: item.isDead || flagged,
-                padding: MetadataWidget.horizontalPadding,
-                child: Hero(
-                  tag: 'item_tile_dead_${item.id}',
-                  child: MetadataWidget(
-                    icon: Icons.flag_outlined,
-                    color:
-                        flagged ? Theme.of(context).colorScheme.tertiary : null,
-                  ),
-                ),
-              ),
-              AnimatedVisibility(
-                visible: blocked,
-                padding: MetadataWidget.horizontalPadding,
-                child: Hero(
-                  tag: 'item_tile_blocked_${item.id}',
-                  child: MetadataWidget(
-                    icon: Icons.block_outlined,
-                    label: Text(context.l10n.blocked),
-                  ),
-                ),
-              ),
-              ...[
-                if (item.isDeleted)
-                  Hero(
-                    tag: 'item_tile_deleted_${item.id}',
-                    child: MetadataWidget(
-                      icon: Icons.delete_outlined,
-                      label: Text(context.l10n.deleted),
-                    ),
-                  ),
-                if (item.username case final username?) ...[
-                  Expanded(
-                    child: Hero(
-                      tag: 'item_tile_username_${item.id}',
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: UsernameWidget(
-                          username: username,
-                          style: usernameStyle,
-                          onTap: () async => context.push(
-                            AppRoute.user
-                                .location(parameters: {'id': username}),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (item.hasUsernameTag)
-                    Hero(
-                      tag: 'item_tile_username_tag_${item.id}',
-                      child: Badge(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        textColor:
-                            Theme.of(context).colorScheme.onTertiaryContainer,
-                        label: Text(item.usernameTag(context)!),
-                      ),
-                    ),
-                ] else
-                  const Spacer(),
-                if (cached)
-                  Hero(
-                    tag: 'item_tile_stale_${item.id}',
-                    child: const MetadataWidget(icon: Icons.cached_outlined),
-                  ),
-                if (item.dateTime case final dateTime?)
-                  Hero(
-                    tag: 'item_tile_date_${item.id}',
-                    child: MetadataWidget(
-                      label: Tooltip(
-                        message: dateTime.toString(),
-                        child: Text(item.dateTime!.relativeTime(context)),
-                      ),
-                    ),
-                  ),
-              ].spaced(width: AppSpacing.m),
-            ],
-          ),
+        if (showMetadata) _buildMetadata(context),
       ].spaced(height: AppSpacing.m),
+    );
+  }
+
+  Widget _buildMetadata(BuildContext context) {
+    Widget favoritedMetadata() => MetadataWidget(
+          icon: Icons.favorite_outline_outlined,
+          color: favorited ? Theme.of(context).colorScheme.tertiary : null,
+        );
+    Widget upvotedMetadata() => MetadataWidget(
+          icon: Icons.arrow_upward_outlined,
+          label: item.score != null ? Text((item.score!).toString()) : null,
+          color: upvoted ? Theme.of(context).colorScheme.tertiary : null,
+        );
+    return Row(
+      children: [
+        Hero(
+          tag: 'item_tile_collapsed_${item.id}',
+          child: AnimatedVisibility(
+            visible: collapsedCount != null,
+            padding: MetadataWidget.horizontalPadding,
+            child: MetadataWidget(
+              icon: Icons.add_circle_outline_outlined,
+              label: collapsedCount != null && collapsedCount! > 0
+                  ? Text(collapsedCount.toString())
+                  : null,
+            ),
+          ),
+        ),
+        Hero(
+          tag: 'item_tile_favorited_${item.id}',
+          child: onTapFavorite != null
+              ? _MetadataActionButton(
+                  padding: MetadataWidget.horizontalPadding,
+                  onTap: onTapFavorite,
+                  child: favoritedMetadata(),
+                )
+              : AnimatedVisibility(
+                  visible: favorited,
+                  padding: MetadataWidget.horizontalPadding,
+                  child: favoritedMetadata(),
+                ),
+        ),
+        if (item.type != ItemType.job)
+          Hero(
+            tag: 'item_tile_score_${item.id}',
+            child: onTapUpvote != null
+                ? _MetadataActionButton(
+                    padding: MetadataWidget.horizontalPadding,
+                    onTap: onTapUpvote,
+                    child: upvotedMetadata(),
+                  )
+                : AnimatedVisibility(
+                    visible: item.score != null || upvoted,
+                    padding: MetadataWidget.horizontalPadding,
+                    child: upvotedMetadata(),
+                  ),
+          ),
+        Hero(
+          tag: 'item_tile_descendants_${item.id}',
+          child: AnimatedVisibility(
+            visible: item.descendantCount != null,
+            padding: MetadataWidget.horizontalPadding,
+            child: MetadataWidget(
+              icon: Icons.mode_comment_outlined,
+              label: item.descendantCount != null
+                  ? Text(item.descendantCount!.toString())
+                  : null,
+            ),
+          ),
+        ),
+        Hero(
+          tag: 'item_tile_dead_${item.id}',
+          child: AnimatedVisibility(
+            visible: item.isDead || flagged,
+            padding: MetadataWidget.horizontalPadding,
+            child: MetadataWidget(
+              icon: Icons.flag_outlined,
+              color: flagged ? Theme.of(context).colorScheme.tertiary : null,
+            ),
+          ),
+        ),
+        Hero(
+          tag: 'item_tile_blocked_${item.id}',
+          child: AnimatedVisibility(
+            visible: blocked,
+            padding: MetadataWidget.horizontalPadding,
+            child: MetadataWidget(
+              icon: Icons.block_outlined,
+              label: Text(context.l10n.blocked),
+            ),
+          ),
+        ),
+        ...[
+          if (item.isDeleted)
+            Hero(
+              tag: 'item_tile_deleted_${item.id}',
+              child: MetadataWidget(
+                icon: Icons.delete_outlined,
+                label: Text(context.l10n.deleted),
+              ),
+            ),
+          if (item.username case final username?) ...[
+            Expanded(
+              child: Hero(
+                tag: 'item_tile_username_${item.id}',
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: UsernameWidget(
+                    username: username,
+                    style: usernameStyle,
+                    onTap: () async => context.push(
+                      AppRoute.user.location(parameters: {'id': username}),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            if (item.hasUsernameTag)
+              Hero(
+                tag: 'item_tile_username_tag_${item.id}',
+                child: Badge(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  textColor: Theme.of(context).colorScheme.onTertiaryContainer,
+                  label: Text(item.usernameTag(context)!),
+                ),
+              ),
+          ] else
+            const Spacer(),
+          if (cached)
+            Hero(
+              tag: 'item_tile_stale_${item.id}',
+              child: const MetadataWidget(icon: Icons.cached_outlined),
+            ),
+          if (item.dateTime case final dateTime?)
+            Hero(
+              tag: 'item_tile_date_${item.id}',
+              child: MetadataWidget(
+                label: Tooltip(
+                  message: dateTime.toString(),
+                  child: Text(item.dateTime!.relativeTime(context)),
+                ),
+              ),
+            ),
+        ].spaced(width: AppSpacing.m),
+      ],
     );
   }
 
@@ -441,6 +456,39 @@ class _ItemTitle extends StatelessWidget {
         ),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+}
+
+class _MetadataActionButton extends StatelessWidget {
+  const _MetadataActionButton({
+    this.padding = EdgeInsets.zero,
+    this.onTap,
+    required this.child,
+  });
+
+  final EdgeInsetsGeometry padding;
+  final VoidCallback? onTap;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding,
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Theme.of(context).colorScheme.onBackground,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.m),
+          minimumSize: const Size.square(40),
+          visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity,
+          ),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        child: child,
       ),
     );
   }

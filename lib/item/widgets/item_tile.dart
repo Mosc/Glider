@@ -7,6 +7,7 @@ import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
 import 'package:glider/item/cubit/item_cubit.dart';
+import 'package:glider/item/models/item_action.dart';
 import 'package:glider/item/models/item_style.dart';
 import 'package:glider/item/typedefs/item_typedefs.dart';
 import 'package:glider/item/widgets/item_data_tile.dart';
@@ -27,6 +28,7 @@ class ItemTile extends StatefulWidget {
     this.highlight = false,
     this.useLargeStoryStyle = true,
     this.showMetadata = true,
+    this.useActionButtons = false,
     this.showJobs = true,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
@@ -47,6 +49,7 @@ class ItemTile extends StatefulWidget {
     this.highlight = false,
     this.useLargeStoryStyle = true,
     this.showMetadata = true,
+    this.useActionButtons = false,
     this.showJobs = true,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
@@ -65,6 +68,7 @@ class ItemTile extends StatefulWidget {
   final bool highlight;
   final bool useLargeStoryStyle;
   final bool showMetadata;
+  final bool useActionButtons;
   final bool showJobs;
   final ItemStyle style;
   final EdgeInsets padding;
@@ -112,10 +116,9 @@ class _ItemTileState extends State<ItemTile>
             elevation: 4,
             shadowColor: Colors.transparent,
             surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-            child: BlocSelector<AuthCubit, AuthState, bool>(
+            child: BlocBuilder<AuthCubit, AuthState>(
               bloc: widget._authCubit,
-              selector: (state) => state.username == item.username,
-              builder: (context, isLoggedInUser) => ItemDataTile(
+              builder: (context, authState) => ItemDataTile(
                 item,
                 visited: state.visited && widget.showVisited,
                 upvoted: state.upvoted,
@@ -127,19 +130,33 @@ class _ItemTileState extends State<ItemTile>
                 useLargeStoryStyle: widget.useLargeStoryStyle,
                 showMetadata: widget.showMetadata,
                 style: widget.style,
-                usernameStyle: isLoggedInUser
+                usernameStyle: authState.username == item.username
                     ? UsernameStyle.loggedInUser
                     : widget.storyUsername == item.username
                         ? UsernameStyle.storyUser
                         : UsernameStyle.none,
                 padding: widget.padding,
                 onTap: item.type == ItemType.pollopt
-                    ? (context, item) async => _itemCubit.upvote(!state.upvoted)
+                    ? ItemAction.upvote.isVisible(state, authState) ||
+                            ItemAction.unvote.isVisible(state, authState)
+                        ? (context, item) async =>
+                            _itemCubit.upvote(!state.upvoted)
+                        : null
                     : widget.onTap,
                 onLongPress: (context, item) async => context.push(
                   AppRoute.itemBottomSheet
                       .location(parameters: {'id': item.id}),
                 ),
+                onTapUpvote: widget.useActionButtons &&
+                        (ItemAction.upvote.isVisible(state, authState) ||
+                            ItemAction.unvote.isVisible(state, authState))
+                    ? () async => _itemCubit.upvote(!state.upvoted)
+                    : null,
+                onTapFavorite: widget.useActionButtons &&
+                        (ItemAction.favorite.isVisible(state, authState) ||
+                            ItemAction.unfavorite.isVisible(state, authState))
+                    ? () async => _itemCubit.favorite(!state.favorited)
+                    : null,
               ),
             ),
           );
