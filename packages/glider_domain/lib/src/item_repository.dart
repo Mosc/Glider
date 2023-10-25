@@ -142,51 +142,55 @@ class ItemRepository {
   Stream<List<ItemDescendant>> getFlatItemDescendantsStream(int id) async* {
     var descendants = <ItemDescendant>[];
 
-    await for (final item in _getItemTreeStream(id)) {
-      if (item.partIds != null && item.partIds!.isNotEmpty ||
-          item.childIds != null && item.childIds!.isNotEmpty) {
-        yield descendants = await compute(
-          (descendants) {
-            final index = descendants
-                .indexWhere((descendant) => descendant.id == item.id);
-            final ancestorIds = [
-              if (index == -1)
-                id
-              else ...[
-                ...descendants[index].ancestorIds,
-                descendants[index].id,
-              ],
-            ];
-            return [
-              ...descendants.take(index + 1),
-              if (item.partIds case final partIds?)
-                for (final partId in partIds)
-                  ItemDescendant(
-                    id: partId,
-                    ancestorIds: ancestorIds,
-                    isPart: true,
-                  ),
-              if (item.childIds case final childIds?)
-                for (final childId in childIds)
-                  ItemDescendant(
-                    id: childId,
-                    ancestorIds: ancestorIds,
-                  ),
-              ...descendants.skip(index + 1),
-            ];
-          },
-          descendants,
-        );
-      }
+    try {
+      await for (final item in _getItemTreeStream(id)) {
+        if (item.partIds != null && item.partIds!.isNotEmpty ||
+            item.childIds != null && item.childIds!.isNotEmpty) {
+          yield descendants = await compute(
+            (descendants) {
+              final index = descendants
+                  .indexWhere((descendant) => descendant.id == item.id);
+              final ancestorIds = [
+                if (index == -1)
+                  id
+                else ...[
+                  ...descendants[index].ancestorIds,
+                  descendants[index].id,
+                ],
+              ];
+              return [
+                ...descendants.take(index + 1),
+                if (item.partIds case final partIds?)
+                  for (final partId in partIds)
+                    ItemDescendant(
+                      id: partId,
+                      ancestorIds: ancestorIds,
+                      isPart: true,
+                    ),
+                if (item.childIds case final childIds?)
+                  for (final childId in childIds)
+                    ItemDescendant(
+                      id: childId,
+                      ancestorIds: ancestorIds,
+                    ),
+                ...descendants.skip(index + 1),
+              ];
+            },
+            descendants,
+          );
+        }
 
-      if (item.isDeleted) {
-        yield descendants = await compute(
-          (descendants) => [
-            ...descendants.where((descendant) => descendant.id != item.id),
-          ],
-          descendants,
-        );
+        if (item.isDeleted) {
+          yield descendants = await compute(
+            (descendants) => [
+              ...descendants.where((descendant) => descendant.id != item.id),
+            ],
+            descendants,
+          );
+        }
       }
+    } on Object catch (e) {
+      yield* Stream.error(e);
     }
   }
 
