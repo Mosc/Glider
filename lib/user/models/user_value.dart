@@ -21,7 +21,7 @@ enum UserValue implements MenuItem<UserState> {
   }
 
   @override
-  String label(BuildContext context) {
+  String label(BuildContext context, UserState state) {
     return switch (this) {
       UserValue.username => context.l10n.username,
       UserValue.about => context.l10n.about,
@@ -30,7 +30,7 @@ enum UserValue implements MenuItem<UserState> {
   }
 
   @override
-  IconData get icon {
+  IconData icon(UserState state) {
     return switch (this) {
       UserValue.username => Icons.person_outline_outlined,
       UserValue.about => Icons.notes_outlined,

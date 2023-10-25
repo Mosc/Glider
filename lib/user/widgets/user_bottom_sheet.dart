@@ -39,8 +39,8 @@ class _UserBottomSheetState extends State<UserBottomSheet> {
         for (final action in UserAction.values)
           if (action.isVisible(_userCubit.state, widget._authCubit.state))
             ListTile(
-              leading: Icon(action.icon),
-              title: Text(action.label(context)),
+              leading: Icon(action.icon(_userCubit.state)),
+              title: Text(action.label(context, _userCubit.state)),
               onTap: () async {
                 context.pop();
                 await action.execute(

@@ -41,8 +41,8 @@ class _ItemValueDialogState extends State<ItemValueDialog> {
         for (final value in ItemValue.values)
           if (value.isVisible(_itemCubit.state, widget._authCubit.state))
             ListTile(
-              leading: Icon(value.icon),
-              title: Text(value.label(context)),
+              leading: Icon(value.icon(_itemCubit.state)),
+              title: Text(value.label(context, _itemCubit.state)),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               onTap: () => context.pop(value),

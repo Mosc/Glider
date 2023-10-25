@@ -20,7 +20,7 @@ enum NavigationShellAction implements MenuItem<void> {
   }
 
   @override
-  String label(BuildContext context) {
+  String label(BuildContext context, void _) {
     return switch (this) {
       NavigationShellAction.settings => context.l10n.settings,
       NavigationShellAction.account => context.l10n.account,
@@ -28,7 +28,7 @@ enum NavigationShellAction implements MenuItem<void> {
   }
 
   @override
-  IconData get icon {
+  IconData icon(void _) {
     return switch (this) {
       NavigationShellAction.settings => Icons.settings_outlined,
       NavigationShellAction.account => Icons.account_circle_outlined,

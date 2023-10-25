@@ -406,10 +406,10 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
                                     widget._authCubit,
                                     option: option,
                                   ),
-                                  child: Text(option.label(context)),
+                                  child: Text(option.label(context, state)),
                                 ),
                           ],
-                          child: Text(action.label(context)),
+                          child: Text(action.label(context, state)),
                         )
                       else
                         MenuItemButton(
@@ -418,7 +418,7 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
                             widget._itemCubit,
                             widget._authCubit,
                           ),
-                          child: Text(action.label(context)),
+                          child: Text(action.label(context, state)),
                         ),
                 ],
                 builder: (context, controller, child) => IconButton(

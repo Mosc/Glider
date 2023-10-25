@@ -41,8 +41,8 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
           for (final action in ItemAction.values)
             if (action.isVisible(_itemCubit.state, widget.authCubit.state))
               ListTile(
-                leading: Icon(action.icon),
-                title: Text(action.label(context)),
+                leading: Icon(action.icon(_itemCubit.state)),
+                title: Text(action.label(context, _itemCubit.state)),
                 onTap: () async {
                   context.pop();
                   await action.execute(context, _itemCubit, widget.authCubit);

@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 
 enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
   block,
-  unblock,
   select,
   copy(options: UserValue.values),
   share(options: UserValue.values),
@@ -24,9 +23,7 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
     final user = state.data;
     if (user == null) return false;
     return switch (this) {
-      UserAction.block => !state.blocked && user.username != authState.username,
-      UserAction.unblock =>
-        state.blocked && user.username != authState.username,
+      UserAction.block => user.username != authState.username,
       UserAction.select => user.about != null,
       UserAction.copy => true,
       UserAction.share => true,
@@ -35,10 +32,10 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
   }
 
   @override
-  String label(BuildContext context) {
+  String label(BuildContext context, UserState state) {
     return switch (this) {
-      UserAction.block => context.l10n.block,
-      UserAction.unblock => context.l10n.unblock,
+      UserAction.block =>
+        state.blocked ? context.l10n.unblock : context.l10n.block,
       UserAction.select => context.l10n.select,
       UserAction.copy => context.l10n.copy,
       UserAction.share => context.l10n.share,
@@ -47,10 +44,12 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
   }
 
   @override
-  IconData get icon {
+  IconData icon(
+    UserState state,
+  ) {
     return switch (this) {
-      UserAction.block => Icons.block_outlined,
-      UserAction.unblock => Icons.healing_outlined,
+      UserAction.block =>
+        state.blocked ? Icons.healing_outlined : Icons.block_outlined,
       UserAction.select => Icons.select_all_outlined,
       UserAction.copy => Icons.copy_outlined,
       UserAction.share => Icons.adaptive.share_outlined,
@@ -66,11 +65,13 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
   }) async {
     switch (this) {
       case UserAction.block:
-        final confirm =
-            await context.push<bool>(AppRoute.confirmDialog.location());
-        if (confirm ?? false) await userCubit.block(true);
-      case UserAction.unblock:
-        await userCubit.block(false);
+        if (!userCubit.state.blocked) {
+          final confirm =
+              await context.push<bool>(AppRoute.confirmDialog.location());
+          if (confirm ?? false) await userCubit.block(true);
+        } else {
+          await userCubit.block(false);
+        }
       case UserAction.select:
         await context.push(
           AppRoute.textSelectDialog.location(),

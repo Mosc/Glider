@@ -11,11 +11,8 @@ import 'package:go_router/go_router.dart';
 
 enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   upvote,
-  unvote,
   favorite,
-  unfavorite,
   flag,
-  unflag,
   edit,
   delete,
   reply,
@@ -34,26 +31,11 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
     return switch (this) {
       ItemAction.upvote => !item.isDeleted &&
           item.type != ItemType.job &&
-          !state.upvoted &&
           authState.isLoggedIn &&
           item.username != authState.username,
-      ItemAction.unvote => !item.isDeleted &&
-          item.type != ItemType.job &&
-          state.upvoted &&
-          authState.isLoggedIn &&
-          item.username != authState.username,
-      ItemAction.favorite =>
-        !item.isDeleted && item.type != ItemType.job && !state.favorited,
-      ItemAction.unfavorite =>
-        !item.isDeleted && item.type != ItemType.job && state.favorited,
-      ItemAction.flag => !item.isDeleted &&
-          item.type != ItemType.job &&
-          !state.flagged &&
-          authState.isLoggedIn,
-      ItemAction.unflag => !item.isDeleted &&
-          item.type != ItemType.job &&
-          state.flagged &&
-          authState.isLoggedIn,
+      ItemAction.favorite => !item.isDeleted && item.type != ItemType.job,
+      ItemAction.flag =>
+        !item.isDeleted && item.type != ItemType.job && authState.isLoggedIn,
       ItemAction.edit => !item.isDeleted &&
           item.isMaxTwoHoursAge &&
           // Restricted because of uncertainty on how editing a job, poll or
@@ -77,14 +59,14 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   }
 
   @override
-  String label(BuildContext context) {
+  String label(BuildContext context, ItemState state) {
     return switch (this) {
-      ItemAction.upvote => context.l10n.upvote,
-      ItemAction.unvote => context.l10n.unvote,
-      ItemAction.favorite => context.l10n.favorite,
-      ItemAction.unfavorite => context.l10n.unfavorite,
-      ItemAction.flag => context.l10n.flag,
-      ItemAction.unflag => context.l10n.unflag,
+      ItemAction.upvote =>
+        state.upvoted ? context.l10n.unvote : context.l10n.upvote,
+      ItemAction.favorite =>
+        state.favorited ? context.l10n.unfavorite : context.l10n.favorite,
+      ItemAction.flag =>
+        state.flagged ? context.l10n.unflag : context.l10n.flag,
       ItemAction.edit => context.l10n.edit,
       ItemAction.delete => context.l10n.delete,
       ItemAction.reply => context.l10n.reply,
@@ -95,14 +77,14 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   }
 
   @override
-  IconData get icon {
+  IconData icon(ItemState state) {
     return switch (this) {
-      ItemAction.upvote => Icons.arrow_upward_outlined,
-      ItemAction.unvote => Icons.undo_outlined,
-      ItemAction.favorite => Icons.favorite_outline_outlined,
-      ItemAction.unfavorite => Icons.heart_broken_outlined,
-      ItemAction.flag => Icons.flag_outlined,
-      ItemAction.unflag => Icons.flag,
+      ItemAction.upvote =>
+        state.upvoted ? Icons.undo_outlined : Icons.arrow_upward_outlined,
+      ItemAction.favorite => state.favorited
+          ? Icons.heart_broken_outlined
+          : Icons.favorite_outline_outlined,
+      ItemAction.flag => state.flagged ? Icons.flag : Icons.flag_outlined,
       ItemAction.edit => Icons.edit_outlined,
       ItemAction.delete => Icons.delete_outline_outlined,
       ItemAction.reply => Icons.reply_outlined,
@@ -121,19 +103,17 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
     final id = itemCubit.id;
     switch (this) {
       case ItemAction.upvote:
-        await itemCubit.upvote(true);
-      case ItemAction.unvote:
-        await itemCubit.upvote(false);
+        await itemCubit.upvote(!itemCubit.state.upvoted);
       case ItemAction.favorite:
-        await itemCubit.favorite(true);
-      case ItemAction.unfavorite:
-        await itemCubit.favorite(false);
+        await itemCubit.favorite(!itemCubit.state.favorited);
       case ItemAction.flag:
-        final confirm =
-            await context.push<bool>(AppRoute.confirmDialog.location());
-        if (confirm ?? false) await itemCubit.flag(true);
-      case ItemAction.unflag:
-        await itemCubit.flag(false);
+        if (!itemCubit.state.flagged) {
+          final confirm =
+              await context.push<bool>(AppRoute.confirmDialog.location());
+          if (confirm ?? false) await itemCubit.flag(true);
+        } else {
+          await itemCubit.flag(false);
+        }
       case ItemAction.edit:
         await context.push(
           AppRoute.edit.location(parameters: {'id': id}),

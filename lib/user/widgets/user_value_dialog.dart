@@ -41,8 +41,8 @@ class _UserValueDialogState extends State<UserValueDialog> {
         for (final value in UserValue.values)
           if (value.isVisible(_userCubit.state, widget._authCubit.state))
             ListTile(
-              leading: Icon(value.icon),
-              title: Text(value.label(context)),
+              leading: Icon(value.icon(_userCubit.state)),
+              title: Text(value.label(context, _userCubit.state)),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               onTap: () => context.pop(value),

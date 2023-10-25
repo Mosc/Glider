@@ -23,7 +23,7 @@ enum ItemValue implements MenuItem<ItemState> {
   }
 
   @override
-  String label(BuildContext context) {
+  String label(BuildContext context, ItemState state) {
     return switch (this) {
       ItemValue.title => context.l10n.title,
       ItemValue.link => context.l10n.link,
@@ -33,7 +33,7 @@ enum ItemValue implements MenuItem<ItemState> {
   }
 
   @override
-  IconData get icon {
+  IconData icon(ItemState state) {
     return switch (this) {
       ItemValue.title => Icons.title_outlined,
       ItemValue.link => Icons.link_outlined,

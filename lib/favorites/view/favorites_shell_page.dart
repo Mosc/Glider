@@ -89,7 +89,7 @@ class _SliverFavoritesAppBar extends StatelessWidget {
                 if (action.isVisible(null, authState))
                   MenuItemButton(
                     onPressed: () async => action.execute(context),
-                    child: Text(action.label(context)),
+                    child: Text(action.label(context, null)),
                   ),
             ],
             builder: (context, controller, child) => IconButton(

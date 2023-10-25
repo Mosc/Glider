@@ -137,10 +137,9 @@ class _ItemTileState extends State<ItemTile>
                         : UsernameStyle.none,
                 padding: widget.padding,
                 onTap: item.type == ItemType.pollopt
-                    ? ItemAction.upvote.isVisible(state, authState) ||
-                            ItemAction.unvote.isVisible(state, authState)
-                        ? (context, item) async =>
-                            _itemCubit.upvote(!state.upvoted)
+                    ? ItemAction.upvote.isVisible(state, authState)
+                        ? (context, item) async => ItemAction.upvote
+                            .execute(context, _itemCubit, widget._authCubit)
                         : null
                     : widget.onTap,
                 onLongPress: (context, item) async => context.push(
@@ -148,14 +147,14 @@ class _ItemTileState extends State<ItemTile>
                       .location(parameters: {'id': item.id}),
                 ),
                 onTapUpvote: widget.useActionButtons &&
-                        (ItemAction.upvote.isVisible(state, authState) ||
-                            ItemAction.unvote.isVisible(state, authState))
-                    ? () async => _itemCubit.upvote(!state.upvoted)
+                        ItemAction.upvote.isVisible(state, authState)
+                    ? () async => ItemAction.upvote
+                        .execute(context, _itemCubit, widget._authCubit)
                     : null,
                 onTapFavorite: widget.useActionButtons &&
-                        (ItemAction.favorite.isVisible(state, authState) ||
-                            ItemAction.unfavorite.isVisible(state, authState))
-                    ? () async => _itemCubit.favorite(!state.favorited)
+                        ItemAction.favorite.isVisible(state, authState)
+                    ? () async => ItemAction.favorite
+                        .execute(context, _itemCubit, widget._authCubit)
                     : null,
               ),
             ),
