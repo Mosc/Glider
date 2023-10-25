@@ -43,7 +43,7 @@ dependencies:
   share_plus: ^7.2.1
   shared_preferences: ^2.2.2
   sliver_tools: ^0.2.12
-  url_launcher: ^6.1.14
+  url_launcher: ^6.2.0
 
 dev_dependencies:
   dependency_validator: ^3.2.3
