@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:glider_data/src/dtos/visited_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
@@ -81,18 +83,40 @@ class SharedPreferencesService {
       _sharedPreferences.setString(_lastVersionKey, value);
 
   Future<bool> getVisited({required int id}) async =>
-      _sharedPreferences.containsElement(_visitedKey, id.toString());
+      getVisitedItems().then((ids) => ids.containsKey(id));
 
-  Future<bool> setVisited({required int id, required bool visit}) async {
+  Future<bool> setVisited({
+    required VisitedDto item,
+    required bool visit,
+  }) async {
     if (visit) {
-      return _sharedPreferences.addElement(_visitedKey, id.toString());
+      return _sharedPreferences.addElement(_visitedKey, item.serialize());
     } else {
-      return _sharedPreferences.removeElement(_visitedKey, id.toString());
+      final originalItem = _sharedPreferences
+          .getStringList(_visitedKey)
+          ?.map(VisitedDto.deserialize)
+          .firstWhereOrNull(
+            (deserialized) => deserialized.itemId == item.itemId,
+          );
+
+      if (originalItem == null) {
+        return true;
+      } else {
+        return _sharedPreferences.removeElement(
+          _visitedKey,
+          originalItem.serialize(),
+        );
+      }
     }
   }
 
-  Future<List<int>> getVisitedIds() async =>
-      [...?_sharedPreferences.getStringList(_visitedKey)?.map(int.parse)];
+  Future<Map<int, DateTime?>> getVisitedItems() async => Map.fromEntries(
+        _sharedPreferences
+                .getStringList(_visitedKey)
+                ?.map(VisitedDto.deserialize)
+                .map((e) => MapEntry(e.itemId, e.time)) ??
+            [],
+      );
 
   Future<bool> getUpvoted({required int id}) async =>
       _sharedPreferences.containsElement(_upvotedKey, id.toString());

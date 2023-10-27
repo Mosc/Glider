@@ -2,6 +2,7 @@ enum AppRoute {
   stories,
   catchUp,
   favorites,
+  history,
   inbox,
   whatsNew,
   auth,

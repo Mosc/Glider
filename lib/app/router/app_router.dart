@@ -9,6 +9,7 @@ import 'package:glider/common/widgets/confirm_dialog.dart';
 import 'package:glider/common/widgets/text_select_dialog.dart';
 import 'package:glider/edit/view/edit_page.dart';
 import 'package:glider/favorites/view/favorites_shell_page.dart';
+import 'package:glider/history/view/history_shell_page.dart';
 import 'package:glider/inbox/view/inbox_shell_page.dart';
 import 'package:glider/item/view/item_page.dart';
 import 'package:glider/item/widgets/item_bottom_sheet.dart';
@@ -84,6 +85,21 @@ class AppRouter {
                     pageBuilder: (context, state) => NoTransitionPage<void>(
                       child: FavoritesShellPage(
                         appContainer.favoritesCubit,
+                        appContainer.itemCubitFactory,
+                        appContainer.authCubit,
+                        appContainer.settingsCubit,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: AppRoute.history.path,
+                    pageBuilder: (context, state) => NoTransitionPage<void>(
+                      child: HistoryShellPage(
+                        appContainer.historyCubit,
                         appContainer.itemCubitFactory,
                         appContainer.authCubit,
                         appContainer.settingsCubit,

@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/edit/cubit/edit_cubit.dart';
 import 'package:glider/favorites/cubit/favorites_cubit.dart';
+import 'package:glider/history/cubit/history_cubit.dart';
 import 'package:glider/inbox/cubit/inbox_cubit.dart';
 import 'package:glider/item/cubit/item_cubit.dart';
 import 'package:glider/item_tree/cubit/item_tree_cubit.dart';
@@ -56,6 +57,7 @@ class AppContainer {
     this.editCubitFactory,
     this.replyCubitFactory,
     this.favoritesCubit,
+    this.historyCubit,
     this.inboxCubit,
     this.userCubitFactory,
     this.userItemSearchBlocFactory,
@@ -121,6 +123,7 @@ class AppContainer {
       (id) => EditCubit(itemRepository, itemInteractionRepository, id: id),
       (id) => ReplyCubit(itemRepository, itemInteractionRepository, id: id),
       FavoritesCubit(itemInteractionRepository),
+      HistoryCubit(itemInteractionRepository),
       InboxCubit(itemRepository, authRepository),
       (username) => UserCubit(
         userRepository,
@@ -146,6 +149,7 @@ class AppContainer {
   final EditCubitFactory editCubitFactory;
   final ReplyCubitFactory replyCubitFactory;
   final FavoritesCubit favoritesCubit;
+  final HistoryCubit historyCubit;
   final InboxCubit inboxCubit;
   final UserCubitFactory userCubitFactory;
   final UserItemSearchBlocFactory userItemSearchBlocFactory;
