@@ -7,6 +7,7 @@ import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
 import 'package:glider/common/widgets/hacker_news_text.dart';
 import 'package:glider/item/models/vote_type.dart';
+import 'package:glider_data/glider_data.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:share_plus/share_plus.dart';
@@ -63,7 +64,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
     );
     _visitedSubscription = _itemInteractionRepository.visitedStream.listen(
       (visited) => safeEmit(
-        state.copyWith(visited: () => visited.contains(itemId)),
+        state.copyWith(visited: () => visited.containsKey(itemId)),
       ),
     );
     _upvotedSubscription = _itemInteractionRepository.upvotedStream.listen(
@@ -106,7 +107,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
   final int itemId;
 
   late final StreamSubscription<Item> _itemSubscription;
-  late final StreamSubscription<List<int>> _visitedSubscription;
+  late final StreamSubscription<Map<int, DateTime?>> _visitedSubscription;
   late final StreamSubscription<List<int>> _upvotedSubscription;
   late final StreamSubscription<List<int>> _downvotedSubscription;
   late final StreamSubscription<List<int>> _favoritedSubscription;
@@ -128,8 +129,8 @@ class ItemCubit extends HydratedCubit<ItemState> {
     safeEmit(
       state.copyWith(visited: () => visit),
     );
-    final success =
-        await _itemInteractionRepository.visit(itemId, visit: visit);
+    final success = await _itemInteractionRepository
+        .visit(VisitedDto(itemId, DateTime.now()), visit: visit);
 
     if (!success) {
       safeEmit(

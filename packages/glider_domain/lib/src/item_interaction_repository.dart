@@ -9,7 +9,7 @@ class ItemInteractionRepository {
     this._secureStorageService,
     this._sharedPreferencesService,
   ) {
-    unawaited(getVisitedIds());
+    unawaited(getVisitedItems());
     unawaited(getUpvotedIds());
     unawaited(getFavoritedIds());
     unawaited(getFlaggedIds());
@@ -19,7 +19,8 @@ class ItemInteractionRepository {
   final SecureStorageService _secureStorageService;
   final SharedPreferencesService _sharedPreferencesService;
 
-  final BehaviorSubject<List<int>> _visitedStreamController = BehaviorSubject();
+  final BehaviorSubject<Map<int, DateTime?>> _visitedStreamController =
+      BehaviorSubject();
   final BehaviorSubject<List<int>> _upvotedStreamController = BehaviorSubject();
   final BehaviorSubject<List<int>> _downvotedStreamController =
       BehaviorSubject();
@@ -27,7 +28,8 @@ class ItemInteractionRepository {
       BehaviorSubject();
   final BehaviorSubject<List<int>> _flaggedStreamController = BehaviorSubject();
 
-  Stream<List<int>> get visitedStream => _visitedStreamController.stream;
+  Stream<Map<int, DateTime?>> get visitedStream =>
+      _visitedStreamController.stream;
 
   Stream<List<int>> get upvotedStream => _upvotedStreamController.stream;
 
@@ -37,9 +39,9 @@ class ItemInteractionRepository {
 
   Stream<List<int>> get flaggedStream => _flaggedStreamController.stream;
 
-  Future<List<int>> getVisitedIds() async {
+  Future<Map<int, DateTime?>> getVisitedItems() async {
     try {
-      final ids = await _sharedPreferencesService.getVisitedIds();
+      final ids = await _sharedPreferencesService.getVisitedItems();
       _visitedStreamController.add(ids);
       return ids;
     } on Object catch (e, st) {
@@ -92,10 +94,10 @@ class ItemInteractionRepository {
     }
   }
 
-  Future<bool> visit(int id, {required bool visit}) async {
+  Future<bool> visit(VisitedDto item, {required bool visit}) async {
     try {
-      await _sharedPreferencesService.setVisited(id: id, visit: visit);
-      await getVisitedIds();
+      await _sharedPreferencesService.setVisited(item: item, visit: visit);
+      await getVisitedItems();
       return true;
     } on Object {
       return false;

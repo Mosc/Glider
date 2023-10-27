@@ -89,6 +89,11 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
               selectedIcon: const Icon(Icons.favorite),
               label: context.l10n.favorites,
             ),
+            NavigationDestination(
+              icon: const Icon(Icons.history_outlined),
+              selectedIcon: const Icon(Icons.history),
+              label: context.l10n.history,
+            ),
             if (authState.isLoggedIn)
               NavigationDestination(
                 icon: const Icon(Icons.inbox_outlined),
