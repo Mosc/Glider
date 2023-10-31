@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +14,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<void> bootstrap(
-  FutureOr<Widget> Function(AppContainer, AppRouter) builder,
+  FutureOr<Widget> Function(AppContainer, AppRouter, BaseDeviceInfo) builder,
 ) async {
   await runZonedGuarded(
     () async {
@@ -35,12 +36,13 @@ Future<void> bootstrap(
             ? HydratedStorage.webStorageDirectory
             : await getApplicationCacheDirectory(),
       );
+      final deviceInfo = await DeviceInfoPlugin().deviceInfo;
 
       final appContainer = await AppContainer.create();
       unawaited(appContainer.authCubit.init());
       final appRouter = AppRouter.create(appContainer);
 
-      runApp(await builder(appContainer, appRouter));
+      runApp(await builder(appContainer, appRouter, deviceInfo));
     },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );

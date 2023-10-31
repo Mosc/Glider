@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,10 +11,16 @@ import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:relative_time/relative_time.dart';
 
 class App extends StatelessWidget {
-  const App(this._settingsCubit, this._routerConfig, {super.key});
+  const App(
+    this._settingsCubit,
+    this._routerConfig,
+    this._deviceInfo, {
+    super.key,
+  });
 
   final SettingsCubit _settingsCubit;
   final RouterConfig<Object> _routerConfig;
+  final BaseDeviceInfo _deviceInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,7 @@ class App extends StatelessWidget {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,
-          scrollBehavior: const _ShowScrollbarScrollBehavior(),
+          scrollBehavior: _ShowScrollbarScrollBehavior(_deviceInfo),
         ),
       ),
     );
@@ -102,7 +109,9 @@ class App extends StatelessWidget {
 }
 
 class _ShowScrollbarScrollBehavior extends MaterialScrollBehavior {
-  const _ShowScrollbarScrollBehavior();
+  const _ShowScrollbarScrollBehavior(this._deviceInfo);
+
+  final BaseDeviceInfo _deviceInfo;
 
   @override
   Widget buildScrollbar(
@@ -114,6 +123,34 @@ class _ShowScrollbarScrollBehavior extends MaterialScrollBehavior {
       Axis.horizontal => child,
       Axis.vertical => Scrollbar(
           controller: details.controller,
+          child: child,
+        ),
+    };
+  }
+
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return switch (getPlatform(context)) {
+      TargetPlatform.iOS ||
+      TargetPlatform.linux ||
+      TargetPlatform.macOS ||
+      TargetPlatform.windows =>
+        child,
+      TargetPlatform.android
+          when _deviceInfo is AndroidDeviceInfo &&
+              _deviceInfo.version.sdkInt >= 31 =>
+        StretchingOverscrollIndicator(
+          axisDirection: details.direction,
+          clipBehavior: details.decorationClipBehavior ?? Clip.hardEdge,
+          child: child,
+        ),
+      _ => GlowingOverscrollIndicator(
+          axisDirection: details.direction,
+          color: Theme.of(context).colorScheme.secondary,
           child: child,
         ),
     };
