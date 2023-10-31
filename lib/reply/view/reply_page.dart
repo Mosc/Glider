@@ -117,7 +117,7 @@ class _ReplyBody extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             child: _ReplyForm(_replyCubit),
           ),
-          if (state.parentItem?.text case final _?)
+          if (state.parentItem?.text != null)
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.xl,
