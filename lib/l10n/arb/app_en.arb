@@ -20,6 +20,7 @@
     "storyMetadataDescription": "Always shows on some pages",
     "actionButtons": "Action buttons",
     "actionButtonsDescription": "Makes some metadata interactive",
+    "themeMode": "Theme mode",
     "dynamicTheme": "Dynamic theme",
     "dynamicThemeDescription": "Uses system color scheme",
     "themeColor": "Theme color",

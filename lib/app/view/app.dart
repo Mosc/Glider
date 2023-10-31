@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:glider/app/extensions/theme_mode_extension.dart';
 import 'package:glider/app/extensions/variant_extension.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
@@ -21,6 +22,7 @@ class App extends StatelessWidget {
           BlocBuilder<SettingsCubit, SettingsState>(
         bloc: _settingsCubit,
         buildWhen: (previous, current) =>
+            previous.themeMode != current.themeMode ||
             previous.useDynamicTheme != current.useDynamicTheme ||
             previous.themeColor != current.themeColor ||
             previous.themeVariant != current.themeVariant ||
@@ -29,6 +31,7 @@ class App extends StatelessWidget {
           routerConfig: _routerConfig,
           theme: _buildTheme(context, state, lightDynamic, Brightness.light),
           darkTheme: _buildTheme(context, state, darkDynamic, Brightness.dark),
+          themeMode: _settingsCubit.state.themeMode.toMaterialThemeMode(),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             RelativeTimeLocalizations.delegate,

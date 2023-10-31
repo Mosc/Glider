@@ -5,6 +5,7 @@ class SettingsState with EquatableMixin {
     this.useLargeStoryStyle = true,
     this.showStoryMetadata = true,
     this.useActionButtons = false,
+    this.themeMode = ThemeMode.system,
     this.useDynamicTheme = true,
     this.themeColor = const Color(0xff6750a4),
     this.themeVariant = Variant.tonalSpot,
@@ -17,6 +18,7 @@ class SettingsState with EquatableMixin {
   final bool useLargeStoryStyle;
   final bool showStoryMetadata;
   final bool useActionButtons;
+  final ThemeMode themeMode;
   final bool useDynamicTheme;
   final Color themeColor;
   final Variant themeVariant;
@@ -29,6 +31,7 @@ class SettingsState with EquatableMixin {
     bool Function()? useLargeStoryStyle,
     bool Function()? showStoryMetadata,
     bool Function()? useActionButtons,
+    ThemeMode Function()? themeMode,
     bool Function()? useDynamicTheme,
     Color Function()? themeColor,
     Variant Function()? themeVariant,
@@ -47,6 +50,7 @@ class SettingsState with EquatableMixin {
         useActionButtons: useActionButtons != null
             ? useActionButtons()
             : this.useActionButtons,
+        themeMode: themeMode != null ? themeMode() : this.themeMode,
         useDynamicTheme:
             useDynamicTheme != null ? useDynamicTheme() : this.useDynamicTheme,
         themeColor: themeColor != null ? themeColor() : this.themeColor,
@@ -66,6 +70,7 @@ class SettingsState with EquatableMixin {
         useLargeStoryStyle,
         showStoryMetadata,
         useActionButtons,
+        themeMode,
         useDynamicTheme,
         themeColor,
         themeVariant,

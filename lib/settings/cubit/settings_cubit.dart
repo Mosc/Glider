@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:material_color_utilities/scheme/variant.dart';
@@ -86,6 +86,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (useActionButtons != null) {
       safeEmit(
         state.copyWith(useActionButtons: () => useActionButtons),
+      );
+    }
+  }
+
+  Future<void> setThemeMode(ThemeMode value) async {
+    await _settingsRepository.setThemeMode(value: value);
+    final themeMode = await _settingsRepository.getThemeMode();
+
+    if (themeMode != null) {
+      safeEmit(
+        state.copyWith(themeMode: () => themeMode),
       );
     }
   }

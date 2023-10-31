@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:glider_data/glider_data.dart';
+import 'package:glider_domain/src/entities/theme_mode.dart';
 import 'package:material_color_utilities/scheme/variant.dart';
 
 class SettingsRepository {
@@ -25,6 +26,14 @@ class SettingsRepository {
 
   Future<bool> setUseActionButtons({required bool value}) async =>
       _sharedPreferencesService.setUseActionButtons(value: value);
+
+  Future<ThemeMode?> getThemeMode() async {
+    final value = await _sharedPreferencesService.getThemeMode();
+    return value != null ? ThemeMode.values.byName(value) : null;
+  }
+
+  Future<bool> setThemeMode({required ThemeMode value}) async =>
+      _sharedPreferencesService.setThemeMode(value: value.name);
 
   Future<bool?> getUseDynamicTheme() async =>
       _sharedPreferencesService.getUseDynamicTheme();
