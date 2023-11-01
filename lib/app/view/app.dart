@@ -48,7 +48,7 @@ class App extends StatelessWidget {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,
-          scrollBehavior: _ShowScrollbarScrollBehavior(_deviceInfo),
+          scrollBehavior: _AppScrollBehavior(_deviceInfo),
         ),
       ),
     );
@@ -108,8 +108,8 @@ class App extends StatelessWidget {
   }
 }
 
-class _ShowScrollbarScrollBehavior extends MaterialScrollBehavior {
-  const _ShowScrollbarScrollBehavior(this._deviceInfo);
+class _AppScrollBehavior extends MaterialScrollBehavior {
+  const _AppScrollBehavior(this._deviceInfo);
 
   final BaseDeviceInfo _deviceInfo;
 
