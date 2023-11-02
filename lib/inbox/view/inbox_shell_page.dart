@@ -52,6 +52,7 @@ class _InboxShellPageState extends State<InboxShellPage> {
           _SliverInboxAppBar(
             widget._inboxCubit,
             widget._authCubit,
+            widget._settingsCubit,
           ),
           SliverSafeArea(
             top: false,
@@ -69,10 +70,15 @@ class _InboxShellPageState extends State<InboxShellPage> {
 }
 
 class _SliverInboxAppBar extends StatelessWidget {
-  const _SliverInboxAppBar(this._inboxCubit, this._authCubit);
+  const _SliverInboxAppBar(
+    this._inboxCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
 
   final InboxCubit _inboxCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -82,22 +88,24 @@ class _SliverInboxAppBar extends StatelessWidget {
       actions: [
         BlocBuilder<AuthCubit, AuthState>(
           bloc: _authCubit,
-          buildWhen: (previous, current) =>
-              previous.isLoggedIn != current.isLoggedIn,
-          builder: (context, authState) => MenuAnchor(
-            menuChildren: [
-              for (final action in NavigationShellAction.values)
-                if (action.isVisible(null, authState))
-                  MenuItemButton(
-                    onPressed: () async => action.execute(context),
-                    child: Text(action.label(context, null)),
-                  ),
-            ],
-            builder: (context, controller, child) => IconButton(
-              icon: Icon(Icons.adaptive.more_outlined),
-              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-              onPressed: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
+          builder: (context, authState) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: _settingsCubit,
+            builder: (context, settingsState) => MenuAnchor(
+              menuChildren: [
+                for (final action in NavigationShellAction.values)
+                  if (action.isVisible(null, authState, settingsState))
+                    MenuItemButton(
+                      onPressed: () async => action.execute(context),
+                      child: Text(action.label(context, null)),
+                    ),
+              ],
+              builder: (context, controller, child) => IconButton(
+                icon: Icon(Icons.adaptive.more_outlined),
+                tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+                onPressed: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+              ),
             ),
           ),
         ),
@@ -140,6 +148,7 @@ class _SliverInboxBody extends StatelessWidget {
                 ItemTile.create(
                   _itemCubitFactory,
                   _authCubit,
+                  _settingsCubit,
                   key: ValueKey<int>(parentId),
                   id: parentId,
                   loadingType: ItemType.story,
@@ -154,6 +163,7 @@ class _SliverInboxBody extends StatelessWidget {
                   child: ItemTile.create(
                     _itemCubitFactory,
                     _authCubit,
+                    _settingsCubit,
                     key: ValueKey<int>(id),
                     id: id,
                     loadingType: ItemType.comment,

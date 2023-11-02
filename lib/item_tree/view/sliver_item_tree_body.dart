@@ -114,6 +114,7 @@ class _SliverItemTreeBodyState extends State<SliverItemTreeBody> {
       child: ItemTile(
         _itemCubits[descendant.id]!,
         widget._authCubit,
+        widget._settingsCubit,
         key: ValueKey(descendant.id),
         storyUsername: widget.storyUsername,
         loadingType: ItemType.comment,

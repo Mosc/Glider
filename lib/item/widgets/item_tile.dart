@@ -13,13 +13,15 @@ import 'package:glider/item/typedefs/item_typedefs.dart';
 import 'package:glider/item/widgets/item_data_tile.dart';
 import 'package:glider/item/widgets/item_loading_tile.dart';
 import 'package:glider/item/widgets/username_widget.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
 class ItemTile extends StatefulWidget {
   ItemTile(
     ItemCubit itemCubit,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
     this.storyUsername,
     required this.loadingType,
@@ -39,7 +41,8 @@ class ItemTile extends StatefulWidget {
 
   const ItemTile.create(
     ItemCubitFactory itemCubitFactory,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
     required this.id,
     this.storyUsername,
@@ -60,6 +63,7 @@ class ItemTile extends StatefulWidget {
   final ItemCubit? _itemCubit;
   final ItemCubitFactory? _itemCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final int id;
   final String? storyUsername;
   final ItemType loadingType;
@@ -118,44 +122,51 @@ class _ItemTileState extends State<ItemTile>
             surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
             child: BlocBuilder<AuthCubit, AuthState>(
               bloc: widget._authCubit,
-              builder: (context, authState) => ItemDataTile(
-                item,
-                visited: state.visited && widget.showVisited,
-                upvoted: state.upvoted,
-                favorited: state.favorited,
-                flagged: state.flagged,
-                blocked: state.blocked,
-                failed: state.status == Status.failure,
-                collapsedCount: widget.collapsedCount,
-                useLargeStoryStyle: widget.useLargeStoryStyle,
-                showMetadata: widget.showMetadata,
-                style: widget.style,
-                usernameStyle: authState.username == item.username
-                    ? UsernameStyle.loggedInUser
-                    : widget.storyUsername == item.username
-                        ? UsernameStyle.storyUser
-                        : UsernameStyle.none,
-                padding: widget.padding,
-                onTap: item.type == ItemType.pollopt
-                    ? ItemAction.upvote.isVisible(state, authState)
-                        ? (context, item) async => ItemAction.upvote
-                            .execute(context, _itemCubit, widget._authCubit)
-                        : null
-                    : widget.onTap,
-                onLongPress: (context, item) async => context.push(
-                  AppRoute.itemBottomSheet
-                      .location(parameters: {'id': item.id}),
+              builder: (context, authState) =>
+                  BlocBuilder<SettingsCubit, SettingsState>(
+                bloc: widget._settingsCubit,
+                builder: (context, settingsState) => ItemDataTile(
+                  item,
+                  visited: state.visited && widget.showVisited,
+                  vote: state.vote,
+                  favorited: state.favorited,
+                  flagged: state.flagged,
+                  blocked: state.blocked,
+                  failed: state.status == Status.failure,
+                  collapsedCount: widget.collapsedCount,
+                  useLargeStoryStyle: widget.useLargeStoryStyle,
+                  showMetadata: widget.showMetadata,
+                  style: widget.style,
+                  usernameStyle: authState.username == item.username
+                      ? UsernameStyle.loggedInUser
+                      : widget.storyUsername == item.username
+                          ? UsernameStyle.storyUser
+                          : UsernameStyle.none,
+                  padding: widget.padding,
+                  onTap: item.type == ItemType.pollopt
+                      ? ItemAction.upvote
+                              .isVisible(state, authState, settingsState)
+                          ? (context, item) async => ItemAction.upvote
+                              .execute(context, _itemCubit, widget._authCubit)
+                          : null
+                      : widget.onTap,
+                  onLongPress: (context, item) async => context.push(
+                    AppRoute.itemBottomSheet
+                        .location(parameters: {'id': item.id}),
+                  ),
+                  onTapUpvote: widget.useActionButtons &&
+                          ItemAction.upvote
+                              .isVisible(state, authState, settingsState)
+                      ? () async => ItemAction.upvote
+                          .execute(context, _itemCubit, widget._authCubit)
+                      : null,
+                  onTapFavorite: widget.useActionButtons &&
+                          ItemAction.favorite
+                              .isVisible(state, authState, settingsState)
+                      ? () async => ItemAction.favorite
+                          .execute(context, _itemCubit, widget._authCubit)
+                      : null,
                 ),
-                onTapUpvote: widget.useActionButtons &&
-                        ItemAction.upvote.isVisible(state, authState)
-                    ? () async => ItemAction.upvote
-                        .execute(context, _itemCubit, widget._authCubit)
-                    : null,
-                onTapFavorite: widget.useActionButtons &&
-                        ItemAction.favorite.isVisible(state, authState)
-                    ? () async => ItemAction.favorite
-                        .execute(context, _itemCubit, widget._authCubit)
-                    : null,
               ),
             ),
           );

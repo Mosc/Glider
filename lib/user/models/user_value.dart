@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/interfaces/menu_item.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/cubit/user_cubit.dart';
 
 enum UserValue implements MenuItem<UserState> {
@@ -10,7 +11,11 @@ enum UserValue implements MenuItem<UserState> {
   userLink;
 
   @override
-  bool isVisible(UserState state, AuthState authState) {
+  bool isVisible(
+    UserState state,
+    AuthState authState,
+    SettingsState settingsState,
+  ) {
     final user = state.data;
     if (user == null) return false;
     return switch (this) {

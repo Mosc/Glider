@@ -12,6 +12,7 @@ class SettingsState with EquatableMixin {
     this.usePureBackground = false,
     this.showJobs = true,
     this.useThreadNavigation = true,
+    this.enableDownvoting = false,
     this.appVersion,
   });
 
@@ -25,6 +26,7 @@ class SettingsState with EquatableMixin {
   final bool usePureBackground;
   final bool showJobs;
   final bool useThreadNavigation;
+  final bool enableDownvoting;
   final Version? appVersion;
 
   SettingsState copyWith({
@@ -38,6 +40,7 @@ class SettingsState with EquatableMixin {
     bool Function()? usePureBackground,
     bool Function()? showJobs,
     bool Function()? useThreadNavigation,
+    bool Function()? enableDownvoting,
     Version? Function()? appVersion,
   }) =>
       SettingsState(
@@ -62,6 +65,9 @@ class SettingsState with EquatableMixin {
         useThreadNavigation: useThreadNavigation != null
             ? useThreadNavigation()
             : this.useThreadNavigation,
+        enableDownvoting: enableDownvoting != null
+            ? enableDownvoting()
+            : this.enableDownvoting,
         appVersion: appVersion != null ? appVersion() : this.appVersion,
       );
 
@@ -77,6 +83,7 @@ class SettingsState with EquatableMixin {
         usePureBackground,
         showJobs,
         useThreadNavigation,
+        enableDownvoting,
         appVersion,
       ];
 }

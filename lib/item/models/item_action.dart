@@ -5,12 +5,15 @@ import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/interfaces/menu_item.dart';
 import 'package:glider/item/cubit/item_cubit.dart';
 import 'package:glider/item/models/item_value.dart';
+import 'package:glider/item/models/vote_type.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
 enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   upvote,
+  downvote,
   favorite,
   flag,
   edit,
@@ -25,7 +28,11 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   final List<T>? options;
 
   @override
-  bool isVisible(ItemState state, AuthState authState) {
+  bool isVisible(
+    ItemState state,
+    AuthState authState,
+    SettingsState settingsState,
+  ) {
     final item = state.data;
     if (item == null) return false;
     return switch (this) {
@@ -33,6 +40,11 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
           item.type != ItemType.job &&
           authState.isLoggedIn &&
           item.username != authState.username,
+      ItemAction.downvote => !item.isDeleted &&
+          item.type != ItemType.job &&
+          authState.isLoggedIn &&
+          item.username != authState.username &&
+          settingsState.enableDownvoting,
       ItemAction.favorite => !item.isDeleted && item.type != ItemType.job,
       ItemAction.flag =>
         !item.isDeleted && item.type != ItemType.job && authState.isLoggedIn,
@@ -53,8 +65,7 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
       ItemAction.reply =>
         !item.isDeleted && item.type != ItemType.job && authState.isLoggedIn,
       ItemAction.select => item.text != null,
-      ItemAction.copy => true,
-      ItemAction.share => true,
+      ItemAction.copy || ItemAction.share => true,
     };
   }
 
@@ -62,7 +73,9 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   String label(BuildContext context, ItemState state) {
     return switch (this) {
       ItemAction.upvote =>
-        state.upvoted ? context.l10n.unvote : context.l10n.upvote,
+        state.vote.upvoted ? context.l10n.unvote : context.l10n.upvote,
+      ItemAction.downvote =>
+        state.vote.downvoted ? context.l10n.unvote : context.l10n.downvote,
       ItemAction.favorite =>
         state.favorited ? context.l10n.unfavorite : context.l10n.favorite,
       ItemAction.flag =>
@@ -80,7 +93,10 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   IconData icon(ItemState state) {
     return switch (this) {
       ItemAction.upvote =>
-        state.upvoted ? Icons.undo_outlined : Icons.arrow_upward_outlined,
+        state.vote.upvoted ? Icons.undo_outlined : Icons.arrow_upward_outlined,
+      ItemAction.downvote => state.vote.downvoted
+          ? Icons.undo_outlined
+          : Icons.arrow_downward_outlined,
       ItemAction.favorite => state.favorited
           ? Icons.heart_broken_outlined
           : Icons.favorite_outline_outlined,
@@ -103,7 +119,9 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
     final id = itemCubit.id;
     switch (this) {
       case ItemAction.upvote:
-        await itemCubit.upvote(!itemCubit.state.upvoted);
+        await itemCubit.upvote(itemCubit.state.vote != VoteType.upvote);
+      case ItemAction.downvote:
+        await itemCubit.downvote(itemCubit.state.vote != VoteType.downvote);
       case ItemAction.favorite:
         await itemCubit.favorite(!itemCubit.state.favorited);
       case ItemAction.flag:

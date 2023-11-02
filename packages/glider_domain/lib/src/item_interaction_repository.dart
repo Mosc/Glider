@@ -21,6 +21,8 @@ class ItemInteractionRepository {
 
   final BehaviorSubject<List<int>> _visitedStreamController = BehaviorSubject();
   final BehaviorSubject<List<int>> _upvotedStreamController = BehaviorSubject();
+  final BehaviorSubject<List<int>> _downvotedStreamController =
+      BehaviorSubject();
   final BehaviorSubject<List<int>> _favoritedStreamController =
       BehaviorSubject();
   final BehaviorSubject<List<int>> _flaggedStreamController = BehaviorSubject();
@@ -28,6 +30,8 @@ class ItemInteractionRepository {
   Stream<List<int>> get visitedStream => _visitedStreamController.stream;
 
   Stream<List<int>> get upvotedStream => _upvotedStreamController.stream;
+
+  Stream<List<int>> get downvotedStream => _downvotedStreamController.stream;
 
   Stream<List<int>> get favoritedStream => _favoritedStreamController.stream;
 
@@ -51,6 +55,17 @@ class ItemInteractionRepository {
       return ids;
     } on Object catch (e, s) {
       _upvotedStreamController.addError(e, s);
+      rethrow;
+    }
+  }
+
+  Future<List<int>> getDownvotedIds() async {
+    try {
+      final ids = await _sharedPreferencesService.getDownvotedIds();
+      _downvotedStreamController.add(ids);
+      return ids;
+    } on Object catch (e, s) {
+      _downvotedStreamController.addError(e, s);
       rethrow;
     }
   }
@@ -97,6 +112,22 @@ class ItemInteractionRepository {
       );
       await _sharedPreferencesService.setUpvoted(id: id, upvote: upvote);
       await getUpvotedIds();
+      return true;
+    } on Object {
+      return false;
+    }
+  }
+
+  Future<bool> downvote(int id, {required bool downvote}) async {
+    try {
+      final userCookie = await _secureStorageService.getUserCookie();
+      await _hackerNewsWebsiteService.downvote(
+        id: id,
+        downvote: downvote,
+        userCookie: userCookie!,
+      );
+      await _sharedPreferencesService.setDownvoted(id: id, downvote: downvote);
+      await getDownvotedIds();
       return true;
     } on Object {
       return false;

@@ -55,6 +55,7 @@ class SliverStoriesSearchBody extends StatelessWidget {
                     ItemTile.create(
                       _itemCubitFactory,
                       _authCubit,
+                      _settingsCubit,
                       key: ValueKey<int>(id),
                       id: id,
                       loadingType: ItemType.story,

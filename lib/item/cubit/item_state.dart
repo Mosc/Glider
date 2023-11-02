@@ -5,7 +5,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
     this.status = Status.initial,
     this.data,
     this.visited = false,
-    this.upvoted = false,
+    this.vote,
     this.favorited = false,
     this.flagged = false,
     this.blocked = false,
@@ -16,7 +16,9 @@ class ItemState with DataMixin<Item>, EquatableMixin {
         status: Status.values.byName(json['status'] as String),
         data: Item.fromJson(json['data'] as Map<String, dynamic>),
         visited: json['visited'] as bool? ?? false,
-        upvoted: json['upvoted'] as bool? ?? false,
+        vote: json['voted'] != null
+            ? VoteType.values.byName(json['voted'] as String)
+            : null,
         favorited: json['favorited'] as bool? ?? false,
         flagged: json['flagged'] as bool? ?? false,
         blocked: json['blocked'] as bool? ?? false,
@@ -25,7 +27,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
   Map<String, dynamic> toJson() => <String, dynamic>{
         'status': status.name,
         'data': data?.toJson(),
-        'upvoted': upvoted,
+        'voted': vote?.name,
         'favorited': favorited,
         'flagged': flagged,
         'blocked': blocked,
@@ -36,7 +38,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
   @override
   final Item? data;
   final bool visited;
-  final bool upvoted;
+  final VoteType? vote;
   final bool favorited;
   final bool flagged;
   final bool blocked;
@@ -47,7 +49,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
     Status Function()? status,
     Item? Function()? data,
     bool Function()? visited,
-    bool Function()? upvoted,
+    VoteType? Function()? vote,
     bool Function()? favorited,
     bool Function()? flagged,
     bool Function()? blocked,
@@ -58,7 +60,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
         status: status != null ? status() : this.status,
         data: data != null ? data() : this.data,
         visited: visited != null ? visited() : this.visited,
-        upvoted: upvoted != null ? upvoted() : this.upvoted,
+        vote: vote != null ? vote() : this.vote,
         favorited: favorited != null ? favorited() : this.favorited,
         flagged: flagged != null ? flagged() : this.flagged,
         blocked: blocked != null ? blocked() : this.blocked,
@@ -70,7 +72,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
         status,
         data,
         visited,
-        upvoted,
+        vote,
         favorited,
         flagged,
         blocked,

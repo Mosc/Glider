@@ -3,6 +3,7 @@ import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/interfaces/menu_item.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/cubit/user_cubit.dart';
 import 'package:glider/user/models/user_value.dart';
 import 'package:go_router/go_router.dart';
@@ -19,14 +20,17 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
   final List<T>? options;
 
   @override
-  bool isVisible(UserState state, AuthState authState) {
+  bool isVisible(
+    UserState state,
+    AuthState authState,
+    SettingsState settingsState,
+  ) {
     final user = state.data;
     if (user == null) return false;
     return switch (this) {
       UserAction.block => user.username != authState.username,
       UserAction.select => user.about != null,
-      UserAction.copy => true,
-      UserAction.share => true,
+      UserAction.copy || UserAction.share => true,
       UserAction.logout => user.username == authState.username,
     };
   }

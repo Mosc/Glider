@@ -168,6 +168,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  Future<void> setEnableDownvoting(bool value) async {
+    await _settingsRepository.setEnableDownvoting(value: value);
+    final enableDownvoting = await _settingsRepository.getEnableDownvoting();
+
+    if (enableDownvoting != null) {
+      safeEmit(
+        state.copyWith(enableDownvoting: () => enableDownvoting),
+      );
+    }
+  }
+
   Future<void> exportFavorites() async {
     final favorites = await _itemInteractionRepository.favoritedStream.first;
     await Share.share(jsonEncode(favorites));

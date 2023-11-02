@@ -285,44 +285,45 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
   Widget build(BuildContext context) {
     return BlocBuilder<ItemCubit, ItemState>(
       bloc: widget._itemCubit,
-      builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
-        bloc: widget._settingsCubit,
-        buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.useActionButtons != current.useActionButtons,
-        builder: (context, settingsState) => SliverAppBar(
-          flexibleSpace: AppBarProgressIndicator(widget._itemTreeCubit),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(widget.toolbarHeight),
-            child: Column(
-              children: [
-                if (state.data?.parentId case final parentId?)
-                  Padding(
-                    padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Hero(
-                        tag: 'load_parent',
-                        child: OutlinedButton.icon(
-                          onPressed: () async => context.push(
-                            AppRoute.item.location(
-                              parameters: {'id': parentId.toString()},
-                            ),
+      builder: (context, state) => SliverAppBar(
+        flexibleSpace: AppBarProgressIndicator(widget._itemTreeCubit),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(widget.toolbarHeight),
+          child: Column(
+            children: [
+              if (state.data?.parentId case final parentId?)
+                Padding(
+                  padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Hero(
+                      tag: 'load_parent',
+                      child: OutlinedButton.icon(
+                        onPressed: () async => context.push(
+                          AppRoute.item.location(
+                            parameters: {'id': parentId.toString()},
                           ),
-                          style: OutlinedButton.styleFrom(
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          icon: const Icon(Icons.arrow_upward_outlined),
-                          label: Text(context.l10n.loadParent),
                         ),
+                        style: OutlinedButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        icon: const Icon(Icons.arrow_upward_outlined),
+                        label: Text(context.l10n.loadParent),
                       ),
                     ),
                   ),
-                ValueListenableBuilder(
+                ),
+              BlocBuilder<SettingsCubit, SettingsState>(
+                bloc: widget._settingsCubit,
+                buildWhen: (previous, current) =>
+                    previous.useLargeStoryStyle != current.useLargeStoryStyle ||
+                    previous.useActionButtons != current.useActionButtons,
+                builder: (context, settingsState) => ValueListenableBuilder(
                   valueListenable: _hasOverlapNotifier,
                   builder: (context, hasOverlap, child) => ItemTile(
                     widget._itemCubit,
                     widget._authCubit,
+                    widget._settingsCubit,
                     storyUsername: state.data?.storyUsername,
                     loadingType: ItemType.story,
                     showVisited: false,
@@ -339,100 +340,125 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
                     ),
                   ),
                 ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          if (state.data?.parentId == null)
+            SearchAnchor(
+              searchController: _searchController,
+              builder: (context, controller) => IconButton(
+                onPressed: () async {
+                  controller.openView();
+                  widget._storyItemSearchBloc
+                      .add(const LoadStoryItemSearchEvent());
+                },
+                tooltip: context.l10n.search,
+                icon: const Icon(Icons.search_outlined),
+              ),
+              viewLeading: IconButton(
+                onPressed: context.pop,
+                style: IconButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                icon: const BackButtonIcon(),
+              ),
+              viewTrailing: [
+                BlocSelector<StoryItemSearchBloc, StoryItemSearchState, Status>(
+                  bloc: widget._storyItemSearchBloc,
+                  selector: (state) => state.status,
+                  builder: (context, searchStatus) => AnimatedOpacity(
+                    opacity: searchStatus == Status.loading ? 1 : 0,
+                    duration: AppAnimation.standard.duration,
+                    curve: AppAnimation.standard.easing,
+                    child: const CircularProgressIndicator.adaptive(),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: _searchController.clear,
+                ),
               ],
+              viewBuilder: (suggestions) => StoryItemSearchView(
+                widget._storyItemSearchBloc,
+                widget._itemCubitFactory,
+                widget._authCubit,
+                widget._settingsCubit,
+              ),
+              suggestionsBuilder: (context, controller) => [],
+            ),
+          _ItemOverflowMenu(
+            widget._itemCubit,
+            widget._authCubit,
+            widget._settingsCubit,
+          ),
+        ],
+        floating: true,
+        stretch: true,
+      ),
+    );
+  }
+}
+
+class _ItemOverflowMenu extends StatelessWidget {
+  const _ItemOverflowMenu(
+    this._itemCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
+
+  final ItemCubit _itemCubit;
+  final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ItemCubit, ItemState>(
+      bloc: _itemCubit,
+      builder: (context, state) => BlocBuilder<AuthCubit, AuthState>(
+        bloc: _authCubit,
+        builder: (context, authState) =>
+            BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: _settingsCubit,
+          builder: (context, settingsState) => MenuAnchor(
+            menuChildren: [
+              for (final action in ItemAction.values)
+                if (action.isVisible(state, authState, settingsState))
+                  if (action.options case final options?)
+                    SubmenuButton(
+                      menuChildren: [
+                        for (final option in options)
+                          if (option.isVisible(state, authState, settingsState))
+                            MenuItemButton(
+                              onPressed: () async => action.execute(
+                                context,
+                                _itemCubit,
+                                _authCubit,
+                                option: option,
+                              ),
+                              child: Text(option.label(context, state)),
+                            ),
+                      ],
+                      child: Text(action.label(context, state)),
+                    )
+                  else
+                    MenuItemButton(
+                      onPressed: () async => action.execute(
+                        context,
+                        _itemCubit,
+                        _authCubit,
+                      ),
+                      child: Text(action.label(context, state)),
+                    ),
+            ],
+            builder: (context, controller, child) => IconButton(
+              icon: Icon(Icons.adaptive.more_outlined),
+              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+              onPressed: () =>
+                  controller.isOpen ? controller.close() : controller.open(),
             ),
           ),
-          actions: [
-            if (state.data?.parentId == null)
-              SearchAnchor(
-                searchController: _searchController,
-                builder: (context, controller) => IconButton(
-                  onPressed: () async {
-                    controller.openView();
-                    widget._storyItemSearchBloc
-                        .add(const LoadStoryItemSearchEvent());
-                  },
-                  tooltip: context.l10n.search,
-                  icon: const Icon(Icons.search_outlined),
-                ),
-                viewLeading: IconButton(
-                  onPressed: context.pop,
-                  style: IconButton.styleFrom(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  icon: const BackButtonIcon(),
-                ),
-                viewTrailing: [
-                  BlocSelector<StoryItemSearchBloc, StoryItemSearchState,
-                      Status>(
-                    bloc: widget._storyItemSearchBloc,
-                    selector: (state) => state.status,
-                    builder: (context, searchStatus) => AnimatedOpacity(
-                      opacity: searchStatus == Status.loading ? 1 : 0,
-                      duration: AppAnimation.standard.duration,
-                      curve: AppAnimation.standard.easing,
-                      child: const CircularProgressIndicator.adaptive(),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: _searchController.clear,
-                  ),
-                ],
-                viewBuilder: (suggestions) => StoryItemSearchView(
-                  widget._storyItemSearchBloc,
-                  widget._itemCubitFactory,
-                  widget._authCubit,
-                ),
-                suggestionsBuilder: (context, controller) => [],
-              ),
-            BlocBuilder<AuthCubit, AuthState>(
-              bloc: widget._authCubit,
-              buildWhen: (previous, current) =>
-                  previous.isLoggedIn != current.isLoggedIn,
-              builder: (context, authState) => MenuAnchor(
-                menuChildren: [
-                  for (final action in ItemAction.values)
-                    if (action.isVisible(state, authState))
-                      if (action.options case final options?)
-                        SubmenuButton(
-                          menuChildren: [
-                            for (final option in options)
-                              if (option.isVisible(state, authState))
-                                MenuItemButton(
-                                  onPressed: () async => action.execute(
-                                    context,
-                                    widget._itemCubit,
-                                    widget._authCubit,
-                                    option: option,
-                                  ),
-                                  child: Text(option.label(context, state)),
-                                ),
-                          ],
-                          child: Text(action.label(context, state)),
-                        )
-                      else
-                        MenuItemButton(
-                          onPressed: () async => action.execute(
-                            context,
-                            widget._itemCubit,
-                            widget._authCubit,
-                          ),
-                          child: Text(action.label(context, state)),
-                        ),
-                ],
-                builder: (context, controller, child) => IconButton(
-                  icon: Icon(Icons.adaptive.more_outlined),
-                  tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-                  onPressed: () => controller.isOpen
-                      ? controller.close()
-                      : controller.open(),
-                ),
-              ),
-            ),
-          ],
-          floating: true,
-          stretch: true,
         ),
       ),
     );
@@ -483,6 +509,7 @@ class _SliverItemBody extends StatelessWidget {
               child: ItemTile(
                 _itemCubit,
                 _authCubit,
+                _settingsCubit,
                 loadingType: state.data!.type ?? ItemType.story,
                 showVisited: false,
                 style: ItemStyle.secondary,
@@ -497,6 +524,7 @@ class _SliverItemBody extends StatelessWidget {
                   _storySimilarCubit,
                   _itemCubitFactory,
                   _authCubit,
+                  _settingsCubit,
                   storyUsername: state.data?.storyUsername,
                 ),
               ),

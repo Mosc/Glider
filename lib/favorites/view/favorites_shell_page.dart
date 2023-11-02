@@ -51,6 +51,7 @@ class _FavoritesShellPageState extends State<FavoritesShellPage> {
           _SliverFavoritesAppBar(
             widget._favoritesCubit,
             widget._authCubit,
+            widget._settingsCubit,
           ),
           SliverSafeArea(
             top: false,
@@ -68,10 +69,15 @@ class _FavoritesShellPageState extends State<FavoritesShellPage> {
 }
 
 class _SliverFavoritesAppBar extends StatelessWidget {
-  const _SliverFavoritesAppBar(this._favoritesCubit, this._authCubit);
+  const _SliverFavoritesAppBar(
+    this._favoritesCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
 
   final FavoritesCubit _favoritesCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +87,24 @@ class _SliverFavoritesAppBar extends StatelessWidget {
       actions: [
         BlocBuilder<AuthCubit, AuthState>(
           bloc: _authCubit,
-          buildWhen: (previous, current) =>
-              previous.isLoggedIn != current.isLoggedIn,
-          builder: (context, authState) => MenuAnchor(
-            menuChildren: [
-              for (final action in NavigationShellAction.values)
-                if (action.isVisible(null, authState))
-                  MenuItemButton(
-                    onPressed: () async => action.execute(context),
-                    child: Text(action.label(context, null)),
-                  ),
-            ],
-            builder: (context, controller, child) => IconButton(
-              icon: Icon(Icons.adaptive.more_outlined),
-              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-              onPressed: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
+          builder: (context, authState) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: _settingsCubit,
+            builder: (context, settingsState) => MenuAnchor(
+              menuChildren: [
+                for (final action in NavigationShellAction.values)
+                  if (action.isVisible(null, authState, settingsState))
+                    MenuItemButton(
+                      onPressed: () async => action.execute(context),
+                      child: Text(action.label(context, null)),
+                    ),
+              ],
+              builder: (context, controller, child) => IconButton(
+                icon: Icon(Icons.adaptive.more_outlined),
+                tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+                onPressed: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+              ),
             ),
           ),
         ),
@@ -141,6 +149,7 @@ class _SliverFavoritesBody extends StatelessWidget {
                 ItemTile.create(
                   _itemCubitFactory,
                   _authCubit,
+                  _settingsCubit,
                   key: ValueKey<int>(id),
                   id: id,
                   loadingType: ItemType.story,

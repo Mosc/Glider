@@ -10,12 +10,14 @@ import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/widgets/decorated_card.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/view/user_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage(
     this._authCubit,
+    this._settingsCubit,
     this._userCubitFactory,
     this._itemCubitFactory,
     this._userItemSearchBlocFactory, {
@@ -23,6 +25,7 @@ class AuthPage extends StatefulWidget {
   });
 
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final UserCubitFactory _userCubitFactory;
   final ItemCubitFactory _itemCubitFactory;
   final UserItemSearchBlocFactory _userItemSearchBlocFactory;
@@ -61,6 +64,7 @@ class _AuthPageState extends State<AuthPage> {
               widget._itemCubitFactory,
               widget._userItemSearchBlocFactory,
               widget._authCubit,
+              widget._settingsCubit,
               username: state.username!,
             )
           : Scaffold(

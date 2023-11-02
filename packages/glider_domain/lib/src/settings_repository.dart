@@ -73,4 +73,10 @@ class SettingsRepository {
 
   Future<bool> setUseThreadNavigation({required bool value}) async =>
       _sharedPreferencesService.setUseThreadNavigation(value: value);
+
+  Future<bool?> getEnableDownvoting() async =>
+      _sharedPreferencesService.getEnableDownvoting();
+
+  Future<bool> setEnableDownvoting({required bool value}) async =>
+      _sharedPreferencesService.setEnableDownvoting(value: value);
 }

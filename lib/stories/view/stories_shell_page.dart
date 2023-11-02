@@ -170,22 +170,24 @@ class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
         ),
         BlocBuilder<AuthCubit, AuthState>(
           bloc: widget._authCubit,
-          buildWhen: (previous, current) =>
-              previous.isLoggedIn != current.isLoggedIn,
-          builder: (context, authState) => MenuAnchor(
-            menuChildren: [
-              for (final action in NavigationShellAction.values)
-                if (action.isVisible(null, authState))
-                  MenuItemButton(
-                    onPressed: () async => action.execute(context),
-                    child: Text(action.label(context, null)),
-                  ),
-            ],
-            builder: (context, controller, child) => IconButton(
-              icon: Icon(Icons.adaptive.more_outlined),
-              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-              onPressed: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
+          builder: (context, authState) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: widget._settingsCubit,
+            builder: (context, settingsState) => MenuAnchor(
+              menuChildren: [
+                for (final action in NavigationShellAction.values)
+                  if (action.isVisible(null, authState, settingsState))
+                    MenuItemButton(
+                      onPressed: () async => action.execute(context),
+                      child: Text(action.label(context, null)),
+                    ),
+              ],
+              builder: (context, controller, child) => IconButton(
+                icon: Icon(Icons.adaptive.more_outlined),
+                tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+                onPressed: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+              ),
             ),
           ),
         ),
@@ -236,6 +238,7 @@ class _SliverStoriesBody extends StatelessWidget {
                     ItemTile.create(
                       _itemCubitFactory,
                       _authCubit,
+                      _settingsCubit,
                       key: ValueKey<int>(id),
                       id: id,
                       loadingType: ItemType.story,

@@ -12,6 +12,7 @@ import 'package:glider/common/widgets/hacker_news_text.dart';
 import 'package:glider/common/widgets/metadata_widget.dart';
 import 'package:glider/item/extensions/item_extension.dart';
 import 'package:glider/item/models/item_style.dart';
+import 'package:glider/item/models/vote_type.dart';
 import 'package:glider/item/typedefs/item_typedefs.dart';
 import 'package:glider/item/widgets/username_widget.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
@@ -26,7 +27,7 @@ class ItemDataTile extends StatelessWidget {
     this.item, {
     super.key,
     this.visited = false,
-    this.upvoted = false,
+    this.vote,
     this.favorited = false,
     this.flagged = false,
     this.blocked = false,
@@ -45,7 +46,7 @@ class ItemDataTile extends StatelessWidget {
 
   final Item item;
   final bool visited;
-  final bool upvoted;
+  final VoteType? vote;
   final bool favorited;
   final bool flagged;
   final bool blocked;
@@ -65,7 +66,7 @@ class ItemDataTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (item.type == ItemType.pollopt) {
       return SwitchListTile.adaptive(
-        value: upvoted,
+        value: vote.upvoted,
         onChanged: (value) => onTap?.call(context, item),
         title: Row(
           children: [
@@ -78,7 +79,8 @@ class ItemDataTile extends StatelessWidget {
             MetadataWidget(
               icon: Icons.arrow_upward_outlined,
               label: item.score != null ? Text(item.score!.toString()) : null,
-              color: upvoted ? Theme.of(context).colorScheme.tertiary : null,
+              color:
+                  vote.upvoted ? Theme.of(context).colorScheme.tertiary : null,
             ),
           ].spaced(width: AppSpacing.s),
         ),
@@ -172,9 +174,15 @@ class ItemDataTile extends StatelessWidget {
           color: favorited ? Theme.of(context).colorScheme.tertiary : null,
         );
     Widget upvotedMetadata() => MetadataWidget(
-          icon: Icons.arrow_upward_outlined,
+          icon: vote.downvoted
+              ? Icons.arrow_downward_outlined
+              : Icons.arrow_upward_outlined,
           label: item.score != null ? Text((item.score!).toString()) : null,
-          color: upvoted ? Theme.of(context).colorScheme.tertiary : null,
+          color: vote.downvoted
+              ? Theme.of(context).colorScheme.secondary
+              : vote.upvoted
+                  ? Theme.of(context).colorScheme.tertiary
+                  : null,
         );
     return Row(
       children: [
@@ -215,7 +223,7 @@ class ItemDataTile extends StatelessWidget {
                     child: upvotedMetadata(),
                   )
                 : AnimatedVisibility(
-                    visible: item.score != null || upvoted,
+                    visible: item.score != null || vote != null,
                     padding: MetadataWidget.horizontalPadding,
                     child: upvotedMetadata(),
                   ),

@@ -6,6 +6,7 @@ import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/widgets/preview_card.dart';
 import 'package:glider/item/models/item_style.dart';
+import 'package:glider/item/models/vote_type.dart';
 import 'package:glider/item/widgets/item_data_tile.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
@@ -175,7 +176,7 @@ class _SettingsBody extends StatelessWidget {
                       score: 42,
                       descendantCount: 7,
                     ),
-                    upvoted: true,
+                    vote: VoteType.upvote,
                     useLargeStoryStyle: state.useLargeStoryStyle,
                     showMetadata: state.showStoryMetadata,
                     style: ItemStyle.overview,
@@ -209,6 +210,14 @@ class _SettingsBody extends StatelessWidget {
             onChanged: _settingsCubit.setUseThreadNavigation,
             title: Text(context.l10n.threadNavigation),
             subtitle: Text(context.l10n.threadNavigationDescription),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          SwitchListTile.adaptive(
+            value: state.enableDownvoting,
+            onChanged: _settingsCubit.setEnableDownvoting,
+            title: Text(context.l10n.downvoting),
+            subtitle: Text(context.l10n.downvotingDescription),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           ),

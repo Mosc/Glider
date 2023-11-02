@@ -38,7 +38,7 @@ class App extends StatelessWidget {
           routerConfig: _routerConfig,
           theme: _buildTheme(context, state, lightDynamic, Brightness.light),
           darkTheme: _buildTheme(context, state, darkDynamic, Brightness.dark),
-          themeMode: _settingsCubit.state.themeMode.toMaterialThemeMode(),
+          themeMode: state.themeMode.toMaterialThemeMode(),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             RelativeTimeLocalizations.delegate,

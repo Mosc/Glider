@@ -15,9 +15,11 @@ class SharedPreferencesService {
   static const String _usePureBackgroundKey = 'use_pure_background';
   static const String _showJobsKey = 'show_jobs';
   static const String _useThreadNavigationKey = 'use_thread_navigation';
+  static const String _enableDownvotingKey = 'enable_downvoting';
   static const String _lastVersionKey = 'last_version';
   static const String _visitedKey = 'visited';
   static const String _upvotedKey = 'upvoted';
+  static const String _downvotedKey = 'downvoted';
   static const String _favoritedKey = 'favorited';
   static const String _flaggedKey = 'flagged';
   static const String _blockedKey = 'blocked';
@@ -81,6 +83,12 @@ class SharedPreferencesService {
   Future<bool> setUseThreadNavigation({required bool value}) async =>
       _sharedPreferences.setBool(_useThreadNavigationKey, value);
 
+  Future<bool?> getEnableDownvoting() async =>
+      _sharedPreferences.getBool(_enableDownvotingKey);
+
+  Future<bool> setEnableDownvoting({required bool value}) async =>
+      _sharedPreferences.setBool(_enableDownvotingKey, value);
+
   Future<String?> getLastVersion() async =>
       _sharedPreferences.getString(_lastVersionKey);
 
@@ -118,6 +126,25 @@ class SharedPreferencesService {
   Future<bool> setUpvotedIds({required Iterable<int> ids}) async {
     return _sharedPreferences
         .setStringList(_upvotedKey, [...ids.map((id) => id.toString())]);
+  }
+
+  Future<bool> getDownvoted({required int id}) async =>
+      _sharedPreferences.containsElement(_downvotedKey, id.toString());
+
+  Future<bool> setDownvoted({required int id, required bool downvote}) async {
+    if (downvote) {
+      return _sharedPreferences.addElement(_downvotedKey, id.toString());
+    } else {
+      return _sharedPreferences.removeElement(_downvotedKey, id.toString());
+    }
+  }
+
+  Future<List<int>> getDownvotedIds() async =>
+      [...?_sharedPreferences.getStringList(_downvotedKey)?.map(int.parse)];
+
+  Future<bool> setDownvotedIds({required Iterable<int> ids}) async {
+    return _sharedPreferences
+        .setStringList(_downvotedKey, [...ids.map((id) => id.toString())]);
   }
 
   Future<bool> getFavorited({required int id}) async =>
