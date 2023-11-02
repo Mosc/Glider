@@ -22,11 +22,6 @@ Future<void> bootstrap(
           log(details.exceptionAsString(), stackTrace: details.stack);
 
       WidgetsFlutterBinding.ensureInitialized();
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors.transparent,
-        ),
-      );
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       if (Platform.isAndroid) await FlutterDisplayMode.setHighRefreshRate();
 
