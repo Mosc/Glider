@@ -25,7 +25,10 @@ class AppBarProgressIndicator<B extends BlocBase<S>,
           padding: EdgeInsets.only(
             top: MediaQuery.paddingOf(context).top + kToolbarHeight - _height,
           ),
-          child: const LinearProgressIndicator(minHeight: _height),
+          child: TickerMode(
+            enabled: isLoading,
+            child: const LinearProgressIndicator(minHeight: _height),
+          ),
         ),
       ),
     );
