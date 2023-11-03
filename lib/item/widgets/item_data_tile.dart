@@ -77,10 +77,15 @@ class ItemDataTile extends StatelessWidget {
             else
               const Spacer(),
             MetadataWidget(
-              icon: Icons.arrow_upward_outlined,
-              label: item.score != null ? Text(item.score!.toString()) : null,
-              color:
-                  vote.upvoted ? Theme.of(context).colorScheme.tertiary : null,
+              icon: vote.downvoted
+                  ? Icons.arrow_downward_outlined
+                  : Icons.arrow_upward_outlined,
+              label: item.score != null ? Text((item.score!).toString()) : null,
+              color: vote.downvoted
+                  ? Theme.of(context).colorScheme.secondary
+                  : vote.upvoted
+                      ? Theme.of(context).colorScheme.tertiary
+                      : null,
             ),
           ].spaced(width: AppSpacing.s),
         ),
