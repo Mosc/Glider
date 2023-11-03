@@ -36,6 +36,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     final usePureBackground = await _settingsRepository.getUsePureBackground();
     final useThreadNavigation =
         await _settingsRepository.getUseThreadNavigation();
+    final enableDownvoting = await _settingsRepository.getEnableDownvoting();
     safeEmit(
       state.copyWith(
         useLargeStoryStyle:
@@ -51,6 +52,8 @@ class SettingsCubit extends Cubit<SettingsState> {
             usePureBackground != null ? () => usePureBackground : null,
         useThreadNavigation:
             useThreadNavigation != null ? () => useThreadNavigation : null,
+        enableDownvoting:
+            enableDownvoting != null ? () => enableDownvoting : null,
         appVersion: _packageRepository.getVersion,
       ),
     );
