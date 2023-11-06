@@ -26,6 +26,7 @@ class ItemDataTile extends StatelessWidget {
   const ItemDataTile(
     this.item, {
     super.key,
+    this.parsedText,
     this.visited = false,
     this.vote,
     this.favorited = false,
@@ -45,6 +46,7 @@ class ItemDataTile extends StatelessWidget {
   });
 
   final Item item;
+  final ParsedData? parsedText;
   final bool visited;
   final VoteType? vote;
   final bool favorited;
@@ -72,20 +74,18 @@ class ItemDataTile extends StatelessWidget {
           children: [
             if (item.text case final text?)
               Expanded(
-                child: HackerNewsText(text),
+                child: Hero(
+                  tag: 'item_tile_text_${item.id}',
+                  child: parsedText != null
+                      ? HackerNewsText.parsed(parsedText!)
+                      : HackerNewsText(text),
+                ),
               )
             else
               const Spacer(),
-            MetadataWidget(
-              icon: vote.downvoted
-                  ? Icons.arrow_downward_outlined
-                  : Icons.arrow_upward_outlined,
-              label: item.score != null ? Text((item.score!).toString()) : null,
-              color: vote.downvoted
-                  ? Theme.of(context).colorScheme.secondary
-                  : vote.upvoted
-                      ? Theme.of(context).colorScheme.tertiary
-                      : null,
+            Hero(
+              tag: 'item_tile_score_${item.id}',
+              child: _buildVotedMetadata(context),
             ),
           ].spaced(width: AppSpacing.s),
         ),
@@ -174,21 +174,6 @@ class ItemDataTile extends StatelessWidget {
   }
 
   Widget _buildMetadata(BuildContext context) {
-    Widget favoritedMetadata() => MetadataWidget(
-          icon: Icons.favorite_outline_outlined,
-          color: favorited ? Theme.of(context).colorScheme.tertiary : null,
-        );
-    Widget upvotedMetadata() => MetadataWidget(
-          icon: vote.downvoted
-              ? Icons.arrow_downward_outlined
-              : Icons.arrow_upward_outlined,
-          label: item.score != null ? Text((item.score!).toString()) : null,
-          color: vote.downvoted
-              ? Theme.of(context).colorScheme.secondary
-              : vote.upvoted
-                  ? Theme.of(context).colorScheme.tertiary
-                  : null,
-        );
     return Row(
       children: [
         Hero(
@@ -210,12 +195,12 @@ class ItemDataTile extends StatelessWidget {
               ? _MetadataActionButton(
                   padding: MetadataWidget.horizontalPadding,
                   onTap: onTapFavorite,
-                  child: favoritedMetadata(),
+                  child: _buildFavoritedMetadata(context),
                 )
               : AnimatedVisibility(
                   visible: favorited,
                   padding: MetadataWidget.horizontalPadding,
-                  child: favoritedMetadata(),
+                  child: _buildFavoritedMetadata(context),
                 ),
         ),
         if (item.type != ItemType.job)
@@ -225,12 +210,12 @@ class ItemDataTile extends StatelessWidget {
                 ? _MetadataActionButton(
                     padding: MetadataWidget.horizontalPadding,
                     onTap: onTapUpvote,
-                    child: upvotedMetadata(),
+                    child: _buildVotedMetadata(context),
                   )
                 : AnimatedVisibility(
                     visible: item.score != null || vote != null,
                     padding: MetadataWidget.horizontalPadding,
-                    child: upvotedMetadata(),
+                    child: _buildVotedMetadata(context),
                   ),
           ),
         Hero(
@@ -325,13 +310,32 @@ class ItemDataTile extends StatelessWidget {
     );
   }
 
+  Widget _buildFavoritedMetadata(BuildContext context) => MetadataWidget(
+        icon: Icons.favorite_outline_outlined,
+        color: favorited ? Theme.of(context).colorScheme.tertiary : null,
+      );
+
+  Widget _buildVotedMetadata(BuildContext context) => MetadataWidget(
+        icon: vote.downvoted
+            ? Icons.arrow_downward_outlined
+            : Icons.arrow_upward_outlined,
+        label: item.score != null ? Text(item.score!.toString()) : null,
+        color: vote.downvoted
+            ? Theme.of(context).colorScheme.secondary
+            : vote.upvoted
+                ? Theme.of(context).colorScheme.tertiary
+                : null,
+      );
+
   Widget _buildSecondary(BuildContext context) {
     return Column(
       children: [
         if (item.text case final text?)
           Hero(
             tag: 'item_tile_text_${item.id}',
-            child: HackerNewsText(text),
+            child: parsedText != null
+                ? HackerNewsText.parsed(parsedText!)
+                : HackerNewsText(text),
           ),
         if (item.url case final url?)
           DecoratedCard.outlined(

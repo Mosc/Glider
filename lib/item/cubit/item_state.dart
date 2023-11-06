@@ -4,6 +4,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
   const ItemState({
     this.status = Status.initial,
     this.data,
+    this.parsedText,
     this.visited = false,
     this.vote,
     this.favorited = false,
@@ -37,6 +38,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
   final Status status;
   @override
   final Item? data;
+  final ParsedData? parsedText;
   final bool visited;
   final VoteType? vote;
   final bool favorited;
@@ -48,6 +50,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
   ItemState copyWith({
     Status Function()? status,
     Item? Function()? data,
+    ParsedData? Function()? parsedText,
     bool Function()? visited,
     VoteType? Function()? vote,
     bool Function()? favorited,
@@ -59,6 +62,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
       ItemState(
         status: status != null ? status() : this.status,
         data: data != null ? data() : this.data,
+        parsedText: parsedText != null ? parsedText() : this.parsedText,
         visited: visited != null ? visited() : this.visited,
         vote: vote != null ? vote() : this.vote,
         favorited: favorited != null ? favorited() : this.favorited,
@@ -71,6 +75,7 @@ class ItemState with DataMixin<Item>, EquatableMixin {
   List<Object?> get props => [
         status,
         data,
+        parsedText,
         visited,
         vote,
         favorited,

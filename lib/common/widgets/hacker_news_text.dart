@@ -8,10 +8,47 @@ import 'package:glider/common/extensions/theme_data_extension.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:markdown/markdown.dart' as md;
 
-class HackerNewsText extends StatelessWidget {
-  const HackerNewsText(this.data, {super.key});
+typedef ParsedData = List<md.Node>;
 
-  final String data;
+class HackerNewsText extends StatelessWidget {
+  HackerNewsText(String data, {super.key}) : parsedData = parse(data);
+
+  const HackerNewsText.parsed(this.parsedData, {super.key});
+
+  final ParsedData parsedData;
+
+  static final _extensionSet = md.ExtensionSet(
+    const [
+      HackerNewsCodeBlockSyntax(),
+      md.FencedCodeBlockSyntax(),
+      md.EmptyBlockSyntax(),
+      md.BlockquoteSyntax(),
+      md.HorizontalRuleSyntax(),
+      md.UnorderedListSyntax(),
+      md.OrderedListSyntax(),
+      md.ParagraphSyntax(),
+    ],
+    [
+      HackerNewsAsteriskEscapeSyntax(),
+      HackerNewsEmphasisSyntax.asterisk(),
+      HackerNewsAutolinkExtensionSyntax(),
+      md.EscapeSyntax(),
+      md.AutolinkSyntax(),
+      md.EmailAutolinkSyntax(),
+      md.CodeSyntax(),
+    ],
+  );
+
+  static ParsedData parse(String data) {
+    final document = md.Document(
+      extensionSet: _extensionSet,
+      encodeHtml: false,
+      withDefaultBlockSyntaxes: false,
+      withDefaultInlineSyntaxes: false,
+    );
+    final lines = const LineSplitter().convert(data);
+    return document.parseLines(lines);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,36 +81,13 @@ class HackerNewsText extends StatelessWidget {
       ),
     );
     return _HackerNewsMarkdownBody(
-      data: data,
+      parsedData: parsedData,
       styleSheet: styleSheet,
       onTapLink: (text, href, title) async {
         if (href != null) {
           await Uri.tryParse(href)?.tryLaunch(title: title);
         }
       },
-      extensionSet: md.ExtensionSet(
-        const [
-          HackerNewsCodeBlockSyntax(),
-          md.FencedCodeBlockSyntax(),
-          md.EmptyBlockSyntax(),
-          md.BlockquoteSyntax(),
-          md.HorizontalRuleSyntax(),
-          md.UnorderedListSyntax(),
-          md.OrderedListSyntax(),
-          md.ParagraphSyntax(),
-        ],
-        [
-          HackerNewsAsteriskEscapeSyntax(),
-          HackerNewsEmphasisSyntax.asterisk(),
-          HackerNewsAutolinkExtensionSyntax(),
-          md.EscapeSyntax(),
-          md.AutolinkSyntax(),
-          md.EmailAutolinkSyntax(),
-          md.CodeSyntax(),
-        ],
-      ),
-      withDefaultBlockSyntaxes: false,
-      withDefaultInlineSyntaxes: false,
       builders: {'pre': _PreElementBuilder(styleSheet)},
       fitContent: false,
     );
@@ -82,18 +96,14 @@ class HackerNewsText extends StatelessWidget {
 
 class _HackerNewsMarkdownBody extends MarkdownBody {
   const _HackerNewsMarkdownBody({
-    required super.data,
+    required this.parsedData,
     super.styleSheet,
     super.onTapLink,
-    super.extensionSet,
-    this.withDefaultBlockSyntaxes = true,
-    this.withDefaultInlineSyntaxes = true,
     super.builders,
     super.fitContent,
-  });
+  }) : super(data: '');
 
-  final bool withDefaultBlockSyntaxes;
-  final bool withDefaultInlineSyntaxes;
+  final ParsedData parsedData;
 
   @override
   State<MarkdownWidget> createState() => _HackerNewsMarkdownBodyState();
@@ -134,14 +144,6 @@ class _HackerNewsMarkdownBodyState extends State<_HackerNewsMarkdownBody>
       textScaleFactor: MediaQuery.textScalerOf(context).textScaleFactor,
     );
     final styleSheet = fallbackStyleSheet.merge(widget.styleSheet);
-    final document = md.Document(
-      extensionSet: widget.extensionSet,
-      encodeHtml: false,
-      withDefaultBlockSyntaxes: widget.withDefaultBlockSyntaxes,
-      withDefaultInlineSyntaxes: widget.withDefaultInlineSyntaxes,
-    );
-    final lines = const LineSplitter().convert(widget.data);
-    final astNodes = document.parseLines(lines);
     final builder = MarkdownBuilder(
       delegate: this,
       selectable: widget.selectable,
@@ -157,7 +159,7 @@ class _HackerNewsMarkdownBodyState extends State<_HackerNewsMarkdownBody>
       onTapText: widget.onTapText,
       softLineBreak: widget.softLineBreak,
     );
-    _children = builder.build(astNodes);
+    _children = builder.build(widget.parsedData);
   }
 
   void _disposeRecognizers() {

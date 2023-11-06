@@ -127,6 +127,7 @@ class _ItemTileState extends State<ItemTile>
                 bloc: widget._settingsCubit,
                 builder: (context, settingsState) => ItemDataTile(
                   item,
+                  parsedText: state.parsedText,
                   visited: state.visited && widget.showVisited,
                   vote: state.vote,
                   favorited: state.favorited,

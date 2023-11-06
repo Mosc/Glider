@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
+import 'package:glider/common/widgets/hacker_news_text.dart';
 import 'package:glider/item/models/vote_type.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -44,6 +45,10 @@ class ItemCubit extends HydratedCubit<ItemState> {
           state.copyWith(
             status: () => Status.success,
             data: () => item,
+            parsedText: () => switch (item.text) {
+              final String text => HackerNewsText.parse(text),
+              _ => null,
+            },
             exception: () => null,
           ),
         );
