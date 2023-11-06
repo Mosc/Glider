@@ -28,9 +28,7 @@ class ItemTile extends StatefulWidget {
     this.collapsedCount,
     this.showVisited = true,
     this.highlight = false,
-    this.useLargeStoryStyle = true,
     this.showMetadata = true,
-    this.useActionButtons = false,
     this.showJobs = true,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
@@ -50,9 +48,7 @@ class ItemTile extends StatefulWidget {
     this.collapsedCount,
     this.showVisited = true,
     this.highlight = false,
-    this.useLargeStoryStyle = true,
     this.showMetadata = true,
-    this.useActionButtons = false,
     this.showJobs = true,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
@@ -70,9 +66,7 @@ class ItemTile extends StatefulWidget {
   final int? collapsedCount;
   final bool showVisited;
   final bool highlight;
-  final bool useLargeStoryStyle;
   final bool showMetadata;
-  final bool useActionButtons;
   final bool showJobs;
   final ItemStyle style;
   final EdgeInsets padding;
@@ -97,35 +91,35 @@ class _ItemTileState extends State<ItemTile>
     super.build(context);
     return BlocBuilder<ItemCubit, ItemState>(
       bloc: _itemCubit,
-      builder: (context, state) => state.whenOrDefaultWidgets(
-        loading: () => ItemLoadingTile(
-          type: widget.loadingType,
-          collapsedCount: widget.collapsedCount,
-          showMetadata: widget.showMetadata,
-          useLargeStoryStyle: widget.useLargeStoryStyle,
-          style: widget.style,
-          padding: widget.padding,
-        ),
-        success: () {
-          final item = state.data!;
+      builder: (context, state) => BlocBuilder<AuthCubit, AuthState>(
+        bloc: widget._authCubit,
+        builder: (context, authState) =>
+            BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: widget._settingsCubit,
+          builder: (context, settingsState) => state.whenOrDefaultWidgets(
+            loading: () => ItemLoadingTile(
+              type: widget.loadingType,
+              collapsedCount: widget.collapsedCount,
+              useLargeStoryStyle: settingsState.useLargeStoryStyle,
+              showMetadata: settingsState.showStoryMetadata,
+              style: widget.style,
+              padding: widget.padding,
+            ),
+            success: () {
+              final item = state.data!;
 
-          if (item.type == ItemType.job && !widget.showJobs) {
-            return const SizedBox.shrink();
-          }
+              if (item.type == ItemType.job && !widget.showJobs) {
+                return const SizedBox.shrink();
+              }
 
-          return Material(
-            type: widget.highlight
-                ? MaterialType.canvas
-                : MaterialType.transparency,
-            elevation: 4,
-            shadowColor: Colors.transparent,
-            surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-            child: BlocBuilder<AuthCubit, AuthState>(
-              bloc: widget._authCubit,
-              builder: (context, authState) =>
-                  BlocBuilder<SettingsCubit, SettingsState>(
-                bloc: widget._settingsCubit,
-                builder: (context, settingsState) => ItemDataTile(
+              return Material(
+                type: widget.highlight
+                    ? MaterialType.canvas
+                    : MaterialType.transparency,
+                elevation: 4,
+                shadowColor: Colors.transparent,
+                surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+                child: ItemDataTile(
                   item,
                   parsedText: state.parsedText,
                   visited: state.visited && widget.showVisited,
@@ -135,7 +129,7 @@ class _ItemTileState extends State<ItemTile>
                   blocked: state.blocked,
                   failed: state.status == Status.failure,
                   collapsedCount: widget.collapsedCount,
-                  useLargeStoryStyle: widget.useLargeStoryStyle,
+                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
                   showMetadata: widget.showMetadata,
                   style: widget.style,
                   usernameStyle: authState.username == item.username
@@ -155,24 +149,24 @@ class _ItemTileState extends State<ItemTile>
                     AppRoute.itemBottomSheet
                         .location(parameters: {'id': item.id}),
                   ),
-                  onTapUpvote: widget.useActionButtons &&
+                  onTapUpvote: settingsState.useActionButtons &&
                           ItemAction.upvote
                               .isVisible(state, authState, settingsState)
                       ? () async => ItemAction.upvote
                           .execute(context, _itemCubit, widget._authCubit)
                       : null,
-                  onTapFavorite: widget.useActionButtons &&
+                  onTapFavorite: settingsState.useActionButtons &&
                           ItemAction.favorite
                               .isVisible(state, authState, settingsState)
                       ? () async => ItemAction.favorite
                           .execute(context, _itemCubit, widget._authCubit)
                       : null,
                 ),
-              ),
-            ),
-          );
-        },
-        onRetry: () async => _itemCubit.load(),
+              );
+            },
+            onRetry: () async => _itemCubit.load(),
+          ),
+        ),
       ),
     );
   }

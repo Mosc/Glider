@@ -152,8 +152,6 @@ class _SliverInboxBody extends StatelessWidget {
                   key: ValueKey<int>(parentId),
                   id: parentId,
                   loadingType: ItemType.story,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  useActionButtons: settingsState.useActionButtons,
                   onTap: (context, item) async => context.push(
                     AppRoute.item.location(parameters: {'id': id}),
                   ),
@@ -167,8 +165,6 @@ class _SliverInboxBody extends StatelessWidget {
                     key: ValueKey<int>(id),
                     id: id,
                     loadingType: ItemType.comment,
-                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                    useActionButtons: settingsState.useActionButtons,
                     onTap: (context, item) async => context.push(
                       AppRoute.item.location(parameters: {'id': id}),
                     ),

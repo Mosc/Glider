@@ -153,8 +153,6 @@ class _SliverFavoritesBody extends StatelessWidget {
                   key: ValueKey<int>(id),
                   id: id,
                   loadingType: ItemType.story,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  useActionButtons: settingsState.useActionButtons,
                   onTap: (context, item) async => context.push(
                     AppRoute.item.location(parameters: {'id': id}),
                   ),

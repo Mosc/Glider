@@ -242,9 +242,7 @@ class _SliverStoriesBody extends StatelessWidget {
                       key: ValueKey<int>(id),
                       id: id,
                       loadingType: ItemType.story,
-                      useLargeStoryStyle: settingsState.useLargeStoryStyle,
                       showMetadata: settingsState.showStoryMetadata,
-                      useActionButtons: settingsState.useActionButtons,
                       showJobs: settingsState.showJobs ||
                           state.storyType == StoryType.jobStories,
                       style: ItemStyle.overview,

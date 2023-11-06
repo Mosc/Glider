@@ -84,7 +84,6 @@ class SliverStorySimilarBody extends StatelessWidget {
                         id: id,
                         storyUsername: storyUsername,
                         loadingType: ItemType.story,
-                        useLargeStoryStyle: false,
                         style: ItemStyle.primary,
                         onTap: (context, item) async => context.push(
                           AppRoute.item.location(parameters: {'id': id}),

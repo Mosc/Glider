@@ -327,8 +327,6 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
                     storyUsername: state.data?.storyUsername,
                     loadingType: ItemType.story,
                     showVisited: false,
-                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                    useActionButtons: settingsState.useActionButtons,
                     // It's redundant to show a URL host in the title when view is
                     // scrolled, because the full URL should be visible below it.
                     style: hasOverlap ? ItemStyle.overview : ItemStyle.primary,
