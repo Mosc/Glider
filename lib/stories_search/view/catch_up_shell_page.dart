@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
@@ -59,6 +60,9 @@ class _CatchUpShellPageState extends State<CatchUpShellPage> {
               widget._authCubit,
               widget._settingsCubit,
             ),
+          ),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
           ),
         ],
       ),

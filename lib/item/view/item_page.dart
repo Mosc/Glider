@@ -534,6 +534,10 @@ class _SliverItemBody extends StatelessWidget {
               childCount: state.data?.childIds?.length,
               storyUsername: state.data?.storyUsername,
             ),
+            const SliverPadding(
+              padding:
+                  AppSpacing.twoSmallFloatingActionButtonsPageBottomPadding,
+            ),
           ],
         ),
         onRetry: () async => _itemCubit.load(),

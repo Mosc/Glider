@@ -53,8 +53,8 @@ class _SubmitPageState extends State<SubmitPage> {
                 child: _SubmitBody(widget._submitCubit),
               ),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.xl),
+            const SliverPadding(
+              padding: AppSpacing.floatingActionButtonPageBottomPadding,
             ),
           ],
         ),

@@ -69,8 +69,8 @@ class _ReplyPageState extends State<ReplyPage> {
                 child: _ReplyBody(_replyCubit),
               ),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.xl),
+            const SliverPadding(
+              padding: AppSpacing.floatingActionButtonPageBottomPadding,
             ),
           ],
         ),

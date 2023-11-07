@@ -66,8 +66,8 @@ class _EditPageState extends State<EditPage> {
                 child: _EditBody(_editCubit),
               ),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.xl),
+            const SliverPadding(
+              padding: AppSpacing.floatingActionButtonPageBottomPadding,
             ),
           ],
         ),

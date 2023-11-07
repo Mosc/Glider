@@ -77,6 +77,9 @@ class _StoriesShellPageState extends State<StoriesShellPage> {
               widget._settingsCubit,
             ),
           ),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
+          ),
         ],
       ),
     );

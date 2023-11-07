@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
@@ -62,6 +63,9 @@ class _InboxShellPageState extends State<InboxShellPage> {
               widget._authCubit,
               widget._settingsCubit,
             ),
+          ),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
           ),
         ],
       ),
