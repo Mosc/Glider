@@ -11,7 +11,9 @@ import 'package:markdown/markdown.dart' as md;
 typedef ParsedData = List<md.Node>;
 
 class HackerNewsText extends StatelessWidget {
-  HackerNewsText(String data, {super.key}) : parsedData = parse(data);
+  HackerNewsText(String data)
+      : parsedData = parse(data),
+        super(key: ValueKey(data));
 
   const HackerNewsText.parsed(this.parsedData, {super.key});
 
