@@ -35,7 +35,9 @@ class ItemDataTile extends StatelessWidget {
     this.failed = false,
     this.collapsedCount,
     this.useLargeStoryStyle = true,
+    this.showFavicons = true,
     this.showMetadata = true,
+    this.showUserAvatars = true,
     this.style = ItemStyle.full,
     this.usernameStyle = UsernameStyle.none,
     this.padding = AppSpacing.defaultTilePadding,
@@ -55,7 +57,9 @@ class ItemDataTile extends StatelessWidget {
   final bool failed;
   final int? collapsedCount;
   final bool useLargeStoryStyle;
+  final bool showFavicons;
   final bool showMetadata;
+  final bool showUserAvatars;
   final ItemStyle style;
   final UsernameStyle usernameStyle;
   final EdgeInsets padding;
@@ -152,7 +156,7 @@ class ItemDataTile extends StatelessWidget {
                 )
               else
                 const Spacer(),
-              if (item.url != null)
+              if (item.url != null && showFavicons)
                 AnimatedVisibility(
                   visible: style == ItemStyle.overview,
                   alignment: AlignmentDirectional.centerEnd,
@@ -270,6 +274,7 @@ class ItemDataTile extends StatelessWidget {
                   alignment: AlignmentDirectional.centerStart,
                   child: UsernameWidget(
                     username: username,
+                    showAvatar: showUserAvatars,
                     style: usernameStyle,
                     onTap: () async => context.push(
                       AppRoute.user.location(parameters: {'id': username}),
@@ -344,16 +349,19 @@ class ItemDataTile extends StatelessWidget {
             onLongPress: () {},
             child: Row(
               children: [
-                Hero(
-                  tag: 'item_tile_favicon_${item.id}',
-                  child: Material(
-                    type: MaterialType.transparency,
-                    child: _ItemFavicon(
-                      item,
-                      isLarge: false,
+                if (showFavicons)
+                  Hero(
+                    tag: 'item_tile_favicon_${item.id}',
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: _ItemFavicon(
+                        item,
+                        isLarge: false,
+                      ),
                     ),
-                  ),
-                ),
+                  )
+                else
+                  const MetadataWidget(icon: Icons.link_outlined),
                 Expanded(
                   child: Hero(
                     tag: 'item_tile_url_${item.id}',

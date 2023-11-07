@@ -130,7 +130,9 @@ class _ItemTileState extends State<ItemTile>
                   failed: state.status == Status.failure,
                   collapsedCount: widget.collapsedCount,
                   useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                  showFavicons: settingsState.showFavicons,
                   showMetadata: widget.showMetadata,
+                  showUserAvatars: settingsState.showUserAvatars,
                   style: widget.style,
                   usernameStyle: authState.username == item.username
                       ? UsernameStyle.loggedInUser

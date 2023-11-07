@@ -28,7 +28,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> _load() async {
     final useLargeStoryStyle =
         await _settingsRepository.getUseLargeStoryStyle();
+    final showFavicons = await _settingsRepository.getShowFavicons();
     final showStoryMetadata = await _settingsRepository.getShowStoryMetadata();
+    final showUserAvatars = await _settingsRepository.getShowUserAvatars();
     final useActionButtons = await _settingsRepository.getUseActionButtons();
     final useDynamicTheme = await _settingsRepository.getUseDynamicTheme();
     final themeColor = await _settingsRepository.getThemeColor();
@@ -41,8 +43,10 @@ class SettingsCubit extends Cubit<SettingsState> {
       state.copyWith(
         useLargeStoryStyle:
             useLargeStoryStyle != null ? () => useLargeStoryStyle : null,
+        showFavicons: showFavicons != null ? () => showFavicons : null,
         showStoryMetadata:
             showStoryMetadata != null ? () => showStoryMetadata : null,
+        showUserAvatars: showUserAvatars != null ? () => showUserAvatars : null,
         useActionButtons:
             useActionButtons != null ? () => useActionButtons : null,
         useDynamicTheme: useDynamicTheme != null ? () => useDynamicTheme : null,
@@ -71,6 +75,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  Future<void> setShowFavicons(bool value) async {
+    await _settingsRepository.setShowFavicons(value: value);
+    final showFavicons = await _settingsRepository.getShowFavicons();
+
+    if (showFavicons != null) {
+      safeEmit(
+        state.copyWith(showFavicons: () => showFavicons),
+      );
+    }
+  }
+
   Future<void> setShowStoryMetadata(bool value) async {
     await _settingsRepository.setShowStoryMetadata(value: value);
     final showStoryMetadata = await _settingsRepository.getShowStoryMetadata();
@@ -78,6 +93,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (showStoryMetadata != null) {
       safeEmit(
         state.copyWith(showStoryMetadata: () => showStoryMetadata),
+      );
+    }
+  }
+
+  Future<void> setShowUserAvatars(bool value) async {
+    await _settingsRepository.setShowUserAvatars(value: value);
+    final showUserAvatars = await _settingsRepository.getShowUserAvatars();
+
+    if (showUserAvatars != null) {
+      safeEmit(
+        state.copyWith(showUserAvatars: () => showUserAvatars),
       );
     }
   }

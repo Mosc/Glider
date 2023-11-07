@@ -3,7 +3,9 @@ part of 'settings_cubit.dart';
 class SettingsState with EquatableMixin {
   const SettingsState({
     this.useLargeStoryStyle = true,
+    this.showFavicons = true,
     this.showStoryMetadata = true,
+    this.showUserAvatars = true,
     this.useActionButtons = false,
     this.themeMode = ThemeMode.system,
     this.useDynamicTheme = true,
@@ -17,7 +19,9 @@ class SettingsState with EquatableMixin {
   });
 
   final bool useLargeStoryStyle;
+  final bool showFavicons;
   final bool showStoryMetadata;
+  final bool showUserAvatars;
   final bool useActionButtons;
   final ThemeMode themeMode;
   final bool useDynamicTheme;
@@ -31,7 +35,9 @@ class SettingsState with EquatableMixin {
 
   SettingsState copyWith({
     bool Function()? useLargeStoryStyle,
+    bool Function()? showFavicons,
     bool Function()? showStoryMetadata,
+    bool Function()? showUserAvatars,
     bool Function()? useActionButtons,
     ThemeMode Function()? themeMode,
     bool Function()? useDynamicTheme,
@@ -47,9 +53,12 @@ class SettingsState with EquatableMixin {
         useLargeStoryStyle: useLargeStoryStyle != null
             ? useLargeStoryStyle()
             : this.useLargeStoryStyle,
+        showFavicons: showFavicons != null ? showFavicons() : this.showFavicons,
         showStoryMetadata: showStoryMetadata != null
             ? showStoryMetadata()
             : this.showStoryMetadata,
+        showUserAvatars:
+            showUserAvatars != null ? showUserAvatars() : this.showUserAvatars,
         useActionButtons: useActionButtons != null
             ? useActionButtons()
             : this.useActionButtons,
@@ -74,7 +83,9 @@ class SettingsState with EquatableMixin {
   @override
   List<Object?> get props => [
         useLargeStoryStyle,
+        showFavicons,
         showStoryMetadata,
+        showUserAvatars,
         useActionButtons,
         themeMode,
         useDynamicTheme,

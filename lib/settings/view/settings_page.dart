@@ -90,10 +90,24 @@ class _SettingsBody extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           ),
           SwitchListTile.adaptive(
+            value: state.showFavicons,
+            onChanged: _settingsCubit.setShowFavicons,
+            title: Text(context.l10n.favicons),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          SwitchListTile.adaptive(
             value: state.showStoryMetadata,
             onChanged: _settingsCubit.setShowStoryMetadata,
             title: Text(context.l10n.storyMetadata),
             subtitle: Text(context.l10n.storyMetadataDescription),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          SwitchListTile.adaptive(
+            value: state.showUserAvatars,
+            onChanged: _settingsCubit.setShowUserAvatars,
+            title: Text(context.l10n.userAvatars),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           ),
@@ -178,7 +192,9 @@ class _SettingsBody extends StatelessWidget {
                     ),
                     vote: VoteType.upvote,
                     useLargeStoryStyle: state.useLargeStoryStyle,
+                    showFavicons: state.showFavicons,
                     showMetadata: state.showStoryMetadata,
+                    showUserAvatars: state.showUserAvatars,
                     style: ItemStyle.overview,
                     onTapFavorite: state.useActionButtons ? () {} : null,
                     onTapUpvote: state.useActionButtons ? () {} : null,

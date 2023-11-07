@@ -15,11 +15,23 @@ class SettingsRepository {
   Future<bool> setUseLargeStoryStyle({required bool value}) async =>
       _sharedPreferencesService.setUseLargeStoryStyle(value: value);
 
+  Future<bool?> getShowFavicons() async =>
+      _sharedPreferencesService.getShowFavicons();
+
+  Future<bool> setShowFavicons({required bool value}) async =>
+      _sharedPreferencesService.setShowFavicons(value: value);
+
   Future<bool?> getShowStoryMetadata() async =>
       _sharedPreferencesService.getShowStoryMetadata();
 
   Future<bool> setShowStoryMetadata({required bool value}) async =>
       _sharedPreferencesService.setShowStoryMetadata(value: value);
+
+  Future<bool?> getShowUserAvatars() async =>
+      _sharedPreferencesService.getShowUserAvatars();
+
+  Future<bool> setShowUserAvatars({required bool value}) async =>
+      _sharedPreferencesService.setShowUserAvatars(value: value);
 
   Future<bool?> getUseActionButtons() async =>
       _sharedPreferencesService.getUseActionButtons();
