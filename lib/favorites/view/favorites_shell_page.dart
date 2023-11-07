@@ -154,7 +154,7 @@ class _SliverFavoritesBody extends StatelessWidget {
                   _itemCubitFactory,
                   _authCubit,
                   _settingsCubit,
-                  key: ValueKey<int>(id),
+                  key: ValueKey(id),
                   id: id,
                   loadingType: ItemType.story,
                   onTap: (context, item) async => context.push(

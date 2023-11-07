@@ -71,7 +71,7 @@ class _SliverStoryItemSearchBody extends StatelessWidget {
                 _itemCubitFactory,
                 _authCubit,
                 _settingsCubit,
-                key: ValueKey<int>(id),
+                key: ValueKey(id),
                 id: id,
                 loadingType: _storyItemSearchBloc.itemId == id
                     ? ItemType.story
