@@ -159,6 +159,7 @@ class AppRouter {
               child: SubmitPage(
                 appContainer.submitCubit,
                 appContainer.authCubit,
+                appContainer.settingsCubit,
               ),
             ),
             parentNavigatorKey: _rootNavigatorKey,
@@ -195,6 +196,7 @@ class AppRouter {
                   fullscreenDialog: true,
                   child: EditPage(
                     appContainer.editCubitFactory,
+                    appContainer.settingsCubit,
                     id: int.parse(state.uri.queryParameters['id']!),
                   ),
                 ),
@@ -207,6 +209,7 @@ class AppRouter {
                   child: ReplyPage(
                     appContainer.replyCubitFactory,
                     appContainer.authCubit,
+                    appContainer.settingsCubit,
                     id: int.parse(state.uri.queryParameters['id']!),
                   ),
                 ),

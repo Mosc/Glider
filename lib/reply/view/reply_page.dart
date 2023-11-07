@@ -14,19 +14,22 @@ import 'package:glider/item/widgets/username_widget.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/reply/cubit/reply_cubit.dart';
 import 'package:glider/reply/models/text_input.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
 class ReplyPage extends StatefulWidget {
   const ReplyPage(
     this._replyCubitFactory,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
     required this.id,
   });
 
   final ReplyCubitFactory _replyCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final int id;
 
   @override
@@ -77,7 +80,11 @@ class _ReplyPageState extends State<ReplyPage> {
           builder: (context, preview) => PreviewBottomPanel(
             visible: preview,
             onChanged: _replyCubit.setPreview,
-            child: _ReplyPreview(_replyCubit, widget._authCubit),
+            child: _ReplyPreview(
+              _replyCubit,
+              widget._authCubit,
+              widget._settingsCubit,
+            ),
           ),
         ),
         floatingActionButton: state.isValid
@@ -192,10 +199,15 @@ class _ReplyFormState extends State<_ReplyForm> {
 }
 
 class _ReplyPreview extends StatelessWidget {
-  const _ReplyPreview(this._replyCubit, this._authCubit);
+  const _ReplyPreview(
+    this._replyCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
 
   final ReplyCubit _replyCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -211,17 +223,25 @@ class _ReplyPreview extends StatelessWidget {
                 BlocSelector<AuthCubit, AuthState, String?>(
               bloc: _authCubit,
               selector: (state) => state.username,
-              builder: (context, username) => HeroMode(
-                enabled: false,
-                child: ItemDataTile(
-                  Item(
-                    id: 0,
-                    username: username,
-                    type: ItemType.comment,
-                    text: state.text.value.isNotEmpty ? state.text.value : null,
-                    dateTime: clock.now(),
+              builder: (context, username) =>
+                  BlocBuilder<SettingsCubit, SettingsState>(
+                bloc: _settingsCubit,
+                builder: (context, settingsState) => HeroMode(
+                  enabled: false,
+                  child: ItemDataTile(
+                    Item(
+                      id: 0,
+                      username: username,
+                      type: ItemType.comment,
+                      text:
+                          state.text.value.isNotEmpty ? state.text.value : null,
+                      dateTime: clock.now(),
+                    ),
+                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                    showFavicons: settingsState.showFavicons,
+                    showUserAvatars: settingsState.showUserAvatars,
+                    usernameStyle: UsernameStyle.loggedInUser,
                   ),
-                  usernameStyle: UsernameStyle.loggedInUser,
                 ),
               ),
             ),
