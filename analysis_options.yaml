@@ -1,5 +1,9 @@
 include: package:leancode_lint/analysis_options.yaml
 
+analyzer:
+  plugins:
+    custom_lint
+
 linter:
   rules:
     always_put_control_body_on_new_line: false

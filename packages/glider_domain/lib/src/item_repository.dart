@@ -133,8 +133,8 @@ class ItemRepository {
       final item = await compute(Item.fromDto, dto);
       _itemStreamControllers.getOrAdd(id).add(item);
       return item;
-    } on Object catch (e, s) {
-      _itemStreamControllers.getOrAdd(id).addError(e, s);
+    } on Object catch (e, st) {
+      _itemStreamControllers.getOrAdd(id).addError(e, st);
       rethrow;
     }
   }
@@ -189,8 +189,8 @@ class ItemRepository {
           );
         }
       }
-    } on Object catch (e, s) {
-      yield* Stream.error(e, s);
+    } on Object catch (e, st) {
+      yield* Stream.error(e, st);
     }
   }
 

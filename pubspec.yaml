@@ -22,7 +22,7 @@ dependencies:
   flutter_inappwebview: ^6.0.0-beta.25
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.6.18
+  flutter_markdown: ^0.6.18+2
   flutter_secure_storage: ^9.0.0
   formz: ^0.6.1
   glider_data:
@@ -39,7 +39,7 @@ dependencies:
   path_provider: ^2.1.1
   pub_semver: ^2.1.4
   relative_time: ^5.0.0
-  rxdart: ^0.28.0-dev.0
+  rxdart: ^0.27.7
   scrollview_observer: ^1.17.0
   share_plus: ^7.2.1
   shared_preferences: ^2.2.2
@@ -47,9 +47,10 @@ dependencies:
   url_launcher: ^6.2.1
 
 dev_dependencies:
+  custom_lint: ^0.5.6
   dependency_validator: ^3.2.3
   flutter_launcher_icons: ^0.13.1
-  leancode_lint: ^6.0.0
+  leancode_lint: ^7.0.0+1
   melos: ^3.2.0
 
 dependency_overrides:

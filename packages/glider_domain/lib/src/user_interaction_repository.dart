@@ -30,8 +30,8 @@ class UserInteractionRepository {
       final usernames = await _sharedPreferencesService.getBlockedUsernames();
       _blockedStreamController.add(usernames);
       return usernames;
-    } on Object catch (e, s) {
-      _blockedStreamController.addError(e, s);
+    } on Object catch (e, st) {
+      _blockedStreamController.addError(e, st);
       rethrow;
     }
   }

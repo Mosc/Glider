@@ -42,8 +42,8 @@ class ItemInteractionRepository {
       final ids = await _sharedPreferencesService.getVisitedIds();
       _visitedStreamController.add(ids);
       return ids;
-    } on Object catch (e, s) {
-      _visitedStreamController.addError(e, s);
+    } on Object catch (e, st) {
+      _visitedStreamController.addError(e, st);
       rethrow;
     }
   }
@@ -53,8 +53,8 @@ class ItemInteractionRepository {
       final ids = await _sharedPreferencesService.getUpvotedIds();
       _upvotedStreamController.add(ids);
       return ids;
-    } on Object catch (e, s) {
-      _upvotedStreamController.addError(e, s);
+    } on Object catch (e, st) {
+      _upvotedStreamController.addError(e, st);
       rethrow;
     }
   }
@@ -64,8 +64,8 @@ class ItemInteractionRepository {
       final ids = await _sharedPreferencesService.getDownvotedIds();
       _downvotedStreamController.add(ids);
       return ids;
-    } on Object catch (e, s) {
-      _downvotedStreamController.addError(e, s);
+    } on Object catch (e, st) {
+      _downvotedStreamController.addError(e, st);
       rethrow;
     }
   }
@@ -75,8 +75,8 @@ class ItemInteractionRepository {
       final ids = await _sharedPreferencesService.getFavoritedIds();
       _favoritedStreamController.add(ids);
       return ids;
-    } on Object catch (e, s) {
-      _favoritedStreamController.addError(e, s);
+    } on Object catch (e, st) {
+      _favoritedStreamController.addError(e, st);
       rethrow;
     }
   }
@@ -86,8 +86,8 @@ class ItemInteractionRepository {
       final ids = await _sharedPreferencesService.getFlaggedIds();
       _flaggedStreamController.add(ids);
       return ids;
-    } on Object catch (e, s) {
-      _flaggedStreamController.addError(e, s);
+    } on Object catch (e, st) {
+      _flaggedStreamController.addError(e, st);
       rethrow;
     }
   }
