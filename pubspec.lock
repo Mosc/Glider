@@ -751,10 +751,10 @@ packages:
     dependency: "direct main"
     description:
       name: relative_time
-      sha256: f0475e5b922f5b125fba1d73ee03ca6d68fb85766fed27d1ad82c8b932ba4ea0
+      sha256: "4e6c3b27d98ff6af5061b6dbaca178b5aa2607b7a7c2a77e6cae1d32b2759893"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "5.0.0"
   rxdart:
     dependency: "direct main"
     description:
