@@ -86,7 +86,7 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
             await context.push(
               AppRoute.userValueDialog
                   .location(parameters: {'id': userCubit.username}),
-              extra: (userCubit.username, context.l10n.copy),
+              extra: context.l10n.copy,
             );
 
         if (valueAction != null) {
@@ -97,7 +97,7 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
             await context.push(
               AppRoute.userValueDialog
                   .location(parameters: {'id': userCubit.username}),
-              extra: (userCubit.username, context.l10n.share),
+              extra: context.l10n.share,
             );
 
         if (valueAction != null) {
