@@ -16,7 +16,7 @@ class MenuListTile<T> extends StatelessWidget {
   final Widget? trailing;
   final bool enabled;
   final void Function(T)? onChanged;
-  final List<T> values;
+  final Iterable<T> values;
   final bool Function(T) selected;
   final String Function(T) labelBuilder;
 

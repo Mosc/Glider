@@ -46,18 +46,30 @@ class _ItemValueDialogState extends State<ItemValueDialog> {
         builder: (context, authState) =>
             BlocBuilder<SettingsCubit, SettingsState>(
           bloc: widget._settingsCubit,
-          builder: (context, settingsState) => SimpleDialog(
+          builder: (context, settingsState) => AlertDialog(
             title: widget.title != null ? Text(widget.title!) : null,
-            children: [
-              for (final value in ItemValue.values)
-                if (value.isVisible(state, authState, settingsState))
-                  ListTile(
-                    leading: Icon(value.icon(state)),
-                    title: Text(value.label(context, state)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
-                    onTap: () => context.pop(value),
-                  ),
+            contentPadding: const EdgeInsets.all(AppSpacing.m),
+            content: SizedBox(
+              width: 0,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final value in ItemValue.values)
+                    if (value.isVisible(state, authState, settingsState))
+                      ListTile(
+                        leading: Icon(value.icon(state)),
+                        title: Text(value.label(context, state)),
+                        onTap: () => context.pop(value),
+                      ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => context.pop(),
+                child:
+                    Text(MaterialLocalizations.of(context).cancelButtonLabel),
+              ),
             ],
           ),
         ),
