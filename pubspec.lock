@@ -847,10 +847,10 @@ packages:
     dependency: "direct main"
     description:
       name: scrollview_observer
-      sha256: "3e736a2bd81a3d59f9d1f16b913d3b46f52bef301442f929389d72bbaad1cee8"
+      sha256: "3206607305d572196a0fd7b434720142d5295ad21cfefd9d103daca63a2489f2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.0"
+    version: "1.18.0"
   share_plus:
     dependency: "direct main"
     description:
