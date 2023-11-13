@@ -330,10 +330,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_inappwebview
-      sha256: "786b124c944f4914670868c9775c90600a4d4674497f617190c0d676019e337b"
+      sha256: "3307260fdf5819de45c7b4889ad70f9b313c7915ad828af4b8004a974de7578a"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0-beta.25"
+    version: "6.0.0-beta.27"
   flutter_inappwebview_internal_annotations:
     dependency: transitive
     description:
