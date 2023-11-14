@@ -66,7 +66,7 @@ class HackerNewsText extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
             decoration: TextDecoration.underline,
           ),
-      code: Theme.of(context).textTheme.bodyMedium?.copyWith(
+      code: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: Theme.of(context).colorScheme.secondary,
             fontFamily: 'NotoSansMono',
           ),
