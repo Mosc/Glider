@@ -187,6 +187,8 @@ class _SliverUserAppBarState extends State<_SliverUserAppBar> {
         preferredSize: const Size.fromHeight(_toolbarHeight),
         child: UserTile(
           widget._userCubit,
+          widget._authCubit,
+          widget._settingsCubit,
           style: UserStyle.primary,
           onTap: (context, user) async => widget.scrollController.animateTo(
             0,
@@ -339,6 +341,8 @@ class _SliverUserBody extends StatelessWidget {
             SliverToBoxAdapter(
               child: UserTile(
                 _userCubit,
+                _authCubit,
+                _settingsCubit,
                 style: UserStyle.secondary,
                 padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
               ),

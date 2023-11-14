@@ -1,7 +1,8 @@
+import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
-import 'package:glider/app/models/app_route.dart';
+import 'package:glider/app/router/app_router.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
@@ -10,12 +11,13 @@ import 'package:glider/item/cubit/item_cubit.dart';
 import 'package:glider/item/models/item_action.dart';
 import 'package:glider/item/models/item_style.dart';
 import 'package:glider/item/typedefs/item_typedefs.dart';
+import 'package:glider/item/widgets/item_bottom_sheet.dart';
 import 'package:glider/item/widgets/item_data_tile.dart';
 import 'package:glider/item/widgets/item_loading_tile.dart';
 import 'package:glider/item/widgets/username_widget.dart';
+import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
-import 'package:go_router/go_router.dart';
 
 class ItemTile extends StatefulWidget {
   ItemTile(
@@ -89,84 +91,98 @@ class _ItemTileState extends State<ItemTile>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocBuilder<ItemCubit, ItemState>(
+    return BlocPresentationListener<ItemCubit, ItemCubitEvent>(
       bloc: _itemCubit,
-      builder: (context, state) => BlocBuilder<AuthCubit, AuthState>(
-        bloc: widget._authCubit,
-        builder: (context, authState) =>
-            BlocBuilder<SettingsCubit, SettingsState>(
-          bloc: widget._settingsCubit,
-          builder: (context, settingsState) => state.whenOrDefaultWidgets(
-            loading: () => ItemLoadingTile(
-              type: widget.loadingType,
-              collapsedCount: widget.collapsedCount,
-              useLargeStoryStyle: settingsState.useLargeStoryStyle,
-              showMetadata: settingsState.showStoryMetadata,
-              style: widget.style,
-              padding: widget.padding,
+      listener: (context, event) => switch (event) {
+        ItemActionFailedEvent() => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.l10n.failure),
             ),
-            success: () {
-              final item = state.data!;
+          ),
+      },
+      child: BlocBuilder<ItemCubit, ItemState>(
+        bloc: _itemCubit,
+        builder: (context, state) => BlocBuilder<AuthCubit, AuthState>(
+          bloc: widget._authCubit,
+          builder: (context, authState) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: widget._settingsCubit,
+            builder: (context, settingsState) => state.whenOrDefaultWidgets(
+              loading: () => ItemLoadingTile(
+                type: widget.loadingType,
+                collapsedCount: widget.collapsedCount,
+                useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                showMetadata: settingsState.showStoryMetadata,
+                style: widget.style,
+                padding: widget.padding,
+              ),
+              success: () {
+                final item = state.data!;
 
-              if (item.type == ItemType.job && !widget.showJobs) {
-                return const SizedBox.shrink();
-              }
+                if (item.type == ItemType.job && !widget.showJobs) {
+                  return const SizedBox.shrink();
+                }
 
-              return Material(
-                type: widget.highlight
-                    ? MaterialType.canvas
-                    : MaterialType.transparency,
-                elevation: 4,
-                shadowColor: Colors.transparent,
-                surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-                child: ItemDataTile(
-                  item,
-                  parsedText: state.parsedText,
-                  visited: state.visited && widget.showVisited,
-                  vote: state.vote,
-                  favorited: state.favorited,
-                  flagged: state.flagged,
-                  blocked: state.blocked,
-                  failed: state.status == Status.failure,
-                  collapsedCount: widget.collapsedCount,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  showFavicons: settingsState.showFavicons,
-                  showMetadata: widget.showMetadata,
-                  showUserAvatars: settingsState.showUserAvatars,
-                  style: widget.style,
-                  usernameStyle: authState.username == item.username
-                      ? UsernameStyle.loggedInUser
-                      : widget.storyUsername == item.username
-                          ? UsernameStyle.storyUser
-                          : UsernameStyle.none,
-                  padding: widget.padding,
-                  onTap: item.type == ItemType.pollopt
-                      ? ItemAction.upvote
-                              .isVisible(state, authState, settingsState)
-                          ? (context, item) async => ItemAction.upvote
-                              .execute(context, _itemCubit, widget._authCubit)
-                          : null
-                      : widget.onTap,
-                  onLongPress: (context, item) async => context.push(
-                    AppRoute.itemBottomSheet
-                        .location(parameters: {'id': item.id}),
+                return Material(
+                  type: widget.highlight
+                      ? MaterialType.canvas
+                      : MaterialType.transparency,
+                  elevation: 4,
+                  shadowColor: Colors.transparent,
+                  surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+                  child: ItemDataTile(
+                    item,
+                    parsedText: state.parsedText,
+                    visited: state.visited && widget.showVisited,
+                    vote: state.vote,
+                    favorited: state.favorited,
+                    flagged: state.flagged,
+                    blocked: state.blocked,
+                    failed: state.status == Status.failure,
+                    collapsedCount: widget.collapsedCount,
+                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                    showFavicons: settingsState.showFavicons,
+                    showMetadata: widget.showMetadata,
+                    showUserAvatars: settingsState.showUserAvatars,
+                    style: widget.style,
+                    usernameStyle: authState.username == item.username
+                        ? UsernameStyle.loggedInUser
+                        : widget.storyUsername == item.username
+                            ? UsernameStyle.storyUser
+                            : UsernameStyle.none,
+                    padding: widget.padding,
+                    onTap: item.type == ItemType.pollopt
+                        ? ItemAction.upvote
+                                .isVisible(state, authState, settingsState)
+                            ? (context, item) async => ItemAction.upvote
+                                .execute(context, _itemCubit, widget._authCubit)
+                            : null
+                        : widget.onTap,
+                    onLongPress: (context, item) async => showModalBottomSheet(
+                      context: rootNavigatorKey.currentContext!,
+                      builder: (context) => ItemBottomSheet(
+                        _itemCubit,
+                        widget._authCubit,
+                        widget._settingsCubit,
+                      ),
+                    ),
+                    onTapUpvote: settingsState.useActionButtons &&
+                            ItemAction.upvote
+                                .isVisible(state, authState, settingsState)
+                        ? () async => ItemAction.upvote
+                            .execute(context, _itemCubit, widget._authCubit)
+                        : null,
+                    onTapFavorite: settingsState.useActionButtons &&
+                            ItemAction.favorite
+                                .isVisible(state, authState, settingsState)
+                        ? () async => ItemAction.favorite
+                            .execute(context, _itemCubit, widget._authCubit)
+                        : null,
                   ),
-                  onTapUpvote: settingsState.useActionButtons &&
-                          ItemAction.upvote
-                              .isVisible(state, authState, settingsState)
-                      ? () async => ItemAction.upvote
-                          .execute(context, _itemCubit, widget._authCubit)
-                      : null,
-                  onTapFavorite: settingsState.useActionButtons &&
-                          ItemAction.favorite
-                              .isVisible(state, authState, settingsState)
-                      ? () async => ItemAction.favorite
-                          .execute(context, _itemCubit, widget._authCubit)
-                      : null,
-                ),
-              );
-            },
-            onRetry: () async => _itemCubit.load(),
+                );
+              },
+              onRetry: () async => _itemCubit.load(),
+            ),
           ),
         ),
       ),

@@ -9,12 +9,10 @@ enum AppRoute {
   themeColorDialog(parent: settings),
   submit,
   item,
-  itemBottomSheet(parent: item),
   edit(parent: item),
   reply(parent: item),
   itemValueDialog(parent: item),
   user,
-  userBottomSheet(parent: user),
   userValueDialog(parent: user),
   textSelectDialog,
   confirmDialog;

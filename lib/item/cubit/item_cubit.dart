@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
@@ -11,9 +12,11 @@ import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
+part 'item_cubit_event.dart';
 part 'item_state.dart';
 
-class ItemCubit extends HydratedCubit<ItemState> {
+class ItemCubit extends HydratedCubit<ItemState>
+    with BlocPresentationMixin<ItemState, ItemCubitEvent> {
   ItemCubit(
     this._itemRepository,
     this._itemInteractionRepository,
@@ -150,6 +153,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
       safeEmit(
         state.copyWith(vote: () => vote),
       );
+      emitPresentation(const ItemActionFailedEvent());
     } else {
       await load();
     }
@@ -167,6 +171,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
       safeEmit(
         state.copyWith(vote: () => vote),
       );
+      emitPresentation(const ItemActionFailedEvent());
     } else {
       await load();
     }
@@ -184,6 +189,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
       safeEmit(
         state.copyWith(favorited: () => favorited),
       );
+      emitPresentation(const ItemActionFailedEvent());
     }
   }
 
@@ -198,6 +204,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
       safeEmit(
         state.copyWith(flagged: () => flagged),
       );
+      emitPresentation(const ItemActionFailedEvent());
     } else {
       await load();
     }
@@ -218,6 +225,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
           data: () => state.data?.copyWith(isDeleted: () => isDeleted),
         ),
       );
+      emitPresentation(const ItemActionFailedEvent());
     } else {
       await load();
     }

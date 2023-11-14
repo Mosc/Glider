@@ -10,7 +10,6 @@ import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/navigation_shell/cubit/navigation_shell_cubit.dart';
-import 'package:glider/navigation_shell/cubit/navigation_shell_event.dart';
 import 'package:go_router/go_router.dart';
 
 // Height based on `_NavigationBarDefaultsM3`.
@@ -65,7 +64,8 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocPresentationListener<NavigationShellCubit, NavigationShellEvent>(
+    return BlocPresentationListener<NavigationShellCubit,
+        NavigationShellCubitEvent>(
       bloc: widget._navigationShellCubit,
       listener: (context, event) => switch (event) {
         ShowWhatsNewEvent() => context.push(AppRoute.whatsNew.location()),
