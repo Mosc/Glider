@@ -30,6 +30,7 @@ dependencies:
   glider_domain:
     path: packages/glider_domain
   go_router: ^12.1.1
+  google_fonts: ^6.1.0
   http: ^1.1.0
   hydrated_bloc: ^9.1.2
   intl: any

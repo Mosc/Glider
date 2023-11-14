@@ -26,21 +26,30 @@ class SettingsCubit extends Cubit<SettingsState> {
   final ItemInteractionRepository _itemInteractionRepository;
 
   Future<void> _load() async {
+    final themeMode = await _settingsRepository.getThemeMode();
+    final useDynamicTheme = await _settingsRepository.getUseDynamicTheme();
+    final themeColor = await _settingsRepository.getThemeColor();
+    final themeVariant = await _settingsRepository.getThemeVariant();
+    final usePureBackground = await _settingsRepository.getUsePureBackground();
+    final font = await _settingsRepository.getFont();
     final useLargeStoryStyle =
         await _settingsRepository.getUseLargeStoryStyle();
     final showFavicons = await _settingsRepository.getShowFavicons();
     final showStoryMetadata = await _settingsRepository.getShowStoryMetadata();
     final showUserAvatars = await _settingsRepository.getShowUserAvatars();
     final useActionButtons = await _settingsRepository.getUseActionButtons();
-    final useDynamicTheme = await _settingsRepository.getUseDynamicTheme();
-    final themeColor = await _settingsRepository.getThemeColor();
-    final themeVariant = await _settingsRepository.getThemeVariant();
-    final usePureBackground = await _settingsRepository.getUsePureBackground();
     final useThreadNavigation =
         await _settingsRepository.getUseThreadNavigation();
     final enableDownvoting = await _settingsRepository.getEnableDownvoting();
     safeEmit(
       state.copyWith(
+        themeMode: themeMode != null ? () => themeMode : null,
+        useDynamicTheme: useDynamicTheme != null ? () => useDynamicTheme : null,
+        themeColor: themeColor != null ? () => themeColor : null,
+        themeVariant: themeVariant != null ? () => themeVariant : null,
+        usePureBackground:
+            usePureBackground != null ? () => usePureBackground : null,
+        font: font != null ? () => font : null,
         useLargeStoryStyle:
             useLargeStoryStyle != null ? () => useLargeStoryStyle : null,
         showFavicons: showFavicons != null ? () => showFavicons : null,
@@ -49,11 +58,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         showUserAvatars: showUserAvatars != null ? () => showUserAvatars : null,
         useActionButtons:
             useActionButtons != null ? () => useActionButtons : null,
-        useDynamicTheme: useDynamicTheme != null ? () => useDynamicTheme : null,
-        themeColor: themeColor != null ? () => themeColor : null,
-        themeVariant: themeVariant != null ? () => themeVariant : null,
-        usePureBackground:
-            usePureBackground != null ? () => usePureBackground : null,
         useThreadNavigation:
             useThreadNavigation != null ? () => useThreadNavigation : null,
         enableDownvoting:
@@ -170,6 +174,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (usePureBackground != null) {
       safeEmit(
         state.copyWith(usePureBackground: () => usePureBackground),
+      );
+    }
+  }
+
+  Future<void> setFont(String value) async {
+    await _settingsRepository.setFont(value: value);
+    final font = await _settingsRepository.getFont();
+
+    if (font != null) {
+      safeEmit(
+        state.copyWith(font: () => font),
       );
     }
   }

@@ -8,6 +8,7 @@ import 'package:glider/app/extensions/theme_mode_extension.dart';
 import 'package:glider/app/extensions/variant_extension.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:relative_time/relative_time.dart';
 
 class App extends StatelessWidget {
@@ -33,7 +34,8 @@ class App extends StatelessWidget {
             previous.useDynamicTheme != current.useDynamicTheme ||
             previous.themeColor != current.themeColor ||
             previous.themeVariant != current.themeVariant ||
-            previous.usePureBackground != current.usePureBackground,
+            previous.usePureBackground != current.usePureBackground ||
+            previous.font != current.font,
         builder: (context, state) => MaterialApp.router(
           routerConfig: _routerConfig,
           theme: _buildTheme(context, state, lightDynamic, Brightness.light),
@@ -76,7 +78,7 @@ class App extends StatelessWidget {
                 : Colors.white
             : null,
       ),
-      fontFamily: 'NotoSans',
+      textTheme: GoogleFonts.getTextTheme(state.font, const TextTheme()),
       menuTheme: const MenuThemeData(
         style: MenuStyle(
           shape: MaterialStatePropertyAll(

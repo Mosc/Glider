@@ -5,16 +5,17 @@ class SharedPreferencesService {
 
   final SharedPreferences _sharedPreferences;
 
-  static const String _useLargeStoryStyleKey = 'use_large_story_style';
-  static const String _showFaviconsKey = 'show_favicons';
-  static const String _showStoryMetadataKey = 'show_story_metadata';
-  static const String _showUserAvatars = 'show_user_avatars';
-  static const String _useActionButtonsKey = 'use_action_buttons';
   static const String _themeModeKey = 'theme_mode';
   static const String _useDynamicThemeKey = 'use_dynamic_theme';
   static const String _themeColorKey = 'theme_color';
   static const String _themeVariantKey = 'theme_variant';
   static const String _usePureBackgroundKey = 'use_pure_background';
+  static const String _fontKey = 'font';
+  static const String _useLargeStoryStyleKey = 'use_large_story_style';
+  static const String _showFaviconsKey = 'show_favicons';
+  static const String _showStoryMetadataKey = 'show_story_metadata';
+  static const String _showUserAvatars = 'show_user_avatars';
+  static const String _useActionButtonsKey = 'use_action_buttons';
   static const String _showJobsKey = 'show_jobs';
   static const String _useThreadNavigationKey = 'use_thread_navigation';
   static const String _enableDownvotingKey = 'enable_downvoting';
@@ -25,36 +26,6 @@ class SharedPreferencesService {
   static const String _favoritedKey = 'favorited';
   static const String _flaggedKey = 'flagged';
   static const String _blockedKey = 'blocked';
-
-  Future<bool?> getUseLargeStoryStyle() async =>
-      _sharedPreferences.getBool(_useLargeStoryStyleKey);
-
-  Future<bool> setUseLargeStoryStyle({required bool value}) async =>
-      _sharedPreferences.setBool(_useLargeStoryStyleKey, value);
-
-  Future<bool?> getShowFavicons() async =>
-      _sharedPreferences.getBool(_showFaviconsKey);
-
-  Future<bool> setShowFavicons({required bool value}) async =>
-      _sharedPreferences.setBool(_showFaviconsKey, value);
-
-  Future<bool?> getShowStoryMetadata() async =>
-      _sharedPreferences.getBool(_showStoryMetadataKey);
-
-  Future<bool> setShowStoryMetadata({required bool value}) async =>
-      _sharedPreferences.setBool(_showStoryMetadataKey, value);
-
-  Future<bool?> getShowUserAvatars() async =>
-      _sharedPreferences.getBool(_showUserAvatars);
-
-  Future<bool> setShowUserAvatars({required bool value}) async =>
-      _sharedPreferences.setBool(_showUserAvatars, value);
-
-  Future<bool?> getUseActionButtons() async =>
-      _sharedPreferences.getBool(_useActionButtonsKey);
-
-  Future<bool> setUseActionButtons({required bool value}) async =>
-      _sharedPreferences.setBool(_useActionButtonsKey, value);
 
   Future<String?> getThemeMode() async =>
       _sharedPreferences.getString(_themeModeKey);
@@ -85,6 +56,41 @@ class SharedPreferencesService {
 
   Future<bool> setUsePureBackground({required bool value}) async =>
       _sharedPreferences.setBool(_usePureBackgroundKey, value);
+
+  Future<String?> getFont() async => _sharedPreferences.getString(_fontKey);
+
+  Future<bool> setFont({required String value}) async =>
+      _sharedPreferences.setString(_fontKey, value);
+
+  Future<bool?> getUseLargeStoryStyle() async =>
+      _sharedPreferences.getBool(_useLargeStoryStyleKey);
+
+  Future<bool> setUseLargeStoryStyle({required bool value}) async =>
+      _sharedPreferences.setBool(_useLargeStoryStyleKey, value);
+
+  Future<bool?> getShowFavicons() async =>
+      _sharedPreferences.getBool(_showFaviconsKey);
+
+  Future<bool> setShowFavicons({required bool value}) async =>
+      _sharedPreferences.setBool(_showFaviconsKey, value);
+
+  Future<bool?> getShowStoryMetadata() async =>
+      _sharedPreferences.getBool(_showStoryMetadataKey);
+
+  Future<bool> setShowStoryMetadata({required bool value}) async =>
+      _sharedPreferences.setBool(_showStoryMetadataKey, value);
+
+  Future<bool?> getShowUserAvatars() async =>
+      _sharedPreferences.getBool(_showUserAvatars);
+
+  Future<bool> setShowUserAvatars({required bool value}) async =>
+      _sharedPreferences.setBool(_showUserAvatars, value);
+
+  Future<bool?> getUseActionButtons() async =>
+      _sharedPreferences.getBool(_useActionButtonsKey);
+
+  Future<bool> setUseActionButtons({required bool value}) async =>
+      _sharedPreferences.setBool(_useActionButtonsKey, value);
 
   Future<bool?> getShowJobs() async => _sharedPreferences.getBool(_showJobsKey);
 

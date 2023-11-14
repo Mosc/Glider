@@ -15,6 +15,7 @@ import 'package:glider/settings/extensions/variant_extension.dart';
 import 'package:glider/settings/widgets/menu_list_tile.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -54,6 +55,14 @@ class _SettingsBody extends StatelessWidget {
 
   final SettingsCubit _settingsCubit;
 
+  static const List<String> _fonts = [
+    'Fira Sans',
+    'IBM Plex Sans',
+    'Inter',
+    'Noto Sans',
+    'Open Sans',
+    'Roboto',
+  ];
   static const String _authority = 'github.com';
   static const String _basePath = 'Mosc/Glider';
   static final Uri _privacyPolicyUrl =
@@ -72,6 +81,74 @@ class _SettingsBody extends StatelessWidget {
       builder: (context, state) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: AppSpacing.defaultTilePadding,
+            child: Text(
+              context.l10n.theme,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+            ),
+          ),
+          MenuListTile(
+            title: Text(context.l10n.themeMode),
+            trailing: Text(state.themeMode.capitalizedLabel),
+            onChanged: (value) async => _settingsCubit.setThemeMode(value),
+            values: ThemeMode.values,
+            selected: (value) => state.themeMode == value,
+            childBuilder: (value) => Text(value.capitalizedLabel),
+          ),
+          SwitchListTile.adaptive(
+            value: state.useDynamicTheme,
+            onChanged: _settingsCubit.setUseDynamicTheme,
+            title: Text(context.l10n.dynamicTheme),
+            subtitle: Text(context.l10n.dynamicThemeDescription),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          ListTile(
+            title: Text(context.l10n.themeColor),
+            trailing: Icon(
+              Icons.circle,
+              color: state.themeColor,
+              size: 40,
+            ),
+            enabled: !state.useDynamicTheme,
+            onTap: () async {
+              final value = await context.push<Color>(
+                AppRoute.themeColorDialog.location(),
+                extra: state.themeColor,
+              );
+              if (value != null) await _settingsCubit.setThemeColor(value);
+            },
+          ),
+          MenuListTile(
+            title: Text(context.l10n.themeVariant),
+            trailing: Text(state.themeVariant.capitalizedLabel),
+            enabled: !state.useDynamicTheme,
+            onChanged: (value) async => _settingsCubit.setThemeVariant(value),
+            values: Variant.values,
+            selected: (value) => state.themeVariant == value,
+            childBuilder: (value) => Text(value.capitalizedLabel),
+          ),
+          SwitchListTile.adaptive(
+            value: state.usePureBackground,
+            onChanged: _settingsCubit.setUsePureBackground,
+            title: Text(context.l10n.pureBackground),
+            subtitle: Text(context.l10n.pureBackgroundDescription),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          MenuListTile(
+            title: Text(context.l10n.font),
+            trailing: Text(state.font),
+            onChanged: (value) async => _settingsCubit.setFont(value),
+            values: _fonts,
+            selected: (value) => state.font == value,
+            childBuilder: (value) =>
+                Text(value, style: GoogleFonts.getFont(value)),
+          ),
+          const Divider(),
           Padding(
             padding: AppSpacing.defaultTilePadding,
             child: Text(
@@ -116,55 +193,6 @@ class _SettingsBody extends StatelessWidget {
             onChanged: _settingsCubit.setUseActionButtons,
             title: Text(context.l10n.actionButtons),
             subtitle: Text(context.l10n.actionButtonsDescription),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-          ),
-          MenuListTile(
-            title: Text(context.l10n.themeMode),
-            trailing: Text(state.themeMode.capitalizedLabel),
-            onChanged: (value) async => _settingsCubit.setThemeMode(value),
-            values: ThemeMode.values,
-            selected: (value) => state.themeMode == value,
-            labelBuilder: (value) => value.capitalizedLabel,
-          ),
-          SwitchListTile.adaptive(
-            value: state.useDynamicTheme,
-            onChanged: _settingsCubit.setUseDynamicTheme,
-            title: Text(context.l10n.dynamicTheme),
-            subtitle: Text(context.l10n.dynamicThemeDescription),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-          ),
-          ListTile(
-            title: Text(context.l10n.themeColor),
-            trailing: Icon(
-              Icons.circle,
-              color: state.themeColor,
-              size: 40,
-            ),
-            enabled: !state.useDynamicTheme,
-            onTap: () async {
-              final value = await context.push<Color>(
-                AppRoute.themeColorDialog.location(),
-                extra: state.themeColor,
-              );
-              if (value != null) await _settingsCubit.setThemeColor(value);
-            },
-          ),
-          MenuListTile(
-            title: Text(context.l10n.themeVariant),
-            trailing: Text(state.themeVariant.capitalizedLabel),
-            enabled: !state.useDynamicTheme,
-            onChanged: (value) async => _settingsCubit.setThemeVariant(value),
-            values: Variant.values,
-            selected: (value) => state.themeVariant == value,
-            labelBuilder: (value) => value.capitalizedLabel,
-          ),
-          SwitchListTile.adaptive(
-            value: state.usePureBackground,
-            onChanged: _settingsCubit.setUsePureBackground,
-            title: Text(context.l10n.pureBackground),
-            subtitle: Text(context.l10n.pureBackgroundDescription),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           ),

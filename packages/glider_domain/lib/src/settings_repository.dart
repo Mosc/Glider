@@ -9,36 +9,6 @@ class SettingsRepository {
 
   final SharedPreferencesService _sharedPreferencesService;
 
-  Future<bool?> getUseLargeStoryStyle() async =>
-      _sharedPreferencesService.getUseLargeStoryStyle();
-
-  Future<bool> setUseLargeStoryStyle({required bool value}) async =>
-      _sharedPreferencesService.setUseLargeStoryStyle(value: value);
-
-  Future<bool?> getShowFavicons() async =>
-      _sharedPreferencesService.getShowFavicons();
-
-  Future<bool> setShowFavicons({required bool value}) async =>
-      _sharedPreferencesService.setShowFavicons(value: value);
-
-  Future<bool?> getShowStoryMetadata() async =>
-      _sharedPreferencesService.getShowStoryMetadata();
-
-  Future<bool> setShowStoryMetadata({required bool value}) async =>
-      _sharedPreferencesService.setShowStoryMetadata(value: value);
-
-  Future<bool?> getShowUserAvatars() async =>
-      _sharedPreferencesService.getShowUserAvatars();
-
-  Future<bool> setShowUserAvatars({required bool value}) async =>
-      _sharedPreferencesService.setShowUserAvatars(value: value);
-
-  Future<bool?> getUseActionButtons() async =>
-      _sharedPreferencesService.getUseActionButtons();
-
-  Future<bool> setUseActionButtons({required bool value}) async =>
-      _sharedPreferencesService.setUseActionButtons(value: value);
-
   Future<ThemeMode?> getThemeMode() async {
     final value = await _sharedPreferencesService.getThemeMode();
     return value != null ? ThemeMode.values.byName(value) : null;
@@ -74,6 +44,41 @@ class SettingsRepository {
 
   Future<bool> setUsePureBackground({required bool value}) async =>
       _sharedPreferencesService.setUsePureBackground(value: value);
+
+  Future<String?> getFont() async => _sharedPreferencesService.getFont();
+
+  Future<bool> setFont({required String value}) async =>
+      _sharedPreferencesService.setFont(value: value);
+
+  Future<bool?> getUseLargeStoryStyle() async =>
+      _sharedPreferencesService.getUseLargeStoryStyle();
+
+  Future<bool> setUseLargeStoryStyle({required bool value}) async =>
+      _sharedPreferencesService.setUseLargeStoryStyle(value: value);
+
+  Future<bool?> getShowFavicons() async =>
+      _sharedPreferencesService.getShowFavicons();
+
+  Future<bool> setShowFavicons({required bool value}) async =>
+      _sharedPreferencesService.setShowFavicons(value: value);
+
+  Future<bool?> getShowStoryMetadata() async =>
+      _sharedPreferencesService.getShowStoryMetadata();
+
+  Future<bool> setShowStoryMetadata({required bool value}) async =>
+      _sharedPreferencesService.setShowStoryMetadata(value: value);
+
+  Future<bool?> getShowUserAvatars() async =>
+      _sharedPreferencesService.getShowUserAvatars();
+
+  Future<bool> setShowUserAvatars({required bool value}) async =>
+      _sharedPreferencesService.setShowUserAvatars(value: value);
+
+  Future<bool?> getUseActionButtons() async =>
+      _sharedPreferencesService.getUseActionButtons();
+
+  Future<bool> setUseActionButtons({required bool value}) async =>
+      _sharedPreferencesService.setUseActionButtons(value: value);
 
   Future<bool?> getShowJobs() async => _sharedPreferencesService.getShowJobs();
 
