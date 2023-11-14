@@ -49,7 +49,7 @@ jobs:
           channel: any
           cache: true
       - name: Setup Melos
-        uses: bluefireteam/melos-action@v2
+        uses: bluefireteam/melos-action@v3
       - name: Build Android APK
         run: flutter build apk
       - name: Build Android App Bundle
