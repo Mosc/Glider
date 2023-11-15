@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_spacing.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/cubit/user_cubit.dart';
 import 'package:glider/user/models/user_value.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +11,8 @@ import 'package:go_router/go_router.dart';
 class UserValueDialog extends StatefulWidget {
   const UserValueDialog(
     this._userCubitFactory,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     required this.username,
     this.title,
     super.key,
@@ -17,6 +20,7 @@ class UserValueDialog extends StatefulWidget {
 
   final UserCubitFactory _userCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final String username;
   final String? title;
 
@@ -35,19 +39,41 @@ class _UserValueDialogState extends State<UserValueDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: widget.title != null ? Text(widget.title!) : null,
-      children: [
-        for (final value in UserValue.values)
-          if (value.isVisible(_userCubit.state, widget._authCubit.state))
-            ListTile(
-              leading: Icon(value.icon(_userCubit.state)),
-              title: Text(value.label(context, _userCubit.state)),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
-              onTap: () => context.pop(value),
+    return BlocBuilder<UserCubit, UserState>(
+      bloc: _userCubit,
+      builder: (context, state) => BlocBuilder<AuthCubit, AuthState>(
+        bloc: widget._authCubit,
+        builder: (context, authState) =>
+            BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: widget._settingsCubit,
+          builder: (context, settingsState) => AlertDialog(
+            title: widget.title != null ? Text(widget.title!) : null,
+            contentPadding: const EdgeInsets.all(AppSpacing.m),
+            content: SizedBox(
+              width: 0,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final value in UserValue.values)
+                    if (value.isVisible(state, authState, settingsState))
+                      ListTile(
+                        leading: Icon(value.icon(state)),
+                        title: Text(value.label(context, state)),
+                        onTap: () => context.pop(value),
+                      ),
+                ],
+              ),
             ),
-      ],
+            actions: [
+              TextButton(
+                onPressed: () => context.pop(),
+                child:
+                    Text(MaterialLocalizations.of(context).cancelButtonLabel),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

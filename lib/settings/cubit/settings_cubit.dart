@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:material_color_utilities/scheme/variant.dart';
@@ -28,7 +28,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> _load() async {
     final useLargeStoryStyle =
         await _settingsRepository.getUseLargeStoryStyle();
+    final showFavicons = await _settingsRepository.getShowFavicons();
     final showStoryMetadata = await _settingsRepository.getShowStoryMetadata();
+    final showUserAvatars = await _settingsRepository.getShowUserAvatars();
     final useActionButtons = await _settingsRepository.getUseActionButtons();
     final useDynamicTheme = await _settingsRepository.getUseDynamicTheme();
     final themeColor = await _settingsRepository.getThemeColor();
@@ -36,12 +38,15 @@ class SettingsCubit extends Cubit<SettingsState> {
     final usePureBackground = await _settingsRepository.getUsePureBackground();
     final useThreadNavigation =
         await _settingsRepository.getUseThreadNavigation();
+    final enableDownvoting = await _settingsRepository.getEnableDownvoting();
     safeEmit(
       state.copyWith(
         useLargeStoryStyle:
             useLargeStoryStyle != null ? () => useLargeStoryStyle : null,
+        showFavicons: showFavicons != null ? () => showFavicons : null,
         showStoryMetadata:
             showStoryMetadata != null ? () => showStoryMetadata : null,
+        showUserAvatars: showUserAvatars != null ? () => showUserAvatars : null,
         useActionButtons:
             useActionButtons != null ? () => useActionButtons : null,
         useDynamicTheme: useDynamicTheme != null ? () => useDynamicTheme : null,
@@ -51,6 +56,8 @@ class SettingsCubit extends Cubit<SettingsState> {
             usePureBackground != null ? () => usePureBackground : null,
         useThreadNavigation:
             useThreadNavigation != null ? () => useThreadNavigation : null,
+        enableDownvoting:
+            enableDownvoting != null ? () => enableDownvoting : null,
         appVersion: _packageRepository.getVersion,
       ),
     );
@@ -68,6 +75,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  Future<void> setShowFavicons(bool value) async {
+    await _settingsRepository.setShowFavicons(value: value);
+    final showFavicons = await _settingsRepository.getShowFavicons();
+
+    if (showFavicons != null) {
+      safeEmit(
+        state.copyWith(showFavicons: () => showFavicons),
+      );
+    }
+  }
+
   Future<void> setShowStoryMetadata(bool value) async {
     await _settingsRepository.setShowStoryMetadata(value: value);
     final showStoryMetadata = await _settingsRepository.getShowStoryMetadata();
@@ -79,6 +97,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  Future<void> setShowUserAvatars(bool value) async {
+    await _settingsRepository.setShowUserAvatars(value: value);
+    final showUserAvatars = await _settingsRepository.getShowUserAvatars();
+
+    if (showUserAvatars != null) {
+      safeEmit(
+        state.copyWith(showUserAvatars: () => showUserAvatars),
+      );
+    }
+  }
+
   Future<void> setUseActionButtons(bool value) async {
     await _settingsRepository.setUseActionButtons(value: value);
     final useActionButtons = await _settingsRepository.getUseActionButtons();
@@ -86,6 +115,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (useActionButtons != null) {
       safeEmit(
         state.copyWith(useActionButtons: () => useActionButtons),
+      );
+    }
+  }
+
+  Future<void> setThemeMode(ThemeMode value) async {
+    await _settingsRepository.setThemeMode(value: value);
+    final themeMode = await _settingsRepository.getThemeMode();
+
+    if (themeMode != null) {
+      safeEmit(
+        state.copyWith(themeMode: () => themeMode),
       );
     }
   }
@@ -153,6 +193,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (useThreadNavigation != null) {
       safeEmit(
         state.copyWith(useThreadNavigation: () => useThreadNavigation),
+      );
+    }
+  }
+
+  Future<void> setEnableDownvoting(bool value) async {
+    await _settingsRepository.setEnableDownvoting(value: value);
+    final enableDownvoting = await _settingsRepository.getEnableDownvoting();
+
+    if (enableDownvoting != null) {
+      safeEmit(
+        state.copyWith(enableDownvoting: () => enableDownvoting),
       );
     }
   }

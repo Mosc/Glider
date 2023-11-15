@@ -55,12 +55,11 @@ class SliverStoriesSearchBody extends StatelessWidget {
                     ItemTile.create(
                       _itemCubitFactory,
                       _authCubit,
-                      key: ValueKey<int>(id),
+                      _settingsCubit,
+                      key: ValueKey(id),
                       id: id,
                       loadingType: ItemType.story,
-                      useLargeStoryStyle: settingsState.useLargeStoryStyle,
                       showMetadata: settingsState.showStoryMetadata,
-                      useActionButtons: settingsState.useActionButtons,
                       style: ItemStyle.overview,
                       onTap: (context, item) async => context.push(
                         AppRoute.item.location(parameters: {'id': id}),

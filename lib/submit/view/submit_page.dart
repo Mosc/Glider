@@ -10,6 +10,7 @@ import 'package:glider/common/widgets/preview_card.dart';
 import 'package:glider/item/widgets/item_data_tile.dart';
 import 'package:glider/item/widgets/username_widget.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/submit/cubit/submit_cubit.dart';
 import 'package:glider/submit/models/text_input.dart';
 import 'package:glider/submit/models/title_input.dart';
@@ -20,12 +21,14 @@ import 'package:go_router/go_router.dart';
 class SubmitPage extends StatefulWidget {
   const SubmitPage(
     this._submitCubit,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
   });
 
   final SubmitCubit _submitCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   State<SubmitPage> createState() => _SubmitPageState();
@@ -50,8 +53,8 @@ class _SubmitPageState extends State<SubmitPage> {
                 child: _SubmitBody(widget._submitCubit),
               ),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.xl),
+            const SliverPadding(
+              padding: AppSpacing.floatingActionButtonPageBottomPadding,
             ),
           ],
         ),
@@ -61,7 +64,11 @@ class _SubmitPageState extends State<SubmitPage> {
           builder: (context, preview) => PreviewBottomPanel(
             visible: preview,
             onChanged: widget._submitCubit.setPreview,
-            child: _SubmitPreview(widget._submitCubit, widget._authCubit),
+            child: _SubmitPreview(
+              widget._submitCubit,
+              widget._authCubit,
+              widget._settingsCubit,
+            ),
           ),
         ),
         floatingActionButton: state.isValid
@@ -234,10 +241,15 @@ class _SubmitFormState extends State<_SubmitForm> {
 }
 
 class _SubmitPreview extends StatelessWidget {
-  const _SubmitPreview(this._submitCubit, this._authCubit);
+  const _SubmitPreview(
+    this._submitCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
 
   final SubmitCubit _submitCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -256,22 +268,31 @@ class _SubmitPreview extends StatelessWidget {
                 BlocSelector<AuthCubit, AuthState, String?>(
               bloc: _authCubit,
               selector: (state) => state.username,
-              builder: (context, username) => HeroMode(
-                enabled: false,
-                child: ItemDataTile(
-                  Item(
-                    id: 0,
-                    username: username,
-                    type: ItemType.story,
-                    title:
-                        state.title.value.isNotEmpty ? state.title.value : null,
-                    url: state.url.value.isNotEmpty
-                        ? Uri.tryParse(state.url.value)
-                        : null,
-                    text: state.text.value.isNotEmpty ? state.text.value : null,
-                    dateTime: clock.now(),
+              builder: (context, username) =>
+                  BlocBuilder<SettingsCubit, SettingsState>(
+                bloc: _settingsCubit,
+                builder: (context, settingsState) => HeroMode(
+                  enabled: false,
+                  child: ItemDataTile(
+                    Item(
+                      id: 0,
+                      username: username,
+                      type: ItemType.story,
+                      title: state.title.value.isNotEmpty
+                          ? state.title.value
+                          : null,
+                      url: state.url.value.isNotEmpty
+                          ? Uri.tryParse(state.url.value)
+                          : null,
+                      text:
+                          state.text.value.isNotEmpty ? state.text.value : null,
+                      dateTime: clock.now(),
+                    ),
+                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                    showFavicons: settingsState.showFavicons,
+                    showUserAvatars: settingsState.showUserAvatars,
+                    usernameStyle: UsernameStyle.loggedInUser,
                   ),
-                  usernameStyle: UsernameStyle.loggedInUser,
                 ),
               ),
             ),

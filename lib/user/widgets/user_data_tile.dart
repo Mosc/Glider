@@ -14,6 +14,7 @@ class UserDataTile extends StatelessWidget {
   const UserDataTile(
     this.user, {
     super.key,
+    this.parsedAbout,
     this.blocked = false,
     this.style = UserStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
@@ -22,6 +23,7 @@ class UserDataTile extends StatelessWidget {
   });
 
   final User user;
+  final ParsedData? parsedAbout;
   final bool blocked;
   final UserStyle style;
   final EdgeInsets padding;
@@ -116,7 +118,9 @@ class UserDataTile extends StatelessWidget {
   Widget _buildSecondary(BuildContext context) {
     return Hero(
       tag: 'user_tile_about_${user.username}',
-      child: HackerNewsText(user.about!),
+      child: parsedAbout != null
+          ? HackerNewsText.parsed(parsedAbout!)
+          : HackerNewsText(user.about!),
     );
   }
 }

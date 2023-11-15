@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
+import 'package:glider/common/widgets/hacker_news_text.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:share_plus/share_plus.dart';
@@ -23,6 +24,10 @@ class UserCubit extends HydratedCubit<UserState> {
             state.copyWith(
               status: () => Status.success,
               data: () => user,
+              parsedAbout: () => switch (user.about) {
+                final String about => HackerNewsText.parse(about),
+                _ => null,
+              },
               exception: () => null,
             ),
           ),

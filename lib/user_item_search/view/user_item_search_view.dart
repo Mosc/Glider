@@ -6,6 +6,7 @@ import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
 import 'package:glider/item/widgets/item_tile.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user_item_search/bloc/user_item_search_bloc.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
@@ -14,13 +15,15 @@ class UserItemSearchView extends StatelessWidget {
   const UserItemSearchView(
     this._userItemSearchBloc,
     this._itemCubitFactory,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
   });
 
   final UserItemSearchBloc _userItemSearchBloc;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,7 @@ class UserItemSearchView extends StatelessWidget {
             _userItemSearchBloc,
             _itemCubitFactory,
             _authCubit,
+            _settingsCubit,
           ),
         ),
       ],
@@ -47,11 +51,13 @@ class _SliverUserItemSearchBody extends StatelessWidget {
     this._userItemSearchBloc,
     this._itemCubitFactory,
     this._authCubit,
+    this._settingsCubit,
   );
 
   final UserItemSearchBloc _userItemSearchBloc;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +70,8 @@ class _SliverUserItemSearchBody extends StatelessWidget {
               ItemTile.create(
                 _itemCubitFactory,
                 _authCubit,
-                key: ValueKey<int>(id),
+                _settingsCubit,
+                key: ValueKey(id),
                 id: id,
                 loadingType: ItemType.story,
                 onTap: (context, item) async => context.push(

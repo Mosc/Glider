@@ -154,6 +154,21 @@ class HackerNewsWebsiteService {
     await _performPost(endpoint, body: body, userCookie: userCookie);
   }
 
+  Future<void> downvote({
+    required int id,
+    required bool downvote,
+    required String userCookie,
+  }) async {
+    final auth = await _getItemAuthValue(id: id, userCookie: userCookie);
+    final endpoint = Uri.https(authority, 'vote');
+    final body = <String, String>{
+      'id': id.toString(),
+      'how': downvote ? 'down' : 'un',
+      'auth': auth!,
+    };
+    await _performPost(endpoint, body: body, userCookie: userCookie);
+  }
+
   Future<void> favorite({
     required int id,
     required bool favorite,

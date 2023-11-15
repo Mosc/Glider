@@ -37,6 +37,7 @@ class UserTile extends StatelessWidget {
           final user = state.data!;
           return UserDataTile(
             user,
+            parsedAbout: state.parsedAbout,
             blocked: state.blocked,
             style: style,
             padding: padding,

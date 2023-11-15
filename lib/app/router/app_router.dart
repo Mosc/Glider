@@ -123,6 +123,7 @@ class AppRouter {
               fullscreenDialog: true,
               child: AuthPage(
                 appContainer.authCubit,
+                appContainer.settingsCubit,
                 appContainer.userCubitFactory,
                 appContainer.itemCubitFactory,
                 appContainer.userItemSearchBlocFactory,
@@ -158,6 +159,7 @@ class AppRouter {
               child: SubmitPage(
                 appContainer.submitCubit,
                 appContainer.authCubit,
+                appContainer.settingsCubit,
               ),
             ),
             parentNavigatorKey: _rootNavigatorKey,
@@ -182,6 +184,7 @@ class AppRouter {
                   builder: (context) => ItemBottomSheet(
                     appContainer.itemCubitFactory,
                     appContainer.authCubit,
+                    appContainer.settingsCubit,
                     id: int.parse(state.uri.queryParameters['id']!),
                   ),
                 ),
@@ -193,6 +196,7 @@ class AppRouter {
                   fullscreenDialog: true,
                   child: EditPage(
                     appContainer.editCubitFactory,
+                    appContainer.settingsCubit,
                     id: int.parse(state.uri.queryParameters['id']!),
                   ),
                 ),
@@ -205,6 +209,7 @@ class AppRouter {
                   child: ReplyPage(
                     appContainer.replyCubitFactory,
                     appContainer.authCubit,
+                    appContainer.settingsCubit,
                     id: int.parse(state.uri.queryParameters['id']!),
                   ),
                 ),
@@ -216,6 +221,7 @@ class AppRouter {
                   builder: (context) => ItemValueDialog(
                     appContainer.itemCubitFactory,
                     appContainer.authCubit,
+                    appContainer.settingsCubit,
                     id: int.parse(state.uri.queryParameters['id']!),
                     title: state.extra as String?,
                   ),
@@ -231,6 +237,7 @@ class AppRouter {
               appContainer.itemCubitFactory,
               appContainer.userItemSearchBlocFactory,
               appContainer.authCubit,
+              appContainer.settingsCubit,
               username: state.uri.queryParameters['id']!,
             ),
             parentNavigatorKey: _rootNavigatorKey,
@@ -242,6 +249,7 @@ class AppRouter {
                   builder: (context) => UserBottomSheet(
                     appContainer.userCubitFactory,
                     appContainer.authCubit,
+                    appContainer.settingsCubit,
                     username: state.uri.queryParameters['id']!,
                   ),
                 ),
@@ -253,6 +261,7 @@ class AppRouter {
                   builder: (context) => UserValueDialog(
                     appContainer.userCubitFactory,
                     appContainer.authCubit,
+                    appContainer.settingsCubit,
                     username: state.uri.queryParameters['id']!,
                     title: state.extra as String?,
                   ),

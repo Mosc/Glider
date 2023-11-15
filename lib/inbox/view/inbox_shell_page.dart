@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
@@ -52,6 +53,7 @@ class _InboxShellPageState extends State<InboxShellPage> {
           _SliverInboxAppBar(
             widget._inboxCubit,
             widget._authCubit,
+            widget._settingsCubit,
           ),
           SliverSafeArea(
             top: false,
@@ -62,6 +64,9 @@ class _InboxShellPageState extends State<InboxShellPage> {
               widget._settingsCubit,
             ),
           ),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
+          ),
         ],
       ),
     );
@@ -69,10 +74,15 @@ class _InboxShellPageState extends State<InboxShellPage> {
 }
 
 class _SliverInboxAppBar extends StatelessWidget {
-  const _SliverInboxAppBar(this._inboxCubit, this._authCubit);
+  const _SliverInboxAppBar(
+    this._inboxCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
 
   final InboxCubit _inboxCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -82,22 +92,24 @@ class _SliverInboxAppBar extends StatelessWidget {
       actions: [
         BlocBuilder<AuthCubit, AuthState>(
           bloc: _authCubit,
-          buildWhen: (previous, current) =>
-              previous.isLoggedIn != current.isLoggedIn,
-          builder: (context, authState) => MenuAnchor(
-            menuChildren: [
-              for (final action in NavigationShellAction.values)
-                if (action.isVisible(null, authState))
-                  MenuItemButton(
-                    onPressed: () async => action.execute(context),
-                    child: Text(action.label(context, null)),
-                  ),
-            ],
-            builder: (context, controller, child) => IconButton(
-              icon: Icon(Icons.adaptive.more_outlined),
-              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-              onPressed: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
+          builder: (context, authState) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: _settingsCubit,
+            builder: (context, settingsState) => MenuAnchor(
+              menuChildren: [
+                for (final action in NavigationShellAction.values)
+                  if (action.isVisible(null, authState, settingsState))
+                    MenuItemButton(
+                      onPressed: () async => action.execute(context),
+                      child: Text(action.label(context, null)),
+                    ),
+              ],
+              builder: (context, controller, child) => IconButton(
+                icon: Icon(Icons.adaptive.more_outlined),
+                tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+                onPressed: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+              ),
             ),
           ),
         ),
@@ -140,11 +152,10 @@ class _SliverInboxBody extends StatelessWidget {
                 ItemTile.create(
                   _itemCubitFactory,
                   _authCubit,
-                  key: ValueKey<int>(parentId),
+                  _settingsCubit,
+                  key: ValueKey(parentId),
                   id: parentId,
                   loadingType: ItemType.story,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  useActionButtons: settingsState.useActionButtons,
                   onTap: (context, item) async => context.push(
                     AppRoute.item.location(parameters: {'id': id}),
                   ),
@@ -154,11 +165,10 @@ class _SliverInboxBody extends StatelessWidget {
                   child: ItemTile.create(
                     _itemCubitFactory,
                     _authCubit,
-                    key: ValueKey<int>(id),
+                    _settingsCubit,
+                    key: ValueKey(id),
                     id: id,
                     loadingType: ItemType.comment,
-                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                    useActionButtons: settingsState.useActionButtons,
                     onTap: (context, item) async => context.push(
                       AppRoute.item.location(parameters: {'id': id}),
                     ),

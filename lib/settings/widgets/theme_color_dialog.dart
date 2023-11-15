@@ -26,7 +26,7 @@ class ThemeColorDialog extends StatelessWidget {
       title: Text(context.l10n.themeColor),
       contentPadding: AppSpacing.defaultTilePadding,
       content: SizedBox(
-        width: double.maxFinite,
+        width: 0,
         child: GridView.extent(
           maxCrossAxisExtent: 64,
           shrinkWrap: true,

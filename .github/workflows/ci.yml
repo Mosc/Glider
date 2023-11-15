@@ -31,7 +31,7 @@ jobs:
           channel: any
           cache: true
       - name: Setup Melos
-        uses: bluefireteam/melos-action@v2
+        uses: bluefireteam/melos-action@v3
       - name: Run static analysis checks
         run: melos lint
       - name: Build Android APK (profile)

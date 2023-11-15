@@ -14,6 +14,7 @@ import 'package:glider/common/widgets/refreshable_scroll_view.dart';
 import 'package:glider/item/widgets/item_loading_tile.dart';
 import 'package:glider/item/widgets/item_tile.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/cubit/user_cubit.dart';
 import 'package:glider/user/models/user_action.dart';
 import 'package:glider/user/models/user_style.dart';
@@ -30,7 +31,8 @@ class UserPage extends StatefulWidget {
     this._userCubitFactory,
     this._itemCubitFactory,
     this._userItemSearchBlocFactory,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
     required this.username,
   });
@@ -39,6 +41,7 @@ class UserPage extends StatefulWidget {
   final ItemCubitFactory _itemCubitFactory;
   final UserItemSearchBlocFactory _userItemSearchBlocFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final String username;
 
   @override
@@ -84,6 +87,7 @@ class _UserPageState extends State<UserPage> {
                 widget._itemCubitFactory,
                 _userItemSearchBloc,
                 widget._authCubit,
+                widget._settingsCubit,
                 id: widget.username,
                 scrollController: _scrollController,
               ),
@@ -93,6 +97,7 @@ class _UserPageState extends State<UserPage> {
                   _userCubit,
                   widget._itemCubitFactory,
                   widget._authCubit,
+                  widget._settingsCubit,
                 ),
               ),
             ],
@@ -135,7 +140,8 @@ class _SliverUserAppBar extends StatefulWidget {
     this._userCubit,
     this._itemCubitFactory,
     this._userItemSearchBloc,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     required this.id,
     required this.scrollController,
   });
@@ -144,6 +150,7 @@ class _SliverUserAppBar extends StatefulWidget {
   final ItemCubitFactory _itemCubitFactory;
   final UserItemSearchBloc _userItemSearchBloc;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final String id;
   final ScrollController scrollController;
 
@@ -226,57 +233,81 @@ class _SliverUserAppBarState extends State<_SliverUserAppBar> {
             widget._userItemSearchBloc,
             widget._itemCubitFactory,
             widget._authCubit,
+            widget._settingsCubit,
           ),
           suggestionsBuilder: (context, controller) => [],
         ),
-        BlocBuilder<UserCubit, UserState>(
-          bloc: widget._userCubit,
-          builder: (context, state) => BlocBuilder<AuthCubit, AuthState>(
-            bloc: widget._authCubit,
-            buildWhen: (previous, current) =>
-                previous.isLoggedIn != current.isLoggedIn,
-            builder: (context, authState) => MenuAnchor(
-              menuChildren: [
-                for (final action in UserAction.values)
-                  if (action.isVisible(state, authState))
-                    if (action.options case final options?)
-                      SubmenuButton(
-                        menuChildren: [
-                          for (final option in options)
-                            if (option.isVisible(state, authState))
-                              MenuItemButton(
-                                onPressed: () async => action.execute(
-                                  context,
-                                  widget._userCubit,
-                                  widget._authCubit,
-                                  option: option,
-                                ),
-                                child: Text(option.label(context, state)),
-                              ),
-                        ],
-                        child: Text(action.label(context, state)),
-                      )
-                    else
-                      MenuItemButton(
-                        onPressed: () async => action.execute(
-                          context,
-                          widget._userCubit,
-                          widget._authCubit,
-                        ),
-                        child: Text(action.label(context, state)),
-                      ),
-              ],
-              builder: (context, controller, child) => IconButton(
-                icon: Icon(Icons.adaptive.more_outlined),
-                tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-                onPressed: () =>
-                    controller.isOpen ? controller.close() : controller.open(),
-              ),
-            ),
-          ),
+        _UserOverflowMenu(
+          widget._userCubit,
+          widget._authCubit,
+          widget._settingsCubit,
         ),
       ],
       floating: true,
+    );
+  }
+}
+
+class _UserOverflowMenu extends StatelessWidget {
+  const _UserOverflowMenu(
+    this._userCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
+
+  final UserCubit _userCubit;
+  final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserCubit, UserState>(
+      bloc: _userCubit,
+      builder: (context, state) => BlocBuilder<AuthCubit, AuthState>(
+        bloc: _authCubit,
+        builder: (context, authState) =>
+            BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: _settingsCubit,
+          builder: (context, settingsState) => MenuAnchor(
+            menuChildren: [
+              for (final action in UserAction.values)
+                if (action.isVisible(state, authState, settingsState))
+                  if (action.options case final options?)
+                    SubmenuButton(
+                      menuChildren: [
+                        for (final option in options)
+                          if (option.isVisible(state, authState, settingsState))
+                            MenuItemButton(
+                              onPressed: () async => action.execute(
+                                context,
+                                _userCubit,
+                                _authCubit,
+                                option: option,
+                              ),
+                              child: Text(option.label(context, state)),
+                            ),
+                      ],
+                      child: Text(action.label(context, state)),
+                    )
+                  else
+                    MenuItemButton(
+                      onPressed: () async => action.execute(
+                        context,
+                        _userCubit,
+                        _authCubit,
+                      ),
+                      child: Text(action.label(context, state)),
+                    ),
+            ],
+            builder: (context, controller, child) => IconButton(
+              icon: Icon(Icons.adaptive.more_outlined),
+              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+              onPressed: () =>
+                  controller.isOpen ? controller.close() : controller.open(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -286,11 +317,13 @@ class _SliverUserBody extends StatelessWidget {
     this._userCubit,
     this._itemCubitFactory,
     this._authCubit,
+    this._settingsCubit,
   );
 
   final UserCubit _userCubit;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +350,8 @@ class _SliverUserBody extends StatelessWidget {
                     ItemTile.create(
                       _itemCubitFactory,
                       _authCubit,
-                      key: ValueKey<int>(id),
+                      _settingsCubit,
+                      key: ValueKey(id),
                       id: id,
                       loadingType: ItemType.story,
                       onTap: (context, item) async => context.push(
