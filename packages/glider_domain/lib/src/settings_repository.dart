@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:glider_data/glider_data.dart';
+import 'package:glider_domain/src/entities/theme_mode.dart';
 import 'package:material_color_utilities/scheme/variant.dart';
 
 class SettingsRepository {
@@ -14,17 +15,37 @@ class SettingsRepository {
   Future<bool> setUseLargeStoryStyle({required bool value}) async =>
       _sharedPreferencesService.setUseLargeStoryStyle(value: value);
 
+  Future<bool?> getShowFavicons() async =>
+      _sharedPreferencesService.getShowFavicons();
+
+  Future<bool> setShowFavicons({required bool value}) async =>
+      _sharedPreferencesService.setShowFavicons(value: value);
+
   Future<bool?> getShowStoryMetadata() async =>
       _sharedPreferencesService.getShowStoryMetadata();
 
   Future<bool> setShowStoryMetadata({required bool value}) async =>
       _sharedPreferencesService.setShowStoryMetadata(value: value);
 
+  Future<bool?> getShowUserAvatars() async =>
+      _sharedPreferencesService.getShowUserAvatars();
+
+  Future<bool> setShowUserAvatars({required bool value}) async =>
+      _sharedPreferencesService.setShowUserAvatars(value: value);
+
   Future<bool?> getUseActionButtons() async =>
       _sharedPreferencesService.getUseActionButtons();
 
   Future<bool> setUseActionButtons({required bool value}) async =>
       _sharedPreferencesService.setUseActionButtons(value: value);
+
+  Future<ThemeMode?> getThemeMode() async {
+    final value = await _sharedPreferencesService.getThemeMode();
+    return value != null ? ThemeMode.values.byName(value) : null;
+  }
+
+  Future<bool> setThemeMode({required ThemeMode value}) async =>
+      _sharedPreferencesService.setThemeMode(value: value.name);
 
   Future<bool?> getUseDynamicTheme() async =>
       _sharedPreferencesService.getUseDynamicTheme();
@@ -64,4 +85,10 @@ class SettingsRepository {
 
   Future<bool> setUseThreadNavigation({required bool value}) async =>
       _sharedPreferencesService.setUseThreadNavigation(value: value);
+
+  Future<bool?> getEnableDownvoting() async =>
+      _sharedPreferencesService.getEnableDownvoting();
+
+  Future<bool> setEnableDownvoting({required bool value}) async =>
+      _sharedPreferencesService.setEnableDownvoting(value: value);
 }

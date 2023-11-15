@@ -11,6 +11,7 @@ import 'package:glider/common/widgets/metadata_widget.dart';
 import 'package:glider/item/models/item_style.dart';
 import 'package:glider/item/widgets/item_tile.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/story_similar/cubit/story_similar_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
@@ -19,7 +20,8 @@ class SliverStorySimilarBody extends StatelessWidget {
   const SliverStorySimilarBody(
     this._storySimilarCubit,
     this._itemCubitFactory,
-    this._authCubit, {
+    this._authCubit,
+    this._settingsCubit, {
     super.key,
     this.storyUsername,
   });
@@ -27,6 +29,7 @@ class SliverStorySimilarBody extends StatelessWidget {
   final StorySimilarCubit _storySimilarCubit;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final String? storyUsername;
 
   @override
@@ -76,11 +79,11 @@ class SliverStorySimilarBody extends StatelessWidget {
                       child: ItemTile.create(
                         _itemCubitFactory,
                         _authCubit,
-                        key: ValueKey<int>(id),
+                        _settingsCubit,
+                        key: ValueKey(id),
                         id: id,
                         storyUsername: storyUsername,
                         loadingType: ItemType.story,
-                        useLargeStoryStyle: false,
                         style: ItemStyle.primary,
                         onTap: (context, item) async => context.push(
                           AppRoute.item.location(parameters: {'id': id}),

@@ -14,16 +14,19 @@ import 'package:glider/edit/models/title_input.dart';
 import 'package:glider/item/widgets/item_data_tile.dart';
 import 'package:glider/item/widgets/username_widget.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage(
-    this._editCubitFactory, {
+    this._editCubitFactory,
+    this._settingsCubit, {
     super.key,
     required this.id,
   });
 
   final EditCubitFactory _editCubitFactory;
+  final SettingsCubit _settingsCubit;
   final int id;
 
   @override
@@ -63,8 +66,8 @@ class _EditPageState extends State<EditPage> {
                 child: _EditBody(_editCubit),
               ),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.xl),
+            const SliverPadding(
+              padding: AppSpacing.floatingActionButtonPageBottomPadding,
             ),
           ],
         ),
@@ -74,7 +77,10 @@ class _EditPageState extends State<EditPage> {
           builder: (context, preview) => PreviewBottomPanel(
             visible: preview,
             onChanged: _editCubit.setPreview,
-            child: _EditPreview(_editCubit),
+            child: _EditPreview(
+              _editCubit,
+              widget._settingsCubit,
+            ),
           ),
         ),
         floatingActionButton: state.isValid
@@ -233,9 +239,13 @@ class _EditFormState extends State<_EditForm> {
 }
 
 class _EditPreview extends StatelessWidget {
-  const _EditPreview(this._editCubit);
+  const _EditPreview(
+    this._editCubit,
+    this._settingsCubit,
+  );
 
   final EditCubit _editCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -251,12 +261,18 @@ class _EditPreview extends StatelessWidget {
                 previous.title != current.title ||
                 previous.text != current.text,
             builder: (context, state) => state.item != null
-                ? ItemDataTile(
-                    state.item!.copyWith(
-                      title: () => state.title?.value,
-                      text: () => state.text?.value,
+                ? BlocBuilder<SettingsCubit, SettingsState>(
+                    bloc: _settingsCubit,
+                    builder: (context, settingsState) => ItemDataTile(
+                      state.item!.copyWith(
+                        title: () => state.title?.value,
+                        text: () => state.text?.value,
+                      ),
+                      useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                      showFavicons: settingsState.showFavicons,
+                      showUserAvatars: settingsState.showUserAvatars,
+                      usernameStyle: UsernameStyle.loggedInUser,
                     ),
-                    usernameStyle: UsernameStyle.loggedInUser,
                   )
                 : const SizedBox.shrink(),
           ),

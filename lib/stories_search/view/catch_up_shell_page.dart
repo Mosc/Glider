@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
@@ -46,6 +47,7 @@ class _CatchUpShellPageState extends State<CatchUpShellPage> {
           _SliverCatchUpAppBar(
             widget._storiesSearchBloc,
             widget._authCubit,
+            widget._settingsCubit,
           ),
           SliverToBoxAdapter(
             child: StoriesSearchRangeView(widget._storiesSearchBloc),
@@ -59,6 +61,9 @@ class _CatchUpShellPageState extends State<CatchUpShellPage> {
               widget._settingsCubit,
             ),
           ),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
+          ),
         ],
       ),
     );
@@ -66,10 +71,15 @@ class _CatchUpShellPageState extends State<CatchUpShellPage> {
 }
 
 class _SliverCatchUpAppBar extends StatelessWidget {
-  const _SliverCatchUpAppBar(this._storiesSearchBloc, this._authCubit);
+  const _SliverCatchUpAppBar(
+    this._storiesSearchBloc,
+    this._authCubit,
+    this._settingsCubit,
+  );
 
   final StoriesSearchBloc _storiesSearchBloc;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -79,22 +89,24 @@ class _SliverCatchUpAppBar extends StatelessWidget {
       actions: [
         BlocBuilder<AuthCubit, AuthState>(
           bloc: _authCubit,
-          buildWhen: (previous, current) =>
-              previous.isLoggedIn != current.isLoggedIn,
-          builder: (context, authState) => MenuAnchor(
-            menuChildren: [
-              for (final action in NavigationShellAction.values)
-                if (action.isVisible(null, authState))
-                  MenuItemButton(
-                    onPressed: () async => action.execute(context),
-                    child: Text(action.label(context, null)),
-                  ),
-            ],
-            builder: (context, controller, child) => IconButton(
-              icon: Icon(Icons.adaptive.more_outlined),
-              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-              onPressed: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
+          builder: (context, authState) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: _settingsCubit,
+            builder: (context, settingsState) => MenuAnchor(
+              menuChildren: [
+                for (final action in NavigationShellAction.values)
+                  if (action.isVisible(null, authState, settingsState))
+                    MenuItemButton(
+                      onPressed: () async => action.execute(context),
+                      child: Text(action.label(context, null)),
+                    ),
+              ],
+              builder: (context, controller, child) => IconButton(
+                icon: Icon(Icons.adaptive.more_outlined),
+                tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+                onPressed: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+              ),
             ),
           ),
         ),

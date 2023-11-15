@@ -12,6 +12,7 @@ import 'package:glider/common/widgets/hacker_news_text.dart';
 import 'package:glider/common/widgets/metadata_widget.dart';
 import 'package:glider/item/extensions/item_extension.dart';
 import 'package:glider/item/models/item_style.dart';
+import 'package:glider/item/models/vote_type.dart';
 import 'package:glider/item/typedefs/item_typedefs.dart';
 import 'package:glider/item/widgets/username_widget.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
@@ -25,15 +26,18 @@ class ItemDataTile extends StatelessWidget {
   const ItemDataTile(
     this.item, {
     super.key,
+    this.parsedText,
     this.visited = false,
-    this.upvoted = false,
+    this.vote,
     this.favorited = false,
     this.flagged = false,
     this.blocked = false,
     this.failed = false,
     this.collapsedCount,
     this.useLargeStoryStyle = true,
+    this.showFavicons = true,
     this.showMetadata = true,
+    this.showUserAvatars = true,
     this.style = ItemStyle.full,
     this.usernameStyle = UsernameStyle.none,
     this.padding = AppSpacing.defaultTilePadding,
@@ -44,15 +48,18 @@ class ItemDataTile extends StatelessWidget {
   });
 
   final Item item;
+  final ParsedData? parsedText;
   final bool visited;
-  final bool upvoted;
+  final VoteType? vote;
   final bool favorited;
   final bool flagged;
   final bool blocked;
   final bool failed;
   final int? collapsedCount;
   final bool useLargeStoryStyle;
+  final bool showFavicons;
   final bool showMetadata;
+  final bool showUserAvatars;
   final ItemStyle style;
   final UsernameStyle usernameStyle;
   final EdgeInsets padding;
@@ -61,27 +68,28 @@ class ItemDataTile extends StatelessWidget {
   final VoidCallback? onTapUpvote;
   final VoidCallback? onTapFavorite;
 
-  int get _faviconSize =>
-      min(useLargeStoryStyle ? 2 * 24 : 20, _faviconRequestSize);
-
   @override
   Widget build(BuildContext context) {
     if (item.type == ItemType.pollopt) {
       return SwitchListTile.adaptive(
-        value: upvoted,
+        value: vote.upvoted,
         onChanged: (value) => onTap?.call(context, item),
         title: Row(
           children: [
             if (item.text case final text?)
               Expanded(
-                child: HackerNewsText(text),
+                child: Hero(
+                  tag: 'item_tile_text_${item.id}',
+                  child: parsedText != null
+                      ? HackerNewsText.parsed(parsedText!)
+                      : HackerNewsText(text),
+                ),
               )
             else
               const Spacer(),
-            MetadataWidget(
-              icon: Icons.arrow_upward_outlined,
-              label: item.score != null ? Text(item.score!.toString()) : null,
-              color: upvoted ? Theme.of(context).colorScheme.tertiary : null,
+            Hero(
+              tag: 'item_tile_score_${item.id}',
+              child: _buildVotedMetadata(context),
             ),
           ].spaced(width: AppSpacing.s),
         ),
@@ -135,37 +143,30 @@ class ItemDataTile extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (item.title case final _?)
+              if (item.title != null)
                 Expanded(
-                  child: _ItemTitle(
-                    item,
-                    useLargeStoryStyle: useLargeStoryStyle,
-                    style: style,
+                  child: Hero(
+                    tag: 'item_tile_title_${item.id}',
+                    child: _ItemTitle(
+                      item,
+                      useLargeStoryStyle: useLargeStoryStyle,
+                      style: style,
+                    ),
                   ),
                 )
               else
                 const Spacer(),
-              if (item.url case final url?)
-                Hero(
-                  tag: 'item_tile_favicon_${item.id}',
-                  child: Material(
-                    type: MaterialType.transparency,
-                    child: InkWell(
-                      onTap: () async => url.tryLaunch(),
-                      // Explicitly override parent widget's long press.
-                      onLongPress: () {},
-                      child: Ink.image(
-                        image: ResizeImage(
-                          NetworkImage(
-                            item.faviconUrl(size: _faviconRequestSize)!,
-                          ),
-                          width: _faviconSize,
-                          height: _faviconSize,
-                          policy: ResizeImagePolicy.fit,
-                        ),
-                        width: _faviconSize.toDouble(),
-                        height: _faviconSize.toDouble(),
-                      ),
+              if (item.url != null && showFavicons)
+                AnimatedVisibility(
+                  visible: style == ItemStyle.overview,
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: InkWell(
+                    onTap: () async => item.url!.tryLaunch(),
+                    // Explicitly override parent widget's long press.
+                    onLongPress: () {},
+                    child: _ItemFavicon(
+                      item,
+                      isLarge: useLargeStoryStyle,
                     ),
                   ),
                 ),
@@ -177,15 +178,6 @@ class ItemDataTile extends StatelessWidget {
   }
 
   Widget _buildMetadata(BuildContext context) {
-    Widget favoritedMetadata() => MetadataWidget(
-          icon: Icons.favorite_outline_outlined,
-          color: favorited ? Theme.of(context).colorScheme.tertiary : null,
-        );
-    Widget upvotedMetadata() => MetadataWidget(
-          icon: Icons.arrow_upward_outlined,
-          label: item.score != null ? Text((item.score!).toString()) : null,
-          color: upvoted ? Theme.of(context).colorScheme.tertiary : null,
-        );
     return Row(
       children: [
         Hero(
@@ -207,12 +199,12 @@ class ItemDataTile extends StatelessWidget {
               ? _MetadataActionButton(
                   padding: MetadataWidget.horizontalPadding,
                   onTap: onTapFavorite,
-                  child: favoritedMetadata(),
+                  child: _buildFavoritedMetadata(context),
                 )
               : AnimatedVisibility(
                   visible: favorited,
                   padding: MetadataWidget.horizontalPadding,
-                  child: favoritedMetadata(),
+                  child: _buildFavoritedMetadata(context),
                 ),
         ),
         if (item.type != ItemType.job)
@@ -222,12 +214,12 @@ class ItemDataTile extends StatelessWidget {
                 ? _MetadataActionButton(
                     padding: MetadataWidget.horizontalPadding,
                     onTap: onTapUpvote,
-                    child: upvotedMetadata(),
+                    child: _buildVotedMetadata(context),
                   )
                 : AnimatedVisibility(
-                    visible: item.score != null || upvoted,
+                    visible: item.score != null || vote != null,
                     padding: MetadataWidget.horizontalPadding,
-                    child: upvotedMetadata(),
+                    child: _buildVotedMetadata(context),
                   ),
           ),
         Hero(
@@ -282,6 +274,7 @@ class ItemDataTile extends StatelessWidget {
                   alignment: AlignmentDirectional.centerStart,
                   child: UsernameWidget(
                     username: username,
+                    showAvatar: showUserAvatars,
                     style: usernameStyle,
                     onTap: () async => context.push(
                       AppRoute.user.location(parameters: {'id': username}),
@@ -322,21 +315,56 @@ class ItemDataTile extends StatelessWidget {
     );
   }
 
+  Widget _buildFavoritedMetadata(BuildContext context) => MetadataWidget(
+        icon: Icons.favorite_outline_outlined,
+        color: favorited ? Theme.of(context).colorScheme.tertiary : null,
+      );
+
+  Widget _buildVotedMetadata(BuildContext context) => MetadataWidget(
+        icon: vote.downvoted
+            ? Icons.arrow_downward_outlined
+            : Icons.arrow_upward_outlined,
+        label: item.score != null ? Text(item.score!.toString()) : null,
+        color: vote.downvoted
+            ? Theme.of(context).colorScheme.secondary
+            : vote.upvoted
+                ? Theme.of(context).colorScheme.tertiary
+                : null,
+      );
+
   Widget _buildSecondary(BuildContext context) {
-    return Hero(
-      tag: 'item_tile_secondary_${item.id}',
-      child: Column(
-        children: [
-          if (item.text case final text?) HackerNewsText(text),
-          if (item.url case final url?)
-            DecoratedCard.outlined(
-              onTap: () async => url.tryLaunch(),
-              // Explicitly override parent widget's long press.
-              onLongPress: () {},
-              child: Row(
-                children: [
+    return Column(
+      children: [
+        if (item.text case final text?)
+          Hero(
+            tag: 'item_tile_text_${item.id}',
+            child: parsedText != null
+                ? HackerNewsText.parsed(parsedText!)
+                : HackerNewsText(text),
+          ),
+        if (item.url case final url?)
+          DecoratedCard.outlined(
+            onTap: () async => url.tryLaunch(),
+            // Explicitly override parent widget's long press.
+            onLongPress: () {},
+            child: Row(
+              children: [
+                if (showFavicons)
+                  Hero(
+                    tag: 'item_tile_favicon_${item.id}',
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: _ItemFavicon(
+                        item,
+                        isLarge: false,
+                      ),
+                    ),
+                  )
+                else
                   const MetadataWidget(icon: Icons.link_outlined),
-                  Expanded(
+                Expanded(
+                  child: Hero(
+                    tag: 'item_tile_url_${item.id}',
                     child: Text(
                       item.url!.toString(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -347,11 +375,11 @@ class ItemDataTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ].spaced(width: AppSpacing.l),
-              ),
+                ),
+              ].spaced(width: AppSpacing.l),
             ),
-        ].spaced(height: AppSpacing.m),
-      ),
+          ),
+      ].spaced(height: AppSpacing.m),
     );
   }
 }
@@ -369,94 +397,118 @@ class _ItemTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'item_tile_title_${item.id}',
-      child: Text.rich(
-        TextSpan(
-          style: useLargeStoryStyle
-              ? Theme.of(context).textTheme.titleMedium
-              : Theme.of(context).textTheme.titleSmall,
-          children: [
-            if (item.hasPrefix) ...[
-              WidgetSpan(
-                alignment: PlaceholderAlignment.baseline,
-                baseline: TextBaseline.alphabetic,
-                child: Badge(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.secondaryContainer,
-                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                  label: Text(item.prefix!),
-                ),
+    return Text.rich(
+      TextSpan(
+        style: useLargeStoryStyle
+            ? Theme.of(context).textTheme.titleMedium
+            : Theme.of(context).textTheme.titleSmall,
+        children: [
+          if (item.hasPrefix) ...[
+            WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
+              baseline: TextBaseline.alphabetic,
+              child: Badge(
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
+                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                label: Text(item.prefix!),
               ),
-              const TextSpan(text: ' '),
-            ],
-            TextSpan(text: item.filteredTitle),
-            if (item.hasSuffix) ...[
-              const TextSpan(text: ' '),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.baseline,
-                baseline: TextBaseline.alphabetic,
-                child: Badge(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                  textColor: Theme.of(context).colorScheme.onPrimaryContainer,
-                  label: Text(item.suffix!),
-                ),
-              ),
-            ],
-            if (item.hasOriginalDate) ...[
-              const TextSpan(text: ' '),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.baseline,
-                baseline: TextBaseline.alphabetic,
-                child: Badge(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.secondaryContainer,
-                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                  label: Text(item.originalDate!),
-                ),
-              ),
-            ],
-            if (item.hasYcBatch) ...[
-              const TextSpan(text: ' '),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.baseline,
-                baseline: TextBaseline.alphabetic,
-                child: Badge(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.tertiaryContainer,
-                  textColor: Theme.of(context).colorScheme.onTertiaryContainer,
-                  label: Text(item.ycBatch!),
-                ),
-              ),
-            ],
-            if (style.showUrlHost && useLargeStoryStyle)
-              if (item.url case final url?) ...[
-                const TextSpan(text: ' '),
-                TextSpan(
-                  text: '(',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                TextSpan(
-                  text: url.host,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                ),
-                TextSpan(
-                  text: ')',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                // Attach zero-width space of title style to
-                // enforce height.
-                const TextSpan(text: '\u200b'),
-              ],
-            if (useLargeStoryStyle) const TextSpan(text: '\n'),
+            ),
+            const TextSpan(text: ' '),
           ],
-        ),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
+          TextSpan(text: item.filteredTitle),
+          if (item.hasSuffix) ...[
+            const TextSpan(text: ' '),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
+              baseline: TextBaseline.alphabetic,
+              child: Badge(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                label: Text(item.suffix!),
+              ),
+            ),
+          ],
+          if (item.hasOriginalDate) ...[
+            const TextSpan(text: ' '),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
+              baseline: TextBaseline.alphabetic,
+              child: Badge(
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
+                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                label: Text(item.originalDate!),
+              ),
+            ),
+          ],
+          if (item.hasYcBatch) ...[
+            const TextSpan(text: ' '),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
+              baseline: TextBaseline.alphabetic,
+              child: Badge(
+                backgroundColor:
+                    Theme.of(context).colorScheme.tertiaryContainer,
+                textColor: Theme.of(context).colorScheme.onTertiaryContainer,
+                label: Text(item.ycBatch!),
+              ),
+            ),
+          ],
+          if (style.showUrlHost && useLargeStoryStyle)
+            if (item.url case final url?) ...[
+              const TextSpan(text: ' '),
+              TextSpan(
+                text: '(',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              TextSpan(
+                text: url.host,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              TextSpan(
+                text: ')',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              // Attach zero-width space of title style to
+              // enforce height.
+              const TextSpan(text: '\u200b'),
+            ],
+          if (useLargeStoryStyle) const TextSpan(text: '\n'),
+        ],
       ),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+}
+
+class _ItemFavicon extends StatelessWidget {
+  const _ItemFavicon(
+    this.item, {
+    required this.isLarge,
+  });
+
+  final Item item;
+  final bool isLarge;
+
+  int get _faviconSize => min(isLarge ? 2 * 24 : 20, _faviconRequestSize);
+
+  @override
+  Widget build(BuildContext context) {
+    return Ink.image(
+      image: ResizeImage(
+        NetworkImage(
+          item.faviconUrl(size: _faviconRequestSize)!,
+        ),
+        width: _faviconSize,
+        height: _faviconSize,
+        policy: ResizeImagePolicy.fit,
+      ),
+      width: _faviconSize.toDouble(),
+      height: _faviconSize.toDouble(),
     );
   }
 }

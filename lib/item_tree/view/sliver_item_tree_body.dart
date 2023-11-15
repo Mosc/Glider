@@ -114,10 +114,10 @@ class _SliverItemTreeBodyState extends State<SliverItemTreeBody> {
       child: ItemTile(
         _itemCubits[descendant.id]!,
         widget._authCubit,
+        widget._settingsCubit,
         key: ValueKey(descendant.id),
         storyUsername: widget.storyUsername,
         loadingType: ItemType.comment,
-        useActionButtons: settingsState.useActionButtons,
         collapsedCount: state.collapsedIds.contains(descendant.id)
             ? state.getDescendants(descendant)?.length
             : null,

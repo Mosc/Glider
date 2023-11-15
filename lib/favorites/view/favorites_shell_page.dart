@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
@@ -51,6 +52,7 @@ class _FavoritesShellPageState extends State<FavoritesShellPage> {
           _SliverFavoritesAppBar(
             widget._favoritesCubit,
             widget._authCubit,
+            widget._settingsCubit,
           ),
           SliverSafeArea(
             top: false,
@@ -61,6 +63,9 @@ class _FavoritesShellPageState extends State<FavoritesShellPage> {
               widget._settingsCubit,
             ),
           ),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
+          ),
         ],
       ),
     );
@@ -68,10 +73,15 @@ class _FavoritesShellPageState extends State<FavoritesShellPage> {
 }
 
 class _SliverFavoritesAppBar extends StatelessWidget {
-  const _SliverFavoritesAppBar(this._favoritesCubit, this._authCubit);
+  const _SliverFavoritesAppBar(
+    this._favoritesCubit,
+    this._authCubit,
+    this._settingsCubit,
+  );
 
   final FavoritesCubit _favoritesCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +91,24 @@ class _SliverFavoritesAppBar extends StatelessWidget {
       actions: [
         BlocBuilder<AuthCubit, AuthState>(
           bloc: _authCubit,
-          buildWhen: (previous, current) =>
-              previous.isLoggedIn != current.isLoggedIn,
-          builder: (context, authState) => MenuAnchor(
-            menuChildren: [
-              for (final action in NavigationShellAction.values)
-                if (action.isVisible(null, authState))
-                  MenuItemButton(
-                    onPressed: () async => action.execute(context),
-                    child: Text(action.label(context, null)),
-                  ),
-            ],
-            builder: (context, controller, child) => IconButton(
-              icon: Icon(Icons.adaptive.more_outlined),
-              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-              onPressed: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
+          builder: (context, authState) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: _settingsCubit,
+            builder: (context, settingsState) => MenuAnchor(
+              menuChildren: [
+                for (final action in NavigationShellAction.values)
+                  if (action.isVisible(null, authState, settingsState))
+                    MenuItemButton(
+                      onPressed: () async => action.execute(context),
+                      child: Text(action.label(context, null)),
+                    ),
+              ],
+              builder: (context, controller, child) => IconButton(
+                icon: Icon(Icons.adaptive.more_outlined),
+                tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+                onPressed: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+              ),
             ),
           ),
         ),
@@ -141,11 +153,10 @@ class _SliverFavoritesBody extends StatelessWidget {
                 ItemTile.create(
                   _itemCubitFactory,
                   _authCubit,
-                  key: ValueKey<int>(id),
+                  _settingsCubit,
+                  key: ValueKey(id),
                   id: id,
                   loadingType: ItemType.story,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  useActionButtons: settingsState.useActionButtons,
                   onTap: (context, item) async => context.push(
                     AppRoute.item.location(parameters: {'id': id}),
                   ),

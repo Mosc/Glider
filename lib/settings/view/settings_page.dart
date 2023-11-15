@@ -1,15 +1,18 @@
 import 'package:clock/clock.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ThemeMode;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/widgets/preview_card.dart';
 import 'package:glider/item/models/item_style.dart';
+import 'package:glider/item/models/vote_type.dart';
 import 'package:glider/item/widgets/item_data_tile.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:glider/settings/extensions/theme_mode_extension.dart';
 import 'package:glider/settings/extensions/variant_extension.dart';
+import 'package:glider/settings/widgets/menu_list_tile.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
@@ -87,10 +90,24 @@ class _SettingsBody extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           ),
           SwitchListTile.adaptive(
+            value: state.showFavicons,
+            onChanged: _settingsCubit.setShowFavicons,
+            title: Text(context.l10n.favicons),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          SwitchListTile.adaptive(
             value: state.showStoryMetadata,
             onChanged: _settingsCubit.setShowStoryMetadata,
             title: Text(context.l10n.storyMetadata),
             subtitle: Text(context.l10n.storyMetadataDescription),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          SwitchListTile.adaptive(
+            value: state.showUserAvatars,
+            onChanged: _settingsCubit.setShowUserAvatars,
+            title: Text(context.l10n.userAvatars),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           ),
@@ -101,6 +118,14 @@ class _SettingsBody extends StatelessWidget {
             subtitle: Text(context.l10n.actionButtonsDescription),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          MenuListTile(
+            title: Text(context.l10n.themeMode),
+            trailing: Text(state.themeMode.capitalizedLabel),
+            onChanged: (value) async => _settingsCubit.setThemeMode(value),
+            values: ThemeMode.values,
+            selected: (value) => state.themeMode == value,
+            labelBuilder: (value) => value.capitalizedLabel,
           ),
           SwitchListTile.adaptive(
             value: state.useDynamicTheme,
@@ -126,30 +151,14 @@ class _SettingsBody extends StatelessWidget {
               if (value != null) await _settingsCubit.setThemeColor(value);
             },
           ),
-          MenuAnchor(
-            style: Theme.of(context)
-                .menuTheme
-                .style
-                ?.copyWith(alignment: AlignmentDirectional.bottomEnd),
-            menuChildren: [
-              for (final variant in Variant.values)
-                MenuItemButton(
-                  onPressed: () async =>
-                      _settingsCubit.setThemeVariant(variant),
-                  leadingIcon: Visibility.maintain(
-                    visible: state.themeVariant == variant,
-                    child: const Icon(Icons.check_outlined),
-                  ),
-                  child: Text(variant.capitalizedLabel),
-                ),
-            ],
-            builder: (context, controller, child) => ListTile(
-              title: Text(context.l10n.themeVariant),
-              trailing: Text(state.themeVariant.capitalizedLabel),
-              enabled: !state.useDynamicTheme,
-              onTap: () async =>
-                  controller.isOpen ? controller.close() : controller.open(),
-            ),
+          MenuListTile(
+            title: Text(context.l10n.themeVariant),
+            trailing: Text(state.themeVariant.capitalizedLabel),
+            enabled: !state.useDynamicTheme,
+            onChanged: (value) async => _settingsCubit.setThemeVariant(value),
+            values: Variant.values,
+            selected: (value) => state.themeVariant == value,
+            labelBuilder: (value) => value.capitalizedLabel,
           ),
           SwitchListTile.adaptive(
             value: state.usePureBackground,
@@ -181,9 +190,11 @@ class _SettingsBody extends StatelessWidget {
                       score: 42,
                       descendantCount: 7,
                     ),
-                    upvoted: true,
+                    vote: VoteType.upvote,
                     useLargeStoryStyle: state.useLargeStoryStyle,
+                    showFavicons: state.showFavicons,
                     showMetadata: state.showStoryMetadata,
+                    showUserAvatars: state.showUserAvatars,
                     style: ItemStyle.overview,
                     onTapFavorite: state.useActionButtons ? () {} : null,
                     onTapUpvote: state.useActionButtons ? () {} : null,
@@ -215,6 +226,14 @@ class _SettingsBody extends StatelessWidget {
             onChanged: _settingsCubit.setUseThreadNavigation,
             title: Text(context.l10n.threadNavigation),
             subtitle: Text(context.l10n.threadNavigationDescription),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          ),
+          SwitchListTile.adaptive(
+            value: state.enableDownvoting,
+            onChanged: _settingsCubit.setEnableDownvoting,
+            title: Text(context.l10n.downvoting),
+            subtitle: Text(context.l10n.downvotingDescription),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           ),

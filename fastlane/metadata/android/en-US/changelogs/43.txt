@@ -1,0 +1,6 @@
+- Added setting to enable downvoting
+- Added theme mode setting to force light or dark theme
+- Moved favicon in thread view down to provide more space for title
+- Changed Android versions below 12 to show glowing overscroll indicator
+- Fixed system navigation bar color on Android versions below 10
+- Fixed themed icons rendering blank at some densities

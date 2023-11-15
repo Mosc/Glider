@@ -6,11 +6,13 @@ class UsernameWidget extends StatelessWidget {
   const UsernameWidget({
     super.key,
     required this.username,
+    this.showAvatar = true,
     this.style = UsernameStyle.none,
     this.onTap,
   });
 
   final String username;
+  final bool showAvatar;
   final UsernameStyle style;
   final VoidCallback? onTap;
 
@@ -39,7 +41,7 @@ class UsernameWidget extends StatelessWidget {
     );
 
     return switch (style) {
-      UsernameStyle.loggedInUser => FilledButton.icon(
+      UsernameStyle.loggedInUser when showAvatar => FilledButton.icon(
           onPressed: onPressed,
           onLongPress: onLongPress,
           style: FilledButton.styleFrom(
@@ -50,7 +52,17 @@ class UsernameWidget extends StatelessWidget {
           icon: icon,
           label: label,
         ),
-      UsernameStyle.storyUser => FilledButton.tonalIcon(
+      UsernameStyle.loggedInUser => FilledButton(
+          onPressed: onPressed,
+          onLongPress: onLongPress,
+          style: FilledButton.styleFrom(
+            padding: padding,
+            visualDensity: visualDensity,
+            tapTargetSize: tapTargetSize,
+          ),
+          child: label,
+        ),
+      UsernameStyle.storyUser when showAvatar => FilledButton.tonalIcon(
           onPressed: onPressed,
           onLongPress: onLongPress,
           style: FilledButton.styleFrom(
@@ -61,7 +73,17 @@ class UsernameWidget extends StatelessWidget {
           icon: icon,
           label: label,
         ),
-      UsernameStyle.none => ElevatedButton.icon(
+      UsernameStyle.storyUser => FilledButton(
+          onPressed: onPressed,
+          onLongPress: onLongPress,
+          style: FilledButton.styleFrom(
+            padding: padding,
+            visualDensity: visualDensity,
+            tapTargetSize: tapTargetSize,
+          ),
+          child: label,
+        ),
+      UsernameStyle.none when showAvatar => ElevatedButton.icon(
           onPressed: onPressed,
           onLongPress: onLongPress,
           style: ElevatedButton.styleFrom(
@@ -71,6 +93,16 @@ class UsernameWidget extends StatelessWidget {
           ),
           icon: icon,
           label: label,
+        ),
+      UsernameStyle.none => ElevatedButton(
+          onPressed: onPressed,
+          onLongPress: onLongPress,
+          style: ElevatedButton.styleFrom(
+            padding: padding,
+            visualDensity: visualDensity,
+            tapTargetSize: tapTargetSize,
+          ),
+          child: label,
         ),
     };
   }

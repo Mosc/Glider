@@ -189,15 +189,13 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
   }
 
   Widget _buildBody(BuildContext context, {Widget? floatingActionButton}) {
-    double? calculateBottomPadding(EdgeInsets padding) =>
-        Breakpoints.small.isActive(context)
-            ? max(0, padding.bottom - _currentNavigationBarHeightNotifier.value)
-            : null;
-
     final directionality = Directionality.of(context);
     final mediaQuery = MediaQuery.of(context);
     final padding = mediaQuery.padding;
     final viewPadding = mediaQuery.viewPadding;
+    final isSmallBreakpointActive = Breakpoints.small.isActive(context);
+    final isMediumAndUpBreakpointActive =
+        Breakpoints.mediumAndUp.isActive(context);
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
@@ -228,30 +226,37 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
       },
       child: ValueListenableBuilder(
         valueListenable: _currentNavigationBarHeightNotifier,
-        builder: (context, currentNavigationBarHeight, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            padding: padding.copyWith(
-              left: Breakpoints.mediumAndUp.isActive(context) &&
-                      directionality == TextDirection.ltr
-                  ? 0
-                  : null,
-              right: Breakpoints.mediumAndUp.isActive(context) &&
-                      directionality == TextDirection.rtl
-                  ? 0
-                  : null,
-              bottom: calculateBottomPadding(padding),
+        builder: (context, currentNavigationBarHeight, child) {
+          double? calculateBottomPadding(EdgeInsets padding) =>
+              isSmallBreakpointActive
+                  ? max(0, padding.bottom - currentNavigationBarHeight)
+                  : null;
+
+          return MediaQuery(
+            data: mediaQuery.copyWith(
+              padding: padding.copyWith(
+                left: isMediumAndUpBreakpointActive &&
+                        directionality == TextDirection.ltr
+                    ? 0
+                    : null,
+                right: isMediumAndUpBreakpointActive &&
+                        directionality == TextDirection.rtl
+                    ? 0
+                    : null,
+                bottom: calculateBottomPadding(padding),
+              ),
+              viewPadding: viewPadding.copyWith(
+                bottom: calculateBottomPadding(viewPadding),
+              ),
+              viewInsets: EdgeInsets.zero,
             ),
-            viewPadding: viewPadding.copyWith(
-              bottom: calculateBottomPadding(viewPadding),
-            ),
-            viewInsets: EdgeInsets.zero,
-          ),
-          child: child!,
-        ),
+            child: child!,
+          );
+        },
         child: Scaffold(
           body: widget._navigationShell,
           floatingActionButton:
-              Breakpoints.small.isActive(context) ? floatingActionButton : null,
+              isSmallBreakpointActive ? floatingActionButton : null,
         ),
       ),
     );
@@ -261,19 +266,17 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
     BuildContext context,
     List<NavigationDestination> destinations,
   ) {
-    return ClipRect(
-      child: ValueListenableBuilder(
-        valueListenable: _currentNavigationBarHeightNotifier,
-        builder: (context, currentNavigationBarHeight, child) => Align(
-          heightFactor: currentNavigationBarHeight / _paddedNavigationBarHeight,
-          alignment: Alignment.topCenter,
-          child: child,
-        ),
-        child: AdaptiveScaffold.standardBottomNavigationBar(
-          currentIndex: _currentIndex,
-          destinations: destinations,
-          onDestinationSelected: onDestinationSelected,
-        ),
+    return ValueListenableBuilder(
+      valueListenable: _currentNavigationBarHeightNotifier,
+      builder: (context, currentNavigationBarHeight, child) => Align(
+        heightFactor: currentNavigationBarHeight / _paddedNavigationBarHeight,
+        alignment: Alignment.topCenter,
+        child: child,
+      ),
+      child: AdaptiveScaffold.standardBottomNavigationBar(
+        currentIndex: _currentIndex,
+        destinations: destinations,
+        onDestinationSelected: onDestinationSelected,
       ),
     );
   }

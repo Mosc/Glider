@@ -4,6 +4,7 @@ class UserState with DataMixin<User>, EquatableMixin {
   const UserState({
     this.status = Status.initial,
     this.data,
+    this.parsedAbout,
     this.blocked = false,
     this.synchronizing = false,
     this.exception,
@@ -25,6 +26,7 @@ class UserState with DataMixin<User>, EquatableMixin {
   final Status status;
   @override
   final User? data;
+  final ParsedData? parsedAbout;
   final bool blocked;
   final bool synchronizing;
   @override
@@ -33,6 +35,7 @@ class UserState with DataMixin<User>, EquatableMixin {
   UserState copyWith({
     Status Function()? status,
     User? Function()? data,
+    ParsedData? Function()? parsedAbout,
     bool Function()? blocked,
     bool Function()? synchronizing,
     Object? Function()? exception,
@@ -40,6 +43,7 @@ class UserState with DataMixin<User>, EquatableMixin {
       UserState(
         status: status != null ? status() : this.status,
         data: data != null ? data() : this.data,
+        parsedAbout: parsedAbout != null ? parsedAbout() : this.parsedAbout,
         blocked: blocked != null ? blocked() : this.blocked,
         synchronizing:
             synchronizing != null ? synchronizing() : this.synchronizing,
@@ -50,6 +54,7 @@ class UserState with DataMixin<User>, EquatableMixin {
   List<Object?> get props => [
         status,
         data,
+        parsedAbout,
         blocked,
         synchronizing,
         exception,

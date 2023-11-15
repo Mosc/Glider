@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
+import 'package:glider/common/widgets/hacker_news_text.dart';
+import 'package:glider/item/models/vote_type.dart';
 import 'package:glider_data/glider_data.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -44,6 +46,10 @@ class ItemCubit extends HydratedCubit<ItemState> {
           state.copyWith(
             status: () => Status.success,
             data: () => item,
+            parsedText: () => switch (item.text) {
+              final String text => HackerNewsText.parse(text),
+              _ => null,
+            },
             exception: () => null,
           ),
         );
@@ -63,7 +69,24 @@ class ItemCubit extends HydratedCubit<ItemState> {
     );
     _upvotedSubscription = _itemInteractionRepository.upvotedStream.listen(
       (upvoted) => safeEmit(
-        state.copyWith(upvoted: () => upvoted.contains(itemId)),
+        state.copyWith(
+          vote: () => upvoted.contains(itemId)
+              ? VoteType.upvote
+              : state.vote.upvoted
+                  ? null
+                  : state.vote,
+        ),
+      ),
+    );
+    _downvotedSubscription = _itemInteractionRepository.downvotedStream.listen(
+      (downvoted) => safeEmit(
+        state.copyWith(
+          vote: () => downvoted.contains(itemId)
+              ? VoteType.downvote
+              : state.vote.downvoted
+                  ? null
+                  : state.vote,
+        ),
       ),
     );
     _favoritedSubscription = _itemInteractionRepository.favoritedStream.listen(
@@ -86,6 +109,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
   late final StreamSubscription<Item> _itemSubscription;
   late final StreamSubscription<Map<int, DateTime?>> _visitedSubscription;
   late final StreamSubscription<List<int>> _upvotedSubscription;
+  late final StreamSubscription<List<int>> _downvotedSubscription;
   late final StreamSubscription<List<int>> _favoritedSubscription;
   late final StreamSubscription<List<int>> _flaggedSubscription;
   StreamSubscription<List<String>>? _blockedSubscription;
@@ -116,16 +140,33 @@ class ItemCubit extends HydratedCubit<ItemState> {
   }
 
   Future<void> upvote(bool upvote) async {
-    final upvoted = state.upvoted;
+    final vote = state.vote;
     safeEmit(
-      state.copyWith(upvoted: () => upvote),
+      state.copyWith(vote: () => VoteType.upvote),
     );
     final success =
         await _itemInteractionRepository.upvote(itemId, upvote: upvote);
 
     if (!success) {
       safeEmit(
-        state.copyWith(upvoted: () => upvoted),
+        state.copyWith(vote: () => vote),
+      );
+    } else {
+      await load();
+    }
+  }
+
+  Future<void> downvote(bool downvote) async {
+    final vote = state.vote;
+    safeEmit(
+      state.copyWith(vote: () => VoteType.downvote),
+    );
+    final success =
+        await _itemInteractionRepository.downvote(itemId, downvote: downvote);
+
+    if (!success) {
+      safeEmit(
+        state.copyWith(vote: () => vote),
       );
     } else {
       await load();
@@ -203,6 +244,7 @@ class ItemCubit extends HydratedCubit<ItemState> {
     await _itemSubscription.cancel();
     await _visitedSubscription.cancel();
     await _upvotedSubscription.cancel();
+    await _downvotedSubscription.cancel();
     await _favoritedSubscription.cancel();
     await _flaggedSubscription.cancel();
     await _blockedSubscription?.cancel();
