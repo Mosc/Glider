@@ -15,6 +15,9 @@ class StoriesSearchRangeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<StoriesSearchBloc, StoriesSearchState>(
       bloc: _storiesSearchBloc,
+      listenWhen: (previous, current) =>
+          previous.searchRange != current.searchRange ||
+          previous.dateRange != current.dateRange,
       listener: (context, state) async {
         if (state.searchRange == SearchRange.custom &&
             state.dateRange == null) {
