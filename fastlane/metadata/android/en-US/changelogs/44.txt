@@ -1,0 +1,8 @@
+- Added font setting
+- Added setting to disable favicons
+- Added setting to disable user avatars
+- Changed font used for code to be smaller
+- Fixed gray screen appearing upon opening deeplinks
+- Fixed custom date range picker opening more than once
+- Added bottom padding to pages with floating action buttons
+- Improved error handling slightly by showing a snackbar on errors
