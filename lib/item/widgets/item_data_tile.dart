@@ -116,7 +116,7 @@ class ItemDataTile extends StatelessWidget {
       child: Padding(
         padding: padding,
         child: Opacity(
-          opacity: visited ? 0.75 : 1,
+          opacity: visited ? 2 / 3 : 1,
           child: AnimatedSize(
             alignment: Alignment.topCenter,
             duration: AppAnimation.emphasized.duration,
