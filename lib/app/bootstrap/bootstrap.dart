@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +11,7 @@ import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/router/app_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:universal_io/io.dart';
 
 Future<void> bootstrap(
   FutureOr<Widget> Function(AppContainer, AppRouter, BaseDeviceInfo) builder,
