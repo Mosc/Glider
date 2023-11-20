@@ -146,36 +146,40 @@ class _SliverInboxBody extends StatelessWidget {
             itemBuilder: (context, index) =>
                 const ItemLoadingTile(type: ItemType.comment),
           ),
-          nonEmpty: () => SliverList.list(
-            children: [
-              for (final (parentId, id) in state.data!) ...[
-                ItemTile.create(
-                  _itemCubitFactory,
-                  _authCubit,
-                  _settingsCubit,
-                  key: ValueKey(parentId),
-                  id: parentId,
-                  loadingType: ItemType.story,
-                  onTap: (context, item) async => context.push(
-                    AppRoute.item.location(parameters: {'id': id}),
-                  ),
-                ),
-                IndentedWidget(
-                  depth: 1,
-                  child: ItemTile.create(
+          nonEmpty: () => SliverList.builder(
+            itemCount: state.data!.length,
+            itemBuilder: (context, index) {
+              final (parentId, id) = state.data![index];
+              return Column(
+                children: [
+                  ItemTile.create(
                     _itemCubitFactory,
                     _authCubit,
                     _settingsCubit,
-                    key: ValueKey(id),
-                    id: id,
-                    loadingType: ItemType.comment,
+                    key: ValueKey(parentId),
+                    id: parentId,
+                    loadingType: ItemType.story,
                     onTap: (context, item) async => context.push(
                       AppRoute.item.location(parameters: {'id': id}),
                     ),
                   ),
-                ),
-              ],
-            ],
+                  IndentedWidget(
+                    depth: 1,
+                    child: ItemTile.create(
+                      _itemCubitFactory,
+                      _authCubit,
+                      _settingsCubit,
+                      key: ValueKey(id),
+                      id: id,
+                      loadingType: ItemType.comment,
+                      onTap: (context, item) async => context.push(
+                        AppRoute.item.location(parameters: {'id': id}),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           onRetry: () async => _inboxCubit.load(),
         ),

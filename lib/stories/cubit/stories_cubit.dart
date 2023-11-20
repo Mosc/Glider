@@ -12,7 +12,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 part 'stories_state.dart';
 
 class StoriesCubit extends HydratedCubit<StoriesState> {
-  StoriesCubit(this._itemRepository) : super(const StoriesState());
+  StoriesCubit(this._itemRepository) : super(StoriesState());
 
   final ItemRepository _itemRepository;
 

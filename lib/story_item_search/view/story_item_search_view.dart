@@ -64,23 +64,24 @@ class _SliverStoryItemSearchBody extends StatelessWidget {
     return BlocBuilder<StoryItemSearchBloc, StoryItemSearchState>(
       bloc: _storyItemSearchBloc,
       builder: (context, state) => state.whenOrDefaultSlivers(
-        nonEmpty: () => SliverList.list(
-          children: [
-            for (final id in state.data!)
-              ItemTile.create(
-                _itemCubitFactory,
-                _authCubit,
-                _settingsCubit,
-                key: ValueKey(id),
-                id: id,
-                loadingType: _storyItemSearchBloc.itemId == id
-                    ? ItemType.story
-                    : ItemType.comment,
-                onTap: (context, item) async => context.push(
-                  AppRoute.item.location(parameters: {'id': id}),
-                ),
+        nonEmpty: () => SliverList.builder(
+          itemCount: state.data!.length,
+          itemBuilder: (context, index) {
+            final id = state.data![index];
+            return ItemTile.create(
+              _itemCubitFactory,
+              _authCubit,
+              _settingsCubit,
+              key: ValueKey(id),
+              id: id,
+              loadingType: _storyItemSearchBloc.itemId == id
+                  ? ItemType.story
+                  : ItemType.comment,
+              onTap: (context, item) async => context.push(
+                AppRoute.item.location(parameters: {'id': id}),
               ),
-          ],
+            );
+          },
         ),
         onRetry: () async =>
             _storyItemSearchBloc.add(const LoadStoryItemSearchEvent()),

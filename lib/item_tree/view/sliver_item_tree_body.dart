@@ -92,11 +92,13 @@ class _SliverItemTreeBodyState extends State<SliverItemTreeBody> {
             ),
             itemCount: widget.childCount,
           ),
-          nonEmpty: () => SliverList.list(
-            children: [
-              for (final descendant in state.viewableData!)
-                _buildItemTile(descendant, state, settingsState),
-            ],
+          nonEmpty: () => SliverList.builder(
+            itemCount: state.viewableData!.length,
+            itemBuilder: (context, index) => _buildItemTile(
+              state.viewableData![index],
+              state,
+              settingsState,
+            ),
           ),
           onRetry: () async => widget._itemTreeCubit.load(),
         ),

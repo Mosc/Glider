@@ -49,23 +49,24 @@ class SliverStoriesSearchBody extends StatelessWidget {
           ),
           nonEmpty: () => SliverMainAxisGroup(
             slivers: [
-              SliverList.list(
-                children: [
-                  for (final id in state.loadedData!)
-                    ItemTile.create(
-                      _itemCubitFactory,
-                      _authCubit,
-                      _settingsCubit,
-                      key: ValueKey(id),
-                      id: id,
-                      loadingType: ItemType.story,
-                      showMetadata: settingsState.showStoryMetadata,
-                      style: ItemStyle.overview,
-                      onTap: (context, item) async => context.push(
-                        AppRoute.item.location(parameters: {'id': id}),
-                      ),
+              SliverList.builder(
+                itemCount: state.loadedData!.length,
+                itemBuilder: (context, index) {
+                  final id = state.loadedData![index];
+                  return ItemTile.create(
+                    _itemCubitFactory,
+                    _authCubit,
+                    _settingsCubit,
+                    key: ValueKey(id),
+                    id: id,
+                    loadingType: ItemType.story,
+                    showMetadata: settingsState.showStoryMetadata,
+                    style: ItemStyle.overview,
+                    onTap: (context, item) async => context.push(
+                      AppRoute.item.location(parameters: {'id': id}),
                     ),
-                ],
+                  );
+                },
               ),
               if (state.loadedData!.length < state.data!.length)
                 SliverPadding(

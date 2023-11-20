@@ -23,7 +23,7 @@ EventTransformer<Event> debounce<Event>(Duration duration) =>
 class StoriesSearchBloc
     extends HydratedBloc<StoriesSearchEvent, StoriesSearchState> {
   StoriesSearchBloc(this._itemRepository, {this.searchType = SearchType.search})
-      : super(const StoriesSearchState()) {
+      : super(StoriesSearchState()) {
     on<LoadStoriesSearchEvent>(
       (event, emit) async => _load(),
       transformer: debounce(_debounceDuration),

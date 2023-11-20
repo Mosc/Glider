@@ -2,7 +2,7 @@ part of 'stories_cubit.dart';
 
 class StoriesState
     with DataMixin<List<int>>, PaginatedListMixin, EquatableMixin {
-  const StoriesState({
+  StoriesState({
     this.status = Status.initial,
     this.data,
     this.page = 1,
@@ -33,6 +33,13 @@ class StoriesState
   final StoryType storyType;
   @override
   final Object? exception;
+
+  @override
+  late List<int>? loadedData = super.loadedData?.toList(growable: false);
+
+  @override
+  late List<int>? currentPageData =
+      super.currentPageData?.toList(growable: false);
 
   StoriesState copyWith({
     Status Function()? status,

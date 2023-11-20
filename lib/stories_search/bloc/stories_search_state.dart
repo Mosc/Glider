@@ -2,7 +2,7 @@ part of 'stories_search_bloc.dart';
 
 class StoriesSearchState
     with DataMixin<List<int>>, PaginatedListMixin, EquatableMixin {
-  const StoriesSearchState({
+  StoriesSearchState({
     this.status = Status.initial,
     this.data,
     this.page = 1,
@@ -56,6 +56,13 @@ class StoriesSearchState
   final DateTimeRange? dateRange;
   @override
   final Object? exception;
+
+  @override
+  late List<int>? loadedData = super.loadedData?.toList(growable: false);
+
+  @override
+  late List<int>? currentPageData =
+      super.currentPageData?.toList(growable: false);
 
   StoriesSearchState copyWith({
     Status Function()? status,

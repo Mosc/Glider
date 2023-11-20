@@ -348,21 +348,22 @@ class _SliverUserBody extends StatelessWidget {
               ),
             ),
             if (state.data?.submittedIds case final submittedIds?)
-              SliverList.list(
-                children: [
-                  for (final id in submittedIds)
-                    ItemTile.create(
-                      _itemCubitFactory,
-                      _authCubit,
-                      _settingsCubit,
-                      key: ValueKey(id),
-                      id: id,
-                      loadingType: ItemType.story,
-                      onTap: (context, item) async => context.push(
-                        AppRoute.item.location(parameters: {'id': id}),
-                      ),
+              SliverList.builder(
+                itemCount: submittedIds.length,
+                itemBuilder: (context, index) {
+                  final id = submittedIds[index];
+                  return ItemTile.create(
+                    _itemCubitFactory,
+                    _authCubit,
+                    _settingsCubit,
+                    key: ValueKey(id),
+                    id: id,
+                    loadingType: ItemType.story,
+                    onTap: (context, item) async => context.push(
+                      AppRoute.item.location(parameters: {'id': id}),
                     ),
-                ],
+                  );
+                },
               ),
           ],
         ),

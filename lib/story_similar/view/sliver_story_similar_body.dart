@@ -69,29 +69,30 @@ class SliverStorySimilarBody extends StatelessWidget {
                 ),
               ),
             ),
-            SliverList.list(
-              children: [
-                for (final id in state.data!)
-                  Padding(
-                    padding: AppSpacing.defaultShadowPadding,
-                    child: Material(
-                      type: MaterialType.transparency,
-                      child: ItemTile.create(
-                        _itemCubitFactory,
-                        _authCubit,
-                        _settingsCubit,
-                        key: ValueKey(id),
-                        id: id,
-                        storyUsername: storyUsername,
-                        loadingType: ItemType.story,
-                        style: ItemStyle.primary,
-                        onTap: (context, item) async => context.push(
-                          AppRoute.item.location(parameters: {'id': id}),
-                        ),
+            SliverList.builder(
+              itemCount: state.data!.length,
+              itemBuilder: (context, index) {
+                final id = state.data![index];
+                return Padding(
+                  padding: AppSpacing.defaultShadowPadding,
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: ItemTile.create(
+                      _itemCubitFactory,
+                      _authCubit,
+                      _settingsCubit,
+                      key: ValueKey(id),
+                      id: id,
+                      storyUsername: storyUsername,
+                      loadingType: ItemType.story,
+                      style: ItemStyle.primary,
+                      onTap: (context, item) async => context.push(
+                        AppRoute.item.location(parameters: {'id': id}),
                       ),
                     ),
                   ),
-              ],
+                );
+              },
             ),
           ],
         ),
