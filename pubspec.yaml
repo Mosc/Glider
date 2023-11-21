@@ -1,6 +1,6 @@
 name: glider
 description: An opinionated Hacker News client.
-version: 2.3.0+44
+version: 2.4.0+45
 publish_to: none
 
 environment:
