@@ -159,7 +159,6 @@ class ItemDataTile extends StatelessWidget {
               if (item.url != null && showFavicons)
                 AnimatedVisibility(
                   visible: style == ItemStyle.overview,
-                  alignment: AlignmentDirectional.centerEnd,
                   child: InkWell(
                     onTap: () async => item.url!.tryLaunch(),
                     // Explicitly override parent widget's long press.
