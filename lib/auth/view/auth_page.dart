@@ -109,7 +109,7 @@ class _AuthPageState extends State<AuthPage> {
                     ),
                     webViewSettings: InAppWebViewSettings(
                       isInspectable: kDebugMode,
-                      incognito: true,
+                      clearCache: true,
                     ),
                   ),
                   urlRequest: URLRequest(
