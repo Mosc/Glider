@@ -129,6 +129,11 @@ class SharedPreferencesService {
   Future<List<int>> getVisitedIds() async =>
       [...?_sharedPreferences.getStringList(_visitedKey)?.map(int.parse)];
 
+  Future<bool> setVisitedIds({required Iterable<int> ids}) async {
+    return _sharedPreferences
+        .setStringList(_visitedKey, [...ids.map((id) => id.toString())]);
+  }
+
   Future<bool> getUpvoted({required int id}) async =>
       _sharedPreferences.containsElement(_upvotedKey, id.toString());
 

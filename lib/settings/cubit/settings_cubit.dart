@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider_domain/glider_domain.dart';
@@ -10,9 +11,11 @@ import 'package:material_color_utilities/scheme/variant.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:share_plus/share_plus.dart';
 
+part 'settings_cubit_event.dart';
 part 'settings_state.dart';
 
-class SettingsCubit extends Cubit<SettingsState> {
+class SettingsCubit extends Cubit<SettingsState>
+    with BlocPresentationMixin<SettingsState, SettingsCubitEvent> {
   SettingsCubit(
     this._settingsRepository,
     this._packageRepository,
@@ -225,6 +228,19 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> exportFavorites() async {
     final favorites = await _itemInteractionRepository.favoritedStream.first;
-    await Share.share(jsonEncode(favorites));
+
+    try {
+      await Share.share(jsonEncode(favorites));
+    } on Object {
+      emitPresentation(const SettingsActionFailedEvent());
+    }
+  }
+
+  Future<void> clearVisited() async {
+    final success = await _itemInteractionRepository.clearVisited();
+
+    if (!success) {
+      emitPresentation(const SettingsActionFailedEvent());
+    }
   }
 }

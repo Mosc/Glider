@@ -229,4 +229,14 @@ class ItemInteractionRepository {
       return false;
     }
   }
+
+  Future<bool> clearVisited() async {
+    try {
+      await _sharedPreferencesService.setVisitedIds(ids: []);
+      await getVisitedIds();
+      return true;
+    } on Object {
+      return false;
+    }
+  }
 }
