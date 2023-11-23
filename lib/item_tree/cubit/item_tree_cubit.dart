@@ -56,15 +56,24 @@ class ItemTreeCubit extends HydratedCubit<ItemTreeState> {
         cancelOnError: true,
       );
     } else {
-      final descendants = await descendantsStream.last;
-      safeEmit(
-        state.copyWith(
-          status: () => Status.success,
-          data: () => descendants,
-          previousData: () => state.data,
-          exception: () => null,
-        ),
-      );
+      try {
+        final descendants = await descendantsStream.last;
+        safeEmit(
+          state.copyWith(
+            status: () => Status.success,
+            data: () => descendants,
+            previousData: () => state.data,
+            exception: () => null,
+          ),
+        );
+      } on Object catch (exception) {
+        safeEmit(
+          state.copyWith(
+            status: () => Status.failure,
+            exception: () => exception,
+          ),
+        );
+      }
     }
   }
 
