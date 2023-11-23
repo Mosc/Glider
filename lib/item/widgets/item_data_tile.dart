@@ -310,7 +310,7 @@ class ItemDataTile extends StatelessWidget {
               child: MetadataWidget(
                 label: Tooltip(
                   message: dateTime.toString(),
-                  child: Text(item.dateTime!.relativeTime(context)),
+                  child: Text(dateTime.relativeTime(context)),
                 ),
               ),
             ),
