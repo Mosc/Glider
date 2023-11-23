@@ -108,9 +108,11 @@ class AppRouter {
           ),
           GoRoute(
             path: AppRoute.whatsNew.path,
-            pageBuilder: (context, state) => const MaterialPage<void>(
+            pageBuilder: (context, state) => MaterialPage<void>(
               fullscreenDialog: true,
-              child: WhatsNewPage(),
+              child: WhatsNewPage(
+                appContainer.settingsCubit,
+              ),
             ),
             parentNavigatorKey: rootNavigatorKey,
           ),

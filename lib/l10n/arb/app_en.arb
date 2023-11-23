@@ -36,6 +36,8 @@
     "threadNavigationDescription": "Allows jumps between top-level comments",
     "downvoting": "Enable downvoting",
     "downvotingDescription": "Requires an account with 501+ karma",
+    "inAppBrowser": "Custom tabs",
+    "inAppBrowserDescription": "Opens links in in-app browser if possible",
     "data": "Data",
     "exportFavorites": "Export favorites",
     "exportFavoritesDescription": "Shares favorites as IDs in JSON format",

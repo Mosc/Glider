@@ -96,4 +96,10 @@ class SettingsRepository {
 
   Future<bool> setEnableDownvoting({required bool value}) async =>
       _sharedPreferencesService.setEnableDownvoting(value: value);
+
+  Future<bool?> getUseInAppBrowser() async =>
+      _sharedPreferencesService.getUseInAppBrowser();
+
+  Future<bool> setUseInAppBrowser({required bool value}) async =>
+      _sharedPreferencesService.setUseInAppBrowser(value: value);
 }

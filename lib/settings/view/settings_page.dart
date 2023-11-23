@@ -235,6 +235,7 @@ class _SettingsBody extends StatelessWidget {
                       showMetadata: state.showStoryMetadata,
                       showUserAvatars: state.showUserAvatars,
                       style: ItemStyle.overview,
+                      useInAppBrowser: state.useInAppBrowser,
                       onTapFavorite: state.useActionButtons ? () {} : null,
                       onTapUpvote: state.useActionButtons ? () {} : null,
                     ),
@@ -276,6 +277,14 @@ class _SettingsBody extends StatelessWidget {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             ),
+            SwitchListTile.adaptive(
+              value: state.useInAppBrowser,
+              onChanged: _settingsCubit.setUseInAppBrowser,
+              title: Text(context.l10n.inAppBrowser),
+              subtitle: Text(context.l10n.inAppBrowserDescription),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            ),
             const Divider(),
             Padding(
               padding: AppSpacing.defaultTilePadding,
@@ -314,25 +323,33 @@ class _SettingsBody extends StatelessWidget {
             ListTile(
               title: Text(context.l10n.privacyPolicy),
               trailing: const Icon(Icons.open_in_new_outlined),
-              onTap: _privacyPolicyUrl.tryLaunch,
+              onTap: () => _privacyPolicyUrl.tryLaunch(
+                useInAppBrowser: state.useInAppBrowser,
+              ),
             ),
             ListTile(
               title: Text(context.l10n.license),
               subtitle: const Text(_license),
               trailing: const Icon(Icons.open_in_new_outlined),
-              onTap: _licenseUrl.tryLaunch,
+              onTap: () => _licenseUrl.tryLaunch(
+                useInAppBrowser: state.useInAppBrowser,
+              ),
             ),
             ListTile(
               title: Text(context.l10n.sourceCode),
               subtitle: Text(_sourceCodeUrl.toString()),
               trailing: const Icon(Icons.open_in_new_outlined),
-              onTap: _sourceCodeUrl.tryLaunch,
+              onTap: () => _sourceCodeUrl.tryLaunch(
+                useInAppBrowser: state.useInAppBrowser,
+              ),
             ),
             ListTile(
               title: Text(context.l10n.issueTracker),
               subtitle: Text(_issueTrackerUrl.toString()),
               trailing: const Icon(Icons.open_in_new_outlined),
-              onTap: _issueTrackerUrl.tryLaunch,
+              onTap: () => _issueTrackerUrl.tryLaunch(
+                useInAppBrowser: state.useInAppBrowser,
+              ),
             ),
             ListTile(
               title: Text(

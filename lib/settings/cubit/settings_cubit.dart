@@ -226,6 +226,17 @@ class SettingsCubit extends Cubit<SettingsState>
     }
   }
 
+  Future<void> setUseInAppBrowser(bool value) async {
+    await _settingsRepository.setUseInAppBrowser(value: value);
+    final useInAppBrowser = await _settingsRepository.getUseInAppBrowser();
+
+    if (useInAppBrowser != null) {
+      safeEmit(
+        state.copyWith(useInAppBrowser: () => useInAppBrowser),
+      );
+    }
+  }
+
   Future<void> exportFavorites() async {
     final favorites = await _itemInteractionRepository.favoritedStream.first;
 

@@ -87,14 +87,14 @@ class _AuthPageState extends State<AuthPage> {
               username: state.username!,
             )
           : Scaffold(
-              body: const CustomScrollView(
+              body: CustomScrollView(
                 slivers: [
-                  _SliverAuthAppBar(),
+                  const _SliverAuthAppBar(),
                   SliverSafeArea(
                     top: false,
                     sliver: SliverFillRemaining(
                       hasScrollBody: false,
-                      child: _AuthBody(),
+                      child: _AuthBody(widget._settingsCubit),
                     ),
                   ),
                 ],
@@ -136,7 +136,9 @@ class _SliverAuthAppBar extends StatelessWidget {
 }
 
 class _AuthBody extends StatelessWidget {
-  const _AuthBody();
+  const _AuthBody(this._settingsCubit);
+
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -158,21 +160,27 @@ class _AuthBody extends StatelessWidget {
                   onPressed: () async => Uri.https(
                     'github.com',
                     'Mosc/Glider/blob/master/PRIVACY.md',
-                  ).tryLaunch(),
+                  ).tryLaunch(
+                    useInAppBrowser: _settingsCubit.state.useInAppBrowser,
+                  ),
                   child: Text(context.l10n.privacyPolicy),
                 ),
                 TextButton(
                   onPressed: () async => Uri.https(
                     'www.ycombinator.com',
                     'legal',
-                  ).replace(fragment: 'privacy').tryLaunch(),
+                  ).replace(fragment: 'privacy').tryLaunch(
+                        useInAppBrowser: _settingsCubit.state.useInAppBrowser,
+                      ),
                   child: Text(context.l10n.privacyPolicyYc),
                 ),
                 TextButton(
                   onPressed: () async => Uri.https(
                     'www.ycombinator.com',
                     'legal',
-                  ).replace(fragment: 'tou').tryLaunch(),
+                  ).replace(fragment: 'tou').tryLaunch(
+                        useInAppBrowser: _settingsCubit.state.useInAppBrowser,
+                      ),
                   child: Text(context.l10n.termsOfUseYc),
                 ),
               ],

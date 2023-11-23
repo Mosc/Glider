@@ -292,6 +292,7 @@ class _SubmitPreview extends StatelessWidget {
                     showFavicons: settingsState.showFavicons,
                     showUserAvatars: settingsState.showUserAvatars,
                     usernameStyle: UsernameStyle.loggedInUser,
+                    useInAppBrowser: settingsState.useInAppBrowser,
                   ),
                 ),
               ),

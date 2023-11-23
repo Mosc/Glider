@@ -11,13 +11,15 @@ import 'package:markdown/markdown.dart' as md;
 typedef ParsedData = List<md.Node>;
 
 class HackerNewsText extends StatelessWidget {
-  HackerNewsText(String data)
-      : parsedData = parse(data),
+  HackerNewsText(
+    String data, {
+    ParsedData? parsedData,
+    required this.useInAppBrowser,
+  })  : parsedData = parsedData ?? parse(data),
         super(key: ValueKey(data));
 
-  const HackerNewsText.parsed(this.parsedData, {super.key});
-
   final ParsedData parsedData;
+  final bool useInAppBrowser;
 
   static final _extensionSet = md.ExtensionSet(
     const [
@@ -87,7 +89,10 @@ class HackerNewsText extends StatelessWidget {
       styleSheet: styleSheet,
       onTapLink: (text, href, title) async {
         if (href != null) {
-          await Uri.tryParse(href)?.tryLaunch(title: title);
+          await Uri.tryParse(href)?.tryLaunch(
+            title: title,
+            useInAppBrowser: useInAppBrowser,
+          );
         }
       },
       builders: {'pre': _PreElementBuilder(styleSheet)},

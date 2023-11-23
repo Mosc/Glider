@@ -151,6 +151,7 @@ class _ItemTileState extends State<ItemTile>
                             ? UsernameStyle.storyUser
                             : UsernameStyle.none,
                     padding: widget.padding,
+                    useInAppBrowser: settingsState.useInAppBrowser,
                     onTap: item.type == ItemType.pollopt
                         ? ItemAction.upvote
                                 .isVisible(state, authState, settingsState)

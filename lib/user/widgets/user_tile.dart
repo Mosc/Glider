@@ -45,31 +45,35 @@ class UserTile extends StatelessWidget {
       },
       child: BlocBuilder<UserCubit, UserState>(
         bloc: _userCubit,
-        builder: (context, state) => state.whenOrDefaultWidgets(
-          loading: () => UserLoadingTile(
-            style: style,
-            padding: padding,
-          ),
-          success: () {
-            final user = state.data!;
-            return UserDataTile(
-              user,
-              parsedAbout: state.parsedAbout,
-              blocked: state.blocked,
+        builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: _settingsCubit,
+          builder: (context, settingsState) => state.whenOrDefaultWidgets(
+            loading: () => UserLoadingTile(
               style: style,
               padding: padding,
-              onTap: onTap,
-              onLongPress: (context, item) async => showModalBottomSheet(
-                context: rootNavigatorKey.currentContext!,
-                builder: (context) => UserBottomSheet(
-                  _userCubit,
-                  _authCubit,
-                  _settingsCubit,
+            ),
+            success: () {
+              final user = state.data!;
+              return UserDataTile(
+                user,
+                parsedAbout: state.parsedAbout,
+                blocked: state.blocked,
+                style: style,
+                padding: padding,
+                useInAppBrowser: settingsState.useInAppBrowser,
+                onTap: onTap,
+                onLongPress: (context, item) async => showModalBottomSheet(
+                  context: rootNavigatorKey.currentContext!,
+                  builder: (context) => UserBottomSheet(
+                    _userCubit,
+                    _authCubit,
+                    _settingsCubit,
+                  ),
                 ),
-              ),
-            );
-          },
-          onRetry: () async => _userCubit.load(),
+              );
+            },
+            onRetry: () async => _userCubit.load(),
+          ),
         ),
       ),
     );

@@ -19,6 +19,7 @@ class SharedPreferencesService {
   static const String _showJobsKey = 'show_jobs';
   static const String _useThreadNavigationKey = 'use_thread_navigation';
   static const String _enableDownvotingKey = 'enable_downvoting';
+  static const String _useInAppBrowserKey = 'use_in_app_browser';
   static const String _lastVersionKey = 'last_version';
   static const String _visitedKey = 'visited';
   static const String _upvotedKey = 'upvoted';
@@ -108,6 +109,12 @@ class SharedPreferencesService {
 
   Future<bool> setEnableDownvoting({required bool value}) async =>
       _sharedPreferences.setBool(_enableDownvotingKey, value);
+
+  Future<bool?> getUseInAppBrowser() async =>
+      _sharedPreferences.getBool(_useInAppBrowserKey);
+
+  Future<bool> setUseInAppBrowser({required bool value}) async =>
+      _sharedPreferences.setBool(_useInAppBrowserKey, value);
 
   Future<String?> getLastVersion() async =>
       _sharedPreferences.getString(_lastVersionKey);

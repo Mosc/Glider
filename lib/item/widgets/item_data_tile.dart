@@ -38,6 +38,7 @@ class ItemDataTile extends StatelessWidget {
     this.showFavicons = true,
     this.showMetadata = true,
     this.showUserAvatars = true,
+    this.useInAppBrowser = false,
     this.style = ItemStyle.full,
     this.usernameStyle = UsernameStyle.none,
     this.padding = AppSpacing.defaultTilePadding,
@@ -60,6 +61,7 @@ class ItemDataTile extends StatelessWidget {
   final bool showFavicons;
   final bool showMetadata;
   final bool showUserAvatars;
+  final bool useInAppBrowser;
   final ItemStyle style;
   final UsernameStyle usernameStyle;
   final EdgeInsets padding;
@@ -80,9 +82,11 @@ class ItemDataTile extends StatelessWidget {
               Expanded(
                 child: Hero(
                   tag: 'item_tile_text_${item.id}',
-                  child: parsedText != null
-                      ? HackerNewsText.parsed(parsedText!)
-                      : HackerNewsText(text),
+                  child: HackerNewsText(
+                    text,
+                    parsedData: parsedText,
+                    useInAppBrowser: useInAppBrowser,
+                  ),
                 ),
               )
             else
@@ -160,7 +164,8 @@ class ItemDataTile extends StatelessWidget {
                 AnimatedVisibility(
                   visible: style == ItemStyle.overview,
                   child: InkWell(
-                    onTap: () async => item.url!.tryLaunch(),
+                    onTap: () async =>
+                        item.url!.tryLaunch(useInAppBrowser: useInAppBrowser),
                     // Explicitly override parent widget's long press.
                     onLongPress: () {},
                     child: _ItemFavicon(
@@ -337,13 +342,15 @@ class ItemDataTile extends StatelessWidget {
         if (item.text case final text?)
           Hero(
             tag: 'item_tile_text_${item.id}',
-            child: parsedText != null
-                ? HackerNewsText.parsed(parsedText!)
-                : HackerNewsText(text),
+            child: HackerNewsText(
+              text,
+              parsedData: parsedText,
+              useInAppBrowser: useInAppBrowser,
+            ),
           ),
         if (item.url case final url?)
           DecoratedCard.outlined(
-            onTap: () async => url.tryLaunch(),
+            onTap: () async => url.tryLaunch(useInAppBrowser: useInAppBrowser),
             // Explicitly override parent widget's long press.
             onLongPress: () {},
             child: Row(
