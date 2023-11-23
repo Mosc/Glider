@@ -15,7 +15,8 @@ class AlgoliaApiService {
 
   Map<String, String> _getCommonQueryParameters({int hits = 1000}) => {
         'hitsPerPage': hits.toString(),
-        'attributesToHighlight': '',
+        // Specify non-existent attribute to avoid returning highlight results.
+        'attributesToHighlight': '_',
         'typoTolerance': false.toString(),
         'analytics': false.toString(),
       };
