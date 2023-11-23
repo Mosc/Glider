@@ -33,7 +33,7 @@ import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class ItemPage extends StatefulWidget {
-  const ItemPage(
+  ItemPage(
     this._itemCubitFactory,
     this._itemTreeCubitFactory,
     this._storySimilarCubitFactory,
@@ -41,8 +41,7 @@ class ItemPage extends StatefulWidget {
     this._authCubit,
     this._settingsCubit, {
     required this.id,
-    super.key,
-  });
+  }) : super(key: ValueKey(id));
 
   final ItemCubitFactory _itemCubitFactory;
   final ItemTreeCubitFactory _itemTreeCubitFactory;

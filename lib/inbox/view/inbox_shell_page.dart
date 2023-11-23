@@ -156,7 +156,6 @@ class _SliverInboxBody extends StatelessWidget {
                     _itemCubitFactory,
                     _authCubit,
                     _settingsCubit,
-                    key: ValueKey(parentId),
                     id: parentId,
                     loadingType: ItemType.story,
                     onTap: (context, item) async => context.push(
@@ -169,7 +168,6 @@ class _SliverInboxBody extends StatelessWidget {
                       _itemCubitFactory,
                       _authCubit,
                       _settingsCubit,
-                      key: ValueKey(id),
                       id: id,
                       loadingType: ItemType.comment,
                       onTap: (context, item) async => context.push(

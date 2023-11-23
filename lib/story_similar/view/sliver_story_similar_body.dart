@@ -81,7 +81,6 @@ class SliverStorySimilarBody extends StatelessWidget {
                       _itemCubitFactory,
                       _authCubit,
                       _settingsCubit,
-                      key: ValueKey(id),
                       id: id,
                       storyUsername: storyUsername,
                       loadingType: ItemType.story,

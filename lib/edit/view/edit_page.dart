@@ -18,12 +18,11 @@ import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class EditPage extends StatefulWidget {
-  const EditPage(
+  EditPage(
     this._editCubitFactory,
     this._settingsCubit, {
-    super.key,
     required this.id,
-  });
+  }) : super(key: ValueKey(id));
 
   final EditCubitFactory _editCubitFactory;
   final SettingsCubit _settingsCubit;

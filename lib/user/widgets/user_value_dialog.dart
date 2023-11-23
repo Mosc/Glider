@@ -9,14 +9,13 @@ import 'package:glider/user/models/user_value.dart';
 import 'package:go_router/go_router.dart';
 
 class UserValueDialog extends StatefulWidget {
-  const UserValueDialog(
+  UserValueDialog(
     this._userCubitFactory,
     this._authCubit,
     this._settingsCubit, {
     required this.username,
     this.title,
-    super.key,
-  });
+  }) : super(key: ValueKey(username));
 
   final UserCubitFactory _userCubitFactory;
   final AuthCubit _authCubit;

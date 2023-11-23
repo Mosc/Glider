@@ -3,13 +3,12 @@ import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/item/widgets/avatar_widget.dart';
 
 class UsernameWidget extends StatelessWidget {
-  const UsernameWidget({
-    super.key,
+  UsernameWidget({
     required this.username,
     this.showAvatar = true,
     this.style = UsernameStyle.none,
     this.onTap,
-  });
+  }) : super(key: ValueKey(username));
 
   final String username;
   final bool showAvatar;

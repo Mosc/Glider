@@ -19,13 +19,12 @@ import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
 class ReplyPage extends StatefulWidget {
-  const ReplyPage(
+  ReplyPage(
     this._replyCubitFactory,
     this._authCubit,
     this._settingsCubit, {
-    super.key,
     required this.id,
-  });
+  }) : super(key: ValueKey(id));
 
   final ReplyCubitFactory _replyCubitFactory;
   final AuthCubit _authCubit;

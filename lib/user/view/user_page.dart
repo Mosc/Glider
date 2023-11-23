@@ -27,15 +27,14 @@ import 'package:go_router/go_router.dart';
 const _toolbarHeight = 32.0;
 
 class UserPage extends StatefulWidget {
-  const UserPage(
+  UserPage(
     this._userCubitFactory,
     this._itemCubitFactory,
     this._userItemSearchBlocFactory,
     this._authCubit,
     this._settingsCubit, {
-    super.key,
     required this.username,
-  });
+  }) : super(key: ValueKey(username));
 
   final UserCubitFactory _userCubitFactory;
   final ItemCubitFactory _itemCubitFactory;
@@ -88,7 +87,7 @@ class _UserPageState extends State<UserPage> {
                 _userItemSearchBloc,
                 widget._authCubit,
                 widget._settingsCubit,
-                id: widget.username,
+                username: widget.username,
                 scrollController: _scrollController,
               ),
               SliverSafeArea(
@@ -142,7 +141,7 @@ class _SliverUserAppBar extends StatefulWidget {
     this._userItemSearchBloc,
     this._authCubit,
     this._settingsCubit, {
-    required this.id,
+    required this.username,
     required this.scrollController,
   });
 
@@ -151,7 +150,7 @@ class _SliverUserAppBar extends StatefulWidget {
   final UserItemSearchBloc _userItemSearchBloc;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
-  final String id;
+  final String username;
   final ScrollController scrollController;
 
   @override
@@ -181,7 +180,7 @@ class _SliverUserAppBarState extends State<_SliverUserAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text(widget.id),
+      title: Text(widget.username),
       flexibleSpace: AppBarProgressIndicator(widget._userCubit),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(_toolbarHeight),
@@ -356,7 +355,6 @@ class _SliverUserBody extends StatelessWidget {
                     _itemCubitFactory,
                     _authCubit,
                     _settingsCubit,
-                    key: ValueKey(id),
                     id: id,
                     loadingType: ItemType.story,
                     onTap: (context, item) async => context.push(

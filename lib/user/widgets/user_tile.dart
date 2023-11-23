@@ -15,15 +15,14 @@ import 'package:glider/user/widgets/user_data_tile.dart';
 import 'package:glider/user/widgets/user_loading_tile.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile(
+  UserTile(
     this._userCubit,
     this._authCubit,
     this._settingsCubit, {
-    super.key,
     this.style = UserStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
     this.onTap,
-  });
+  }) : super(key: ValueKey(_userCubit.username));
 
   final UserCubit _userCubit;
   final AuthCubit _authCubit;

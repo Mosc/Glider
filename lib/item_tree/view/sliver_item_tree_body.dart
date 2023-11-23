@@ -83,7 +83,6 @@ class SliverItemTreeBody extends StatelessWidget {
         _itemCubitFactory,
         _authCubit,
         _settingsCubit,
-        key: ValueKey(descendant.id),
         id: descendant.id,
         storyUsername: storyUsername,
         loadingType: ItemType.comment,

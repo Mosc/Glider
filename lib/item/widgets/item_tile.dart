@@ -24,7 +24,6 @@ class ItemTile extends StatefulWidget {
     ItemCubit itemCubit,
     this._authCubit,
     this._settingsCubit, {
-    super.key,
     this.storyUsername,
     required this.loadingType,
     this.collapsedCount,
@@ -37,13 +36,13 @@ class ItemTile extends StatefulWidget {
     this.onTap,
   })  : _itemCubit = itemCubit,
         _itemCubitFactory = null,
-        id = itemCubit.itemId;
+        id = itemCubit.itemId,
+        super(key: ValueKey(itemCubit.itemId));
 
-  const ItemTile.create(
+  ItemTile.create(
     ItemCubitFactory itemCubitFactory,
     this._authCubit,
     this._settingsCubit, {
-    super.key,
     required this.id,
     this.storyUsername,
     required this.loadingType,
@@ -56,7 +55,8 @@ class ItemTile extends StatefulWidget {
     this.padding = AppSpacing.defaultTilePadding,
     this.onTap,
   })  : _itemCubit = null,
-        _itemCubitFactory = itemCubitFactory;
+        _itemCubitFactory = itemCubitFactory,
+        super(key: ValueKey(id));
 
   final ItemCubit? _itemCubit;
   final ItemCubitFactory? _itemCubitFactory;
