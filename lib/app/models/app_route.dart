@@ -21,10 +21,10 @@ enum AppRoute {
 
   final AppRoute? parent;
 
-  String get path => parent != null ? name : '/$name';
+  String get path => [if (parent == null) '/', name].join();
 
   String location({Map<String, Object?>? parameters}) => Uri(
-        path: parent != null ? '${parent!.path}/$path' : path,
+        path: [if (parent case final parent?) '${parent.path}/', path].join(),
         queryParameters: parameters != null
             ? {
                 for (final parameter in parameters.entries)
