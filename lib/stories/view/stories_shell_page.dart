@@ -217,62 +217,60 @@ class _SliverStoriesBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StoriesCubit, StoriesState>(
       bloc: _storiesCubit,
-      builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
-        bloc: _settingsCubit,
-        buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.showStoryMetadata != current.showStoryMetadata ||
-            previous.useActionButtons != current.useActionButtons ||
-            previous.showJobs != current.showJobs,
-        builder: (context, settingsState) => state.whenOrDefaultSlivers(
-          loading: () => SliverList.builder(
-            itemBuilder: (context, index) => ItemLoadingTile(
+      builder: (context, state) => state.whenOrDefaultSlivers(
+        loading: () => SliverList.builder(
+          itemBuilder: (context, index) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: _settingsCubit,
+            buildWhen: (previous, current) =>
+                previous.useLargeStoryStyle != current.useLargeStoryStyle ||
+                previous.showStoryMetadata != current.showStoryMetadata,
+            builder: (context, settingsState) => ItemLoadingTile(
               type: ItemType.story,
               showMetadata: settingsState.showStoryMetadata,
               useLargeStoryStyle: settingsState.useLargeStoryStyle,
               style: ItemStyle.overview,
             ),
           ),
-          nonEmpty: () => SliverMainAxisGroup(
-            slivers: [
-              SliverList.builder(
-                itemCount: state.loadedData!.length,
-                itemBuilder: (context, index) {
-                  final id = state.loadedData![index];
-                  return ItemTile.create(
-                    _itemCubitFactory,
-                    _authCubit,
-                    _settingsCubit,
-                    id: id,
-                    loadingType: ItemType.story,
-                    showMetadata: settingsState.showStoryMetadata,
-                    showJobs: settingsState.showJobs ||
-                        state.storyType == StoryType.jobStories,
-                    style: ItemStyle.overview,
-                    onTap: (context, item) async => context.push(
-                      AppRoute.item.location(parameters: {'id': id}),
+        ),
+        nonEmpty: () => SliverMainAxisGroup(
+          slivers: [
+            SliverList.builder(
+              itemCount: state.loadedData!.length,
+              itemBuilder: (context, index) {
+                final id = state.loadedData![index];
+                return ItemTile.create(
+                  _itemCubitFactory,
+                  _authCubit,
+                  _settingsCubit,
+                  id: id,
+                  loadingType: ItemType.story,
+                  forceShowMetadata: false,
+                  forceShowJobs: state.storyType == StoryType.jobStories,
+                  style: ItemStyle.overview,
+                  onTap: (context, item) async => context.push(
+                    AppRoute.item.location(parameters: {'id': id}),
+                  ),
+                );
+              },
+            ),
+            if (state.loadedData!.length < state.data!.length)
+              SliverPadding(
+                padding: AppSpacing.defaultTilePadding,
+                sliver: SliverToBoxAdapter(
+                  child: OutlinedButton.icon(
+                    onPressed: _storiesCubit.showMore,
+                    style: OutlinedButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                  );
-                },
-              ),
-              if (state.loadedData!.length < state.data!.length)
-                SliverPadding(
-                  padding: AppSpacing.defaultTilePadding,
-                  sliver: SliverToBoxAdapter(
-                    child: OutlinedButton.icon(
-                      onPressed: _storiesCubit.showMore,
-                      style: OutlinedButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      icon: const Icon(Icons.expand_more_outlined),
-                      label: Text(context.l10n.showMore),
-                    ),
+                    icon: const Icon(Icons.expand_more_outlined),
+                    label: Text(context.l10n.showMore),
                   ),
                 ),
-            ],
-          ),
-          onRetry: () async => _storiesCubit.load(),
+              ),
+          ],
         ),
+        onRetry: () async => _storiesCubit.load(),
       ),
     );
   }

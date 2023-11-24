@@ -29,8 +29,8 @@ class ItemTile extends StatefulWidget {
     this.collapsedCount,
     this.showVisited = true,
     this.highlight = false,
-    this.showMetadata = true,
-    this.showJobs = true,
+    this.forceShowMetadata = true,
+    this.forceShowJobs = false,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
     this.onTap,
@@ -49,8 +49,8 @@ class ItemTile extends StatefulWidget {
     this.collapsedCount,
     this.showVisited = true,
     this.highlight = false,
-    this.showMetadata = true,
-    this.showJobs = true,
+    this.forceShowMetadata = true,
+    this.forceShowJobs = false,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
     this.onTap,
@@ -68,8 +68,8 @@ class ItemTile extends StatefulWidget {
   final int? collapsedCount;
   final bool showVisited;
   final bool highlight;
-  final bool showMetadata;
-  final bool showJobs;
+  final bool forceShowMetadata;
+  final bool forceShowJobs;
   final ItemStyle style;
   final EdgeInsets padding;
   final ItemCallback? onTap;
@@ -112,14 +112,16 @@ class _ItemTileState extends State<ItemTile>
                 type: widget.loadingType,
                 collapsedCount: widget.collapsedCount,
                 useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                showMetadata: settingsState.showStoryMetadata,
+                showMetadata:
+                    settingsState.showStoryMetadata || widget.forceShowMetadata,
                 style: widget.style,
                 padding: widget.padding,
               ),
               success: () {
                 final item = state.data!;
 
-                if (item.type == ItemType.job && !widget.showJobs) {
+                if (item.type == ItemType.job &&
+                    !(settingsState.showJobs || widget.forceShowJobs)) {
                   return const SizedBox.shrink();
                 }
 
@@ -142,7 +144,8 @@ class _ItemTileState extends State<ItemTile>
                     collapsedCount: widget.collapsedCount,
                     useLargeStoryStyle: settingsState.useLargeStoryStyle,
                     showFavicons: settingsState.showFavicons,
-                    showMetadata: widget.showMetadata,
+                    showMetadata: settingsState.showStoryMetadata ||
+                        widget.forceShowMetadata,
                     showUserAvatars: settingsState.showUserAvatars,
                     style: widget.style,
                     usernameStyle: authState.username == item.username
