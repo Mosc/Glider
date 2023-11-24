@@ -159,7 +159,7 @@ class _SliverInboxBody extends StatelessWidget {
                     id: parentId,
                     loadingType: ItemType.story,
                     onTap: (context, item) async => context.push(
-                      AppRoute.item.location(parameters: {'id': id}),
+                      AppRoute.item.location(parameters: {'id': parentId}),
                     ),
                   ),
                   IndentedWidget(
