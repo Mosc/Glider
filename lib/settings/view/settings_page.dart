@@ -302,7 +302,12 @@ class _SettingsBody extends StatelessWidget {
             ),
             ListTile(
               title: Text(context.l10n.clearVisited),
-              onTap: _settingsCubit.clearVisited,
+              onTap: () async {
+                final confirm = await context.push<bool>(
+                  AppRoute.confirmDialog.location(),
+                );
+                if (confirm ?? false) await _settingsCubit.clearVisited();
+              },
             ),
             const Divider(),
             Padding(
