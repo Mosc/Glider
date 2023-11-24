@@ -165,14 +165,16 @@ class AppRouter {
           ),
           GoRoute(
             path: AppRoute.item.path,
-            builder: (context, state) => ItemPage(
-              appContainer.itemCubitFactory,
-              appContainer.itemTreeCubitFactory,
-              appContainer.storySimilarCubitFactory,
-              appContainer.storyItemSearchCubitFactory,
-              appContainer.authCubit,
-              appContainer.settingsCubit,
-              id: int.parse(state.uri.queryParameters['id']!),
+            pageBuilder: (context, state) => MaterialPage<void>(
+              child: ItemPage(
+                appContainer.itemCubitFactory,
+                appContainer.itemTreeCubitFactory,
+                appContainer.storySimilarCubitFactory,
+                appContainer.storyItemSearchCubitFactory,
+                appContainer.authCubit,
+                appContainer.settingsCubit,
+                id: int.parse(state.uri.queryParameters['id']!),
+              ),
             ),
             parentNavigatorKey: rootNavigatorKey,
             routes: [
@@ -218,13 +220,15 @@ class AppRouter {
           ),
           GoRoute(
             path: AppRoute.user.path,
-            builder: (context, state) => UserPage(
-              appContainer.userCubitFactory,
-              appContainer.itemCubitFactory,
-              appContainer.userItemSearchBlocFactory,
-              appContainer.authCubit,
-              appContainer.settingsCubit,
-              username: state.uri.queryParameters['id']!,
+            pageBuilder: (context, state) => MaterialPage<void>(
+              child: UserPage(
+                appContainer.userCubitFactory,
+                appContainer.itemCubitFactory,
+                appContainer.userItemSearchBlocFactory,
+                appContainer.authCubit,
+                appContainer.settingsCubit,
+                username: state.uri.queryParameters['id']!,
+              ),
             ),
             parentNavigatorKey: rootNavigatorKey,
             routes: [
