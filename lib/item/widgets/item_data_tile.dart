@@ -478,10 +478,9 @@ class _ItemTitle extends StatelessWidget {
                 text: ')',
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              // Attach zero-width space of title style to
-              // enforce height.
-              const TextSpan(text: '\u200b'),
             ],
+          // Attach zero-width space of title style to enforce height.
+          const TextSpan(text: '\u200b'),
           if (useLargeStoryStyle) const TextSpan(text: '\n'),
         ],
       ),
