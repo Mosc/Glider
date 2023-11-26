@@ -221,18 +221,11 @@ class _SliverItemAppBar extends StatefulWidget {
 }
 
 class _SliverItemAppBarState extends State<_SliverItemAppBar> {
-  late final SearchController _searchController;
   late final ValueNotifier<bool> _hasOverlapNotifier;
   RenderSliver? bodyRenderSliver;
 
   @override
   void initState() {
-    _searchController = SearchController()
-      ..text = widget._storyItemSearchBloc.state.searchText ?? ''
-      ..addListener(
-        () async => widget._storyItemSearchBloc
-            .add(SetTextStoryItemSearchEvent(_searchController.text)),
-      );
     WidgetsBinding.instance
         .addPostFrameCallback((timeStamp) => _updateBodyRenderSliver());
     widget.scrollController?.addListener(_scrollListener);
@@ -275,7 +268,6 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
   @override
   void dispose() {
     widget.scrollController?.removeListener(_scrollListener);
-    _searchController.dispose();
     _hasOverlapNotifier.dispose();
     super.dispose();
   }
@@ -343,47 +335,11 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
         ),
         actions: [
           if (state.data?.parentId == null)
-            SearchAnchor(
-              searchController: _searchController,
-              builder: (context, controller) => IconButton(
-                onPressed: () async {
-                  controller.openView();
-                  widget._storyItemSearchBloc
-                      .add(const LoadStoryItemSearchEvent());
-                },
-                tooltip: context.l10n.search,
-                icon: const Icon(Icons.search_outlined),
-              ),
-              viewLeading: IconButton(
-                onPressed: context.pop,
-                style: IconButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                icon: const BackButtonIcon(),
-              ),
-              viewTrailing: [
-                BlocSelector<StoryItemSearchBloc, StoryItemSearchState, Status>(
-                  bloc: widget._storyItemSearchBloc,
-                  selector: (state) => state.status,
-                  builder: (context, searchStatus) => AnimatedOpacity(
-                    opacity: searchStatus == Status.loading ? 1 : 0,
-                    duration: AppAnimation.standard.duration,
-                    curve: AppAnimation.standard.easing,
-                    child: const CircularProgressIndicator.adaptive(),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: _searchController.clear,
-                ),
-              ],
-              viewBuilder: (suggestions) => StoryItemSearchView(
-                widget._storyItemSearchBloc,
-                widget._itemCubitFactory,
-                widget._authCubit,
-                widget._settingsCubit,
-              ),
-              suggestionsBuilder: (context, controller) => [],
+            _ItemSearchAnchor(
+              widget._storyItemSearchBloc,
+              widget._itemCubitFactory,
+              widget._authCubit,
+              widget._settingsCubit,
             ),
           _ItemOverflowMenu(
             widget._itemCubit,
@@ -394,6 +350,89 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
         floating: true,
         stretch: true,
       ),
+    );
+  }
+}
+
+class _ItemSearchAnchor extends StatefulWidget {
+  const _ItemSearchAnchor(
+    this._storyItemSearchBloc,
+    this._itemCubitFactory,
+    this._authCubit,
+    this._settingsCubit,
+  );
+
+  final StoryItemSearchBloc _storyItemSearchBloc;
+  final ItemCubitFactory _itemCubitFactory;
+  final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
+
+  @override
+  State<_ItemSearchAnchor> createState() => _ItemSearchAnchorState();
+}
+
+class _ItemSearchAnchorState extends State<_ItemSearchAnchor> {
+  late final SearchController _searchController;
+
+  @override
+  void initState() {
+    _searchController = SearchController()
+      ..text = widget._storyItemSearchBloc.state.searchText ?? ''
+      ..addListener(
+        () async => widget._storyItemSearchBloc
+            .add(SetTextStoryItemSearchEvent(_searchController.text)),
+      );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchAnchor(
+      searchController: _searchController,
+      builder: (context, controller) => IconButton(
+        onPressed: () async {
+          controller.openView();
+          widget._storyItemSearchBloc.add(const LoadStoryItemSearchEvent());
+        },
+        tooltip: context.l10n.search,
+        icon: const Icon(Icons.search_outlined),
+      ),
+      viewLeading: IconButton(
+        onPressed: context.pop,
+        style: IconButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        icon: const BackButtonIcon(),
+      ),
+      viewTrailing: [
+        BlocSelector<StoryItemSearchBloc, StoryItemSearchState, Status>(
+          bloc: widget._storyItemSearchBloc,
+          selector: (state) => state.status,
+          builder: (context, searchStatus) => AnimatedOpacity(
+            opacity: searchStatus == Status.loading ? 1 : 0,
+            duration: AppAnimation.standard.duration,
+            curve: AppAnimation.standard.easing,
+            child: const CircularProgressIndicator.adaptive(),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: _searchController.clear,
+        ),
+      ],
+      viewBuilder: (suggestions) => StoryItemSearchView(
+        widget._storyItemSearchBloc,
+        widget._itemCubitFactory,
+        widget._authCubit,
+        widget._settingsCubit,
+      ),
+      suggestionsBuilder: (context, controller) => [],
     );
   }
 }

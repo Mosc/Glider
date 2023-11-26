@@ -134,7 +134,7 @@ class _UserPageState extends State<UserPage> {
   }
 }
 
-class _SliverUserAppBar extends StatefulWidget {
+class _SliverUserAppBar extends StatelessWidget {
   const _SliverUserAppBar(
     this._userCubit,
     this._itemCubitFactory,
@@ -154,10 +154,60 @@ class _SliverUserAppBar extends StatefulWidget {
   final ScrollController scrollController;
 
   @override
-  State<_SliverUserAppBar> createState() => _SliverUserAppBarState();
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      title: Text(username),
+      flexibleSpace: AppBarProgressIndicator(_userCubit),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(_toolbarHeight),
+        child: UserTile(
+          _userCubit,
+          _authCubit,
+          _settingsCubit,
+          style: UserStyle.primary,
+          onTap: (context, user) async => scrollController.animateTo(
+            0,
+            duration: AppAnimation.emphasized.duration,
+            curve: AppAnimation.emphasized.easing,
+          ),
+        ),
+      ),
+      actions: [
+        _UserSearchAnchor(
+          _userItemSearchBloc,
+          _itemCubitFactory,
+          _authCubit,
+          _settingsCubit,
+        ),
+        _UserOverflowMenu(
+          _userCubit,
+          _authCubit,
+          _settingsCubit,
+        ),
+      ],
+      floating: true,
+    );
+  }
 }
 
-class _SliverUserAppBarState extends State<_SliverUserAppBar> {
+class _UserSearchAnchor extends StatefulWidget {
+  const _UserSearchAnchor(
+    this._userItemSearchBloc,
+    this._itemCubitFactory,
+    this._authCubit,
+    this._settingsCubit,
+  );
+
+  final UserItemSearchBloc _userItemSearchBloc;
+  final ItemCubitFactory _itemCubitFactory;
+  final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
+
+  @override
+  State<_UserSearchAnchor> createState() => _UserSearchAnchorState();
+}
+
+class _UserSearchAnchorState extends State<_UserSearchAnchor> {
   late final SearchController _searchController;
 
   @override
@@ -179,72 +229,45 @@ class _SliverUserAppBarState extends State<_SliverUserAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      title: Text(widget.username),
-      flexibleSpace: AppBarProgressIndicator(widget._userCubit),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(_toolbarHeight),
-        child: UserTile(
-          widget._userCubit,
-          widget._authCubit,
-          widget._settingsCubit,
-          style: UserStyle.primary,
-          onTap: (context, user) async => widget.scrollController.animateTo(
-            0,
-            duration: AppAnimation.emphasized.duration,
-            curve: AppAnimation.emphasized.easing,
-          ),
-        ),
+    return SearchAnchor(
+      searchController: _searchController,
+      builder: (context, controller) => IconButton(
+        onPressed: () async {
+          controller.openView();
+          widget._userItemSearchBloc.add(const LoadUserItemSearchEvent());
+        },
+        tooltip: context.l10n.search,
+        icon: const Icon(Icons.search_outlined),
       ),
-      actions: [
-        SearchAnchor(
-          searchController: _searchController,
-          builder: (context, controller) => IconButton(
-            onPressed: () async {
-              controller.openView();
-              widget._userItemSearchBloc.add(const LoadUserItemSearchEvent());
-            },
-            tooltip: context.l10n.search,
-            icon: const Icon(Icons.search_outlined),
-          ),
-          viewLeading: IconButton(
-            onPressed: context.pop,
-            style: IconButton.styleFrom(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: const BackButtonIcon(),
-          ),
-          viewTrailing: [
-            BlocSelector<UserItemSearchBloc, UserItemSearchState, Status>(
-              bloc: widget._userItemSearchBloc,
-              selector: (state) => state.status,
-              builder: (context, searchStatus) => AnimatedOpacity(
-                opacity: searchStatus == Status.loading ? 1 : 0,
-                duration: AppAnimation.standard.duration,
-                curve: AppAnimation.standard.easing,
-                child: const CircularProgressIndicator.adaptive(),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: _searchController.clear,
-            ),
-          ],
-          viewBuilder: (suggestions) => UserItemSearchView(
-            widget._userItemSearchBloc,
-            widget._itemCubitFactory,
-            widget._authCubit,
-            widget._settingsCubit,
-          ),
-          suggestionsBuilder: (context, controller) => [],
+      viewLeading: IconButton(
+        onPressed: context.pop,
+        style: IconButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
-        _UserOverflowMenu(
-          widget._userCubit,
-          widget._authCubit,
-          widget._settingsCubit,
+        icon: const BackButtonIcon(),
+      ),
+      viewTrailing: [
+        BlocBuilder<UserItemSearchBloc, UserItemSearchState>(
+          bloc: widget._userItemSearchBloc,
+          builder: (context, state) => AnimatedOpacity(
+            opacity: state.status == Status.loading ? 1 : 0,
+            duration: AppAnimation.standard.duration,
+            curve: AppAnimation.standard.easing,
+            child: const CircularProgressIndicator.adaptive(),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: _searchController.clear,
         ),
       ],
-      floating: true,
+      viewBuilder: (suggestions) => UserItemSearchView(
+        widget._userItemSearchBloc,
+        widget._itemCubitFactory,
+        widget._authCubit,
+        widget._settingsCubit,
+      ),
+      suggestionsBuilder: (context, controller) => [],
     );
   }
 }

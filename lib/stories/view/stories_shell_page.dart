@@ -106,70 +106,17 @@ class _SliverStoriesAppBar extends StatefulWidget {
 }
 
 class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
-  late final SearchController _searchController;
-
-  @override
-  void initState() {
-    _searchController = SearchController()
-      ..text = widget._storiesSearchBloc.state.searchText ?? ''
-      ..addListener(
-        () async => widget._storiesSearchBloc
-            .add(SetTextStoriesSearchEvent(_searchController.text)),
-      );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       title: Text(context.l10n.stories),
       flexibleSpace: AppBarProgressIndicator(widget._storiesCubit),
       actions: [
-        SearchAnchor(
-          searchController: _searchController,
-          builder: (context, controller) => IconButton(
-            onPressed: () {
-              controller.openView();
-              widget._storiesSearchBloc.add(const LoadStoriesSearchEvent());
-            },
-            tooltip: context.l10n.search,
-            icon: const Icon(Icons.search_outlined),
-          ),
-          viewLeading: IconButton(
-            onPressed: context.pop,
-            style: IconButton.styleFrom(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: const BackButtonIcon(),
-          ),
-          viewTrailing: [
-            BlocBuilder<StoriesSearchBloc, StoriesSearchState>(
-              bloc: widget._storiesSearchBloc,
-              builder: (context, state) => AnimatedOpacity(
-                opacity: state.status == Status.loading ? 1 : 0,
-                duration: AppAnimation.standard.duration,
-                curve: AppAnimation.standard.easing,
-                child: const CircularProgressIndicator.adaptive(),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: _searchController.clear,
-            ),
-          ],
-          viewBuilder: (suggestions) => StoriesSearchView(
-            widget._storiesSearchBloc,
-            widget._itemCubitFactory,
-            widget._authCubit,
-            widget._settingsCubit,
-          ),
-          suggestionsBuilder: (context, controller) => [],
+        _StoriesSearchAnchor(
+          widget._storiesSearchBloc,
+          widget._itemCubitFactory,
+          widget._authCubit,
+          widget._settingsCubit,
         ),
         BlocBuilder<AuthCubit, AuthState>(
           bloc: widget._authCubit,
@@ -196,6 +143,88 @@ class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
         ),
       ],
       floating: true,
+    );
+  }
+}
+
+class _StoriesSearchAnchor extends StatefulWidget {
+  const _StoriesSearchAnchor(
+    this._storiesSearchBloc,
+    this._itemCubitFactory,
+    this._authCubit,
+    this._settingsCubit,
+  );
+
+  final StoriesSearchBloc _storiesSearchBloc;
+  final ItemCubitFactory _itemCubitFactory;
+  final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
+
+  @override
+  State<_StoriesSearchAnchor> createState() => _StoriesSearchAnchorState();
+}
+
+class _StoriesSearchAnchorState extends State<_StoriesSearchAnchor> {
+  late final SearchController _searchController;
+
+  @override
+  void initState() {
+    _searchController = SearchController()
+      ..text = widget._storiesSearchBloc.state.searchText ?? ''
+      ..addListener(
+        () async => widget._storiesSearchBloc
+            .add(SetTextStoriesSearchEvent(_searchController.text)),
+      );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchAnchor(
+      searchController: _searchController,
+      builder: (context, controller) => IconButton(
+        onPressed: () async {
+          controller.openView();
+          widget._storiesSearchBloc.add(const LoadStoriesSearchEvent());
+        },
+        tooltip: context.l10n.search,
+        icon: const Icon(Icons.search_outlined),
+      ),
+      viewLeading: IconButton(
+        onPressed: context.pop,
+        style: IconButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        icon: const BackButtonIcon(),
+      ),
+      viewTrailing: [
+        BlocBuilder<StoriesSearchBloc, StoriesSearchState>(
+          bloc: widget._storiesSearchBloc,
+          builder: (context, state) => AnimatedOpacity(
+            opacity: state.status == Status.loading ? 1 : 0,
+            duration: AppAnimation.standard.duration,
+            curve: AppAnimation.standard.easing,
+            child: const CircularProgressIndicator.adaptive(),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: _searchController.clear,
+        ),
+      ],
+      viewBuilder: (suggestions) => StoriesSearchView(
+        widget._storiesSearchBloc,
+        widget._itemCubitFactory,
+        widget._authCubit,
+        widget._settingsCubit,
+      ),
+      suggestionsBuilder: (context, controller) => [],
     );
   }
 }
