@@ -91,7 +91,6 @@
     "block": "Block",
     "unblock": "Unblock",
     "username": "Username",
-    "about": "About",
     "userLink": "User link",
     "autofillTitle": "Autofill title",
     "emptyError": "This field cannot be empty.",
