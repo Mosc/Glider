@@ -1,0 +1,5 @@
+- Added setting to enable custom tabs
+- Fixed only first opened deeplink loading correctly
+- Fixed edit/delete actions not properly authenticating and thus failing
+- Fixed comments page sometimes staying in loading state when error occurs
+- Improved search and catch up page load speed
