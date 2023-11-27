@@ -10,7 +10,7 @@ dependencies:
   compute: ^1.0.2
   flutter_secure_storage: ^9.0.0
   html: ^0.15.4
-  http: ^1.1.0
+  http: ^1.1.2
   shared_preferences: ^2.2.1
 
 dev_dependencies:

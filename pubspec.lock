@@ -181,10 +181,10 @@ packages:
     dependency: transitive
     description:
       name: cross_file
-      sha256: "445db18de832dba8d851e287aff8ccf169bed30d2e94243cb54c7d2f1ed2142c"
+      sha256: "2f9d2cbccb76127ba28528cb3ae2c2326a122446a83de5a056aaa3880d3882c5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3+6"
+    version: "0.3.3+7"
   crypto:
     dependency: transitive
     description:
@@ -330,10 +330,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_inappwebview
-      sha256: "838edeb770c5e6de8f178dbe6821bc31acf081fe9754210a03399b350261a491"
+      sha256: "2349c52ea4c425dcd2cf80d82464d14fe6589a6f2d92c7f865df4b3f74e36525"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0-beta.28"
+    version: "6.0.0-beta.29"
+  flutter_inappwebview_android:
+    dependency: transitive
+    description:
+      name: flutter_inappwebview_android
+      sha256: "11919ca2f2e2b438a6b6d8ef365cf67050bac0e87712fa937c570b18d72ad855"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_inappwebview_internal_annotations:
     dependency: transitive
     description:
@@ -342,6 +350,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  flutter_inappwebview_ios:
+    dependency: transitive
+    description:
+      name: flutter_inappwebview_ios
+      sha256: "3a7fe9e6a41879ef3538cd1a834d7e5f23673af6cb8eea5e28829fb1a5154085"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  flutter_inappwebview_macos:
+    dependency: transitive
+    description:
+      name: flutter_inappwebview_macos
+      sha256: "4b074e2efbcdccd202f2928c4afde5c4ad242f3112b9655735b80c4e735bc180"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  flutter_inappwebview_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_inappwebview_platform_interface
+      sha256: cd789c378c8270e7b5ee52bcc9364001bdaebd843571e1952635ebcf4e65bb9f
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  flutter_inappwebview_web:
+    dependency: transitive
+    description:
+      name: flutter_inappwebview_web
+      sha256: b1757cfafc110e1a874f6a4193b41a0c90ec630ee0a5d288a82d46290c507d71
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -511,10 +551,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
+      sha256: d4872660c46d929f6b8a9ef4e7a7eff7e49bbf0c4ec3f385ee32df5119175139
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.2"
   http_parser:
     dependency: transitive
     description:
@@ -679,10 +719,10 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: "7e76fad405b3e4016cd39d08f455a4eb5199723cf594cd1b8916d47140d93017"
+      sha256: "88bc797f44a94814f2213db1c9bd5badebafdfb8290ca9f78d4b9ee2a3db4d79"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
+    version: "5.0.1"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -871,10 +911,10 @@ packages:
     dependency: "direct main"
     description:
       name: scrollview_observer
-      sha256: f3b22470b4e0060566054b360eb2c04b4162b5990060cf5b2987a423a7e2f00f
+      sha256: "72b806ea64d446efffac1000c0e0c0b03b06ce019b0fcc7d24d3b1f86e93fb0d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.18.1"
+    version: "1.18.2"
   share_plus:
     dependency: "direct main"
     description:
@@ -1100,10 +1140,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_web
-      sha256: "7fd2f55fe86cea2897b963e864dc01a7eb0719ecc65fcef4c1cc3d686d718bb2"
+      sha256: "138bd45b3a456dcfafc46d1a146787424f8d2edfbf2809c9324361e58f851cf7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   url_launcher_windows:
     dependency: transitive
     description:

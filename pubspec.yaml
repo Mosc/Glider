@@ -19,7 +19,7 @@ dependencies:
   flutter_adaptive_scaffold: ^0.1.7+1
   flutter_bloc: ^8.1.3
   flutter_displaymode: ^0.6.0
-  flutter_inappwebview: ^6.0.0-beta.28
+  flutter_inappwebview: ^6.0.0-beta.29
   flutter_localizations:
     sdk: flutter
   flutter_markdown: ^0.6.18+2
@@ -31,17 +31,17 @@ dependencies:
     path: packages/glider_domain
   go_router: ^12.1.1
   google_fonts: ^6.1.0
-  http: ^1.1.0
+  http: ^1.1.2
   hydrated_bloc: ^9.1.2
   intl: any
   markdown: ^7.1.1
   material_color_utilities: any
-  package_info_plus: ^4.2.0
+  package_info_plus: ^5.0.1
   path_provider: ^2.1.1
   pub_semver: ^2.1.4
   relative_time: ^5.0.0
   rxdart: ^0.27.7
-  scrollview_observer: ^1.18.1
+  scrollview_observer: ^1.18.2
   share_plus: ^7.2.1
   shared_preferences: ^2.2.2
   sliver_tools: ^0.2.12

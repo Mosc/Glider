@@ -12,7 +12,7 @@ dependencies:
     path: ../glider_data
   html: ^0.15.4
   material_color_utilities: any
-  package_info_plus: ^4.2.0
+  package_info_plus: ^5.0.1
   pub_semver: ^2.1.4
   rxdart: ^0.27.7
 
