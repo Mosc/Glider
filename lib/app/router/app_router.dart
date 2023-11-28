@@ -144,7 +144,7 @@ class AppRouter {
                 path: AppRoute.themeColorDialog.path,
                 pageBuilder: (context, state) => DialogPage<Color>(
                   builder: (context) => ThemeColorDialog(
-                    selectedColor: state.extra! as Color?,
+                    selectedColor: state.extra as Color?,
                   ),
                 ),
                 parentNavigatorKey: rootNavigatorKey,
