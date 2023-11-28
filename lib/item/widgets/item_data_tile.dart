@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:glider/app/models/app_route.dart';
-import 'package:glider/common/constants/app_animation.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/extensions/widget_list_extension.dart';
@@ -121,19 +120,14 @@ class ItemDataTile extends StatelessWidget {
         padding: padding,
         child: Opacity(
           opacity: visited ? 2 / 3 : 1,
-          child: AnimatedSize(
-            alignment: Alignment.topCenter,
-            duration: AppAnimation.emphasized.duration,
-            curve: AppAnimation.emphasized.easing,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (hasPrimary) _buildPrimary(context),
-                if (hasSecondary && collapsedCount == null)
-                  _buildSecondary(context),
-              ].spaced(height: AppSpacing.m),
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (hasPrimary) _buildPrimary(context),
+              if (hasSecondary && collapsedCount == null)
+                _buildSecondary(context),
+            ].spaced(height: AppSpacing.m),
           ),
         ),
       ),

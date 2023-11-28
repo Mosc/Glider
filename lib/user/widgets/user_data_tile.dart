@@ -47,18 +47,13 @@ class UserDataTile extends StatelessWidget {
           onLongPress != null ? () => onLongPress!(context, user) : null,
       child: Padding(
         padding: padding,
-        child: AnimatedSize(
-          alignment: Alignment.topCenter,
-          duration: AppAnimation.emphasized.duration,
-          curve: AppAnimation.emphasized.easing,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (hasPrimary) _buildPrimary(context),
-              if (hasSecondary) _buildSecondary(context),
-            ].spaced(height: AppSpacing.m),
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (hasPrimary) _buildPrimary(context),
+            if (hasSecondary) _buildSecondary(context),
+          ].spaced(height: AppSpacing.m),
         ),
       ),
     );

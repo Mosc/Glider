@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/router/app_router.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_animation.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
@@ -107,85 +108,95 @@ class _ItemTileState extends State<ItemTile>
           builder: (context, authState) =>
               BlocBuilder<SettingsCubit, SettingsState>(
             bloc: widget._settingsCubit,
-            builder: (context, settingsState) => state.whenOrDefaultWidgets(
-              loading: () => ItemLoadingTile(
-                type: widget.loadingType,
-                collapsedCount: widget.collapsedCount,
-                useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                showMetadata:
-                    settingsState.showStoryMetadata || widget.forceShowMetadata,
-                style: widget.style,
-                padding: widget.padding,
-              ),
-              success: () {
-                final item = state.data!;
+            builder: (context, settingsState) => AnimatedSize(
+              alignment: Alignment.topCenter,
+              duration: AppAnimation.emphasized.duration,
+              curve: AppAnimation.emphasized.easing,
+              child: state.whenOrDefaultWidgets(
+                loading: () => ItemLoadingTile(
+                  type: widget.loadingType,
+                  collapsedCount: widget.collapsedCount,
+                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                  showMetadata: settingsState.showStoryMetadata ||
+                      widget.forceShowMetadata,
+                  style: widget.style,
+                  padding: widget.padding,
+                ),
+                success: () {
+                  final item = state.data!;
 
-                if (item.type == ItemType.job &&
-                    !(settingsState.showJobs || widget.forceShowJobs)) {
-                  return const SizedBox.shrink();
-                }
+                  if (item.type == ItemType.job &&
+                      !(settingsState.showJobs || widget.forceShowJobs)) {
+                    return const SizedBox.shrink();
+                  }
 
-                return Material(
-                  type: widget.highlight
-                      ? MaterialType.canvas
-                      : MaterialType.transparency,
-                  elevation: 4,
-                  shadowColor: Colors.transparent,
-                  surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-                  child: ItemDataTile(
-                    item,
-                    parsedText: state.parsedText,
-                    visited: state.visited && widget.showVisited,
-                    vote: state.vote,
-                    favorited: state.favorited,
-                    flagged: state.flagged,
-                    blocked: state.blocked,
-                    failed: state.status == Status.failure,
-                    collapsedCount: widget.collapsedCount,
-                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                    showFavicons: settingsState.showFavicons,
-                    showMetadata: settingsState.showStoryMetadata ||
-                        widget.forceShowMetadata,
-                    showUserAvatars: settingsState.showUserAvatars,
-                    style: widget.style,
-                    usernameStyle: authState.username == item.username
-                        ? UsernameStyle.loggedInUser
-                        : widget.storyUsername == item.username
-                            ? UsernameStyle.storyUser
-                            : UsernameStyle.none,
-                    padding: widget.padding,
-                    useInAppBrowser: settingsState.useInAppBrowser,
-                    onTap: item.type == ItemType.pollopt
-                        ? ItemAction.upvote
-                                .isVisible(state, authState, settingsState)
-                            ? (context, item) async => ItemAction.upvote
-                                .execute(context, _itemCubit, widget._authCubit)
-                            : null
-                        : widget.onTap,
-                    onLongPress: (context, item) async => showModalBottomSheet(
-                      context: rootNavigatorKey.currentContext!,
-                      builder: (context) => ItemBottomSheet(
-                        _itemCubit,
-                        widget._authCubit,
-                        widget._settingsCubit,
+                  return Material(
+                    type: widget.highlight
+                        ? MaterialType.canvas
+                        : MaterialType.transparency,
+                    elevation: 4,
+                    shadowColor: Colors.transparent,
+                    surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+                    child: ItemDataTile(
+                      item,
+                      parsedText: state.parsedText,
+                      visited: state.visited && widget.showVisited,
+                      vote: state.vote,
+                      favorited: state.favorited,
+                      flagged: state.flagged,
+                      blocked: state.blocked,
+                      failed: state.status == Status.failure,
+                      collapsedCount: widget.collapsedCount,
+                      useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                      showFavicons: settingsState.showFavicons,
+                      showMetadata: settingsState.showStoryMetadata ||
+                          widget.forceShowMetadata,
+                      showUserAvatars: settingsState.showUserAvatars,
+                      style: widget.style,
+                      usernameStyle: authState.username == item.username
+                          ? UsernameStyle.loggedInUser
+                          : widget.storyUsername == item.username
+                              ? UsernameStyle.storyUser
+                              : UsernameStyle.none,
+                      padding: widget.padding,
+                      useInAppBrowser: settingsState.useInAppBrowser,
+                      onTap: item.type == ItemType.pollopt
+                          ? ItemAction.upvote
+                                  .isVisible(state, authState, settingsState)
+                              ? (context, item) async =>
+                                  ItemAction.upvote.execute(
+                                    context,
+                                    _itemCubit,
+                                    widget._authCubit,
+                                  )
+                              : null
+                          : widget.onTap,
+                      onLongPress: (context, item) async =>
+                          showModalBottomSheet(
+                        context: rootNavigatorKey.currentContext!,
+                        builder: (context) => ItemBottomSheet(
+                          _itemCubit,
+                          widget._authCubit,
+                          widget._settingsCubit,
+                        ),
                       ),
+                      onTapUpvote: settingsState.useActionButtons &&
+                              ItemAction.upvote
+                                  .isVisible(state, authState, settingsState)
+                          ? () async => ItemAction.upvote
+                              .execute(context, _itemCubit, widget._authCubit)
+                          : null,
+                      onTapFavorite: settingsState.useActionButtons &&
+                              ItemAction.favorite
+                                  .isVisible(state, authState, settingsState)
+                          ? () async => ItemAction.favorite
+                              .execute(context, _itemCubit, widget._authCubit)
+                          : null,
                     ),
-                    onTapUpvote: settingsState.useActionButtons &&
-                            ItemAction.upvote
-                                .isVisible(state, authState, settingsState)
-                        ? () async => ItemAction.upvote
-                            .execute(context, _itemCubit, widget._authCubit)
-                        : null,
-                    onTapFavorite: settingsState.useActionButtons &&
-                            ItemAction.favorite
-                                .isVisible(state, authState, settingsState)
-                        ? () async => ItemAction.favorite
-                            .execute(context, _itemCubit, widget._authCubit)
-                        : null,
-                  ),
-                );
-              },
-              onRetry: () async => _itemCubit.load(),
+                  );
+                },
+                onRetry: () async => _itemCubit.load(),
+              ),
             ),
           ),
         ),
