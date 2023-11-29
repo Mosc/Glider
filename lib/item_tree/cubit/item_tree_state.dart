@@ -6,7 +6,6 @@ class ItemTreeState with DataMixin<List<ItemDescendant>>, EquatableMixin {
     this.data,
     this.previousData,
     this.collapsedIds = const {},
-    this.visited = false,
     this.exception,
   });
 
@@ -37,7 +36,6 @@ class ItemTreeState with DataMixin<List<ItemDescendant>>, EquatableMixin {
   final List<ItemDescendant>? data;
   final List<ItemDescendant>? previousData;
   final Set<int> collapsedIds;
-  final bool visited;
   @override
   final Object? exception;
 
@@ -46,7 +44,7 @@ class ItemTreeState with DataMixin<List<ItemDescendant>>, EquatableMixin {
       .toList(growable: false);
 
   late int newDescendantsCount = data != null && previousData != null
-      ? data!.toSet().difference(previousData!.toSet()).length
+      ? {...?data}.difference({...?previousData}).length
       : 0;
 
   ItemTreeState copyWith({
@@ -54,7 +52,6 @@ class ItemTreeState with DataMixin<List<ItemDescendant>>, EquatableMixin {
     List<ItemDescendant>? Function()? data,
     List<ItemDescendant>? Function()? previousData,
     Set<int> Function()? collapsedIds,
-    bool Function()? visited,
     Object? Function()? exception,
   }) =>
       ItemTreeState(
@@ -62,7 +59,6 @@ class ItemTreeState with DataMixin<List<ItemDescendant>>, EquatableMixin {
         data: data != null ? data() : this.data,
         previousData: previousData != null ? previousData() : this.previousData,
         collapsedIds: collapsedIds != null ? collapsedIds() : this.collapsedIds,
-        visited: visited != null ? visited() : this.visited,
         exception: exception != null ? exception() : this.exception,
       );
 
@@ -72,7 +68,6 @@ class ItemTreeState with DataMixin<List<ItemDescendant>>, EquatableMixin {
         data,
         previousData,
         collapsedIds,
-        visited,
         exception,
       ];
 }

@@ -24,13 +24,9 @@ class ItemTreeCubit extends HydratedCubit<ItemTreeState> {
 
   Future<void> load() async {
     safeEmit(
-      state.copyWith(
-        status: () => Status.loading,
-        visited: () => state.status != Status.initial,
-      ),
+      state.copyWith(status: () => Status.loading),
     );
-    final descendantsStream =
-        _itemRepository.getFlatItemDescendantsStream(itemId);
+    final descendantsStream = _itemRepository.getItemDescendantsStream(itemId);
 
     if (state.data == null || state.data!.isEmpty) {
       descendantsStream.listen(
@@ -49,11 +45,8 @@ class ItemTreeCubit extends HydratedCubit<ItemTreeState> {
           ),
         ),
         onDone: () => safeEmit(
-          state.copyWith(
-            status: () => Status.success,
-          ),
+          state.copyWith(status: () => Status.success),
         ),
-        cancelOnError: true,
       );
     } else {
       try {
