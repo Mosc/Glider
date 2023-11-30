@@ -44,6 +44,7 @@ class SettingsCubit extends Cubit<SettingsState>
     final useThreadNavigation =
         await _settingsRepository.getUseThreadNavigation();
     final enableDownvoting = await _settingsRepository.getEnableDownvoting();
+    final useInAppBrowser = await _settingsRepository.getUseInAppBrowser();
     safeEmit(
       state.copyWith(
         themeMode: themeMode != null ? () => themeMode : null,
@@ -65,6 +66,7 @@ class SettingsCubit extends Cubit<SettingsState>
             useThreadNavigation != null ? () => useThreadNavigation : null,
         enableDownvoting:
             enableDownvoting != null ? () => enableDownvoting : null,
+        useInAppBrowser: useInAppBrowser != null ? () => useInAppBrowser : null,
         appVersion: _packageRepository.getVersion,
       ),
     );
