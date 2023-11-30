@@ -101,23 +101,20 @@ class _SubmitBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SubmitCubit, SubmitState>(
       bloc: _submitCubit,
-      builder: (context, state) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-            child: _SubmitForm(_submitCubit),
-          ),
-          if (state.url.hasHost)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-              child: ElevatedButton.icon(
+      builder: (context, state) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SubmitForm(_submitCubit),
+            if (state.url.hasHost)
+              ElevatedButton.icon(
                 onPressed: _submitCubit.autofillTitle,
                 icon: const Icon(Icons.title_outlined),
                 label: Text(context.l10n.autofillTitle),
               ),
-            ),
-        ].spaced(height: AppSpacing.xl),
+          ].spaced(height: AppSpacing.xl),
+        ),
       ),
     );
   }

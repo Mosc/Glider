@@ -116,25 +116,20 @@ class _ReplyBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ReplyCubit, ReplyState>(
       bloc: _replyCubit,
-      builder: (context, state) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-            child: _ReplyForm(_replyCubit),
-          ),
-          if (state.parentItem?.text != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.xl,
-              ),
-              child: ElevatedButton.icon(
+      builder: (context, state) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _ReplyForm(_replyCubit),
+            if (state.parentItem?.text != null)
+              ElevatedButton.icon(
                 onPressed: _replyCubit.quoteParent,
                 icon: const Icon(Icons.format_quote),
                 label: Text(context.l10n.quoteParent),
               ),
-            ),
-        ].spaced(height: AppSpacing.xl),
+          ].spaced(height: AppSpacing.xl),
+        ),
       ),
     );
   }
