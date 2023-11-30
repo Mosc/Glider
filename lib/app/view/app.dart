@@ -106,6 +106,7 @@ class App extends StatelessWidget {
           ),
         ),
       ),
+      inputDecorationTheme: const InputDecorationTheme(filled: true),
     );
   }
 }

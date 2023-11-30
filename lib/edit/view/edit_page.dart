@@ -192,7 +192,6 @@ class _EditFormState extends State<_EditForm> {
                 decoration: InputDecoration(
                   labelText: context.l10n.title,
                   errorText: state.title?.displayError?.label(context),
-                  filled: true,
                 ),
                 textCapitalization: TextCapitalization.words,
                 maxLength: TitleInput.maxLength,
@@ -209,7 +208,6 @@ class _EditFormState extends State<_EditForm> {
                 controller: _urlController,
                 decoration: InputDecoration(
                   labelText: context.l10n.link,
-                  filled: true,
                 ),
                 enabled: false,
               ),
@@ -223,7 +221,6 @@ class _EditFormState extends State<_EditForm> {
                 decoration: InputDecoration(
                   labelText: context.l10n.text,
                   errorText: state.text?.displayError?.label(context),
-                  filled: true,
                 ),
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,

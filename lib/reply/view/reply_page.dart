@@ -180,7 +180,6 @@ class _ReplyFormState extends State<_ReplyForm> {
           decoration: InputDecoration(
             labelText: context.l10n.text,
             errorText: state.text.displayError?.label(context),
-            filled: true,
           ),
           keyboardType: TextInputType.multiline,
           textCapitalization: TextCapitalization.sentences,

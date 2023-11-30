@@ -189,7 +189,6 @@ class _SubmitFormState extends State<_SubmitForm> {
               decoration: InputDecoration(
                 labelText: context.l10n.title,
                 errorText: state.title.displayError?.label(context),
-                filled: true,
               ),
               textCapitalization: TextCapitalization.words,
               maxLength: TitleInput.maxLength,
@@ -207,7 +206,6 @@ class _SubmitFormState extends State<_SubmitForm> {
                 labelText: context.l10n.link,
                 errorText: state.url.displayError
                     ?.label(context, otherField: context.l10n.text),
-                filled: true,
               ),
               keyboardType: TextInputType.url,
               onChanged: widget._submitCubit.setUrl,
@@ -223,7 +221,6 @@ class _SubmitFormState extends State<_SubmitForm> {
                 labelText: context.l10n.text,
                 errorText: state.text.displayError
                     ?.label(context, otherField: context.l10n.link),
-                filled: true,
               ),
               keyboardType: TextInputType.multiline,
               textCapitalization: TextCapitalization.sentences,
