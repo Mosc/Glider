@@ -13,6 +13,7 @@ import 'package:glider/item/view/item_page.dart';
 import 'package:glider/item/widgets/item_value_dialog.dart';
 import 'package:glider/navigation_shell/widgets/navigation_shell_scaffold.dart';
 import 'package:glider/reply/view/reply_page.dart';
+import 'package:glider/settings/view/filters_dialog.dart';
 import 'package:glider/settings/view/settings_page.dart';
 import 'package:glider/settings/widgets/theme_color_dialog.dart';
 import 'package:glider/stories/view/stories_shell_page.dart';
@@ -145,6 +146,15 @@ class AppRouter {
                 pageBuilder: (context, state) => DialogPage<Color>(
                   builder: (context) => ThemeColorDialog(
                     selectedColor: state.extra as Color?,
+                  ),
+                ),
+                parentNavigatorKey: rootNavigatorKey,
+              ),
+              GoRoute(
+                path: AppRoute.filtersDialog.path,
+                pageBuilder: (context, state) => DialogPage<void>(
+                  builder: (context) => FiltersDialog(
+                    appContainer.settingsCubit,
                   ),
                 ),
                 parentNavigatorKey: rootNavigatorKey,

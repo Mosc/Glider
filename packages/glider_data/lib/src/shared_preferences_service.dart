@@ -20,6 +20,8 @@ class SharedPreferencesService {
   static const String _useThreadNavigationKey = 'use_thread_navigation';
   static const String _enableDownvotingKey = 'enable_downvoting';
   static const String _useInAppBrowserKey = 'use_in_app_browser';
+  static const String _wordFiltersKey = 'word_filters';
+  static const String _domainFiltersKey = 'domain_filters';
   static const String _lastVersionKey = 'last_version';
   static const String _visitedKey = 'visited';
   static const String _upvotedKey = 'upvoted';
@@ -115,6 +117,34 @@ class SharedPreferencesService {
 
   Future<bool> setUseInAppBrowser({required bool value}) async =>
       _sharedPreferences.setBool(_useInAppBrowserKey, value);
+
+  Future<List<String>?> getWordFilters() async =>
+      _sharedPreferences.getStringList(_wordFiltersKey);
+
+  Future<bool> setWordFilter({
+    required String value,
+    required bool filter,
+  }) async {
+    if (filter) {
+      return _sharedPreferences.addElement(_wordFiltersKey, value);
+    } else {
+      return _sharedPreferences.removeElement(_wordFiltersKey, value);
+    }
+  }
+
+  Future<List<String>?> getDomainFilters() async =>
+      _sharedPreferences.getStringList(_domainFiltersKey);
+
+  Future<bool> setDomainFilter({
+    required String value,
+    required bool filter,
+  }) async {
+    if (filter) {
+      return _sharedPreferences.addElement(_domainFiltersKey, value);
+    } else {
+      return _sharedPreferences.removeElement(_domainFiltersKey, value);
+    }
+  }
 
   Future<String?> getLastVersion() async =>
       _sharedPreferences.getString(_lastVersionKey);

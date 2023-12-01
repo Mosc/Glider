@@ -44,6 +44,8 @@ class SettingsCubit extends Cubit<SettingsState>
     final useThreadNavigation =
         await _settingsRepository.getUseThreadNavigation();
     final enableDownvoting = await _settingsRepository.getEnableDownvoting();
+    final wordFilters = await _settingsRepository.getWordFilters();
+    final domainFilters = await _settingsRepository.getDomainFilters();
     final useInAppBrowser = await _settingsRepository.getUseInAppBrowser();
     safeEmit(
       state.copyWith(
@@ -67,6 +69,8 @@ class SettingsCubit extends Cubit<SettingsState>
         enableDownvoting:
             enableDownvoting != null ? () => enableDownvoting : null,
         useInAppBrowser: useInAppBrowser != null ? () => useInAppBrowser : null,
+        wordFilters: wordFilters != null ? () => wordFilters : null,
+        domainFilters: domainFilters != null ? () => domainFilters : null,
         appVersion: _packageRepository.getVersion,
       ),
     );
@@ -235,6 +239,28 @@ class SettingsCubit extends Cubit<SettingsState>
     if (useInAppBrowser != null) {
       safeEmit(
         state.copyWith(useInAppBrowser: () => useInAppBrowser),
+      );
+    }
+  }
+
+  Future<void> setWordFilter(String value, {required bool filter}) async {
+    await _settingsRepository.setWordFilter(value: value, filter: filter);
+    final wordFilters = await _settingsRepository.getWordFilters();
+
+    if (wordFilters != null) {
+      safeEmit(
+        state.copyWith(wordFilters: () => wordFilters),
+      );
+    }
+  }
+
+  Future<void> setDomainFilter(String value, {required bool filter}) async {
+    await _settingsRepository.setDomainFilter(value: value, filter: filter);
+    final domainFilters = await _settingsRepository.getDomainFilters();
+
+    if (domainFilters != null) {
+      safeEmit(
+        state.copyWith(domainFilters: () => domainFilters),
       );
     }
   }

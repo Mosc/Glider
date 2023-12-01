@@ -31,6 +31,7 @@ class ItemDataTile extends StatelessWidget {
     this.favorited = false,
     this.flagged = false,
     this.blocked = false,
+    this.filtered = false,
     this.failed = false,
     this.collapsedCount,
     this.useLargeStoryStyle = true,
@@ -54,6 +55,7 @@ class ItemDataTile extends StatelessWidget {
   final bool favorited;
   final bool flagged;
   final bool blocked;
+  final bool filtered;
   final bool failed;
   final int? collapsedCount;
   final bool useLargeStoryStyle;
@@ -103,10 +105,12 @@ class ItemDataTile extends StatelessWidget {
 
     final hasPrimary = style.showPrimary &&
         item.dateTime != null &&
-        (showMetadata || (item.title != null || item.url != null) && !blocked);
+        (showMetadata ||
+            (item.title != null || item.url != null) && !blocked && !filtered);
     final hasSecondary = style.showSecondary &&
         (item.text != null || item.url != null) &&
-        !blocked;
+        !blocked &&
+        !filtered;
 
     if (!hasPrimary && !hasSecondary) {
       return const SizedBox.shrink();
@@ -137,7 +141,7 @@ class ItemDataTile extends StatelessWidget {
   Widget _buildPrimary(BuildContext context) {
     return Column(
       children: [
-        if ((item.title != null || item.url != null) && !blocked)
+        if ((item.title != null || item.url != null) && !blocked && !filtered)
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -252,6 +256,17 @@ class ItemDataTile extends StatelessWidget {
             child: MetadataWidget(
               icon: Icons.block_outlined,
               label: Text(context.l10n.blocked),
+            ),
+          ),
+        ),
+        Hero(
+          tag: 'item_tile_filtered_${item.id}',
+          child: AnimatedVisibility(
+            visible: filtered,
+            padding: MetadataWidget.horizontalPadding,
+            child: const MetadataWidget(
+              icon: Icons.filter_alt_outlined,
+              label: Text('[filtered]'),
             ),
           ),
         ),

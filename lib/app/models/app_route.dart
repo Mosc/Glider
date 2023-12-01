@@ -7,6 +7,7 @@ enum AppRoute {
   auth,
   settings,
   themeColorDialog(parent: settings),
+  filtersDialog(parent: settings),
   submit,
   item,
   edit(parent: item),

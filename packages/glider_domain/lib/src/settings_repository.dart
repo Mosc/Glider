@@ -102,4 +102,22 @@ class SettingsRepository {
 
   Future<bool> setUseInAppBrowser({required bool value}) async =>
       _sharedPreferencesService.setUseInAppBrowser(value: value);
+
+  Future<Set<String>?> getWordFilters() async =>
+      (await _sharedPreferencesService.getWordFilters())?.toSet();
+
+  Future<bool> setWordFilter({
+    required String value,
+    required bool filter,
+  }) async =>
+      _sharedPreferencesService.setWordFilter(value: value, filter: filter);
+
+  Future<Set<String>?> getDomainFilters() async =>
+      (await _sharedPreferencesService.getDomainFilters())?.toSet();
+
+  Future<bool> setDomainFilter({
+    required String value,
+    required bool filter,
+  }) async =>
+      _sharedPreferencesService.setDomainFilter(value: value, filter: filter);
 }

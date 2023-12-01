@@ -285,6 +285,13 @@ class _SettingsBody extends StatelessWidget {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             ),
+            ListTile(
+              title: Text(context.l10n.filters),
+              subtitle: Text(context.l10n.filtersDescription),
+              onTap: () async => context.push<void>(
+                AppRoute.filtersDialog.location(),
+              ),
+            ),
             const Divider(),
             Padding(
               padding: AppSpacing.defaultTilePadding,

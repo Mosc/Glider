@@ -2,6 +2,7 @@ import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
+import 'package:glider/app/extensions/string_extension.dart';
 import 'package:glider/app/router/app_router.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_animation.dart';
@@ -145,6 +146,16 @@ class _ItemTileState extends State<ItemTile>
                       favorited: state.favorited,
                       flagged: state.flagged,
                       blocked: state.blocked,
+                      filtered: item.title != null &&
+                              settingsState.wordFilters.any(
+                                (word) =>
+                                    item.title!.caseInsensitiveContains(word),
+                              ) ||
+                          item.url != null &&
+                              settingsState.domainFilters.any(
+                                (domain) => item.url!.host
+                                    .caseInsensitiveContains(domain),
+                              ),
                       failed: state.status == Status.failure,
                       collapsedCount: widget.collapsedCount,
                       useLargeStoryStyle: settingsState.useLargeStoryStyle,

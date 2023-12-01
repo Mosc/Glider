@@ -17,6 +17,8 @@ class SettingsState with EquatableMixin {
     this.useThreadNavigation = true,
     this.enableDownvoting = false,
     this.useInAppBrowser = false,
+    this.wordFilters = const {},
+    this.domainFilters = const {},
     this.appVersion,
   });
 
@@ -35,6 +37,8 @@ class SettingsState with EquatableMixin {
   final bool useThreadNavigation;
   final bool enableDownvoting;
   final bool useInAppBrowser;
+  final Set<String> wordFilters;
+  final Set<String> domainFilters;
   final Version? appVersion;
 
   SettingsState copyWith({
@@ -53,6 +57,8 @@ class SettingsState with EquatableMixin {
     bool Function()? useThreadNavigation,
     bool Function()? enableDownvoting,
     bool Function()? useInAppBrowser,
+    Set<String> Function()? wordFilters,
+    Set<String> Function()? domainFilters,
     Version? Function()? appVersion,
   }) =>
       SettingsState(
@@ -86,6 +92,9 @@ class SettingsState with EquatableMixin {
             : this.enableDownvoting,
         useInAppBrowser:
             useInAppBrowser != null ? useInAppBrowser() : this.useInAppBrowser,
+        wordFilters: wordFilters != null ? wordFilters() : this.wordFilters,
+        domainFilters:
+            domainFilters != null ? domainFilters() : this.domainFilters,
         appVersion: appVersion != null ? appVersion() : this.appVersion,
       );
 
@@ -106,6 +115,8 @@ class SettingsState with EquatableMixin {
         useThreadNavigation,
         enableDownvoting,
         useInAppBrowser,
+        wordFilters,
+        domainFilters,
         appVersion,
       ];
 }
