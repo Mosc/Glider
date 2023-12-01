@@ -41,7 +41,7 @@
     "filters": "Filters",
     "filtersDescription": "Hides stories based on words or domains",
     "words": "Words",
-    "wordsHint": "Foobar",
+    "wordsHint": "foobar",
     "domains": "Domains",
     "domainsHelp": "example.com",
     "data": "Data",
