@@ -125,13 +125,9 @@ class _SettingsBody extends StatelessWidget {
                 size: 40,
               ),
               enabled: !state.useDynamicTheme,
-              onTap: () async {
-                final value = await context.push<Color>(
-                  AppRoute.themeColorDialog.location(),
-                  extra: state.themeColor,
-                );
-                if (value != null) await _settingsCubit.setThemeColor(value);
-              },
+              onTap: () async => context.push<void>(
+                AppRoute.themeColorDialog.location(),
+              ),
             ),
             MenuListTile(
               title: Text(context.l10n.themeVariant),

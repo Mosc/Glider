@@ -15,7 +15,7 @@ import 'package:glider/navigation_shell/widgets/navigation_shell_scaffold.dart';
 import 'package:glider/reply/view/reply_page.dart';
 import 'package:glider/settings/view/filters_dialog.dart';
 import 'package:glider/settings/view/settings_page.dart';
-import 'package:glider/settings/widgets/theme_color_dialog.dart';
+import 'package:glider/settings/view/theme_color_dialog.dart';
 import 'package:glider/stories/view/stories_shell_page.dart';
 import 'package:glider/stories_search/view/catch_up_shell_page.dart';
 import 'package:glider/submit/view/submit_page.dart';
@@ -143,9 +143,9 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoute.themeColorDialog.path,
-                pageBuilder: (context, state) => DialogPage<Color>(
+                pageBuilder: (context, state) => DialogPage<void>(
                   builder: (context) => ThemeColorDialog(
-                    selectedColor: state.extra as Color?,
+                    appContainer.settingsCubit,
                   ),
                 ),
                 parentNavigatorKey: rootNavigatorKey,
