@@ -52,59 +52,52 @@ class SliverItemTreeBody extends StatelessWidget {
             previous.useActionButtons != current.useActionButtons,
         builder: (context, settingsState) => state.whenOrDefaultSlivers(
           loading: () => SliverList.builder(
+            itemCount: childCount,
             itemBuilder: (context, index) => const IndentedWidget(
               depth: 1,
               child: ItemLoadingTile(type: ItemType.comment),
             ),
-            itemCount: childCount,
           ),
           nonEmpty: () => SliverList.builder(
             itemCount: state.viewableData!.length,
-            itemBuilder: (context, index) => _buildItemTile(
-              state.viewableData![index],
-              state,
-              settingsState,
-            ),
+            itemBuilder: (context, index) {
+              final descendant = state.viewableData![index];
+              return IndentedWidget(
+                depth: descendant.isPart ? 0 : descendant.depth,
+                child: ItemTile.create(
+                  _itemCubitFactory,
+                  _authCubit,
+                  _settingsCubit,
+                  id: descendant.id,
+                  storyUsername: storyUsername,
+                  loadingType: ItemType.comment,
+                  collapsedCount: state.collapsedIds.contains(descendant.id)
+                      ? state.getDescendants(descendant)?.length
+                      : null,
+                  showVisited: false,
+                  highlight: !(state.previousData
+                          ?.map((e) => e.id)
+                          .contains(descendant.id) ??
+                      true),
+                  onTap: (context, item) async {
+                    if (!item.isDeleted) {
+                      _itemTreeCubit.toggleCollapsed(item.id);
+                    }
+
+                    await Scrollable.ensureVisible(
+                      context,
+                      duration: AppAnimation.standard.duration,
+                      curve: AppAnimation.standard.easing,
+                      alignmentPolicy:
+                          ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+                    );
+                  },
+                ),
+              );
+            },
           ),
           onRetry: () async => _itemTreeCubit.load(),
         ),
-      ),
-    );
-  }
-
-  Widget _buildItemTile(
-    ItemDescendant descendant,
-    ItemTreeState state,
-    SettingsState settingsState,
-  ) {
-    return IndentedWidget(
-      depth: descendant.isPart ? 0 : descendant.depth,
-      child: ItemTile.create(
-        _itemCubitFactory,
-        _authCubit,
-        _settingsCubit,
-        id: descendant.id,
-        storyUsername: storyUsername,
-        loadingType: ItemType.comment,
-        collapsedCount: state.collapsedIds.contains(descendant.id)
-            ? state.getDescendants(descendant)?.length
-            : null,
-        showVisited: false,
-        highlight:
-            !(state.previousData?.map((e) => e.id).contains(descendant.id) ??
-                true),
-        onTap: (context, item) async {
-          if (!item.isDeleted) {
-            _itemTreeCubit.toggleCollapsed(item.id);
-          }
-
-          await Scrollable.ensureVisible(
-            context,
-            duration: AppAnimation.standard.duration,
-            curve: AppAnimation.standard.easing,
-            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
-          );
-        },
       ),
     );
   }
