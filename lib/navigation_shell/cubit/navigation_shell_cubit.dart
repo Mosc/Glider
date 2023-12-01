@@ -22,7 +22,7 @@ class NavigationShellCubit extends Cubit<NavigationShellState>
     if (version != lastVersion) {
       await _packageRepository.setLastVersion(value: version);
 
-      if (lastVersion == null || version >= lastVersion.nextMajor) {
+      if (lastVersion != null && version >= lastVersion.nextMajor) {
         emitPresentation(ShowWhatsNewEvent());
       }
     }
