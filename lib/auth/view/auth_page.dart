@@ -41,22 +41,26 @@ class _AuthPageState extends State<AuthPage> {
   @override
   void initState() {
     _browser = _AuthInAppBrowser(widget._authCubit);
+    unawaited(widget._authCubit.init());
+    super.initState();
+  }
 
-    if (!kIsWeb && defaultTargetPlatform != TargetPlatform.iOS) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (timeStamp) => _browser.addMenuItem(
-          InAppBrowserMenuItem(
-            id: 0,
-            title: MaterialLocalizations.of(context).closeButtonLabel,
-            showAsAction: true,
-            onClick: () async => _browser.close(),
-          ),
+  @override
+  void didChangeDependencies() {
+    _browser.removeAllMenuItem();
+
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) {
+      _browser.addMenuItem(
+        InAppBrowserMenuItem(
+          id: 0,
+          title: MaterialLocalizations.of(context).closeButtonLabel,
+          showAsAction: true,
+          onClick: () async => _browser.close(),
         ),
       );
     }
 
-    unawaited(widget._authCubit.init());
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override
