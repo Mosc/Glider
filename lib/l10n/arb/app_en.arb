@@ -31,7 +31,7 @@
     "userAvatars": "User avatars",
     "behavior": "Behavior",
     "showJobs": "Show job stories",
-    "showJobsDescription": "Always shown on jobs tab",
+    "showJobsDescription": "Also shows jobs tab",
     "threadNavigation": "Thread navigation",
     "threadNavigationDescription": "Allows jumps between top-level comments",
     "downvoting": "Enable downvoting",

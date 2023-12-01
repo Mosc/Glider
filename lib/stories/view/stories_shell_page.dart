@@ -18,7 +18,6 @@ import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/navigation_shell/models/navigation_shell_action.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/stories/cubit/stories_cubit.dart';
-import 'package:glider/stories/models/story_type.dart';
 import 'package:glider/stories/view/stories_type_view.dart';
 import 'package:glider/stories_search/bloc/stories_search_bloc.dart';
 import 'package:glider/stories_search/view/stories_search_view.dart';
@@ -66,7 +65,10 @@ class _StoriesShellPageState extends State<StoriesShellPage> {
             widget._settingsCubit,
           ),
           SliverToBoxAdapter(
-            child: StoriesTypeView(widget._storiesCubit),
+            child: StoriesTypeView(
+              widget._storiesCubit,
+              widget._settingsCubit,
+            ),
           ),
           SliverSafeArea(
             top: false,
@@ -275,7 +277,6 @@ class _SliverStoriesBody extends StatelessWidget {
                   id: id,
                   loadingType: ItemType.story,
                   forceShowMetadata: false,
-                  forceShowJobs: state.storyType == StoryType.jobStories,
                   style: ItemStyle.overview,
                   onTap: (context, item) async => context.push(
                     AppRoute.item.location(parameters: {'id': id}),

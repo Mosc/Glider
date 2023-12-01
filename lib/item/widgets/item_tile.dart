@@ -32,7 +32,6 @@ class ItemTile extends StatefulWidget {
     this.showVisited = true,
     this.highlight = false,
     this.forceShowMetadata = true,
-    this.forceShowJobs = false,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
     this.onTap,
@@ -52,7 +51,6 @@ class ItemTile extends StatefulWidget {
     this.showVisited = true,
     this.highlight = false,
     this.forceShowMetadata = true,
-    this.forceShowJobs = false,
     this.style = ItemStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
     this.onTap,
@@ -71,7 +69,6 @@ class ItemTile extends StatefulWidget {
   final bool showVisited;
   final bool highlight;
   final bool forceShowMetadata;
-  final bool forceShowJobs;
   final ItemStyle style;
   final EdgeInsets padding;
   final ItemCallback? onTap;
@@ -126,8 +123,7 @@ class _ItemTileState extends State<ItemTile>
                 success: () {
                   final item = state.data!;
 
-                  if (item.type == ItemType.job &&
-                      !(settingsState.showJobs || widget.forceShowJobs)) {
+                  if (item.type == ItemType.job && !settingsState.showJobs) {
                     return const SizedBox.shrink();
                   }
 
