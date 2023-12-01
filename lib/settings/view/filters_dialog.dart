@@ -158,7 +158,7 @@ class _FiltersBodyState extends State<_FiltersBody> {
   Future<void> _addWordFilter() async {
     if (_wordsController.text.isNotEmpty) {
       await widget._settingsCubit.setWordFilter(
-        _wordsController.text.toLowerCase(),
+        _wordsController.text.trim().toLowerCase(),
         filter: true,
       );
       _wordsController.clear();
@@ -169,7 +169,7 @@ class _FiltersBodyState extends State<_FiltersBody> {
   Future<void> _addDomainFilter() async {
     if (_domainsController.text.isNotEmpty) {
       await widget._settingsCubit.setDomainFilter(
-        _domainsController.text.toLowerCase(),
+        _domainsController.text.trim().toLowerCase(),
         filter: true,
       );
       _domainsController.clear();
