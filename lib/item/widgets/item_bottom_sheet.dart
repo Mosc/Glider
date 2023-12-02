@@ -39,6 +39,9 @@ class ItemBottomSheet extends StatelessWidget {
                     ListTile(
                       leading: Icon(action.icon(state)),
                       title: Text(action.label(context, state)),
+                      trailing: action.options != null
+                          ? const Icon(Icons.chevron_right)
+                          : null,
                       onTap: () async {
                         context.pop();
                         await action.execute(
