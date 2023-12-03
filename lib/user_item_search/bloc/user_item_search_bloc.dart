@@ -17,7 +17,7 @@ EventTransformer<Event> debounce<Event>(Duration duration) =>
     (events, mapper) => events.debounceTime(duration).switchMap(mapper);
 
 class UserItemSearchBloc
-    extends HydratedBloc<UserItemSearchEvent, UserItemSearchState> {
+    extends Bloc<UserItemSearchEvent, UserItemSearchState> {
   UserItemSearchBloc(this._itemRepository, {required this.username})
       : super(const UserItemSearchState()) {
     on<LoadUserItemSearchEvent>(
@@ -31,9 +31,6 @@ class UserItemSearchBloc
 
   final ItemRepository _itemRepository;
   final String username;
-
-  @override
-  String get id => username;
 
   Future<void> _load() async {
     safeEmit(
@@ -68,12 +65,4 @@ class UserItemSearchBloc
     );
     add(const LoadUserItemSearchEvent());
   }
-
-  @override
-  UserItemSearchState? fromJson(Map<String, dynamic> json) =>
-      UserItemSearchState.fromJson(json);
-
-  @override
-  Map<String, dynamic>? toJson(UserItemSearchState state) =>
-      state.status == Status.success ? state.toJson() : null;
 }

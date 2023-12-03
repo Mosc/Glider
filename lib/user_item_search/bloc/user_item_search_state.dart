@@ -8,22 +8,6 @@ class UserItemSearchState with DataMixin<List<int>>, EquatableMixin {
     this.exception,
   });
 
-  factory UserItemSearchState.fromJson(Map<String, dynamic> json) =>
-      UserItemSearchState(
-        status: Status.values.byName(json['status'] as String),
-        data: (json['data'] as List<dynamic>?)
-                ?.map((e) => e as int)
-                .toList(growable: false) ??
-            const [],
-        searchText: json['searchText'] as String?,
-      );
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'status': status.name,
-        'data': data,
-        'searchText': searchText,
-      };
-
   @override
   final Status status;
   @override

@@ -14,12 +14,6 @@ class StoriesSearchState
 
   factory StoriesSearchState.fromJson(Map<String, dynamic> json) =>
       StoriesSearchState(
-        status: Status.values.byName(json['status'] as String),
-        data: (json['data'] as List<dynamic>?)
-                ?.map((e) => e as int)
-                .toList(growable: false) ??
-            const [],
-        searchText: json['searchText'] as String?,
         searchRange: json['searchRange'] != null
             ? SearchRange.values.byName(json['searchRange'] as String)
             : null,
