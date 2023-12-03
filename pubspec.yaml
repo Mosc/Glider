@@ -52,7 +52,7 @@ dev_dependencies:
   dependency_validator: ^3.2.3
   flutter_launcher_icons: ^0.13.1
   leancode_lint: ^7.0.0+1
-  melos: ^3.2.0
+  melos: ^3.3.0
 
 flutter:
   uses-material-design: true
