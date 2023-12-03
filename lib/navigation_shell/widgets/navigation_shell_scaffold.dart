@@ -108,22 +108,22 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
             child: AdaptiveLayout(
               primaryNavigation: SlotLayout(
                 config: <Breakpoint, SlotLayoutConfig>{
-                  Breakpoints.medium: SlotLayout.from(
-                    key: const Key('primaryNavigationMedium'),
+                  Breakpoints.mediumAndUp: SlotLayout.from(
+                    key: const Key('primaryNavigationMediumAndUp'),
                     builder: (context) => _buildPrimaryNavigation(
                       context,
                       destinations,
                       leading: floatingActionButton,
                     ),
                   ),
-                  Breakpoints.large: SlotLayout.from(
-                    key: const Key('primaryNavigationLarge'),
-                    builder: (context) => _buildPrimaryNavigation(
-                      context,
-                      destinations,
-                      leading: floatingActionButton,
-                      extended: true,
-                    ),
+                },
+              ),
+              bottomNavigation: SlotLayout(
+                config: {
+                  Breakpoints.small: SlotLayout.from(
+                    key: const Key('bottomNavigationStandard'),
+                    builder: (context) =>
+                        _buildBottomNavigation(context, destinations),
                   ),
                 },
               ),
@@ -135,15 +135,6 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
                       context,
                       floatingActionButton: floatingActionButton,
                     ),
-                  ),
-                },
-              ),
-              bottomNavigation: SlotLayout(
-                config: {
-                  Breakpoints.small: SlotLayout.from(
-                    key: const Key('bottomNavigationSmall'),
-                    builder: (context) =>
-                        _buildBottomNavigation(context, destinations),
                   ),
                 },
               ),
@@ -189,8 +180,6 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
     final padding = mediaQuery.padding;
     final viewPadding = mediaQuery.viewPadding;
     final isSmallBreakpointActive = Breakpoints.small.isActive(context);
-    final isMediumAndUpBreakpointActive =
-        Breakpoints.mediumAndUp.isActive(context);
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
@@ -230,11 +219,11 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
           return MediaQuery(
             data: mediaQuery.copyWith(
               padding: padding.copyWith(
-                left: isMediumAndUpBreakpointActive &&
+                left: !isSmallBreakpointActive &&
                         directionality == TextDirection.ltr
                     ? 0
                     : null,
-                right: isMediumAndUpBreakpointActive &&
+                right: !isSmallBreakpointActive &&
                         directionality == TextDirection.rtl
                     ? 0
                     : null,
