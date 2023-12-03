@@ -1,0 +1,7 @@
+- Added setting to configure filters for words and domains
+- Added animation to list tiles changing size, most noticably when comments load in
+- Changed what's new page to not show on new installs
+- Changed show job stories setting to also hide jobs tab when disabled
+- Changed navigation rail on large devices or orientations to be more compact
+- Removed persistence of search queries across sessions
+- Fixed custom tabs setting not persisting
