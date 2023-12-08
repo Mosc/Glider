@@ -64,6 +64,11 @@ class App extends StatelessWidget {
   ) {
     // ignore: deprecated_member_use
     final textScaleFactor = MediaQuery.textScalerOf(context).textScaleFactor;
+    final backgroundColor = state.usePureBackground
+        ? brightness == Brightness.dark
+            ? Colors.black
+            : Colors.white
+        : null;
     return ThemeData(
       useMaterial3: true,
       visualDensity: VisualDensity.comfortable,
@@ -72,11 +77,7 @@ class App extends StatelessWidget {
               ? dynamicColorScheme
               : state.themeVariant.toColorScheme(state.themeColor, brightness))
           .copyWith(
-        background: state.usePureBackground
-            ? brightness == Brightness.dark
-                ? Colors.black
-                : Colors.white
-            : null,
+        background: backgroundColor,
       ),
       textTheme: GoogleFonts.getTextTheme(state.font, const TextTheme()),
       menuTheme: const MenuThemeData(
@@ -88,7 +89,10 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      appBarTheme: const AppBarTheme(centerTitle: false),
+      appBarTheme: AppBarTheme(
+        color: backgroundColor,
+        centerTitle: false,
+      ),
       // Badges do not handle text scaling by default.
       badgeTheme: BadgeThemeData(
         smallSize: 6 * textScaleFactor,
