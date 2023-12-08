@@ -16,4 +16,4 @@ dependencies:
 dev_dependencies:
   custom_lint: ^0.5.7
   dependency_validator: ^3.2.3
-  leancode_lint: ^7.0.0+1
+  leancode_lint: ^8.0.0

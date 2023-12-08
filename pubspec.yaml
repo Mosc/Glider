@@ -19,7 +19,7 @@ dependencies:
   flutter_adaptive_scaffold: ^0.1.7+1
   flutter_bloc: ^8.1.3
   flutter_displaymode: ^0.6.0
-  flutter_inappwebview: ^6.0.0-beta.30
+  flutter_inappwebview: ^6.0.0-beta.31
   flutter_localizations:
     sdk: flutter
   flutter_markdown: ^0.6.18+2
@@ -29,7 +29,7 @@ dependencies:
     path: packages/glider_data
   glider_domain:
     path: packages/glider_domain
-  go_router: ^12.1.1
+  go_router: ^12.1.3
   google_fonts: ^6.1.0
   http: ^1.1.2
   hydrated_bloc: ^9.1.2
@@ -45,14 +45,14 @@ dependencies:
   share_plus: ^7.2.1
   shared_preferences: ^2.2.2
   sliver_tools: ^0.2.12
-  url_launcher: ^6.2.1
+  url_launcher: ^6.2.2
 
 dev_dependencies:
   custom_lint: ^0.5.7
   dependency_validator: ^3.2.3
   flutter_launcher_icons: ^0.13.1
-  leancode_lint: ^7.0.0+1
-  melos: ^3.3.0
+  leancode_lint: ^8.0.0
+  melos: ^3.4.0
 
 flutter:
   uses-material-design: true
