@@ -1,4 +1,4 @@
 extension StringExtension on String {
-  bool caseInsensitiveContains(String other) =>
-      toLowerCase().contains(other.toLowerCase());
+  bool containsWord(String other, {bool caseSensitive = true}) =>
+      RegExp('\\b$other\\b', caseSensitive: caseSensitive).hasMatch(this);
 }

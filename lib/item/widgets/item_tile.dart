@@ -144,13 +144,17 @@ class _ItemTileState extends State<ItemTile>
                       blocked: state.blocked,
                       filtered: item.title != null &&
                               settingsState.wordFilters.any(
-                                (word) =>
-                                    item.title!.caseInsensitiveContains(word),
+                                (word) => item.title!.containsWord(
+                                  word,
+                                  caseSensitive: false,
+                                ),
                               ) ||
                           item.url != null &&
                               settingsState.domainFilters.any(
-                                (domain) => item.url!.host
-                                    .caseInsensitiveContains(domain),
+                                (domain) => item.url!.host.containsWord(
+                                  domain,
+                                  caseSensitive: false,
+                                ),
                               ),
                       failed: state.status == Status.failure,
                       collapsedCount: widget.collapsedCount,
