@@ -5,7 +5,7 @@ import 'package:glider_domain/glider_domain.dart';
 // These regular expressions are partially based on analysis from
 // https://vsupalov.com/frequent-hn-title-suffixes-prefixes/.
 final RegExp _prefixRegExp = RegExp(r'^(\S+\s+(?:HN|YC|PG)|Poll):\s+');
-final RegExp _suffixRegExp = RegExp(r'\s+\[(\S+)\]');
+final RegExp _suffixRegExp = RegExp(r'\s+\[(\S+)\](?=(?:\s|$))');
 final RegExp _originalDateRegExp = RegExp(r'\s+\(((?:\S+\s+)?\d{4})\)$');
 final RegExp _ycBatchRegExp = RegExp(r'\s+\((YC\s*[SW]\d{2})\)');
 
