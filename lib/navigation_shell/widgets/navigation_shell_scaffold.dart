@@ -149,20 +149,17 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
     BuildContext context,
     List<NavigationDestination> destinations, {
     Widget? leading,
-    bool extended = false,
   }) {
     final padding = MediaQuery.paddingOf(context);
     final directionality = Directionality.of(context);
 
     return AdaptiveScaffold.standardNavigationRail(
-      extended: extended,
-      width: (extended ? 160 : 80) +
+      width: 80 +
           switch (directionality) {
             TextDirection.ltr => padding.left,
             TextDirection.rtl => padding.right,
           },
-      labelType:
-          extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
+      labelType: NavigationRailLabelType.all,
       groupAlignment: 0,
       leading: leading,
       selectedIndex: _currentIndex,
