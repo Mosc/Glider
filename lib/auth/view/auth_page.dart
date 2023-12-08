@@ -68,7 +68,7 @@ class _AuthPageState extends State<AuthPage> {
     return BlocConsumer<AuthCubit, AuthState>(
       listenWhen: (previous, current) => current.isLoggedIn,
       listener: (context, state) async {
-        await _browser.close();
+        unawaited(_browser.close());
         final confirm = await context.push<bool>(
           AppRoute.confirmDialog.location(),
           extra: (
