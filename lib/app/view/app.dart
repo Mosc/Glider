@@ -98,6 +98,9 @@ class App extends StatelessWidget {
         smallSize: 6 * textScaleFactor,
         largeSize: 16 * textScaleFactor,
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: backgroundColor,
+      ),
       bottomSheetTheme: const BottomSheetThemeData(
         showDragHandle: true,
         // Material 3 dictates a maximum width for bottom sheets.
