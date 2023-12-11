@@ -13,12 +13,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
+      - name: Bootstrap workspace
+        uses: ./.github/actions/bootstrap
       - name: Get Android keystore
         id: android-keystore
         uses: timheuer/base64-to-file@v1
@@ -39,21 +35,10 @@ jobs:
             ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
             ${{ secrets.ANDROID_KEY_PASSWORD }}
             ${{ secrets.ANDROID_KEY_ALIAS }}
-      - name: Parse FVM config
-        id: fvm-config-action
-        uses: kuhnroyal/flutter-fvm-config-action@v2.0
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
-          channel: any
-          cache: true
-      - name: Setup Melos
-        uses: bluefireteam/melos-action@v3
       - name: Build Android APK
-        run: flutter build apk
+        run: fvm flutter build apk
       - name: Build Android App Bundle
-        run: flutter build appbundle
+        run: fvm flutter build appbundle
       - name: Upload APK artifact
         uses: actions/upload-artifact@v3
         with:
@@ -98,7 +83,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Ruby
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2
