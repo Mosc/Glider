@@ -98,6 +98,7 @@
     "unblock": "Unblock",
     "username": "Username",
     "userLink": "User link",
+    "userUnavailable": "User information is not available yet",
     "autofillTitle": "Autofill title",
     "emptyError": "This field cannot be empty.",
     "bothEmptyError": "This field and {otherField} cannot both be empty.",

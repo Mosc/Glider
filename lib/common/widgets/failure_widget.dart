@@ -5,11 +5,13 @@ import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 class FailureWidget extends StatelessWidget {
   const FailureWidget({
     super.key,
+    this.title,
     this.exception,
     this.onRetry,
     this.compact = false,
   });
 
+  final String? title;
   final Object? exception;
   final VoidCallback? onRetry;
   final bool compact;
@@ -21,7 +23,7 @@ class FailureWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            title: Text(context.l10n.failure),
+            title: Text(title ?? context.l10n.failure),
             subtitle: exception != null
                 ? Text(exception.runtimeType.toString())
                 : null,

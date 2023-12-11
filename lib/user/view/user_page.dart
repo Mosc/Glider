@@ -10,6 +10,7 @@ import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
+import 'package:glider/common/widgets/failure_widget.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
 import 'package:glider/item/widgets/item_loading_tile.dart';
 import 'package:glider/item/widgets/item_tile.dart';
@@ -70,12 +71,12 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthCubit, AuthState, bool>(
-      bloc: widget._authCubit,
-      selector: (state) => state.username == widget.username,
-      builder: (context, isLoggedInUser) => BlocBuilder<UserCubit, UserState>(
-        bloc: _userCubit,
-        builder: (context, state) => Scaffold(
+    return BlocBuilder<UserCubit, UserState>(
+      bloc: _userCubit,
+      builder: (context, state) => BlocSelector<AuthCubit, AuthState, bool>(
+        bloc: widget._authCubit,
+        selector: (state) => state.username == widget.username,
+        builder: (context, isLoggedInUser) => Scaffold(
           body: RefreshableScrollView(
             scrollController: _scrollController,
             onRefresh: () async => unawaited(_userCubit.load()),
@@ -97,6 +98,7 @@ class _UserPageState extends State<UserPage> {
                   widget._itemCubitFactory,
                   widget._authCubit,
                   widget._settingsCubit,
+                  isLoggedInUser: isLoggedInUser,
                 ),
               ),
             ],
@@ -341,13 +343,15 @@ class _SliverUserBody extends StatelessWidget {
     this._userCubit,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit,
-  );
+    this._settingsCubit, {
+    this.isLoggedInUser = false,
+  });
 
   final UserCubit _userCubit;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final bool isLoggedInUser;
 
   @override
   Widget build(BuildContext context) {
@@ -388,6 +392,16 @@ class _SliverUserBody extends StatelessWidget {
               ),
           ],
         ),
+        // Data may not be available yet for newly registered users. Show a more
+        // friendly message when we suspect this is the case.
+        failure: isLoggedInUser
+            ? () => SliverFillRemaining(
+                  child: FailureWidget(
+                    title: context.l10n.userUnavailable,
+                    onRetry: () async => _userCubit.load(),
+                  ),
+                )
+            : null,
         onRetry: () async => _userCubit.load(),
       ),
     );

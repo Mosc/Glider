@@ -76,7 +76,7 @@ class UserTile extends StatelessWidget {
                   ),
                 );
               },
-              onRetry: () async => _userCubit.load(),
+              failure: SizedBox.shrink,
             ),
           ),
         ),
