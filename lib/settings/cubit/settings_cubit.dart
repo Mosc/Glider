@@ -41,6 +41,7 @@ class SettingsCubit extends Cubit<SettingsState>
     final showStoryMetadata = await _settingsRepository.getShowStoryMetadata();
     final showUserAvatars = await _settingsRepository.getShowUserAvatars();
     final useActionButtons = await _settingsRepository.getUseActionButtons();
+    final showJobs = await _settingsRepository.getShowJobs();
     final useThreadNavigation =
         await _settingsRepository.getUseThreadNavigation();
     final enableDownvoting = await _settingsRepository.getEnableDownvoting();
@@ -64,6 +65,7 @@ class SettingsCubit extends Cubit<SettingsState>
         showUserAvatars: showUserAvatars != null ? () => showUserAvatars : null,
         useActionButtons:
             useActionButtons != null ? () => useActionButtons : null,
+        showJobs: showJobs != null ? () => showJobs : null,
         useThreadNavigation:
             useThreadNavigation != null ? () => useThreadNavigation : null,
         enableDownvoting:
