@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_uris.dart';
 import 'package:glider/common/interfaces/menu_item.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
@@ -48,10 +49,9 @@ enum UserValue implements MenuItem<UserState> {
     return switch (this) {
       UserValue.username => userCubit.username,
       UserValue.about => user?.about,
-      UserValue.userLink => Uri.https(
-          'news.ycombinator.com',
-          'user',
-          <String, String>{
+      UserValue.userLink => AppUris.hackerNewsUri.replace(
+          path: 'user',
+          queryParameters: <String, String>{
             'id': userCubit.username,
           },
         ).toString(),

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:glider/common/constants/app_uris.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider_domain/glider_domain.dart';
 
@@ -22,7 +23,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> login() async {
-    final userCookieUrl = WebUri('https://news.ycombinator.com');
+    final userCookieUrl = WebUri.uri(AppUris.hackerNewsUri);
     const userCookieName = 'user';
     final userCookie = await _cookieManager.getCookie(
       url: userCookieUrl,

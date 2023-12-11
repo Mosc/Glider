@@ -8,6 +8,7 @@ import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_spacing.dart';
+import 'package:glider/common/constants/app_uris.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/extensions/widget_list_extension.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
@@ -118,7 +119,7 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   urlRequest: URLRequest(
                     url: WebUri(
-                      Uri.https('news.ycombinator.com', 'login').toString(),
+                      AppUris.hackerNewsUri.replace(path: 'login').toString(),
                     ),
                   ),
                 ),
@@ -165,6 +166,7 @@ class _AuthBody extends StatelessWidget {
                     'github.com',
                     'Mosc/Glider/blob/master/PRIVACY.md',
                   ).tryLaunch(
+                    context,
                     useInAppBrowser: _settingsCubit.state.useInAppBrowser,
                   ),
                   child: Text(context.l10n.privacyPolicy),
@@ -174,6 +176,7 @@ class _AuthBody extends StatelessWidget {
                     'www.ycombinator.com',
                     'legal',
                   ).replace(fragment: 'privacy').tryLaunch(
+                        context,
                         useInAppBrowser: _settingsCubit.state.useInAppBrowser,
                       ),
                   child: Text(context.l10n.privacyPolicyYc),
@@ -183,6 +186,7 @@ class _AuthBody extends StatelessWidget {
                     'www.ycombinator.com',
                     'legal',
                   ).replace(fragment: 'tou').tryLaunch(
+                        context,
                         useInAppBrowser: _settingsCubit.state.useInAppBrowser,
                       ),
                   child: Text(context.l10n.termsOfUseYc),

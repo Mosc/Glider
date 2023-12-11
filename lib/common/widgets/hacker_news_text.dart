@@ -90,6 +90,7 @@ class HackerNewsText extends StatelessWidget {
       onTapLink: (text, href, title) async {
         if (href != null) {
           await Uri.tryParse(href)?.tryLaunch(
+            context,
             title: title,
             useInAppBrowser: useInAppBrowser,
           );

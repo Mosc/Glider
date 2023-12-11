@@ -162,8 +162,10 @@ class ItemDataTile extends StatelessWidget {
                 AnimatedVisibility(
                   visible: style == ItemStyle.overview,
                   child: InkWell(
-                    onTap: () async =>
-                        item.url!.tryLaunch(useInAppBrowser: useInAppBrowser),
+                    onTap: () async => item.url!.tryLaunch(
+                      context,
+                      useInAppBrowser: useInAppBrowser,
+                    ),
                     // Explicitly override parent widget's long press.
                     onLongPress: () {},
                     child: _ItemFavicon(
@@ -359,7 +361,10 @@ class ItemDataTile extends StatelessWidget {
           ),
         if (item.url case final url?)
           DecoratedCard.outlined(
-            onTap: () async => url.tryLaunch(useInAppBrowser: useInAppBrowser),
+            onTap: () async => url.tryLaunch(
+              context,
+              useInAppBrowser: useInAppBrowser,
+            ),
             // Explicitly override parent widget's long press.
             onLongPress: () {},
             child: Row(

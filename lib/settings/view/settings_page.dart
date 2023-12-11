@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide ThemeMode;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/common/constants/app_spacing.dart';
+import 'package:glider/common/constants/app_uris.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/widgets/preview_card.dart';
 import 'package:glider/item/models/item_style.dart';
@@ -64,16 +65,14 @@ class _SettingsBody extends StatelessWidget {
     'Open Sans',
     'Roboto',
   ];
-  static const String _authority = 'github.com';
-  static const String _basePath = 'Mosc/Glider';
-  static final Uri _privacyPolicyUrl =
-      Uri.https(_authority, '$_basePath/blob/master/PRIVACY.md');
+  static final Uri _privacyPolicyUrl = AppUris.projectUri
+      .replace(path: '${AppUris.projectUri.path}/blob/master/PRIVACY.md');
   static const String _license = 'MIT';
-  static final Uri _licenseUrl =
-      Uri.https(_authority, '$_basePath/blob/master/LICENSE');
-  static final Uri _sourceCodeUrl = Uri.https('github.com', _basePath);
+  static final Uri _licenseUrl = AppUris.projectUri
+      .replace(path: '${AppUris.projectUri.path}/blob/master/LICENSE');
+  static final Uri _sourceCodeUrl = AppUris.projectUri;
   static final Uri _issueTrackerUrl =
-      Uri.https(_authority, '$_basePath/issues');
+      AppUris.projectUri.replace(path: '${AppUris.projectUri.path}/issues');
 
   @override
   Widget build(BuildContext context) {
@@ -332,6 +331,7 @@ class _SettingsBody extends StatelessWidget {
               title: Text(context.l10n.privacyPolicy),
               trailing: const Icon(Icons.open_in_new_outlined),
               onTap: () => _privacyPolicyUrl.tryLaunch(
+                context,
                 useInAppBrowser: state.useInAppBrowser,
               ),
             ),
@@ -340,6 +340,7 @@ class _SettingsBody extends StatelessWidget {
               subtitle: const Text(_license),
               trailing: const Icon(Icons.open_in_new_outlined),
               onTap: () => _licenseUrl.tryLaunch(
+                context,
                 useInAppBrowser: state.useInAppBrowser,
               ),
             ),
@@ -348,6 +349,7 @@ class _SettingsBody extends StatelessWidget {
               subtitle: Text(_sourceCodeUrl.toString()),
               trailing: const Icon(Icons.open_in_new_outlined),
               onTap: () => _sourceCodeUrl.tryLaunch(
+                context,
                 useInAppBrowser: state.useInAppBrowser,
               ),
             ),
@@ -356,6 +358,7 @@ class _SettingsBody extends StatelessWidget {
               subtitle: Text(_issueTrackerUrl.toString()),
               trailing: const Icon(Icons.open_in_new_outlined),
               onTap: () => _issueTrackerUrl.tryLaunch(
+                context,
                 useInAppBrowser: state.useInAppBrowser,
               ),
             ),
