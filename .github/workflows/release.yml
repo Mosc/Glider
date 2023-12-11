@@ -94,10 +94,7 @@ jobs:
         with:
           name: app-release.aab
       - name: Release to Google Play
-        uses: maierj/fastlane-action@v3.0.0
-        with:
-          lane: supply
-          options: '{ "aab": "app-release.aab" }'
+        run: bundle exec fastlane supply --aab app-release.aab
         env:
           SUPPLY_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
           SUPPLY_JSON_KEY_DATA: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
