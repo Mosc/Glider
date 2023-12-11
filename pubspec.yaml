@@ -41,7 +41,7 @@ dependencies:
   pub_semver: ^2.1.4
   relative_time: ^5.0.0
   rxdart: ^0.27.7
-  scrollview_observer: ^1.18.2
+  scrollview_observer: ^1.19.0
   share_plus: ^7.2.1
   shared_preferences: ^2.2.2
   sliver_tools: ^0.2.12
