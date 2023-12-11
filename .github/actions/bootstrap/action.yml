@@ -1,0 +1,25 @@
+name: Bootstrap
+description: Bootstrap project
+runs:
+  using: composite
+  steps:
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 21
+        cache: gradle
+    - name: Set up Homebrew
+      uses: Homebrew/actions/setup-homebrew@master
+    - name: Set up FVM
+      run: brew tap leoafarias/fvm && brew install fvm@3.0.0-beta.5
+      shell: bash
+    - name: Set up Flutter
+      run: fvm install && fvm flutter config --disable-analytics && echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      shell: bash
+    - name: Set up Melos
+      run: fvm dart pub global activate melos
+      shell: bash
+    - name: Bootstrap Melos
+      run: fvm flutter pub global run melos bootstrap
+      shell: bash
