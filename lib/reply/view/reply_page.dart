@@ -40,8 +40,8 @@ class _ReplyPageState extends State<ReplyPage> {
 
   @override
   void initState() {
-    _replyCubit = widget._replyCubitFactory(widget.id);
     super.initState();
+    _replyCubit = widget._replyCubitFactory(widget.id);
   }
 
   @override
@@ -149,9 +149,9 @@ class _ReplyFormState extends State<_ReplyForm> {
 
   @override
   void initState() {
+    super.initState();
     final state = widget._replyCubit.state;
     _textController = TextEditingController(text: state.text.value);
-    super.initState();
   }
 
   @override

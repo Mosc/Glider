@@ -47,8 +47,8 @@ class StoriesShellPage extends StatefulWidget {
 class _StoriesShellPageState extends State<StoriesShellPage> {
   @override
   void initState() {
-    unawaited(widget._storiesCubit.load());
     super.initState();
+    unawaited(widget._storiesCubit.load());
   }
 
   @override
@@ -171,13 +171,13 @@ class _StoriesSearchAnchorState extends State<_StoriesSearchAnchor> {
 
   @override
   void initState() {
+    super.initState();
     _searchController = SearchController()
       ..text = widget._storiesSearchBloc.state.searchText ?? ''
       ..addListener(
         () async => widget._storiesSearchBloc
             .add(SetTextStoriesSearchEvent(_searchController.text)),
       );
-    super.initState();
   }
 
   @override

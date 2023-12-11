@@ -32,8 +32,8 @@ class _UserValueDialogState extends State<UserValueDialog> {
 
   @override
   void initState() {
-    _userCubit = widget._userCubitFactory(widget.username);
     super.initState();
+    _userCubit = widget._userCubitFactory(widget.username);
   }
 
   @override

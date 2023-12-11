@@ -40,8 +40,8 @@ class InboxShellPage extends StatefulWidget {
 class _InboxShellPageState extends State<InboxShellPage> {
   @override
   void initState() {
-    unawaited(widget._inboxCubit.load());
     super.initState();
+    unawaited(widget._inboxCubit.load());
   }
 
   @override

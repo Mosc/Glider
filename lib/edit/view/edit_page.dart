@@ -37,8 +37,8 @@ class _EditPageState extends State<EditPage> {
 
   @override
   void initState() {
-    _editCubit = widget._editCubitFactory(widget.id);
     super.initState();
+    _editCubit = widget._editCubitFactory(widget.id);
   }
 
   @override
@@ -133,11 +133,11 @@ class _EditFormState extends State<_EditForm> {
 
   @override
   void initState() {
+    super.initState();
     final state = widget._editCubit.state;
     _titleController = TextEditingController(text: state.title?.value);
     _urlController = TextEditingController(text: state.item?.url?.toString());
     _textController = TextEditingController(text: state.text?.value);
-    super.initState();
   }
 
   @override

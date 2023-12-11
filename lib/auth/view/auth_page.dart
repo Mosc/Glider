@@ -40,9 +40,9 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void initState() {
+    super.initState();
     _browser = _AuthInAppBrowser(widget._authCubit);
     unawaited(widget._authCubit.init());
-    super.initState();
   }
 
   @override

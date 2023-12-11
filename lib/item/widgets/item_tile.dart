@@ -83,6 +83,7 @@ class _ItemTileState extends State<ItemTile>
 
   @override
   void initState() {
+    // Define before `super.initState()` for safe access in `wantKeepAlive`.
     _itemCubit = widget._itemCubit ?? widget._itemCubitFactory!(widget.id);
     super.initState();
   }

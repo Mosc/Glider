@@ -39,8 +39,8 @@ class FavoritesShellPage extends StatefulWidget {
 class _FavoritesShellPageState extends State<FavoritesShellPage> {
   @override
   void initState() {
-    unawaited(widget._favoritesCubit.load());
     super.initState();
+    unawaited(widget._favoritesCubit.load());
   }
 
   @override

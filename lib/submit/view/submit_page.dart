@@ -136,11 +136,11 @@ class _SubmitFormState extends State<_SubmitForm> {
 
   @override
   void initState() {
+    super.initState();
     final state = widget._submitCubit.state;
     _titleController = TextEditingController(text: state.title.value);
     _urlController = TextEditingController(text: state.url.value);
     _textController = TextEditingController(text: state.text.value);
-    super.initState();
   }
 
   @override

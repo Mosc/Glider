@@ -54,11 +54,11 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void initState() {
+    super.initState();
     _userCubit = widget._userCubitFactory(widget.username);
     unawaited(_userCubit.load());
     _userItemSearchBloc = widget._userItemSearchBlocFactory(widget.username);
     _scrollController = ScrollController();
-    super.initState();
   }
 
   @override
@@ -212,13 +212,13 @@ class _UserSearchAnchorState extends State<_UserSearchAnchor> {
 
   @override
   void initState() {
+    super.initState();
     _searchController = SearchController()
       ..text = widget._userItemSearchBloc.state.searchText ?? ''
       ..addListener(
         () async => widget._userItemSearchBloc
             .add(SetTextUserItemSearchEvent(_searchController.text)),
       );
-    super.initState();
   }
 
   @override

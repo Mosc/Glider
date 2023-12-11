@@ -45,9 +45,9 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
 
   @override
   void initState() {
+    super.initState();
     unawaited(widget._navigationShellCubit.init());
     _currentNavigationBarHeightNotifier = ValueNotifier(0);
-    super.initState();
   }
 
   @override

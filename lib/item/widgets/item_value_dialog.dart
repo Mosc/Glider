@@ -32,8 +32,8 @@ class _ItemValueDialogState extends State<ItemValueDialog> {
 
   @override
   void initState() {
-    _itemCubit = widget._itemCubitFactory(widget.id);
     super.initState();
+    _itemCubit = widget._itemCubitFactory(widget.id);
   }
 
   @override

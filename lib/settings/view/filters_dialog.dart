@@ -46,11 +46,11 @@ class _FiltersBodyState extends State<_FiltersBody> {
 
   @override
   void initState() {
+    super.initState();
     _wordsController = TextEditingController();
     _domainsController = TextEditingController();
     _wordsFocusNode = FocusNode();
     _domainsFocusNode = FocusNode();
-    super.initState();
   }
 
   @override

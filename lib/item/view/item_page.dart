@@ -68,6 +68,7 @@ class _ItemPageState extends State<ItemPage> {
 
   @override
   void initState() {
+    super.initState();
     _itemCubit = widget._itemCubitFactory(widget.id);
     unawaited(_itemCubit.visit(true));
     _itemTreeCubit = widget._itemTreeCubitFactory(widget.id);
@@ -77,7 +78,6 @@ class _ItemPageState extends State<ItemPage> {
     _scrollController = ScrollController();
     _sliverObserverController =
         SliverObserverController(controller: _scrollController);
-    super.initState();
   }
 
   @override
@@ -226,11 +226,11 @@ class _SliverItemAppBarState extends State<_SliverItemAppBar> {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance
         .addPostFrameCallback((timeStamp) => _updateBodyRenderSliver());
     widget.scrollController?.addListener(_scrollListener);
     _hasOverlapNotifier = ValueNotifier(false);
-    super.initState();
   }
 
   @override
@@ -376,13 +376,13 @@ class _ItemSearchAnchorState extends State<_ItemSearchAnchor> {
 
   @override
   void initState() {
+    super.initState();
     _searchController = SearchController()
       ..text = widget._storyItemSearchBloc.state.searchText ?? ''
       ..addListener(
         () async => widget._storyItemSearchBloc
             .add(SetTextStoryItemSearchEvent(_searchController.text)),
       );
-    super.initState();
   }
 
   @override
