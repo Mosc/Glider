@@ -70,7 +70,6 @@ class App extends StatelessWidget {
             : Colors.white
         : null;
     return ThemeData(
-      useMaterial3: true,
       visualDensity: VisualDensity.comfortable,
       brightness: brightness,
       colorScheme: (state.useDynamicTheme && dynamicColorScheme != null
@@ -80,15 +79,6 @@ class App extends StatelessWidget {
         background: backgroundColor,
       ),
       textTheme: GoogleFonts.getTextTheme(state.font, const TextTheme()),
-      menuTheme: const MenuThemeData(
-        style: MenuStyle(
-          shape: MaterialStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(AppSpacing.m)),
-            ),
-          ),
-        ),
-      ),
       appBarTheme: AppBarTheme(
         color: backgroundColor,
         centerTitle: false,
@@ -97,9 +87,6 @@ class App extends StatelessWidget {
       badgeTheme: BadgeThemeData(
         smallSize: 6 * textScaleFactor,
         largeSize: 16 * textScaleFactor,
-      ),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: backgroundColor,
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         showDragHandle: true,
@@ -114,6 +101,24 @@ class App extends StatelessWidget {
         ),
       ),
       inputDecorationTheme: const InputDecorationTheme(filled: true),
+      menuTheme: const MenuThemeData(
+        style: MenuStyle(
+          shape: MaterialStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(AppSpacing.m)),
+            ),
+          ),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: backgroundColor,
+      ),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: backgroundColor,
+      ),
+      searchViewTheme: SearchViewThemeData(
+        backgroundColor: backgroundColor,
+      ),
     );
   }
 }
