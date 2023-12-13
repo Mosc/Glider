@@ -47,6 +47,8 @@ class _ThemeColorBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       bloc: _settingsCubit,
+      buildWhen: (previous, current) =>
+          previous.themeColor != current.themeColor,
       builder: (context, state) => GridView.extent(
         maxCrossAxisExtent: 64,
         shrinkWrap: true,

@@ -204,6 +204,13 @@ class _SettingsBody extends StatelessWidget {
             ),
             BlocBuilder<SettingsCubit, SettingsState>(
               bloc: _settingsCubit,
+              buildWhen: (previous, current) =>
+                  previous.useLargeStoryStyle != current.useLargeStoryStyle ||
+                  previous.showFavicons != current.showFavicons ||
+                  previous.showStoryMetadata != current.showStoryMetadata ||
+                  previous.showUserAvatars != current.showUserAvatars ||
+                  previous.useActionButtons != current.useActionButtons ||
+                  previous.useInAppBrowser != current.useInAppBrowser,
               builder: (context, state) => Padding(
                 padding: AppSpacing.defaultTilePadding,
                 child: PreviewCard(

@@ -107,6 +107,12 @@ class _ItemTileState extends State<ItemTile>
           builder: (context, authState) =>
               BlocBuilder<SettingsCubit, SettingsState>(
             bloc: widget._settingsCubit,
+            buildWhen: (previous, current) =>
+                previous.showStoryMetadata != current.showStoryMetadata ||
+                previous.useLargeStoryStyle != current.useLargeStoryStyle ||
+                previous.showFavicons != current.showFavicons ||
+                previous.showUserAvatars != current.showUserAvatars ||
+                previous.useInAppBrowser != current.useInAppBrowser,
             builder: (context, settingsState) => AnimatedSize(
               alignment: Alignment.topCenter,
               duration: AppAnimation.emphasized.duration,

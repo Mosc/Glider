@@ -97,6 +97,9 @@ class _ItemPageState extends State<ItemPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       bloc: widget._settingsCubit,
+      buildWhen: (previous, current) =>
+          previous.useLargeStoryStyle != current.useLargeStoryStyle ||
+          previous.useThreadNavigation != current.useThreadNavigation,
       builder: (context, settingsState) => Scaffold(
         body: SliverViewObserver(
           controller: _sliverObserverController,

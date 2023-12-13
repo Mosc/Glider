@@ -47,6 +47,8 @@ class UserTile extends StatelessWidget {
         bloc: _userCubit,
         builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
           bloc: _settingsCubit,
+          buildWhen: (previous, current) =>
+              previous.useInAppBrowser != current.useInAppBrowser,
           builder: (context, settingsState) => AnimatedSize(
             alignment: Alignment.topCenter,
             duration: AppAnimation.emphasized.duration,

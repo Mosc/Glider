@@ -61,6 +61,7 @@ class _StoriesTypeBody extends StatelessWidget {
       buildWhen: (previous, current) => previous.storyType != current.storyType,
       builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
         bloc: _settingsCubit,
+        buildWhen: (previous, current) => previous.showJobs != current.showJobs,
         builder: (context, settingsState) => Row(
           children: [
             for (final storyType in StoryType.values)

@@ -259,6 +259,12 @@ class _EditPreview extends StatelessWidget {
             builder: (context, state) => state.item != null
                 ? BlocBuilder<SettingsCubit, SettingsState>(
                     bloc: _settingsCubit,
+                    buildWhen: (previous, current) =>
+                        previous.useLargeStoryStyle !=
+                            current.useLargeStoryStyle ||
+                        previous.showFavicons != current.showFavicons ||
+                        previous.showUserAvatars != current.showUserAvatars ||
+                        previous.useInAppBrowser != current.useInAppBrowser,
                     builder: (context, settingsState) => ItemDataTile(
                       state.item!.copyWith(
                         title: () => state.title?.value,

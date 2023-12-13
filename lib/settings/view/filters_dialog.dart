@@ -66,6 +66,9 @@ class _FiltersBodyState extends State<_FiltersBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       bloc: widget._settingsCubit,
+      buildWhen: (previous, current) =>
+          previous.wordFilters != current.wordFilters ||
+          previous.domainFilters != current.domainFilters,
       builder: (context, state) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
