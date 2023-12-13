@@ -38,6 +38,8 @@
     "downvotingDescription": "Requires an account with 501+ karma",
     "inAppBrowser": "Custom tabs",
     "inAppBrowserDescription": "Opens links in in-app browser if possible",
+    "navigationDrawer": "Navigation drawer",
+    "navigationDrawerDescription": "Replaces navigation bar or rail",
     "filters": "Filters",
     "filtersDescription": "Hides stories based on words or domains",
     "words": "Words",

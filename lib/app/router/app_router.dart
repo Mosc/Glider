@@ -41,6 +41,7 @@ class AppRouter {
                 NavigationShellScaffold(
               appContainer.navigationShellCubit,
               appContainer.authCubit,
+              appContainer.settingsCubit,
               navigationShell,
             ),
             branches: [

@@ -245,6 +245,18 @@ class SettingsCubit extends Cubit<SettingsState>
     }
   }
 
+  Future<void> setUseNavigationDrawer(bool value) async {
+    await _settingsRepository.setUseNavigationDrawer(value: value);
+    final useNavigationDrawer =
+        await _settingsRepository.getUseNavigationDrawer();
+
+    if (useNavigationDrawer != null) {
+      safeEmit(
+        state.copyWith(useNavigationDrawer: () => useNavigationDrawer),
+      );
+    }
+  }
+
   Future<void> setWordFilter(String value, {required bool filter}) async {
     await _settingsRepository.setWordFilter(value: value, filter: filter);
     final wordFilters = await _settingsRepository.getWordFilters();

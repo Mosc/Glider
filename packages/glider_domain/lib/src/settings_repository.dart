@@ -103,6 +103,12 @@ class SettingsRepository {
   Future<bool> setUseInAppBrowser({required bool value}) async =>
       _sharedPreferencesService.setUseInAppBrowser(value: value);
 
+  Future<bool?> getUseNavigationDrawer() async =>
+      _sharedPreferencesService.getUseNavigationDrawer();
+
+  Future<bool> setUseNavigationDrawer({required bool value}) async =>
+      _sharedPreferencesService.setUseNavigationDrawer(value: value);
+
   Future<Set<String>?> getWordFilters() async =>
       (await _sharedPreferencesService.getWordFilters())?.toSet();
 

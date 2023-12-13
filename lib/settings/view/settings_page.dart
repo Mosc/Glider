@@ -280,6 +280,14 @@ class _SettingsBody extends StatelessWidget {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             ),
+            SwitchListTile.adaptive(
+              value: state.useNavigationDrawer,
+              onChanged: _settingsCubit.setUseNavigationDrawer,
+              title: Text(context.l10n.navigationDrawer),
+              subtitle: Text(context.l10n.navigationDrawerDescription),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            ),
             ListTile(
               title: Text(context.l10n.filters),
               subtitle: Text(context.l10n.filtersDescription),

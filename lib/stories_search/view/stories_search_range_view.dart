@@ -45,7 +45,11 @@ class StoriesSearchRangeView extends StatelessWidget {
           padding: EdgeInsetsDirectional.only(
             top: AppSpacing.s,
             bottom: AppSpacing.s,
-            start: AppSpacing.xl,
+            start: AppSpacing.xl +
+                switch (directionality) {
+                  TextDirection.ltr => padding.left,
+                  TextDirection.rtl => padding.right,
+                },
             end: AppSpacing.xl +
                 switch (directionality) {
                   TextDirection.ltr => padding.right,
