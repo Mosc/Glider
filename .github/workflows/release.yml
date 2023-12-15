@@ -66,7 +66,7 @@ jobs:
         uses: altive/pubspec-metadata@v1
       - name: Get artifact
         id: download-artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-release.apk
       - name: Release
@@ -90,7 +90,7 @@ jobs:
           bundler-cache: true
       - name: Get artifact
         id: download-artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-release.aab
       - name: Release to Google Play
