@@ -22,7 +22,7 @@ jobs:
       - name: Build Android APK (profile)
         run: fvm flutter build apk --profile
       - name: Upload APK (profile) artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-profile.apk
           path: build/app/outputs/apk/profile/app-profile.apk
