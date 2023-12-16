@@ -40,12 +40,12 @@ jobs:
       - name: Build Android App Bundle
         run: fvm flutter build appbundle
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: build/app/outputs/apk/release/app-release.apk
       - name: Upload App Bundle artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release.aab
           path: build/app/outputs/bundle/release/app-release.aab
