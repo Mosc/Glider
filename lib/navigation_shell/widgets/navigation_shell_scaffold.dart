@@ -165,36 +165,30 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
     BuildContext context,
     List<NavigationDestination> destinations, {
     Widget? leading,
-    bool extended = false,
   }) {
     final padding = MediaQuery.paddingOf(context);
     final directionality = Directionality.of(context);
 
     return Material(
       child: AdaptiveScaffold.standardNavigationRail(
-        extended: extended,
-        width: (extended ? 192 : 80) +
+        width: 80 +
             switch (directionality) {
               TextDirection.ltr => padding.left,
               TextDirection.rtl => padding.right,
             },
-        labelType: extended
-            ? NavigationRailLabelType.none
-            : NavigationRailLabelType.all,
-        groupAlignment: extended ? -1 : 0,
+        labelType: NavigationRailLabelType.all,
+        groupAlignment: 0,
         leading: leading,
-        selectedIndex: _currentIndex,
         destinations: [
           for (final destination in destinations)
-            AdaptiveScaffold.toRailDestination(destination),
+            NavigationRailDestination(
+              icon: destination.icon,
+              selectedIcon: destination.selectedIcon,
+              label: Text(destination.label),
+            ),
         ],
-        onDestinationSelected: (index) {
-          if (extended) {
-            Navigator.of(context).pop();
-          }
-
-          onDestinationSelected(index);
-        },
+        selectedIndex: _currentIndex,
+        onDestinationSelected: onDestinationSelected,
       ),
     );
   }
@@ -211,8 +205,8 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
         child: child,
       ),
       child: AdaptiveScaffold.standardBottomNavigationBar(
-        currentIndex: _currentIndex,
         destinations: destinations,
+        currentIndex: _currentIndex,
         onDestinationSelected: onDestinationSelected,
       ),
     );
@@ -287,12 +281,20 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
         },
         child: Scaffold(
           drawer: useNavigationDrawer
-              ? Drawer(
-                  child: _buildPrimaryNavigation(
-                    context,
-                    destinations,
-                    extended: true,
-                  ),
+              ? NavigationDrawer(
+                  selectedIndex: _currentIndex,
+                  onDestinationSelected: (index) {
+                    onDestinationSelected(index);
+                    Navigator.pop(context);
+                  },
+                  children: [
+                    for (final destination in destinations)
+                      NavigationDrawerDestination(
+                        icon: destination.icon,
+                        selectedIcon: destination.selectedIcon,
+                        label: Text(destination.label),
+                      ),
+                  ],
                 )
               : null,
           body: widget._navigationShell,
