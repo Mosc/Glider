@@ -91,7 +91,7 @@ class _ItemPageState extends State<ItemPage> {
   }
 
   static double _getToolbarHeight({required bool useLargeStoryStyle}) =>
-      useLargeStoryStyle ? 96 : 88;
+      useLargeStoryStyle ? 92 : 84;
 
   @override
   Widget build(BuildContext context) {

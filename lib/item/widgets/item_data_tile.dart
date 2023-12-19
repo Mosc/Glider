@@ -177,7 +177,7 @@ class ItemDataTile extends StatelessWidget {
             ].spaced(width: AppSpacing.xl),
           ),
         if (showMetadata) _buildMetadata(context),
-      ].spaced(height: AppSpacing.m),
+      ].spaced(height: AppSpacing.s),
     );
   }
 
