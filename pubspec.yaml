@@ -12,7 +12,7 @@ dependencies:
   clock: ^1.1.1
   collection: any
   device_info_plus: ^9.1.1
-  dynamic_color: ^1.6.8
+  dynamic_color: ^1.6.9
   equatable: ^2.0.5
   flutter:
     sdk: flutter
