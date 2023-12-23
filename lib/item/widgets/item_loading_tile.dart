@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/app/extensions/text_scaler_extension.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/widget_list_extension.dart';
 import 'package:glider/common/widgets/loading_block.dart';
@@ -113,8 +114,10 @@ class ItemLoadingTile extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: AppSpacing.l),
               const EdgeInsets.symmetric(horizontal: AppSpacing.m),
               const EdgeInsets.symmetric(horizontal: AppSpacing.s),
-              // ignore: deprecated_member_use
-              MediaQuery.textScalerOf(context).textScaleFactor,
+              MediaQuery.textScalerOf(context).getFontSizeMultiplier(
+                fontSize: Theme.of(context).textTheme.labelLarge?.fontSize,
+                fallbackFontSize: 14,
+              ),
             ),
             visualDensity: const VisualDensity(
               horizontal: VisualDensity.minimumDensity,

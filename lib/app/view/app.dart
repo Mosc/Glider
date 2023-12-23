@@ -62,8 +62,6 @@ class App extends StatelessWidget {
     ColorScheme? dynamicColorScheme,
     Brightness brightness,
   ) {
-    // ignore: deprecated_member_use
-    final textScaleFactor = MediaQuery.textScalerOf(context).textScaleFactor;
     final backgroundColor = state.usePureBackground
         ? brightness == Brightness.dark
             ? Colors.black
@@ -83,16 +81,17 @@ class App extends StatelessWidget {
         color: backgroundColor,
         centerTitle: false,
       ),
-      // Badges do not handle text scaling by default.
       badgeTheme: BadgeThemeData(
-        smallSize: 6 * textScaleFactor,
-        largeSize: 16 * textScaleFactor,
+        // Badges do not handle text scaling by default.
+        smallSize: MediaQuery.textScalerOf(context).scale(6),
+        largeSize: MediaQuery.textScalerOf(context).scale(16),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         showDragHandle: true,
         // Material 3 dictates a maximum width for bottom sheets.
         constraints: BoxConstraints(maxWidth: 640),
       ),
+      inputDecorationTheme: const InputDecorationTheme(filled: true),
       menuButtonTheme: const MenuButtonThemeData(
         style: ButtonStyle(
           padding: MaterialStatePropertyAll(
@@ -100,7 +99,6 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      inputDecorationTheme: const InputDecorationTheme(filled: true),
       menuTheme: const MenuThemeData(
         style: MenuStyle(
           shape: MaterialStatePropertyAll(
