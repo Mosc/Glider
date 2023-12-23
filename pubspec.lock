@@ -261,10 +261,10 @@ packages:
     dependency: "direct main"
     description:
       name: dynamic_color
-      sha256: "8b8bd1d798bd393e11eddeaa8ae95b12ff028bf7d5998fc5d003488cd5f4ce2f"
+      sha256: a866f1f8947bfdaf674d7928e769eac7230388a2e7a2542824fad4bb5b87be3b
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.8"
+    version: "1.6.9"
   equatable:
     dependency: "direct main"
     description:
@@ -330,18 +330,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_inappwebview
-      sha256: "585348d7682f3a59fe6c63f895cb67d28f078815794f16d1f3943fd5b4718e20"
+      sha256: "69cd9b5fa2c5dba20d896df0aa7d6300c2fca0459fda685266c0ad3cf1486d1d"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0-beta.32"
+    version: "6.0.0-rc.3"
   flutter_inappwebview_android:
     dependency: transitive
     description:
       name: flutter_inappwebview_android
-      sha256: "29d493ec6fbb11788d1d79394287f13c7c362e6862726d1c922cb1f0b7ec92c4"
+      sha256: "3cb7c49b51faab8b0938910b707fc10e8c9538e5cd9fc1da03b6b47dfa4340cc"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.8"
+    version: "1.0.11"
   flutter_inappwebview_internal_annotations:
     dependency: transitive
     description:
@@ -354,34 +354,34 @@ packages:
     dependency: transitive
     description:
       name: flutter_inappwebview_ios
-      sha256: "2ed0639516a6a13209871fcc9bc21db03cb9dd8f93a6125cc6c9deb14db38ce6"
+      sha256: "548f393fa06385e6d8621778a3012eb5e66fa11d7bea0a7f4ae9c37bb1a97a84"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.9"
+    version: "1.0.12"
   flutter_inappwebview_macos:
     dependency: transitive
     description:
       name: flutter_inappwebview_macos
-      sha256: "23aea85f9e16ce6671696c95b3eae6b53912264e18c07934ad16457c2f152ff0"
+      sha256: c2ed011d45d7c536cd4ce4201160658e68912b764cb2894f73183c3cd796b5ee
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.10"
   flutter_inappwebview_platform_interface:
     dependency: transitive
     description:
       name: flutter_inappwebview_platform_interface
-      sha256: b9941cb6c358f50ab4a890a6301e50a6cfca20e70408627ec34bc69fddd85ca7
+      sha256: "9b0bce22162f05af36dc7480dbe43650414704591df263810d773a7ba4139447"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.9"
   flutter_inappwebview_web:
     dependency: transitive
     description:
       name: flutter_inappwebview_web
-      sha256: "6a2b5c0496f8f8260e3564d4323deccb7635368477576710e4f03879a1c4a2b7"
+      sha256: "1d8c6574a17747f472b039393f365e39d594945f795b3b178abd8ce22c4c836c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.7"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -503,10 +503,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: c5fa45fa502ee880839e3b2152d987c44abae26d064a2376d4aad434cf0f7b15
+      sha256: ca7e4a2249f96773152f1853fa25933ac752495cdd7fdf5dafb9691bd05830fd
       url: "https://pub.dev"
     source: hosted
-    version: "12.1.3"
+    version: "13.0.0"
   google_fonts:
     dependency: "direct main"
     description:
@@ -1052,10 +1052,10 @@ packages:
     dependency: transitive
     description:
       name: synchronized
-      sha256: "5fcbd27688af6082f5abd611af56ee575342c30e87541d0245f7ff99faa02c60"
+      sha256: "539ef412b170d65ecdafd780f924e5be3f60032a1128df156adad6c5b373d558"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.0+1"
   term_glyph:
     dependency: transitive
     description:
