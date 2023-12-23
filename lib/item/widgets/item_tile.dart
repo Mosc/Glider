@@ -112,6 +112,7 @@ class _ItemTileState extends State<ItemTile>
                 previous.useLargeStoryStyle != current.useLargeStoryStyle ||
                 previous.showFavicons != current.showFavicons ||
                 previous.showUserAvatars != current.showUserAvatars ||
+                previous.useActionButtons != current.useActionButtons ||
                 previous.useInAppBrowser != current.useInAppBrowser,
             builder: (context, settingsState) => AnimatedSize(
               alignment: Alignment.topCenter,

@@ -136,51 +136,45 @@ class _SliverInboxBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<InboxCubit, InboxState>(
       bloc: _inboxCubit,
-      builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
-        bloc: _settingsCubit,
-        buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.useActionButtons != current.useActionButtons,
-        builder: (context, settingsState) => state.whenOrDefaultSlivers(
-          loading: () => SliverList.builder(
-            itemBuilder: (context, index) =>
-                const ItemLoadingTile(type: ItemType.comment),
-          ),
-          nonEmpty: () => SliverList.builder(
-            itemCount: state.data!.length,
-            itemBuilder: (context, index) {
-              final (parentId, id) = state.data![index];
-              return Column(
-                children: [
-                  ItemTile.create(
+      builder: (context, state) => state.whenOrDefaultSlivers(
+        loading: () => SliverList.builder(
+          itemBuilder: (context, index) =>
+              const ItemLoadingTile(type: ItemType.comment),
+        ),
+        nonEmpty: () => SliverList.builder(
+          itemCount: state.data!.length,
+          itemBuilder: (context, index) {
+            final (parentId, id) = state.data![index];
+            return Column(
+              children: [
+                ItemTile.create(
+                  _itemCubitFactory,
+                  _authCubit,
+                  _settingsCubit,
+                  id: parentId,
+                  loadingType: ItemType.story,
+                  onTap: (context, item) async => context.push(
+                    AppRoute.item.location(parameters: {'id': parentId}),
+                  ),
+                ),
+                IndentedWidget(
+                  depth: 1,
+                  child: ItemTile.create(
                     _itemCubitFactory,
                     _authCubit,
                     _settingsCubit,
-                    id: parentId,
-                    loadingType: ItemType.story,
+                    id: id,
+                    loadingType: ItemType.comment,
                     onTap: (context, item) async => context.push(
-                      AppRoute.item.location(parameters: {'id': parentId}),
+                      AppRoute.item.location(parameters: {'id': id}),
                     ),
                   ),
-                  IndentedWidget(
-                    depth: 1,
-                    child: ItemTile.create(
-                      _itemCubitFactory,
-                      _authCubit,
-                      _settingsCubit,
-                      id: id,
-                      loadingType: ItemType.comment,
-                      onTap: (context, item) async => context.push(
-                        AppRoute.item.location(parameters: {'id': id}),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-          onRetry: () async => _inboxCubit.load(),
+                ),
+              ],
+            );
+          },
         ),
+        onRetry: () async => _inboxCubit.load(),
       ),
     );
   }
