@@ -34,7 +34,7 @@
     "showJobsDescription": "Also shows jobs tab",
     "threadNavigation": "Thread navigation",
     "threadNavigationDescription": "Allows jumps between top-level comments",
-    "downvoting": "Enable downvoting",
+    "downvoting": "Downvoting",
     "downvotingDescription": "Requires an account with 501+ karma",
     "inAppBrowser": "Custom tabs",
     "inAppBrowserDescription": "Opens links in in-app browser if possible",
