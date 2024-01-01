@@ -15,6 +15,12 @@ jobs:
           fetch-depth: 0
       - name: Bootstrap workspace
         uses: ./.github/actions/bootstrap
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
       - name: Get Android keystore
         id: android-keystore
         uses: timheuer/base64-to-file@v1
@@ -86,7 +92,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          ruby-version: 3.3
           bundler-cache: true
       - name: Get artifact
         id: download-artifact

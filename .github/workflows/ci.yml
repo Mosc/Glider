@@ -17,6 +17,11 @@ jobs:
           fetch-depth: 0
       - name: Bootstrap workspace
         uses: ./.github/actions/bootstrap
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
       - name: Run static analysis checks
         run: melos lint
       - name: Build Android APK (profile)
