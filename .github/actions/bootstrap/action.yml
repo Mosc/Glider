@@ -1,30 +1,58 @@
 name: Bootstrap
 description: Bootstrap workspace
+inputs:
+  fvm-version:
+    description: FVM version
+    required: false
+    default: 3.0.0-beta.5
 runs:
   using: composite
   steps:
-    - name: Set up Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: 21
-        cache: gradle
     - name: Set up Homebrew
       uses: Homebrew/actions/setup-homebrew@master
+    - name: Disable Homebrew analytics
+      shell: bash
+      run: brew analytics off
+    - name: Get Homebrew directory
+      shell: bash
+      run: echo "HOMEBREW_CELLAR=$(brew --cellar)" >> $GITHUB_ENV
+    - name: Cache Homebrew
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ env.HOMEBREW_CELLAR }}/dart
+          ${{ env.HOMEBREW_CELLAR }}/fvm@${{ inputs.fvm-version }}
+        key: ${{ runner.os }}-homebrew-fvm-${{ inputs.fvm-version }}
+        restore-keys: ${{ runner.os }}-homebrew-fvm-
+    - name: Cache FVM
+      uses: actions/cache@v3
+      with:
+        path: ~/fvm
+        key: ${{ runner.os }}-fvm-${{ hashFiles('.fvmrc') }}
+        restore-keys: ${{ runner.os }}-fvm-
+    - name: Cache pub
+      uses: actions/cache@v3
+      with:
+        path: ~/.pub-cache
+        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: ${{ runner.os }}-pub-
     - name: Set up FVM
+      shell: bash
       run: |
         brew tap leoafarias/fvm
-        brew install fvm@3.0.0-beta.5
-      shell: bash
+        brew link dart fvm@${{ inputs.fvm-version }} || brew install fvm@${{ inputs.fvm-version }}
+      env:
+        HOMEBREW_NO_ENV_HINTS: '1'
     - name: Set up Flutter
+      shell: bash
       run: |
         fvm install
+        fvm dart --disable-analytics
         fvm flutter config --disable-analytics
         echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
-      shell: bash
     - name: Set up Melos
+      shell: bash
       run: fvm dart pub global activate melos
-      shell: bash
     - name: Bootstrap workspace
-      run: fvm flutter pub global run melos bootstrap
       shell: bash
+      run: fvm flutter pub global run melos bootstrap
