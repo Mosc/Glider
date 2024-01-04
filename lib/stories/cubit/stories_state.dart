@@ -10,7 +10,7 @@ class StoriesState
     this.exception,
   });
 
-  factory StoriesState.fromJson(Map<String, dynamic> json) => StoriesState(
+  factory StoriesState.fromMap(Map<String, dynamic> json) => StoriesState(
         status: Status.values.byName(json['status'] as String),
         data: (json['data'] as List<dynamic>?)
             ?.map((e) => e as int)
@@ -18,7 +18,7 @@ class StoriesState
         storyType: StoryType.values.byName(json['storyType'] as String),
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
         'data': data,
         'storyType': storyType.name,

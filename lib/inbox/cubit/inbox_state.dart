@@ -9,7 +9,7 @@ class InboxState with DataMixin<List<IdWithParent>>, EquatableMixin {
     this.exception,
   });
 
-  factory InboxState.fromJson(Map<String, dynamic> json) => InboxState(
+  factory InboxState.fromMap(Map<String, dynamic> json) => InboxState(
         status: Status.values.byName(json['status'] as String),
         data: (json['data'] as List<dynamic>?)
             ?.map((e) => e as Map<String, dynamic>)
@@ -17,7 +17,7 @@ class InboxState with DataMixin<List<IdWithParent>>, EquatableMixin {
             .toList(growable: false),
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
         'data': data
             ?.map((e) => <String, dynamic>{'parentId': e.$1, 'id': e.$2})

@@ -105,11 +105,11 @@ class UserCubit extends HydratedCubit<UserState>
   }
 
   @override
-  UserState? fromJson(Map<String, dynamic> json) => UserState.fromJson(json);
+  UserState? fromJson(Map<String, dynamic> json) => UserState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(UserState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 
   @override
   Future<void> close() async {

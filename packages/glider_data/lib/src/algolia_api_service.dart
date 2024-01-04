@@ -46,7 +46,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -67,7 +67,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -94,7 +94,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -118,7 +118,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -138,7 +138,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );

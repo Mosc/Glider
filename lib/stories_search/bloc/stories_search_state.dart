@@ -12,7 +12,7 @@ class StoriesSearchState
     this.exception,
   });
 
-  factory StoriesSearchState.fromJson(Map<String, dynamic> json) =>
+  factory StoriesSearchState.fromMap(Map<String, dynamic> json) =>
       StoriesSearchState(
         searchRange: json['searchRange'] != null
             ? SearchRange.values.byName(json['searchRange'] as String)
@@ -30,7 +30,7 @@ class StoriesSearchState
                 : null,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
         'data': data,
         'searchText': searchText,

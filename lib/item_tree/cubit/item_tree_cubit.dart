@@ -82,9 +82,9 @@ class ItemTreeCubit extends HydratedCubit<ItemTreeState> {
 
   @override
   ItemTreeState? fromJson(Map<String, dynamic> json) =>
-      ItemTreeState.fromJson(json);
+      ItemTreeState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(ItemTreeState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 }

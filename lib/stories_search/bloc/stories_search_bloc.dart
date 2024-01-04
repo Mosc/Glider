@@ -119,9 +119,9 @@ class StoriesSearchBloc
 
   @override
   StoriesSearchState? fromJson(Map<String, dynamic> json) =>
-      StoriesSearchState.fromJson(json);
+      StoriesSearchState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(StoriesSearchState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 }

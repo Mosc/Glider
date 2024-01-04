@@ -17,7 +17,6 @@ import 'package:glider/settings/extensions/variant_extension.dart';
 import 'package:glider/settings/widgets/menu_list_tile.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -151,8 +150,7 @@ class _SettingsBody extends StatelessWidget {
               onChanged: (value) async => _settingsCubit.setFont(value),
               values: _fonts,
               selected: (value) => state.font == value,
-              childBuilder: (value) =>
-                  Text(value, style: GoogleFonts.getFont(value)),
+              childBuilder: Text.new,
             ),
             const Divider(),
             Padding(

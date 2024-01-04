@@ -7,14 +7,14 @@ class FavoritesState with DataMixin<List<int>>, EquatableMixin {
     this.exception,
   });
 
-  factory FavoritesState.fromJson(Map<String, dynamic> json) => FavoritesState(
+  factory FavoritesState.fromMap(Map<String, dynamic> json) => FavoritesState(
         status: Status.values.byName(json['status'] as String),
         data: (json['data'] as List<dynamic>?)
             ?.map((e) => e as int)
             .toList(growable: false),
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
         'data': data,
       };

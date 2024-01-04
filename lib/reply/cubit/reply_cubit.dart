@@ -71,10 +71,10 @@ class ReplyCubit extends HydratedCubit<ReplyState> {
   }
 
   @override
-  ReplyState? fromJson(Map<String, dynamic> json) => ReplyState.fromJson(json);
+  ReplyState? fromJson(Map<String, dynamic> json) => ReplyState.fromMap(json);
 
   @override
-  Map<String, dynamic>? toJson(ReplyState state) => state.toJson();
+  Map<String, dynamic>? toJson(ReplyState state) => state.toMap();
 
   @override
   Future<void> close() async {

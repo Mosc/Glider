@@ -240,11 +240,11 @@ class ItemCubit extends HydratedCubit<ItemState>
   }
 
   @override
-  ItemState? fromJson(Map<String, dynamic> json) => ItemState.fromJson(json);
+  ItemState? fromJson(Map<String, dynamic> json) => ItemState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(ItemState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 
   @override
   Future<void> close() async {

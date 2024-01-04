@@ -7,7 +7,7 @@ class UserDto {
     this.submitted,
   });
 
-  factory UserDto.fromJson(Map<String, dynamic> json) => UserDto(
+  factory UserDto.fromMap(Map<String, dynamic> json) => UserDto(
         id: json['id'] as String,
         created: json['created'] as int,
         karma: json['karma'] as int,

@@ -97,9 +97,9 @@ class StoriesCubit extends HydratedCubit<StoriesState> {
 
   @override
   StoriesState? fromJson(Map<String, dynamic> json) =>
-      StoriesState.fromJson(json);
+      StoriesState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(StoriesState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 }

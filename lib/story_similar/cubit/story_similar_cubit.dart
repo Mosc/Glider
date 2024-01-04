@@ -72,11 +72,11 @@ class StorySimilarCubit extends HydratedCubit<StorySimilarState> {
 
   @override
   StorySimilarState? fromJson(Map<String, dynamic> json) =>
-      StorySimilarState.fromJson(json);
+      StorySimilarState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(StorySimilarState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 
   @override
   Future<void> close() {

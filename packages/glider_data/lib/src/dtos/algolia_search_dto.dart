@@ -1,11 +1,11 @@
 class AlgoliaSearchDto {
   const AlgoliaSearchDto({required this.hits});
 
-  factory AlgoliaSearchDto.fromJson(Map<String, dynamic> json) =>
+  factory AlgoliaSearchDto.fromMap(Map<String, dynamic> json) =>
       AlgoliaSearchDto(
         hits: (json['hits'] as List<dynamic>)
             .map(
-              (e) => AlgoliaSearchHitDto.fromJson(e as Map<String, dynamic>),
+              (e) => AlgoliaSearchHitDto.fromMap(e as Map<String, dynamic>),
             )
             .toList(growable: false),
       );
@@ -27,7 +27,7 @@ class AlgoliaSearchHitDto {
     this.createdAtI,
   });
 
-  factory AlgoliaSearchHitDto.fromJson(Map<String, dynamic> json) =>
+  factory AlgoliaSearchHitDto.fromMap(Map<String, dynamic> json) =>
       AlgoliaSearchHitDto(
         objectId: json['objectID'] as String,
         title: json['title'] as String?,

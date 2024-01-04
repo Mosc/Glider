@@ -13,9 +13,9 @@ class ItemState with DataMixin<Item>, EquatableMixin {
     this.exception,
   });
 
-  factory ItemState.fromJson(Map<String, dynamic> json) => ItemState(
+  factory ItemState.fromMap(Map<String, dynamic> json) => ItemState(
         status: Status.values.byName(json['status'] as String),
-        data: Item.fromJson(json['data'] as Map<String, dynamic>),
+        data: Item.fromMap(json['data'] as Map<String, dynamic>),
         visited: json['visited'] as bool? ?? false,
         vote: json['voted'] != null
             ? VoteType.values.byName(json['voted'] as String)
@@ -25,9 +25,9 @@ class ItemState with DataMixin<Item>, EquatableMixin {
         blocked: json['blocked'] as bool? ?? false,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
-        'data': data?.toJson(),
+        'data': data?.toMap(),
         'voted': vote?.name,
         'favorited': favorited,
         'flagged': flagged,

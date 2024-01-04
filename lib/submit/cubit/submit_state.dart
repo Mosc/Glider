@@ -10,7 +10,7 @@ class SubmitState with EquatableMixin {
     this.success = false,
   });
 
-  factory SubmitState.fromJson(Map<String, dynamic> json) => SubmitState(
+  factory SubmitState.fromMap(Map<String, dynamic> json) => SubmitState(
         title: TitleInput.pure(json['title'] as String? ?? ''),
         url: UrlInput.pure(
           json['url'] as String? ?? '',
@@ -23,7 +23,7 @@ class SubmitState with EquatableMixin {
         isValid: json['isValid'] as bool? ?? false,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'title': title.value,
         'url': url.value,
         'text': text.value,

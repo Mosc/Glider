@@ -20,7 +20,7 @@ class User with EquatableMixin {
         submittedIds: dto.submitted ?? const [],
       );
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory User.fromMap(Map<String, dynamic> json) => User(
         username: json['username'] as String,
         createdDateTime:
             DateTime.fromMillisecondsSinceEpoch(json['createdDateTime'] as int),
@@ -31,7 +31,7 @@ class User with EquatableMixin {
             .toList(growable: false),
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'username': username,
         'createdDateTime': createdDateTime.millisecondsSinceEpoch,
         'karma': karma,

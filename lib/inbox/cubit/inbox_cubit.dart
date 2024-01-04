@@ -43,9 +43,9 @@ class InboxCubit extends HydratedCubit<InboxState> {
   }
 
   @override
-  InboxState? fromJson(Map<String, dynamic> json) => InboxState.fromJson(json);
+  InboxState? fromJson(Map<String, dynamic> json) => InboxState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(InboxState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 }
