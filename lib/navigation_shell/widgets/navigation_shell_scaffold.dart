@@ -288,6 +288,16 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
                     Navigator.pop(context);
                   },
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                      child: Text(
+                        context.l10n.appName,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
                     for (final destination in destinations)
                       NavigationDrawerDestination(
                         icon: destination.icon,
