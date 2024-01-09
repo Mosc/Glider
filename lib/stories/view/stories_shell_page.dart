@@ -64,12 +64,6 @@ class _StoriesShellPageState extends State<StoriesShellPage> {
             widget._authCubit,
             widget._settingsCubit,
           ),
-          SliverToBoxAdapter(
-            child: StoriesTypeView(
-              widget._storiesCubit,
-              widget._settingsCubit,
-            ),
-          ),
           SliverSafeArea(
             top: false,
             sliver: _SliverStoriesBody(
@@ -111,7 +105,10 @@ class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text(context.l10n.stories),
+      title: StoriesTypeView(
+        widget._storiesCubit,
+        widget._settingsCubit,
+      ),
       flexibleSpace: AppBarProgressIndicator(widget._storiesCubit),
       actions: [
         _StoriesSearchAnchor(

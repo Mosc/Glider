@@ -18,68 +18,33 @@ class StoriesTypeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final directionality = Directionality.of(context);
-    final padding = MediaQuery.paddingOf(context);
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: EdgeInsetsDirectional.only(
-        top: AppSpacing.s,
-        bottom: AppSpacing.s,
-        start: AppSpacing.xl +
-            switch (directionality) {
-              TextDirection.ltr => padding.left,
-              TextDirection.rtl => padding.right,
-            },
-        end: AppSpacing.xl +
-            switch (directionality) {
-              TextDirection.ltr => padding.right,
-              TextDirection.rtl => padding.left,
-            },
-      ),
-      child: _StoriesTypeBody(
-        _storiesCubit,
-        _settingsCubit,
-      ),
-    );
-  }
-}
-
-class _StoriesTypeBody extends StatelessWidget {
-  const _StoriesTypeBody(
-    this._storiesCubit,
-    this._settingsCubit,
-  );
-
-  final StoriesCubit _storiesCubit;
-  final SettingsCubit _settingsCubit;
-
-  @override
-  Widget build(BuildContext context) {
     return BlocBuilder<StoriesCubit, StoriesState>(
       bloc: _storiesCubit,
-      buildWhen: (previous, current) => previous.storyType != current.storyType,
       builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
         bloc: _settingsCubit,
-        buildWhen: (previous, current) => previous.showJobs != current.showJobs,
-        builder: (context, settingsState) => Row(
-          children: [
+        builder: (context, settingsState) => MenuAnchor(
+          menuChildren: [
             for (final storyType in StoryType.values)
               if (storyType != StoryType.jobStories || settingsState.showJobs)
-                ChoiceChip(
-                  showCheckmark: false,
-                  avatar: Icon(
-                    state.storyType == storyType
-                        ? storyType.selectedIcon
-                        : storyType.icon,
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-                  label: Text(storyType.label(context)),
-                  selected: state.storyType == storyType,
-                  onSelected: (selected) =>
-                      _storiesCubit.setStoryType(storyType),
+                MenuItemButton(
+                  onPressed: () async => _storiesCubit.setStoryType(storyType),
+                  child: Text(storyType.label(context)),
                 ),
-          ].spaced(width: AppSpacing.m),
+          ],
+          builder: (context, controller, child) => FilterChip.elevated(
+            avatar: Icon(state.storyType.icon),
+            label: Row(
+              children: [
+                Expanded(
+                  child: Text(state.storyType.label(context)),
+                ),
+                const Icon(Icons.arrow_drop_down),
+              ].spaced(width: AppSpacing.m),
+            ),
+            labelPadding: const EdgeInsetsDirectional.only(start: AppSpacing.m),
+            onSelected: (storyType) =>
+                controller.isOpen ? controller.close() : controller.open(),
+          ),
         ),
       ),
     );
