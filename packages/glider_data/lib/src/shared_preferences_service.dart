@@ -11,6 +11,7 @@ class SharedPreferencesService {
   static const String _themeVariantKey = 'theme_variant';
   static const String _usePureBackgroundKey = 'use_pure_background';
   static const String _fontKey = 'font';
+  static const String _storyLinesKey = 'story_lines';
   static const String _useLargeStoryStyleKey = 'use_large_story_style';
   static const String _showFaviconsKey = 'show_favicons';
   static const String _showStoryMetadataKey = 'show_story_metadata';
@@ -65,6 +66,12 @@ class SharedPreferencesService {
 
   Future<bool> setFont({required String value}) async =>
       _sharedPreferences.setString(_fontKey, value);
+
+  Future<int?> getStoryLines() async =>
+      _sharedPreferences.getInt(_storyLinesKey);
+
+  Future<bool> setStoryLines({required int value}) async =>
+      _sharedPreferences.setInt(_storyLinesKey, value);
 
   Future<bool?> getUseLargeStoryStyle() async =>
       _sharedPreferences.getBool(_useLargeStoryStyleKey);

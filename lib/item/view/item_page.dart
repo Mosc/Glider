@@ -90,14 +90,20 @@ class _ItemPageState extends State<ItemPage> {
     super.dispose();
   }
 
-  static double _getToolbarHeight({required bool useLargeStoryStyle}) =>
-      useLargeStoryStyle ? 92 : 84;
+  static double _getToolbarHeight({
+    required int storyLines,
+    required bool useLargeStoryStyle,
+  }) =>
+      (storyLines >= 0 ? storyLines : (useLargeStoryStyle ? 3 : 2)) *
+          (useLargeStoryStyle ? 24 : 20) +
+      44;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       bloc: widget._settingsCubit,
       buildWhen: (previous, current) =>
+          previous.storyLines != current.storyLines ||
           previous.useLargeStoryStyle != current.useLargeStoryStyle ||
           previous.useThreadNavigation != current.useThreadNavigation,
       builder: (context, settingsState) => Scaffold(
@@ -112,6 +118,7 @@ class _ItemPageState extends State<ItemPage> {
             scrollController: _scrollController,
             onRefresh: () async => unawaited(_itemTreeCubit.load()),
             toolbarHeight: _getToolbarHeight(
+              storyLines: settingsState.storyLines,
               useLargeStoryStyle: settingsState.useLargeStoryStyle,
             ),
             slivers: [
@@ -125,6 +132,7 @@ class _ItemPageState extends State<ItemPage> {
                 bodyKey: _bodyKey,
                 scrollController: _scrollController,
                 toolbarHeight: _getToolbarHeight(
+                  storyLines: settingsState.storyLines,
                   useLargeStoryStyle: settingsState.useLargeStoryStyle,
                 ),
               ),

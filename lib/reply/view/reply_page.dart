@@ -219,11 +219,6 @@ class _ReplyPreview extends StatelessWidget {
               builder: (context, username) =>
                   BlocBuilder<SettingsCubit, SettingsState>(
                 bloc: _settingsCubit,
-                buildWhen: (previous, current) =>
-                    previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-                    previous.showFavicons != current.showFavicons ||
-                    previous.showUserAvatars != current.showUserAvatars ||
-                    previous.useInAppBrowser != current.useInAppBrowser,
                 builder: (context, settingsState) => HeroMode(
                   enabled: false,
                   child: ItemDataTile(
@@ -235,6 +230,7 @@ class _ReplyPreview extends StatelessWidget {
                           state.text.value.isNotEmpty ? state.text.value : null,
                       dateTime: clock.now(),
                     ),
+                    storyLines: settingsState.storyLines,
                     useLargeStoryStyle: settingsState.useLargeStoryStyle,
                     showFavicons: settingsState.showFavicons,
                     showUserAvatars: settingsState.showUserAvatars,

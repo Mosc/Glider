@@ -34,6 +34,7 @@ class ItemDataTile extends StatelessWidget {
     this.filtered = false,
     this.failed = false,
     this.collapsedCount,
+    this.storyLines = 2,
     this.useLargeStoryStyle = true,
     this.showFavicons = true,
     this.showMetadata = true,
@@ -58,6 +59,7 @@ class ItemDataTile extends StatelessWidget {
   final bool filtered;
   final bool failed;
   final int? collapsedCount;
+  final int storyLines;
   final bool useLargeStoryStyle;
   final bool showFavicons;
   final bool showMetadata;
@@ -151,6 +153,7 @@ class ItemDataTile extends StatelessWidget {
                     tag: 'item_tile_title_${item.id}',
                     child: _ItemTitle(
                       item,
+                      storyLines: storyLines,
                       useLargeStoryStyle: useLargeStoryStyle,
                       style: style,
                     ),
@@ -170,7 +173,8 @@ class ItemDataTile extends StatelessWidget {
                     onLongPress: () {},
                     child: _ItemFavicon(
                       item,
-                      isLarge: useLargeStoryStyle,
+                      storyLines: storyLines,
+                      useLargeStoryStyle: useLargeStoryStyle,
                     ),
                   ),
                 ),
@@ -376,7 +380,8 @@ class ItemDataTile extends StatelessWidget {
                       type: MaterialType.transparency,
                       child: _ItemFavicon(
                         item,
-                        isLarge: false,
+                        storyLines: 1,
+                        useLargeStoryStyle: false,
                       ),
                     ),
                   )
@@ -407,13 +412,18 @@ class ItemDataTile extends StatelessWidget {
 class _ItemTitle extends StatelessWidget {
   const _ItemTitle(
     this.item, {
+    required this.storyLines,
     required this.useLargeStoryStyle,
     required this.style,
   });
 
   final Item item;
+  final int storyLines;
   final bool useLargeStoryStyle;
   final ItemStyle style;
+
+  int get maxLines =>
+      storyLines >= 0 ? storyLines : (useLargeStoryStyle ? 3 : 2);
 
   @override
   Widget build(BuildContext context) {
@@ -493,12 +503,14 @@ class _ItemTitle extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
-          // Attach zero-width space of title style to enforce height.
+          // Append zero-width space of title style to enforce height.
           const TextSpan(text: '\u200b'),
-          if (useLargeStoryStyle) const TextSpan(text: '\n'),
+          if (storyLines >= 0)
+            // `minLines` does not exist, so append newlines as a workaround.
+            TextSpan(text: '\n' * (maxLines - 1)),
         ],
       ),
-      maxLines: 2,
+      maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -507,13 +519,18 @@ class _ItemTitle extends StatelessWidget {
 class _ItemFavicon extends StatelessWidget {
   const _ItemFavicon(
     this.item, {
-    required this.isLarge,
+    required this.storyLines,
+    required this.useLargeStoryStyle,
   });
 
   final Item item;
-  final bool isLarge;
+  final int storyLines;
+  final bool useLargeStoryStyle;
 
-  int get _faviconSize => min(isLarge ? 2 * 24 : 20, _faviconRequestSize);
+  int get _faviconSize => min(
+        useLargeStoryStyle ? (storyLines >= 0 ? storyLines : 2) * 24 : 20,
+        _faviconRequestSize,
+      );
 
   @override
   Widget build(BuildContext context) {

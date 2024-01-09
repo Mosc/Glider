@@ -37,11 +37,9 @@ class SliverStoriesSearchBody extends StatelessWidget {
           itemBuilder: (context, index) =>
               BlocBuilder<SettingsCubit, SettingsState>(
             bloc: _settingsCubit,
-            buildWhen: (previous, current) =>
-                previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-                previous.showStoryMetadata != current.showStoryMetadata,
             builder: (context, settingsState) => ItemLoadingTile(
               type: ItemType.story,
+              storyLines: settingsState.storyLines,
               useLargeStoryStyle: settingsState.useLargeStoryStyle,
               showMetadata: settingsState.showStoryMetadata,
               style: ItemStyle.overview,

@@ -102,7 +102,7 @@ class _SettingsBody extends StatelessWidget {
             MenuListTile(
               title: Text(context.l10n.themeMode),
               trailing: Text(state.themeMode.capitalizedLabel),
-              onChanged: (value) async => _settingsCubit.setThemeMode(value),
+              onChanged: _settingsCubit.setThemeMode,
               values: ThemeMode.values,
               selected: (value) => state.themeMode == value,
               childBuilder: (value) => Text(value.capitalizedLabel),
@@ -131,7 +131,7 @@ class _SettingsBody extends StatelessWidget {
               title: Text(context.l10n.themeVariant),
               trailing: Text(state.themeVariant.capitalizedLabel),
               enabled: !state.useDynamicTheme,
-              onChanged: (value) async => _settingsCubit.setThemeVariant(value),
+              onChanged: _settingsCubit.setThemeVariant,
               values: Variant.values,
               selected: (value) => state.themeVariant == value,
               childBuilder: (value) => Text(value.capitalizedLabel),
@@ -147,7 +147,7 @@ class _SettingsBody extends StatelessWidget {
             MenuListTile(
               title: Text(context.l10n.font),
               trailing: Text(state.font),
-              onChanged: (value) async => _settingsCubit.setFont(value),
+              onChanged: _settingsCubit.setFont,
               values: _fonts,
               selected: (value) => state.font == value,
               childBuilder: Text.new,
@@ -161,6 +161,19 @@ class _SettingsBody extends StatelessWidget {
                       color: Theme.of(context).colorScheme.secondary,
                     ),
               ),
+            ),
+            MenuListTile(
+              title: Text(context.l10n.storyLines),
+              trailing: Text(
+                state.storyLines >= 0
+                    ? '${state.storyLines}'
+                    : context.l10n.variable,
+              ),
+              onChanged: _settingsCubit.setStoryLines,
+              values: const [1, 2, -1],
+              selected: (value) => state.storyLines == value,
+              childBuilder: (value) =>
+                  Text(value >= 0 ? '$value' : context.l10n.variable),
             ),
             SwitchListTile.adaptive(
               value: state.useLargeStoryStyle,
@@ -202,13 +215,6 @@ class _SettingsBody extends StatelessWidget {
             ),
             BlocBuilder<SettingsCubit, SettingsState>(
               bloc: _settingsCubit,
-              buildWhen: (previous, current) =>
-                  previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-                  previous.showFavicons != current.showFavicons ||
-                  previous.showStoryMetadata != current.showStoryMetadata ||
-                  previous.showUserAvatars != current.showUserAvatars ||
-                  previous.useActionButtons != current.useActionButtons ||
-                  previous.useInAppBrowser != current.useInAppBrowser,
               builder: (context, state) => Padding(
                 padding: AppSpacing.defaultTilePadding,
                 child: PreviewCard(
@@ -230,6 +236,7 @@ class _SettingsBody extends StatelessWidget {
                         descendantCount: 7,
                       ),
                       vote: VoteType.upvote,
+                      storyLines: state.storyLines,
                       useLargeStoryStyle: state.useLargeStoryStyle,
                       showFavicons: state.showFavicons,
                       showMetadata: state.showStoryMetadata,

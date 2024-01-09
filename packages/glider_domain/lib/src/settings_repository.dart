@@ -50,6 +50,12 @@ class SettingsRepository {
   Future<bool> setFont({required String value}) async =>
       _sharedPreferencesService.setFont(value: value);
 
+  Future<int?> getStoryLines() async =>
+      _sharedPreferencesService.getStoryLines();
+
+  Future<bool> setStoryLines({required int value}) async =>
+      _sharedPreferencesService.setStoryLines(value: value);
+
   Future<bool?> getUseLargeStoryStyle() async =>
       _sharedPreferencesService.getUseLargeStoryStyle();
 

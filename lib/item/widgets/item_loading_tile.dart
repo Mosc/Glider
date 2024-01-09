@@ -13,6 +13,7 @@ class ItemLoadingTile extends StatelessWidget {
     super.key,
     required this.type,
     this.collapsedCount,
+    this.storyLines = 2,
     this.useLargeStoryStyle = true,
     this.showMetadata = true,
     this.style = ItemStyle.full,
@@ -21,12 +22,14 @@ class ItemLoadingTile extends StatelessWidget {
 
   final ItemType type;
   final int? collapsedCount;
+  final int storyLines;
   final bool useLargeStoryStyle;
   final bool showMetadata;
   final ItemStyle style;
   final EdgeInsetsGeometry padding;
 
-  int get _faviconSize => useLargeStoryStyle ? 2 * 24 : 20;
+  int get _faviconSize =>
+      useLargeStoryStyle ? (storyLines >= 0 ? storyLines : 2) * 24 : 20;
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +60,20 @@ class ItemLoadingTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    for (var i = 0;
+                        i < (storyLines >= 0 ? storyLines : 2) - 1;
+                        i++)
+                      LoadingTextBlock(
+                        style: useLargeStoryStyle
+                            ? textTheme.titleMedium
+                            : textTheme.titleSmall,
+                      ),
                     LoadingTextBlock(
+                      width: 200,
                       style: useLargeStoryStyle
                           ? textTheme.titleMedium
                           : textTheme.titleSmall,
                     ),
-                    if (useLargeStoryStyle)
-                      LoadingTextBlock(
-                        width: 200,
-                        style: textTheme.titleMedium,
-                      ),
                   ],
                 ),
               ),

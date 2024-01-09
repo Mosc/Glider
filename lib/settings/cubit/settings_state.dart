@@ -8,6 +8,7 @@ class SettingsState with EquatableMixin {
     this.themeVariant = Variant.tonalSpot,
     this.usePureBackground = false,
     this.font = 'Noto Sans',
+    this.storyLines = 2,
     this.useLargeStoryStyle = true,
     this.showFavicons = true,
     this.showStoryMetadata = true,
@@ -29,6 +30,7 @@ class SettingsState with EquatableMixin {
   final Variant themeVariant;
   final bool usePureBackground;
   final String font;
+  final int storyLines;
   final bool useLargeStoryStyle;
   final bool showFavicons;
   final bool showStoryMetadata;
@@ -50,6 +52,7 @@ class SettingsState with EquatableMixin {
     Variant Function()? themeVariant,
     bool Function()? usePureBackground,
     String Function()? font,
+    int Function()? storyLines,
     bool Function()? useLargeStoryStyle,
     bool Function()? showFavicons,
     bool Function()? showStoryMetadata,
@@ -74,6 +77,7 @@ class SettingsState with EquatableMixin {
             ? usePureBackground()
             : this.usePureBackground,
         font: font != null ? font() : this.font,
+        storyLines: storyLines != null ? storyLines() : this.storyLines,
         useLargeStoryStyle: useLargeStoryStyle != null
             ? useLargeStoryStyle()
             : this.useLargeStoryStyle,
@@ -112,6 +116,7 @@ class SettingsState with EquatableMixin {
         themeVariant,
         usePureBackground,
         font,
+        storyLines,
         useLargeStoryStyle,
         showFavicons,
         showStoryMetadata,

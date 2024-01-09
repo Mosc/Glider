@@ -109,6 +109,7 @@ class _ItemTileState extends State<ItemTile>
             bloc: widget._settingsCubit,
             buildWhen: (previous, current) =>
                 previous.showStoryMetadata != current.showStoryMetadata ||
+                previous.storyLines != current.storyLines ||
                 previous.useLargeStoryStyle != current.useLargeStoryStyle ||
                 previous.showFavicons != current.showFavicons ||
                 previous.showUserAvatars != current.showUserAvatars ||
@@ -122,6 +123,7 @@ class _ItemTileState extends State<ItemTile>
                 loading: () => ItemLoadingTile(
                   type: widget.loadingType,
                   collapsedCount: widget.collapsedCount,
+                  storyLines: settingsState.storyLines,
                   useLargeStoryStyle: settingsState.useLargeStoryStyle,
                   showMetadata: settingsState.showStoryMetadata ||
                       widget.forceShowMetadata,
@@ -166,6 +168,7 @@ class _ItemTileState extends State<ItemTile>
                               ),
                       failed: state.status == Status.failure,
                       collapsedCount: widget.collapsedCount,
+                      storyLines: settingsState.storyLines,
                       useLargeStoryStyle: settingsState.useLargeStoryStyle,
                       showFavicons: settingsState.showFavicons,
                       showMetadata: settingsState.showStoryMetadata ||
