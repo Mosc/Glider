@@ -17,6 +17,6 @@ dependencies:
   rxdart: ^0.27.7
 
 dev_dependencies:
-  custom_lint: ^0.5.7
+  custom_lint: ^0.5.8
   dependency_validator: ^3.2.3
   leancode_lint: ^8.0.0
