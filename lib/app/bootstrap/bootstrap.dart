@@ -11,7 +11,6 @@ import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/router/app_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:universal_io/io.dart';
 
 Future<void> bootstrap(
   FutureOr<Widget> Function(AppContainer, AppRouter, BaseDeviceInfo) builder,
@@ -23,7 +22,9 @@ Future<void> bootstrap(
 
       WidgetsFlutterBinding.ensureInitialized();
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      if (Platform.isAndroid) await FlutterDisplayMode.setHighRefreshRate();
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        await FlutterDisplayMode.setHighRefreshRate();
+      }
 
       Bloc.observer = const AppBlocObserver();
       HydratedBloc.storage = await HydratedStorage.build(
