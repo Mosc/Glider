@@ -4,25 +4,20 @@ import 'package:equatable/equatable.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
+import 'package:glider/common/transformers/debounce.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:rxdart/transformers.dart';
 
 part 'user_item_search_event.dart';
 part 'user_item_search_state.dart';
 
-const _debounceDuration = Duration(milliseconds: 300);
-
-EventTransformer<Event> debounce<Event>(Duration duration) =>
-    (events, mapper) => events.debounceTime(duration).switchMap(mapper);
-
 class UserItemSearchBloc
-    extends HydratedBloc<UserItemSearchEvent, UserItemSearchState> {
+    extends Bloc<UserItemSearchEvent, UserItemSearchState> {
   UserItemSearchBloc(this._itemRepository, {required this.username})
       : super(const UserItemSearchState()) {
     on<LoadUserItemSearchEvent>(
       (event, emit) async => _load(),
-      transformer: debounce(_debounceDuration),
+      transformer: debounce(const Duration(milliseconds: 300)),
     );
     on<SetTextUserItemSearchEvent>(
       (event, emit) async => _setText(event),
@@ -31,9 +26,6 @@ class UserItemSearchBloc
 
   final ItemRepository _itemRepository;
   final String username;
-
-  @override
-  String get id => username;
 
   Future<void> _load() async {
     safeEmit(
@@ -68,12 +60,4 @@ class UserItemSearchBloc
     );
     add(const LoadUserItemSearchEvent());
   }
-
-  @override
-  UserItemSearchState? fromJson(Map<String, dynamic> json) =>
-      UserItemSearchState.fromJson(json);
-
-  @override
-  Map<String, dynamic>? toJson(UserItemSearchState state) =>
-      state.status == Status.success ? state.toJson() : null;
 }

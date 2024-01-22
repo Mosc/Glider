@@ -90,9 +90,8 @@ class SubmitCubit extends HydratedCubit<SubmitState> {
   }
 
   @override
-  SubmitState? fromJson(Map<String, dynamic> json) =>
-      SubmitState.fromJson(json);
+  SubmitState? fromJson(Map<String, dynamic> json) => SubmitState.fromMap(json);
 
   @override
-  Map<String, dynamic>? toJson(SubmitState state) => state.toJson();
+  Map<String, dynamic>? toJson(SubmitState state) => state.toMap();
 }

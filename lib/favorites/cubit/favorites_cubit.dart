@@ -44,11 +44,11 @@ class FavoritesCubit extends HydratedCubit<FavoritesState> {
 
   @override
   FavoritesState? fromJson(Map<String, dynamic> json) =>
-      FavoritesState.fromJson(json);
+      FavoritesState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(FavoritesState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 
   @override
   Future<void> close() async {

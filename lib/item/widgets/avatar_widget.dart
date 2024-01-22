@@ -4,10 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
 class AvatarWidget extends StatelessWidget {
-  const AvatarWidget({
-    super.key,
-    required this.username,
-  });
+  AvatarWidget({required this.username}) : super(key: ValueKey(username));
 
   final String username;
 

@@ -9,7 +9,7 @@ class MenuListTile<T> extends StatelessWidget {
     this.onChanged,
     required this.values,
     required this.selected,
-    required this.labelBuilder,
+    required this.childBuilder,
   });
 
   final Widget? title;
@@ -18,7 +18,7 @@ class MenuListTile<T> extends StatelessWidget {
   final void Function(T)? onChanged;
   final Iterable<T> values;
   final bool Function(T) selected;
-  final String Function(T) labelBuilder;
+  final Widget Function(T) childBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class MenuListTile<T> extends StatelessWidget {
               visible: selected(value),
               child: const Icon(Icons.check_outlined),
             ),
-            child: Text(labelBuilder(value)),
+            child: childBuilder(value),
           ),
       ],
       builder: (context, controller, child) => ListTile(

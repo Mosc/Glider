@@ -46,6 +46,9 @@ class StoriesSearchView extends StatelessWidget {
               _settingsCubit,
             ),
           ),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
+          ),
         ],
       ),
     );

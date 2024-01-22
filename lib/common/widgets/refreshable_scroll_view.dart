@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 // This value happens to fit a page worth of items (30) with the standard height
-// of an item in the stories overview (96). It does not appear to have a
+// of an item in the stories overview (92). It does not appear to have a
 // significant negative impact on initial load performance, while making
 // scrolling noticably smoother on most affected pages compared to the default.
-const _cacheExtent = 2880.0;
+const _cacheExtent = 2760.0;
 
 class RefreshableScrollView extends StatelessWidget {
   const RefreshableScrollView({

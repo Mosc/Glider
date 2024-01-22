@@ -19,13 +19,12 @@ import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
 class ReplyPage extends StatefulWidget {
-  const ReplyPage(
+  ReplyPage(
     this._replyCubitFactory,
     this._authCubit,
     this._settingsCubit, {
-    super.key,
     required this.id,
-  });
+  }) : super(key: ValueKey(id));
 
   final ReplyCubitFactory _replyCubitFactory;
   final AuthCubit _authCubit;
@@ -41,8 +40,8 @@ class _ReplyPageState extends State<ReplyPage> {
 
   @override
   void initState() {
-    _replyCubit = widget._replyCubitFactory(widget.id);
     super.initState();
+    _replyCubit = widget._replyCubitFactory(widget.id);
   }
 
   @override
@@ -117,25 +116,20 @@ class _ReplyBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ReplyCubit, ReplyState>(
       bloc: _replyCubit,
-      builder: (context, state) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-            child: _ReplyForm(_replyCubit),
-          ),
-          if (state.parentItem?.text != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.xl,
-              ),
-              child: ElevatedButton.icon(
+      builder: (context, state) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _ReplyForm(_replyCubit),
+            if (state.parentItem?.text != null)
+              ElevatedButton.icon(
                 onPressed: _replyCubit.quoteParent,
                 icon: const Icon(Icons.format_quote),
                 label: Text(context.l10n.quoteParent),
               ),
-            ),
-        ].spaced(height: AppSpacing.xl),
+          ].spaced(height: AppSpacing.xl),
+        ),
       ),
     );
   }
@@ -155,9 +149,9 @@ class _ReplyFormState extends State<_ReplyForm> {
 
   @override
   void initState() {
+    super.initState();
     final state = widget._replyCubit.state;
     _textController = TextEditingController(text: state.text.value);
-    super.initState();
   }
 
   @override
@@ -186,7 +180,6 @@ class _ReplyFormState extends State<_ReplyForm> {
           decoration: InputDecoration(
             labelText: context.l10n.text,
             errorText: state.text.displayError?.label(context),
-            filled: true,
           ),
           keyboardType: TextInputType.multiline,
           textCapitalization: TextCapitalization.sentences,
@@ -237,10 +230,12 @@ class _ReplyPreview extends StatelessWidget {
                           state.text.value.isNotEmpty ? state.text.value : null,
                       dateTime: clock.now(),
                     ),
+                    storyLines: settingsState.storyLines,
                     useLargeStoryStyle: settingsState.useLargeStoryStyle,
                     showFavicons: settingsState.showFavicons,
                     showUserAvatars: settingsState.showUserAvatars,
                     usernameStyle: UsernameStyle.loggedInUser,
+                    useInAppBrowser: settingsState.useInAppBrowser,
                   ),
                 ),
               ),

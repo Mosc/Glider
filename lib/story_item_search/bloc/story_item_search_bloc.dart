@@ -4,26 +4,21 @@ import 'package:equatable/equatable.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
 import 'package:glider/common/models/status.dart';
+import 'package:glider/common/transformers/debounce.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:rxdart/transformers.dart';
 
 part 'story_item_search_event.dart';
 part 'story_item_search_state.dart';
 
-const _debounceDuration = Duration(milliseconds: 300);
-
-EventTransformer<Event> debounce<Event>(Duration duration) =>
-    (events, mapper) => events.debounceTime(duration).switchMap(mapper);
-
 class StoryItemSearchBloc
-    extends HydratedBloc<ItemSearchEvent, StoryItemSearchState> {
+    extends Bloc<StoryItemSearchEvent, StoryItemSearchState> {
   StoryItemSearchBloc(this._itemRepository, {required int id})
       : itemId = id,
         super(const StoryItemSearchState()) {
     on<LoadStoryItemSearchEvent>(
       (event, emit) async => _load(),
-      transformer: debounce(_debounceDuration),
+      transformer: debounce(const Duration(milliseconds: 300)),
     );
     on<SetTextStoryItemSearchEvent>(
       (event, emit) async => _setText(event),
@@ -32,9 +27,6 @@ class StoryItemSearchBloc
 
   final ItemRepository _itemRepository;
   final int itemId;
-
-  @override
-  String get id => itemId.toString();
 
   Future<void> _load() async {
     safeEmit(
@@ -69,12 +61,4 @@ class StoryItemSearchBloc
     );
     add(const LoadStoryItemSearchEvent());
   }
-
-  @override
-  StoryItemSearchState? fromJson(Map<String, dynamic> json) =>
-      StoryItemSearchState.fromJson(json);
-
-  @override
-  Map<String, dynamic>? toJson(StoryItemSearchState state) =>
-      state.status == Status.success ? state.toJson() : null;
 }

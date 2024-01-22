@@ -24,13 +24,9 @@ class ItemTreeCubit extends HydratedCubit<ItemTreeState> {
 
   Future<void> load() async {
     safeEmit(
-      state.copyWith(
-        status: () => Status.loading,
-        visited: () => state.status != Status.initial,
-      ),
+      state.copyWith(status: () => Status.loading),
     );
-    final descendantsStream =
-        _itemRepository.getFlatItemDescendantsStream(itemId);
+    final descendantsStream = _itemRepository.getItemDescendantsStream(itemId);
 
     if (state.data == null || state.data!.isEmpty) {
       descendantsStream.listen(
@@ -49,22 +45,28 @@ class ItemTreeCubit extends HydratedCubit<ItemTreeState> {
           ),
         ),
         onDone: () => safeEmit(
-          state.copyWith(
-            status: () => Status.success,
-          ),
+          state.copyWith(status: () => Status.success),
         ),
-        cancelOnError: true,
       );
     } else {
-      final descendants = await descendantsStream.last;
-      safeEmit(
-        state.copyWith(
-          status: () => Status.success,
-          data: () => descendants,
-          previousData: () => state.data,
-          exception: () => null,
-        ),
-      );
+      try {
+        final descendants = await descendantsStream.last;
+        safeEmit(
+          state.copyWith(
+            status: () => Status.success,
+            data: () => descendants,
+            previousData: () => state.data,
+            exception: () => null,
+          ),
+        );
+      } on Object catch (exception) {
+        safeEmit(
+          state.copyWith(
+            status: () => Status.failure,
+            exception: () => exception,
+          ),
+        );
+      }
     }
   }
 
@@ -80,9 +82,9 @@ class ItemTreeCubit extends HydratedCubit<ItemTreeState> {
 
   @override
   ItemTreeState? fromJson(Map<String, dynamic> json) =>
-      ItemTreeState.fromJson(json);
+      ItemTreeState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(ItemTreeState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 }

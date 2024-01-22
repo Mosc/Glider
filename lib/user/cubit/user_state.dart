@@ -10,15 +10,15 @@ class UserState with DataMixin<User>, EquatableMixin {
     this.exception,
   });
 
-  factory UserState.fromJson(Map<String, dynamic> json) => UserState(
+  factory UserState.fromMap(Map<String, dynamic> json) => UserState(
         status: Status.values.byName(json['status'] as String),
-        data: User.fromJson(json['data'] as Map<String, dynamic>),
+        data: User.fromMap(json['data'] as Map<String, dynamic>),
         blocked: json['blocked'] as bool? ?? false,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
-        'data': data?.toJson(),
+        'data': data?.toMap(),
         'blocked': blocked,
       };
 

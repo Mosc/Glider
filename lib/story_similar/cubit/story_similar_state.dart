@@ -8,16 +8,16 @@ class StorySimilarState with DataMixin<List<int>>, EquatableMixin {
     this.exception,
   });
 
-  factory StorySimilarState.fromJson(Map<String, dynamic> json) =>
+  factory StorySimilarState.fromMap(Map<String, dynamic> json) =>
       StorySimilarState(
         status: Status.values.byName(json['status'] as String),
-        item: Item.fromJson(json['item'] as Map<String, dynamic>),
+        item: Item.fromMap(json['item'] as Map<String, dynamic>),
         data: (json['data'] as List<dynamic>?)
             ?.map((e) => e as int)
             .toList(growable: false),
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
         'item': item,
         'data': data,

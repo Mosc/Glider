@@ -15,7 +15,8 @@ class AlgoliaApiService {
 
   Map<String, String> _getCommonQueryParameters({int hits = 1000}) => {
         'hitsPerPage': hits.toString(),
-        'attributesToHighlight': '',
+        // Specify non-existent attribute to avoid returning highlight results.
+        'attributesToHighlight': '_',
         'typoTolerance': false.toString(),
         'analytics': false.toString(),
       };
@@ -45,7 +46,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -66,7 +67,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -93,7 +94,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -117,7 +118,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );
@@ -137,7 +138,7 @@ class AlgoliaApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return AlgoliaSearchDto.fromJson(map);
+        return AlgoliaSearchDto.fromMap(map);
       },
       response.body,
     );

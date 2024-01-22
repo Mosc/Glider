@@ -1,0 +1,4 @@
+- Added action to mark items as read or unread
+- Added setting to clear all read statuses
+- Fixed login autofill issues by replacing login flow
+- Improved (scrolling) performance

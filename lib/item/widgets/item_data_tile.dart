@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:glider/app/models/app_route.dart';
-import 'package:glider/common/constants/app_animation.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/extensions/widget_list_extension.dart';
@@ -32,12 +31,15 @@ class ItemDataTile extends StatelessWidget {
     this.favorited = false,
     this.flagged = false,
     this.blocked = false,
+    this.filtered = false,
     this.failed = false,
     this.collapsedCount,
+    this.storyLines = 2,
     this.useLargeStoryStyle = true,
     this.showFavicons = true,
     this.showMetadata = true,
     this.showUserAvatars = true,
+    this.useInAppBrowser = false,
     this.style = ItemStyle.full,
     this.usernameStyle = UsernameStyle.none,
     this.padding = AppSpacing.defaultTilePadding,
@@ -54,12 +56,15 @@ class ItemDataTile extends StatelessWidget {
   final bool favorited;
   final bool flagged;
   final bool blocked;
+  final bool filtered;
   final bool failed;
   final int? collapsedCount;
+  final int storyLines;
   final bool useLargeStoryStyle;
   final bool showFavicons;
   final bool showMetadata;
   final bool showUserAvatars;
+  final bool useInAppBrowser;
   final ItemStyle style;
   final UsernameStyle usernameStyle;
   final EdgeInsets padding;
@@ -80,9 +85,11 @@ class ItemDataTile extends StatelessWidget {
               Expanded(
                 child: Hero(
                   tag: 'item_tile_text_${item.id}',
-                  child: parsedText != null
-                      ? HackerNewsText.parsed(parsedText!)
-                      : HackerNewsText(text),
+                  child: HackerNewsText(
+                    text,
+                    parsedData: parsedText,
+                    useInAppBrowser: useInAppBrowser,
+                  ),
                 ),
               )
             else
@@ -100,10 +107,12 @@ class ItemDataTile extends StatelessWidget {
 
     final hasPrimary = style.showPrimary &&
         item.dateTime != null &&
-        (showMetadata || (item.title != null || item.url != null) && !blocked);
+        (showMetadata ||
+            (item.title != null || item.url != null) && !blocked && !filtered);
     final hasSecondary = style.showSecondary &&
         (item.text != null || item.url != null) &&
-        !blocked;
+        !blocked &&
+        !filtered;
 
     if (!hasPrimary && !hasSecondary) {
       return const SizedBox.shrink();
@@ -116,20 +125,15 @@ class ItemDataTile extends StatelessWidget {
       child: Padding(
         padding: padding,
         child: Opacity(
-          opacity: visited ? 0.75 : 1,
-          child: AnimatedSize(
-            alignment: Alignment.topCenter,
-            duration: AppAnimation.emphasized.duration,
-            curve: AppAnimation.emphasized.easing,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (hasPrimary) _buildPrimary(context),
-                if (hasSecondary && collapsedCount == null)
-                  _buildSecondary(context),
-              ].spaced(height: AppSpacing.m),
-            ),
+          opacity: visited ? 2 / 3 : 1,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (hasPrimary) _buildPrimary(context),
+              if (hasSecondary && collapsedCount == null)
+                _buildSecondary(context),
+            ].spaced(height: AppSpacing.m),
           ),
         ),
       ),
@@ -139,7 +143,7 @@ class ItemDataTile extends StatelessWidget {
   Widget _buildPrimary(BuildContext context) {
     return Column(
       children: [
-        if ((item.title != null || item.url != null) && !blocked)
+        if ((item.title != null || item.url != null) && !blocked && !filtered)
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -149,6 +153,7 @@ class ItemDataTile extends StatelessWidget {
                     tag: 'item_tile_title_${item.id}',
                     child: _ItemTitle(
                       item,
+                      storyLines: storyLines,
                       useLargeStoryStyle: useLargeStoryStyle,
                       style: style,
                     ),
@@ -159,21 +164,24 @@ class ItemDataTile extends StatelessWidget {
               if (item.url != null && showFavicons)
                 AnimatedVisibility(
                   visible: style == ItemStyle.overview,
-                  alignment: AlignmentDirectional.centerEnd,
                   child: InkWell(
-                    onTap: () async => item.url!.tryLaunch(),
+                    onTap: () async => item.url!.tryLaunch(
+                      context,
+                      useInAppBrowser: useInAppBrowser,
+                    ),
                     // Explicitly override parent widget's long press.
                     onLongPress: () {},
                     child: _ItemFavicon(
                       item,
-                      isLarge: useLargeStoryStyle,
+                      storyLines: storyLines,
+                      useLargeStoryStyle: useLargeStoryStyle,
                     ),
                   ),
                 ),
             ].spaced(width: AppSpacing.xl),
           ),
         if (showMetadata) _buildMetadata(context),
-      ].spaced(height: AppSpacing.m),
+      ].spaced(height: AppSpacing.s),
     );
   }
 
@@ -257,6 +265,17 @@ class ItemDataTile extends StatelessWidget {
             ),
           ),
         ),
+        Hero(
+          tag: 'item_tile_filtered_${item.id}',
+          child: AnimatedVisibility(
+            visible: filtered,
+            padding: MetadataWidget.horizontalPadding,
+            child: const MetadataWidget(
+              icon: Icons.filter_alt_outlined,
+              label: Text('[filtered]'),
+            ),
+          ),
+        ),
         ...[
           if (item.isDeleted)
             Hero(
@@ -306,7 +325,7 @@ class ItemDataTile extends StatelessWidget {
               child: MetadataWidget(
                 label: Tooltip(
                   message: dateTime.toString(),
-                  child: Text(item.dateTime!.relativeTime(context)),
+                  child: Text(dateTime.relativeTime(context)),
                 ),
               ),
             ),
@@ -338,13 +357,18 @@ class ItemDataTile extends StatelessWidget {
         if (item.text case final text?)
           Hero(
             tag: 'item_tile_text_${item.id}',
-            child: parsedText != null
-                ? HackerNewsText.parsed(parsedText!)
-                : HackerNewsText(text),
+            child: HackerNewsText(
+              text,
+              parsedData: parsedText,
+              useInAppBrowser: useInAppBrowser,
+            ),
           ),
         if (item.url case final url?)
           DecoratedCard.outlined(
-            onTap: () async => url.tryLaunch(),
+            onTap: () async => url.tryLaunch(
+              context,
+              useInAppBrowser: useInAppBrowser,
+            ),
             // Explicitly override parent widget's long press.
             onLongPress: () {},
             child: Row(
@@ -356,7 +380,8 @@ class ItemDataTile extends StatelessWidget {
                       type: MaterialType.transparency,
                       child: _ItemFavicon(
                         item,
-                        isLarge: false,
+                        storyLines: 1,
+                        useLargeStoryStyle: false,
                       ),
                     ),
                   )
@@ -387,13 +412,18 @@ class ItemDataTile extends StatelessWidget {
 class _ItemTitle extends StatelessWidget {
   const _ItemTitle(
     this.item, {
+    required this.storyLines,
     required this.useLargeStoryStyle,
     required this.style,
   });
 
   final Item item;
+  final int storyLines;
   final bool useLargeStoryStyle;
   final ItemStyle style;
+
+  int get maxLines =>
+      storyLines >= 0 ? storyLines : (useLargeStoryStyle ? 3 : 2);
 
   @override
   Widget build(BuildContext context) {
@@ -472,14 +502,15 @@ class _ItemTitle extends StatelessWidget {
                 text: ')',
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              // Attach zero-width space of title style to
-              // enforce height.
-              const TextSpan(text: '\u200b'),
             ],
-          if (useLargeStoryStyle) const TextSpan(text: '\n'),
+          // Append zero-width space of title style to enforce height.
+          const TextSpan(text: '\u200b'),
+          if (storyLines >= 0)
+            // `minLines` does not exist, so append newlines as a workaround.
+            TextSpan(text: '\n' * (maxLines - 1)),
         ],
       ),
-      maxLines: 2,
+      maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -488,13 +519,18 @@ class _ItemTitle extends StatelessWidget {
 class _ItemFavicon extends StatelessWidget {
   const _ItemFavicon(
     this.item, {
-    required this.isLarge,
+    required this.storyLines,
+    required this.useLargeStoryStyle,
   });
 
   final Item item;
-  final bool isLarge;
+  final int storyLines;
+  final bool useLargeStoryStyle;
 
-  int get _faviconSize => min(isLarge ? 2 * 24 : 20, _faviconRequestSize);
+  int get _faviconSize => min(
+        useLargeStoryStyle ? (storyLines >= 0 ? storyLines : 2) * 24 : 20,
+        _faviconRequestSize,
+      );
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,6 @@ import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/navigation_shell/models/navigation_shell_action.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/stories/cubit/stories_cubit.dart';
-import 'package:glider/stories/models/story_type.dart';
 import 'package:glider/stories/view/stories_type_view.dart';
 import 'package:glider/stories_search/bloc/stories_search_bloc.dart';
 import 'package:glider/stories_search/view/stories_search_view.dart';
@@ -48,8 +47,8 @@ class StoriesShellPage extends StatefulWidget {
 class _StoriesShellPageState extends State<StoriesShellPage> {
   @override
   void initState() {
-    unawaited(widget._storiesCubit.load());
     super.initState();
+    unawaited(widget._storiesCubit.load());
   }
 
   @override
@@ -64,9 +63,6 @@ class _StoriesShellPageState extends State<StoriesShellPage> {
             widget._itemCubitFactory,
             widget._authCubit,
             widget._settingsCubit,
-          ),
-          SliverToBoxAdapter(
-            child: StoriesTypeView(widget._storiesCubit),
           ),
           SliverSafeArea(
             top: false,
@@ -106,70 +102,20 @@ class _SliverStoriesAppBar extends StatefulWidget {
 }
 
 class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
-  late final SearchController _searchController;
-
-  @override
-  void initState() {
-    _searchController = SearchController()
-      ..text = widget._storiesSearchBloc.state.searchText ?? ''
-      ..addListener(
-        () async => widget._storiesSearchBloc
-            .add(SetTextStoriesSearchEvent(_searchController.text)),
-      );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text(context.l10n.stories),
+      title: StoriesTypeView(
+        widget._storiesCubit,
+        widget._settingsCubit,
+      ),
       flexibleSpace: AppBarProgressIndicator(widget._storiesCubit),
       actions: [
-        SearchAnchor(
-          searchController: _searchController,
-          builder: (context, controller) => IconButton(
-            onPressed: () {
-              controller.openView();
-              widget._storiesSearchBloc.add(const LoadStoriesSearchEvent());
-            },
-            tooltip: context.l10n.search,
-            icon: const Icon(Icons.search_outlined),
-          ),
-          viewLeading: IconButton(
-            onPressed: context.pop,
-            style: IconButton.styleFrom(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: const BackButtonIcon(),
-          ),
-          viewTrailing: [
-            BlocBuilder<StoriesSearchBloc, StoriesSearchState>(
-              bloc: widget._storiesSearchBloc,
-              builder: (context, state) => AnimatedOpacity(
-                opacity: state.status == Status.loading ? 1 : 0,
-                duration: AppAnimation.standard.duration,
-                curve: AppAnimation.standard.easing,
-                child: const CircularProgressIndicator.adaptive(),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: _searchController.clear,
-            ),
-          ],
-          viewBuilder: (suggestions) => StoriesSearchView(
-            widget._storiesSearchBloc,
-            widget._itemCubitFactory,
-            widget._authCubit,
-            widget._settingsCubit,
-          ),
-          suggestionsBuilder: (context, controller) => [],
+        _StoriesSearchAnchor(
+          widget._storiesSearchBloc,
+          widget._itemCubitFactory,
+          widget._authCubit,
+          widget._settingsCubit,
         ),
         BlocBuilder<AuthCubit, AuthState>(
           bloc: widget._authCubit,
@@ -200,6 +146,88 @@ class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
   }
 }
 
+class _StoriesSearchAnchor extends StatefulWidget {
+  const _StoriesSearchAnchor(
+    this._storiesSearchBloc,
+    this._itemCubitFactory,
+    this._authCubit,
+    this._settingsCubit,
+  );
+
+  final StoriesSearchBloc _storiesSearchBloc;
+  final ItemCubitFactory _itemCubitFactory;
+  final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
+
+  @override
+  State<_StoriesSearchAnchor> createState() => _StoriesSearchAnchorState();
+}
+
+class _StoriesSearchAnchorState extends State<_StoriesSearchAnchor> {
+  late final SearchController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = SearchController()
+      ..text = widget._storiesSearchBloc.state.searchText ?? ''
+      ..addListener(
+        () async => widget._storiesSearchBloc
+            .add(SetTextStoriesSearchEvent(_searchController.text)),
+      );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchAnchor(
+      searchController: _searchController,
+      builder: (context, controller) => IconButton(
+        onPressed: () async {
+          controller.openView();
+          widget._storiesSearchBloc.add(const LoadStoriesSearchEvent());
+        },
+        tooltip: context.l10n.search,
+        icon: const Icon(Icons.search_outlined),
+      ),
+      viewLeading: IconButton(
+        onPressed: context.pop,
+        style: IconButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        icon: const BackButtonIcon(),
+      ),
+      viewTrailing: [
+        BlocBuilder<StoriesSearchBloc, StoriesSearchState>(
+          bloc: widget._storiesSearchBloc,
+          builder: (context, state) => AnimatedOpacity(
+            opacity: state.status == Status.loading ? 1 : 0,
+            duration: AppAnimation.standard.duration,
+            curve: AppAnimation.standard.easing,
+            child: const CircularProgressIndicator.adaptive(),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: _searchController.clear,
+        ),
+      ],
+      viewBuilder: (suggestions) => StoriesSearchView(
+        widget._storiesSearchBloc,
+        widget._itemCubitFactory,
+        widget._authCubit,
+        widget._settingsCubit,
+      ),
+      suggestionsBuilder: (context, controller) => [],
+    );
+  }
+}
+
 class _SliverStoriesBody extends StatelessWidget {
   const _SliverStoriesBody(
     this._storiesCubit,
@@ -217,62 +245,57 @@ class _SliverStoriesBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StoriesCubit, StoriesState>(
       bloc: _storiesCubit,
-      builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
-        bloc: _settingsCubit,
-        buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.showStoryMetadata != current.showStoryMetadata ||
-            previous.useActionButtons != current.useActionButtons ||
-            previous.showJobs != current.showJobs,
-        builder: (context, settingsState) => state.whenOrDefaultSlivers(
-          loading: () => SliverList.builder(
-            itemBuilder: (context, index) => ItemLoadingTile(
+      builder: (context, state) => state.whenOrDefaultSlivers(
+        loading: () => SliverList.builder(
+          itemBuilder: (context, index) =>
+              BlocBuilder<SettingsCubit, SettingsState>(
+            bloc: _settingsCubit,
+            builder: (context, settingsState) => ItemLoadingTile(
               type: ItemType.story,
-              showMetadata: settingsState.showStoryMetadata,
+              storyLines: settingsState.storyLines,
               useLargeStoryStyle: settingsState.useLargeStoryStyle,
+              showMetadata: settingsState.showStoryMetadata,
               style: ItemStyle.overview,
             ),
           ),
-          nonEmpty: () => SliverMainAxisGroup(
-            slivers: [
-              SliverList.list(
-                children: [
-                  for (final id in state.loadedData!)
-                    ItemTile.create(
-                      _itemCubitFactory,
-                      _authCubit,
-                      _settingsCubit,
-                      key: ValueKey(id),
-                      id: id,
-                      loadingType: ItemType.story,
-                      showMetadata: settingsState.showStoryMetadata,
-                      showJobs: settingsState.showJobs ||
-                          state.storyType == StoryType.jobStories,
-                      style: ItemStyle.overview,
-                      onTap: (context, item) async => context.push(
-                        AppRoute.item.location(parameters: {'id': id}),
-                      ),
+        ),
+        nonEmpty: () => SliverMainAxisGroup(
+          slivers: [
+            SliverList.builder(
+              itemCount: state.loadedData!.length,
+              itemBuilder: (context, index) {
+                final id = state.loadedData![index];
+                return ItemTile.create(
+                  _itemCubitFactory,
+                  _authCubit,
+                  _settingsCubit,
+                  id: id,
+                  loadingType: ItemType.story,
+                  forceShowMetadata: false,
+                  style: ItemStyle.overview,
+                  onTap: (context, item) async => context.push(
+                    AppRoute.item.location(parameters: {'id': id}),
+                  ),
+                );
+              },
+            ),
+            if (state.loadedData!.length < state.data!.length)
+              SliverPadding(
+                padding: AppSpacing.defaultTilePadding,
+                sliver: SliverToBoxAdapter(
+                  child: OutlinedButton.icon(
+                    onPressed: _storiesCubit.showMore,
+                    style: OutlinedButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                ],
-              ),
-              if (state.loadedData!.length < state.data!.length)
-                SliverPadding(
-                  padding: AppSpacing.defaultTilePadding,
-                  sliver: SliverToBoxAdapter(
-                    child: OutlinedButton.icon(
-                      onPressed: _storiesCubit.showMore,
-                      style: OutlinedButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      icon: const Icon(Icons.expand_more_outlined),
-                      label: Text(context.l10n.showMore),
-                    ),
+                    icon: const Icon(Icons.expand_more_outlined),
+                    label: Text(context.l10n.showMore),
                   ),
                 ),
-            ],
-          ),
-          onRetry: () async => _storiesCubit.load(),
+              ),
+          ],
         ),
+        onRetry: () async => _storiesCubit.load(),
       ),
     );
   }

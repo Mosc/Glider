@@ -41,7 +41,7 @@ class HackerNewsApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return ItemDto.fromJson(map);
+        return ItemDto.fromMap(map);
       },
       response.body,
     );
@@ -53,7 +53,7 @@ class HackerNewsApiService {
     return compute(
       (body) {
         final map = jsonDecode(body) as Map<String, dynamic>;
-        return UserDto.fromJson(map);
+        return UserDto.fromMap(map);
       },
       response.body,
     );

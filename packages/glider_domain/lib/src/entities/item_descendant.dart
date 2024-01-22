@@ -7,7 +7,7 @@ class ItemDescendant with EquatableMixin {
     this.isPart = false,
   });
 
-  factory ItemDescendant.fromJson(Map<String, dynamic> json) => ItemDescendant(
+  factory ItemDescendant.fromMap(Map<String, dynamic> json) => ItemDescendant(
         id: json['id'] as int,
         ancestorIds: (json['ancestorIds'] as List<dynamic>?)
                 ?.map((e) => e as int)
@@ -16,7 +16,7 @@ class ItemDescendant with EquatableMixin {
         isPart: json['isPart'] as bool? ?? false,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'id': id,
         'ancestorIds': ancestorIds,
         'isPart': isPart,

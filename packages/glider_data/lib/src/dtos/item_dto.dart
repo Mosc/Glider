@@ -17,7 +17,7 @@ class ItemDto {
     this.descendants,
   });
 
-  factory ItemDto.fromJson(Map<String, dynamic> json) => ItemDto(
+  factory ItemDto.fromMap(Map<String, dynamic> json) => ItemDto(
         id: json['id'] as int,
         deleted: json['deleted'] as bool?,
         type: json['type'] as String?,

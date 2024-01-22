@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
+import 'package:glider/common/constants/app_uris.dart';
 import 'package:glider/common/interfaces/menu_item.dart';
 import 'package:glider/item/cubit/item_cubit.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
@@ -53,10 +54,9 @@ enum ItemValue implements MenuItem<ItemState> {
       ItemValue.title => item?.title,
       ItemValue.link => item?.url.toString(),
       ItemValue.text => item?.text,
-      ItemValue.itemLink => Uri.https(
-          'news.ycombinator.com',
-          'item',
-          <String, String>{
+      ItemValue.itemLink => AppUris.hackerNewsUri.replace(
+          path: 'item',
+          queryParameters: <String, String>{
             'id': itemCubit.itemId.toString(),
           },
         ).toString(),

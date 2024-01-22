@@ -139,10 +139,10 @@ class ItemRepository {
     }
   }
 
-  Stream<List<ItemDescendant>> getFlatItemDescendantsStream(int id) async* {
-    var descendants = <ItemDescendant>[];
-
+  Stream<List<ItemDescendant>> getItemDescendantsStream(int id) async* {
     try {
+      var descendants = <ItemDescendant>[];
+
       await for (final item in _getItemTreeStream(id)) {
         if (item.partIds != null && item.partIds!.isNotEmpty ||
             item.childIds != null && item.childIds!.isNotEmpty) {

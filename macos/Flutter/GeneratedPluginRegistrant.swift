@@ -7,7 +7,7 @@ import Foundation
 
 import device_info_plus
 import dynamic_color
-import flutter_inappwebview
+import flutter_inappwebview_macos
 import flutter_secure_storage_macos
 import package_info_plus
 import path_provider_foundation

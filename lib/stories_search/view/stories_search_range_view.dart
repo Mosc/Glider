@@ -15,6 +15,9 @@ class StoriesSearchRangeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<StoriesSearchBloc, StoriesSearchState>(
       bloc: _storiesSearchBloc,
+      listenWhen: (previous, current) =>
+          previous.searchRange != current.searchRange ||
+          previous.dateRange != current.dateRange,
       listener: (context, state) async {
         if (state.searchRange == SearchRange.custom &&
             state.dateRange == null) {
@@ -42,7 +45,11 @@ class StoriesSearchRangeView extends StatelessWidget {
           padding: EdgeInsetsDirectional.only(
             top: AppSpacing.s,
             bottom: AppSpacing.s,
-            start: AppSpacing.xl,
+            start: AppSpacing.xl +
+                switch (directionality) {
+                  TextDirection.ltr => padding.left,
+                  TextDirection.rtl => padding.right,
+                },
             end: AppSpacing.xl +
                 switch (directionality) {
                   TextDirection.ltr => padding.right,

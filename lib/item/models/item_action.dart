@@ -12,6 +12,7 @@ import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
 enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
+  visit,
   upvote,
   downvote,
   favorite,
@@ -36,6 +37,7 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
     final item = state.data;
     if (item == null) return false;
     return switch (this) {
+      ItemAction.visit => true,
       ItemAction.upvote => !item.isDeleted &&
           item.type != ItemType.job &&
           authState.isLoggedIn &&
@@ -72,6 +74,8 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   @override
   String label(BuildContext context, ItemState state) {
     return switch (this) {
+      ItemAction.visit =>
+        state.visited ? context.l10n.unvisit : context.l10n.visit,
       ItemAction.upvote =>
         state.vote.upvoted ? context.l10n.unvote : context.l10n.upvote,
       ItemAction.downvote =>
@@ -101,6 +105,9 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
           ? Icons.heart_broken_outlined
           : Icons.favorite_outline_outlined,
       ItemAction.flag => state.flagged ? Icons.flag : Icons.flag_outlined,
+      ItemAction.visit => state.visited
+          ? Icons.visibility_off_outlined
+          : Icons.visibility_outlined,
       ItemAction.edit => Icons.edit_outlined,
       ItemAction.delete => Icons.delete_outline_outlined,
       ItemAction.reply => Icons.reply_outlined,
@@ -118,6 +125,8 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   }) async {
     final id = itemCubit.id;
     switch (this) {
+      case ItemAction.visit:
+        await itemCubit.visit(!itemCubit.state.visited);
       case ItemAction.upvote:
         await itemCubit.upvote(itemCubit.state.vote != VoteType.upvote);
       case ItemAction.downvote:

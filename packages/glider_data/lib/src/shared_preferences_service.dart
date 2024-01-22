@@ -5,19 +5,25 @@ class SharedPreferencesService {
 
   final SharedPreferences _sharedPreferences;
 
-  static const String _useLargeStoryStyleKey = 'use_large_story_style';
-  static const String _showFaviconsKey = 'show_favicons';
-  static const String _showStoryMetadataKey = 'show_story_metadata';
-  static const String _showUserAvatars = 'show_user_avatars';
-  static const String _useActionButtonsKey = 'use_action_buttons';
   static const String _themeModeKey = 'theme_mode';
   static const String _useDynamicThemeKey = 'use_dynamic_theme';
   static const String _themeColorKey = 'theme_color';
   static const String _themeVariantKey = 'theme_variant';
   static const String _usePureBackgroundKey = 'use_pure_background';
+  static const String _fontKey = 'font';
+  static const String _storyLinesKey = 'story_lines';
+  static const String _useLargeStoryStyleKey = 'use_large_story_style';
+  static const String _showFaviconsKey = 'show_favicons';
+  static const String _showStoryMetadataKey = 'show_story_metadata';
+  static const String _showUserAvatars = 'show_user_avatars';
+  static const String _useActionButtonsKey = 'use_action_buttons';
   static const String _showJobsKey = 'show_jobs';
   static const String _useThreadNavigationKey = 'use_thread_navigation';
   static const String _enableDownvotingKey = 'enable_downvoting';
+  static const String _useInAppBrowserKey = 'use_in_app_browser';
+  static const String _useNavigationDrawerKey = 'use_navigation_drawer';
+  static const String _wordFiltersKey = 'word_filters';
+  static const String _domainFiltersKey = 'domain_filters';
   static const String _lastVersionKey = 'last_version';
   static const String _visitedKey = 'visited';
   static const String _upvotedKey = 'upvoted';
@@ -25,36 +31,6 @@ class SharedPreferencesService {
   static const String _favoritedKey = 'favorited';
   static const String _flaggedKey = 'flagged';
   static const String _blockedKey = 'blocked';
-
-  Future<bool?> getUseLargeStoryStyle() async =>
-      _sharedPreferences.getBool(_useLargeStoryStyleKey);
-
-  Future<bool> setUseLargeStoryStyle({required bool value}) async =>
-      _sharedPreferences.setBool(_useLargeStoryStyleKey, value);
-
-  Future<bool?> getShowFavicons() async =>
-      _sharedPreferences.getBool(_showFaviconsKey);
-
-  Future<bool> setShowFavicons({required bool value}) async =>
-      _sharedPreferences.setBool(_showFaviconsKey, value);
-
-  Future<bool?> getShowStoryMetadata() async =>
-      _sharedPreferences.getBool(_showStoryMetadataKey);
-
-  Future<bool> setShowStoryMetadata({required bool value}) async =>
-      _sharedPreferences.setBool(_showStoryMetadataKey, value);
-
-  Future<bool?> getShowUserAvatars() async =>
-      _sharedPreferences.getBool(_showUserAvatars);
-
-  Future<bool> setShowUserAvatars({required bool value}) async =>
-      _sharedPreferences.setBool(_showUserAvatars, value);
-
-  Future<bool?> getUseActionButtons() async =>
-      _sharedPreferences.getBool(_useActionButtonsKey);
-
-  Future<bool> setUseActionButtons({required bool value}) async =>
-      _sharedPreferences.setBool(_useActionButtonsKey, value);
 
   Future<String?> getThemeMode() async =>
       _sharedPreferences.getString(_themeModeKey);
@@ -86,6 +62,47 @@ class SharedPreferencesService {
   Future<bool> setUsePureBackground({required bool value}) async =>
       _sharedPreferences.setBool(_usePureBackgroundKey, value);
 
+  Future<String?> getFont() async => _sharedPreferences.getString(_fontKey);
+
+  Future<bool> setFont({required String value}) async =>
+      _sharedPreferences.setString(_fontKey, value);
+
+  Future<int?> getStoryLines() async =>
+      _sharedPreferences.getInt(_storyLinesKey);
+
+  Future<bool> setStoryLines({required int value}) async =>
+      _sharedPreferences.setInt(_storyLinesKey, value);
+
+  Future<bool?> getUseLargeStoryStyle() async =>
+      _sharedPreferences.getBool(_useLargeStoryStyleKey);
+
+  Future<bool> setUseLargeStoryStyle({required bool value}) async =>
+      _sharedPreferences.setBool(_useLargeStoryStyleKey, value);
+
+  Future<bool?> getShowFavicons() async =>
+      _sharedPreferences.getBool(_showFaviconsKey);
+
+  Future<bool> setShowFavicons({required bool value}) async =>
+      _sharedPreferences.setBool(_showFaviconsKey, value);
+
+  Future<bool?> getShowStoryMetadata() async =>
+      _sharedPreferences.getBool(_showStoryMetadataKey);
+
+  Future<bool> setShowStoryMetadata({required bool value}) async =>
+      _sharedPreferences.setBool(_showStoryMetadataKey, value);
+
+  Future<bool?> getShowUserAvatars() async =>
+      _sharedPreferences.getBool(_showUserAvatars);
+
+  Future<bool> setShowUserAvatars({required bool value}) async =>
+      _sharedPreferences.setBool(_showUserAvatars, value);
+
+  Future<bool?> getUseActionButtons() async =>
+      _sharedPreferences.getBool(_useActionButtonsKey);
+
+  Future<bool> setUseActionButtons({required bool value}) async =>
+      _sharedPreferences.setBool(_useActionButtonsKey, value);
+
   Future<bool?> getShowJobs() async => _sharedPreferences.getBool(_showJobsKey);
 
   Future<bool> setShowJobs({required bool value}) async =>
@@ -102,6 +119,46 @@ class SharedPreferencesService {
 
   Future<bool> setEnableDownvoting({required bool value}) async =>
       _sharedPreferences.setBool(_enableDownvotingKey, value);
+
+  Future<bool?> getUseInAppBrowser() async =>
+      _sharedPreferences.getBool(_useInAppBrowserKey);
+
+  Future<bool> setUseInAppBrowser({required bool value}) async =>
+      _sharedPreferences.setBool(_useInAppBrowserKey, value);
+
+  Future<bool?> getUseNavigationDrawer() async =>
+      _sharedPreferences.getBool(_useNavigationDrawerKey);
+
+  Future<bool> setUseNavigationDrawer({required bool value}) async =>
+      _sharedPreferences.setBool(_useNavigationDrawerKey, value);
+
+  Future<List<String>?> getWordFilters() async =>
+      _sharedPreferences.getStringList(_wordFiltersKey);
+
+  Future<bool> setWordFilter({
+    required String value,
+    required bool filter,
+  }) async {
+    if (filter) {
+      return _sharedPreferences.addElement(_wordFiltersKey, value);
+    } else {
+      return _sharedPreferences.removeElement(_wordFiltersKey, value);
+    }
+  }
+
+  Future<List<String>?> getDomainFilters() async =>
+      _sharedPreferences.getStringList(_domainFiltersKey);
+
+  Future<bool> setDomainFilter({
+    required String value,
+    required bool filter,
+  }) async {
+    if (filter) {
+      return _sharedPreferences.addElement(_domainFiltersKey, value);
+    } else {
+      return _sharedPreferences.removeElement(_domainFiltersKey, value);
+    }
+  }
 
   Future<String?> getLastVersion() async =>
       _sharedPreferences.getString(_lastVersionKey);
@@ -122,6 +179,11 @@ class SharedPreferencesService {
 
   Future<List<int>> getVisitedIds() async =>
       [...?_sharedPreferences.getStringList(_visitedKey)?.map(int.parse)];
+
+  Future<bool> setVisitedIds({required Iterable<int> ids}) async {
+    return _sharedPreferences
+        .setStringList(_visitedKey, [...ids.map((id) => id.toString())]);
+  }
 
   Future<bool> getUpvoted({required int id}) async =>
       _sharedPreferences.containsElement(_upvotedKey, id.toString());

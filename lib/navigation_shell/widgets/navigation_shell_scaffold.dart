@@ -10,7 +10,7 @@ import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/navigation_shell/cubit/navigation_shell_cubit.dart';
-import 'package:glider/navigation_shell/cubit/navigation_shell_event.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 // Height based on `_NavigationBarDefaultsM3`.
@@ -20,12 +20,14 @@ class NavigationShellScaffold extends StatefulWidget {
   const NavigationShellScaffold(
     this._navigationShellCubit,
     this._authCubit,
+    this._settingsCubit,
     this._navigationShell, {
     super.key,
   });
 
   final NavigationShellCubit _navigationShellCubit;
   final AuthCubit _authCubit;
+  final SettingsCubit _settingsCubit;
   final StatefulNavigationShell _navigationShell;
 
   @override
@@ -46,9 +48,9 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
 
   @override
   void initState() {
+    super.initState();
     unawaited(widget._navigationShellCubit.init());
     _currentNavigationBarHeightNotifier = ValueNotifier(0);
-    super.initState();
   }
 
   @override
@@ -65,91 +67,96 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocPresentationListener<NavigationShellCubit, NavigationShellEvent>(
+    return BlocPresentationListener<NavigationShellCubit,
+        NavigationShellCubitEvent>(
       bloc: widget._navigationShellCubit,
       listener: (context, event) => switch (event) {
         ShowWhatsNewEvent() => context.push(AppRoute.whatsNew.location()),
       },
-      child: BlocBuilder<AuthCubit, AuthState>(
+      child: BlocSelector<AuthCubit, AuthState, bool>(
         bloc: widget._authCubit,
-        builder: (context, authState) {
-          final destinations = [
-            NavigationDestination(
-              icon: const Icon(Icons.whatshot_outlined),
-              selectedIcon: const Icon(Icons.whatshot),
-              label: context.l10n.stories,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.fast_rewind_outlined),
-              selectedIcon: const Icon(Icons.fast_rewind),
-              label: context.l10n.catchUp,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.favorite_outline_outlined),
-              selectedIcon: const Icon(Icons.favorite),
-              label: context.l10n.favorites,
-            ),
-            if (authState.isLoggedIn)
+        selector: (state) => state.isLoggedIn,
+        builder: (context, isLoggedIn) =>
+            BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: widget._settingsCubit,
+          buildWhen: (previous, current) =>
+              previous.useNavigationDrawer != current.useNavigationDrawer,
+          builder: (context, settingsState) {
+            final destinations = [
               NavigationDestination(
-                icon: const Icon(Icons.inbox_outlined),
-                selectedIcon: const Icon(Icons.inbox),
-                label: context.l10n.inbox,
+                icon: const Icon(Icons.whatshot_outlined),
+                selectedIcon: const Icon(Icons.whatshot),
+                label: context.l10n.stories,
               ),
-          ];
-          final floatingActionButton = authState.isLoggedIn
-              ? FloatingActionButton(
-                  onPressed: () => context.push(AppRoute.submit.location()),
-                  tooltip: context.l10n.submit,
-                  child: const Icon(Icons.add_outlined),
-                )
-              : null;
+              NavigationDestination(
+                icon: const Icon(Icons.fast_rewind_outlined),
+                selectedIcon: const Icon(Icons.fast_rewind),
+                label: context.l10n.catchUp,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.favorite_outline_outlined),
+                selectedIcon: const Icon(Icons.favorite),
+                label: context.l10n.favorites,
+              ),
+              if (isLoggedIn)
+                NavigationDestination(
+                  icon: const Icon(Icons.inbox_outlined),
+                  selectedIcon: const Icon(Icons.inbox),
+                  label: context.l10n.inbox,
+                ),
+            ];
+            final floatingActionButton = isLoggedIn
+                ? FloatingActionButton(
+                    onPressed: () => context.push(AppRoute.submit.location()),
+                    tooltip: context.l10n.submit,
+                    child: const Icon(Icons.add_outlined),
+                  )
+                : null;
 
-          return Material(
-            child: AdaptiveLayout(
-              primaryNavigation: SlotLayout(
-                config: <Breakpoint, SlotLayoutConfig>{
-                  Breakpoints.medium: SlotLayout.from(
-                    key: const Key('primaryNavigationMedium'),
-                    builder: (context) => _buildPrimaryNavigation(
-                      context,
-                      destinations,
-                      leading: floatingActionButton,
+            return AdaptiveLayout(
+              primaryNavigation: settingsState.useNavigationDrawer
+                  ? null
+                  : SlotLayout(
+                      config: <Breakpoint, SlotLayoutConfig>{
+                        Breakpoints.mediumAndUp: SlotLayout.from(
+                          key: const Key('primaryNavigationMediumAndUp'),
+                          builder: (context) => _buildPrimaryNavigation(
+                            context,
+                            destinations,
+                            leading: floatingActionButton,
+                          ),
+                        ),
+                      },
                     ),
-                  ),
-                  Breakpoints.large: SlotLayout.from(
-                    key: const Key('primaryNavigationLarge'),
-                    builder: (context) => _buildPrimaryNavigation(
-                      context,
-                      destinations,
-                      leading: floatingActionButton,
-                      extended: true,
+              bottomNavigation: settingsState.useNavigationDrawer
+                  ? null
+                  : SlotLayout(
+                      config: {
+                        Breakpoints.small: SlotLayout.from(
+                          key: const Key('bottomNavigationStandard'),
+                          builder: (context) => _buildBottomNavigation(
+                            context,
+                            destinations,
+                          ),
+                        ),
+                      },
                     ),
-                  ),
-                },
-              ),
               body: SlotLayout(
                 config: {
                   Breakpoints.standard: SlotLayout.from(
                     key: const Key('bodyStandard'),
                     builder: (context) => _buildBody(
                       context,
+                      destinations,
                       floatingActionButton: floatingActionButton,
+                      useNavigationDrawer: settingsState.useNavigationDrawer,
                     ),
                   ),
                 },
               ),
-              bottomNavigation: SlotLayout(
-                config: {
-                  Breakpoints.small: SlotLayout.from(
-                    key: const Key('bottomNavigationSmall'),
-                    builder: (context) =>
-                        _buildBottomNavigation(context, destinations),
-                  ),
-                },
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -158,39 +165,66 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
     BuildContext context,
     List<NavigationDestination> destinations, {
     Widget? leading,
-    bool extended = false,
   }) {
     final padding = MediaQuery.paddingOf(context);
     final directionality = Directionality.of(context);
 
-    return AdaptiveScaffold.standardNavigationRail(
-      extended: extended,
-      width: (extended ? 160 : 80) +
-          switch (directionality) {
-            TextDirection.ltr => padding.left,
-            TextDirection.rtl => padding.right,
-          },
-      labelType:
-          extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
-      groupAlignment: 0,
-      leading: leading,
-      selectedIndex: _currentIndex,
-      destinations: [
-        for (final destination in destinations)
-          AdaptiveScaffold.toRailDestination(destination),
-      ],
-      onDestinationSelected: onDestinationSelected,
+    return Material(
+      child: AdaptiveScaffold.standardNavigationRail(
+        width: 80 +
+            switch (directionality) {
+              TextDirection.ltr => padding.left,
+              TextDirection.rtl => padding.right,
+            },
+        labelType: NavigationRailLabelType.all,
+        groupAlignment: 0,
+        leading: leading,
+        destinations: [
+          for (final destination in destinations)
+            NavigationRailDestination(
+              icon: destination.icon,
+              selectedIcon: destination.selectedIcon,
+              label: Text(destination.label),
+            ),
+        ],
+        selectedIndex: _currentIndex,
+        onDestinationSelected: onDestinationSelected,
+      ),
     );
   }
 
-  Widget _buildBody(BuildContext context, {Widget? floatingActionButton}) {
+  Widget _buildBottomNavigation(
+    BuildContext context,
+    List<NavigationDestination> destinations,
+  ) {
+    return ValueListenableBuilder(
+      valueListenable: _currentNavigationBarHeightNotifier,
+      builder: (context, currentNavigationBarHeight, child) => Align(
+        heightFactor: currentNavigationBarHeight / _paddedNavigationBarHeight,
+        alignment: Alignment.topCenter,
+        child: child,
+      ),
+      child: AdaptiveScaffold.standardBottomNavigationBar(
+        destinations: destinations,
+        currentIndex: _currentIndex,
+        onDestinationSelected: onDestinationSelected,
+      ),
+    );
+  }
+
+  Widget _buildBody(
+    BuildContext context,
+    List<NavigationDestination> destinations, {
+    Widget? floatingActionButton,
+    bool useNavigationDrawer = false,
+  }) {
     final directionality = Directionality.of(context);
     final mediaQuery = MediaQuery.of(context);
     final padding = mediaQuery.padding;
     final viewPadding = mediaQuery.viewPadding;
     final isSmallBreakpointActive = Breakpoints.small.isActive(context);
-    final isMediumAndUpBreakpointActive =
-        Breakpoints.mediumAndUp.isActive(context);
+    final hasNavigationBar = !useNavigationDrawer && isSmallBreakpointActive;
+    final hasNavigationRail = !useNavigationDrawer && !isSmallBreakpointActive;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
@@ -222,20 +256,17 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
       child: ValueListenableBuilder(
         valueListenable: _currentNavigationBarHeightNotifier,
         builder: (context, currentNavigationBarHeight, child) {
-          double? calculateBottomPadding(EdgeInsets padding) =>
-              isSmallBreakpointActive
-                  ? max(0, padding.bottom - currentNavigationBarHeight)
-                  : null;
+          double? calculateBottomPadding(EdgeInsets padding) => hasNavigationBar
+              ? max(0, padding.bottom - currentNavigationBarHeight)
+              : null;
 
           return MediaQuery(
             data: mediaQuery.copyWith(
               padding: padding.copyWith(
-                left: isMediumAndUpBreakpointActive &&
-                        directionality == TextDirection.ltr
+                left: hasNavigationRail && directionality == TextDirection.ltr
                     ? 0
                     : null,
-                right: isMediumAndUpBreakpointActive &&
-                        directionality == TextDirection.rtl
+                right: hasNavigationRail && directionality == TextDirection.rtl
                     ? 0
                     : null,
                 bottom: calculateBottomPadding(padding),
@@ -249,29 +280,36 @@ class _NavigationShellScaffoldState extends State<NavigationShellScaffold> {
           );
         },
         child: Scaffold(
+          drawer: useNavigationDrawer
+              ? NavigationDrawer(
+                  selectedIndex: _currentIndex,
+                  onDestinationSelected: (index) {
+                    onDestinationSelected(index);
+                    Navigator.pop(context);
+                  },
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                      child: Text(
+                        context.l10n.appName,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
+                    for (final destination in destinations)
+                      NavigationDrawerDestination(
+                        icon: destination.icon,
+                        selectedIcon: destination.selectedIcon,
+                        label: Text(destination.label),
+                      ),
+                  ],
+                )
+              : null,
           body: widget._navigationShell,
-          floatingActionButton:
-              isSmallBreakpointActive ? floatingActionButton : null,
+          floatingActionButton: hasNavigationRail ? null : floatingActionButton,
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigation(
-    BuildContext context,
-    List<NavigationDestination> destinations,
-  ) {
-    return ValueListenableBuilder(
-      valueListenable: _currentNavigationBarHeightNotifier,
-      builder: (context, currentNavigationBarHeight, child) => Align(
-        heightFactor: currentNavigationBarHeight / _paddedNavigationBarHeight,
-        alignment: Alignment.topCenter,
-        child: child,
-      ),
-      child: AdaptiveScaffold.standardBottomNavigationBar(
-        currentIndex: _currentIndex,
-        destinations: destinations,
-        onDestinationSelected: onDestinationSelected,
       ),
     );
   }

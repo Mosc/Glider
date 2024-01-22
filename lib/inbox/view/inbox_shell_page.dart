@@ -40,8 +40,8 @@ class InboxShellPage extends StatefulWidget {
 class _InboxShellPageState extends State<InboxShellPage> {
   @override
   void initState() {
-    unawaited(widget._inboxCubit.load());
     super.initState();
+    unawaited(widget._inboxCubit.load());
   }
 
   @override
@@ -136,28 +136,25 @@ class _SliverInboxBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<InboxCubit, InboxState>(
       bloc: _inboxCubit,
-      builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
-        bloc: _settingsCubit,
-        buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.useActionButtons != current.useActionButtons,
-        builder: (context, settingsState) => state.whenOrDefaultSlivers(
-          loading: () => SliverList.builder(
-            itemBuilder: (context, index) =>
-                const ItemLoadingTile(type: ItemType.comment),
-          ),
-          nonEmpty: () => SliverList.list(
-            children: [
-              for (final (parentId, id) in state.data!) ...[
+      builder: (context, state) => state.whenOrDefaultSlivers(
+        loading: () => SliverList.builder(
+          itemBuilder: (context, index) =>
+              const ItemLoadingTile(type: ItemType.comment),
+        ),
+        nonEmpty: () => SliverList.builder(
+          itemCount: state.data!.length,
+          itemBuilder: (context, index) {
+            final (parentId, id) = state.data![index];
+            return Column(
+              children: [
                 ItemTile.create(
                   _itemCubitFactory,
                   _authCubit,
                   _settingsCubit,
-                  key: ValueKey(parentId),
                   id: parentId,
                   loadingType: ItemType.story,
                   onTap: (context, item) async => context.push(
-                    AppRoute.item.location(parameters: {'id': id}),
+                    AppRoute.item.location(parameters: {'id': parentId}),
                   ),
                 ),
                 IndentedWidget(
@@ -166,7 +163,6 @@ class _SliverInboxBody extends StatelessWidget {
                     _itemCubitFactory,
                     _authCubit,
                     _settingsCubit,
-                    key: ValueKey(id),
                     id: id,
                     loadingType: ItemType.comment,
                     onTap: (context, item) async => context.push(
@@ -175,10 +171,10 @@ class _SliverInboxBody extends StatelessWidget {
                   ),
                 ),
               ],
-            ],
-          ),
-          onRetry: () async => _inboxCubit.load(),
+            );
+          },
         ),
+        onRetry: () async => _inboxCubit.load(),
       ),
     );
   }

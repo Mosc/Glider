@@ -39,8 +39,8 @@ class FavoritesShellPage extends StatefulWidget {
 class _FavoritesShellPageState extends State<FavoritesShellPage> {
   @override
   void initState() {
-    unawaited(widget._favoritesCubit.load());
     super.initState();
+    unawaited(widget._favoritesCubit.load());
   }
 
   @override
@@ -137,31 +137,29 @@ class _SliverFavoritesBody extends StatelessWidget {
       bloc: _favoritesCubit,
       builder: (context, state) => BlocBuilder<SettingsCubit, SettingsState>(
         bloc: _settingsCubit,
-        buildWhen: (previous, current) =>
-            previous.useLargeStoryStyle != current.useLargeStoryStyle ||
-            previous.useActionButtons != current.useActionButtons,
         builder: (context, settingsState) => state.whenOrDefaultSlivers(
           loading: () => SliverList.builder(
             itemBuilder: (context, index) => ItemLoadingTile(
               type: ItemType.story,
+              storyLines: settingsState.storyLines,
               useLargeStoryStyle: settingsState.useLargeStoryStyle,
             ),
           ),
-          nonEmpty: () => SliverList.list(
-            children: [
-              for (final id in state.data!)
-                ItemTile.create(
-                  _itemCubitFactory,
-                  _authCubit,
-                  _settingsCubit,
-                  key: ValueKey(id),
-                  id: id,
-                  loadingType: ItemType.story,
-                  onTap: (context, item) async => context.push(
-                    AppRoute.item.location(parameters: {'id': id}),
-                  ),
+          nonEmpty: () => SliverList.builder(
+            itemCount: state.data!.length,
+            itemBuilder: (context, index) {
+              final id = state.data![index];
+              return ItemTile.create(
+                _itemCubitFactory,
+                _authCubit,
+                _settingsCubit,
+                id: id,
+                loadingType: ItemType.story,
+                onTap: (context, item) async => context.push(
+                  AppRoute.item.location(parameters: {'id': id}),
                 ),
-            ],
+              );
+            },
           ),
           onRetry: () async => _favoritesCubit.load(),
         ),

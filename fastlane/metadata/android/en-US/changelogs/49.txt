@@ -1,0 +1,3 @@
+- Added setting to change navigation bar or rail into navigation drawer
+- Improved pure background setting to apply to more UI elemeents
+- Changed padding between story title and metadata to be a bit tighter

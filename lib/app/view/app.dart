@@ -8,6 +8,7 @@ import 'package:glider/app/extensions/theme_mode_extension.dart';
 import 'package:glider/app/extensions/variant_extension.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:relative_time/relative_time.dart';
 
 class App extends StatelessWidget {
@@ -33,7 +34,8 @@ class App extends StatelessWidget {
             previous.useDynamicTheme != current.useDynamicTheme ||
             previous.themeColor != current.themeColor ||
             previous.themeVariant != current.themeVariant ||
-            previous.usePureBackground != current.usePureBackground,
+            previous.usePureBackground != current.usePureBackground ||
+            previous.font != current.font,
         builder: (context, state) => MaterialApp.router(
           routerConfig: _routerConfig,
           theme: _buildTheme(context, state, lightDynamic, Brightness.light),
@@ -60,23 +62,43 @@ class App extends StatelessWidget {
     ColorScheme? dynamicColorScheme,
     Brightness brightness,
   ) {
-    // ignore: deprecated_member_use
-    final textScaleFactor = MediaQuery.textScalerOf(context).textScaleFactor;
+    final backgroundColor = state.usePureBackground
+        ? brightness == Brightness.dark
+            ? Colors.black
+            : Colors.white
+        : null;
     return ThemeData(
-      useMaterial3: true,
       visualDensity: VisualDensity.comfortable,
       brightness: brightness,
       colorScheme: (state.useDynamicTheme && dynamicColorScheme != null
               ? dynamicColorScheme
               : state.themeVariant.toColorScheme(state.themeColor, brightness))
           .copyWith(
-        background: state.usePureBackground
-            ? brightness == Brightness.dark
-                ? Colors.black
-                : Colors.white
-            : null,
+        background: backgroundColor,
       ),
-      fontFamily: 'NotoSans',
+      textTheme: GoogleFonts.getTextTheme(state.font, const TextTheme()),
+      appBarTheme: AppBarTheme(
+        color: backgroundColor,
+        centerTitle: false,
+      ),
+      badgeTheme: BadgeThemeData(
+        // Badges do not handle text scaling by default.
+        smallSize: MediaQuery.textScalerOf(context).scale(6),
+        largeSize: MediaQuery.textScalerOf(context).scale(16),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        showDragHandle: true,
+        // Material 3 dictates a maximum width for bottom sheets.
+        constraints: BoxConstraints(maxWidth: 640),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(filled: true),
+      menuButtonTheme: const MenuButtonThemeData(
+        style: ButtonStyle(
+          padding: MaterialStatePropertyAll(
+            AppSpacing.defaultTilePadding,
+          ),
+        ),
+      ),
       menuTheme: const MenuThemeData(
         style: MenuStyle(
           shape: MaterialStatePropertyAll(
@@ -86,23 +108,14 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      appBarTheme: const AppBarTheme(centerTitle: false),
-      // Badges do not handle text scaling by default.
-      badgeTheme: BadgeThemeData(
-        smallSize: 6 * textScaleFactor,
-        largeSize: 16 * textScaleFactor,
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: backgroundColor,
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        showDragHandle: true,
-        // Material 3 dictates a maximum width for bottom sheets.
-        constraints: BoxConstraints(maxWidth: 640),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: backgroundColor,
       ),
-      menuButtonTheme: const MenuButtonThemeData(
-        style: ButtonStyle(
-          padding: MaterialStatePropertyAll(
-            AppSpacing.defaultTilePadding,
-          ),
-        ),
+      searchViewTheme: SearchViewThemeData(
+        backgroundColor: backgroundColor,
       ),
     );
   }

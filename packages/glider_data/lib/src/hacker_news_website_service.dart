@@ -144,7 +144,7 @@ class HackerNewsWebsiteService {
     required bool upvote,
     required String userCookie,
   }) async {
-    final auth = await _getItemAuthValue(id: id, userCookie: userCookie);
+    final auth = await _getAuthValue(id: id, userCookie: userCookie);
     final endpoint = Uri.https(authority, 'vote');
     final body = <String, String>{
       'id': id.toString(),
@@ -159,7 +159,7 @@ class HackerNewsWebsiteService {
     required bool downvote,
     required String userCookie,
   }) async {
-    final auth = await _getItemAuthValue(id: id, userCookie: userCookie);
+    final auth = await _getAuthValue(id: id, userCookie: userCookie);
     final endpoint = Uri.https(authority, 'vote');
     final body = <String, String>{
       'id': id.toString(),
@@ -174,7 +174,7 @@ class HackerNewsWebsiteService {
     required bool favorite,
     required String userCookie,
   }) async {
-    final auth = await _getItemAuthValue(id: id, userCookie: userCookie);
+    final auth = await _getAuthValue(id: id, userCookie: userCookie);
     final endpoint = Uri.https(authority, 'fave');
     final body = <String, String>{
       'id': id.toString(),
@@ -189,7 +189,7 @@ class HackerNewsWebsiteService {
     required bool flag,
     required String userCookie,
   }) async {
-    final auth = await _getItemAuthValue(id: id, userCookie: userCookie);
+    final auth = await _getAuthValue(id: id, userCookie: userCookie);
     final endpoint = Uri.https(authority, 'flag');
     final body = <String, String>{
       'id': id.toString(),
@@ -206,7 +206,11 @@ class HackerNewsWebsiteService {
     // ignore: always_put_required_named_parameters_first
     required String userCookie,
   }) async {
-    final hmac = await _getItemHmacValue(id: id, userCookie: userCookie);
+    final hmac = await _getHmacValue(
+      path: 'edit',
+      id: id,
+      userCookie: userCookie,
+    );
     final endpoint = Uri.https(authority, 'xedit');
     final body = <String, String>{
       'id': id.toString(),
@@ -221,7 +225,11 @@ class HackerNewsWebsiteService {
     required int id,
     required String userCookie,
   }) async {
-    final hmac = await _getItemHmacValue(id: id, userCookie: userCookie);
+    final hmac = await _getHmacValue(
+      path: 'delete-confirm',
+      id: id,
+      userCookie: userCookie,
+    );
     final endpoint = Uri.https(authority, 'xdelete');
     final body = <String, String>{
       'id': id.toString(),
@@ -236,7 +244,7 @@ class HackerNewsWebsiteService {
     required String text,
     required String userCookie,
   }) async {
-    final hmac = await _getItemHmacValue(id: parentId, userCookie: userCookie);
+    final hmac = await _getHmacValue(id: parentId, userCookie: userCookie);
     final endpoint = Uri.https(authority, 'comment');
     final body = <String, String>{
       'parent': parentId.toString(),
@@ -266,11 +274,16 @@ class HackerNewsWebsiteService {
     await _performPost(endpoint, body: body, userCookie: userCookie);
   }
 
-  Future<String?> _getItemAuthValue({
+  Future<String?> _getAuthValue({
+    String path = 'item',
     required int id,
     required String userCookie,
   }) async {
-    final endpoint = _getItemUrl(id);
+    final endpoint = Uri.https(
+      authority,
+      path,
+      <String, dynamic>{'id': id.toString()},
+    );
     final response = await _performGet(endpoint, userCookie: userCookie);
     final voteHref = await compute(
       (body) =>
@@ -286,11 +299,16 @@ class HackerNewsWebsiteService {
     return voteUrl.queryParameters['auth'];
   }
 
-  Future<String?> _getItemHmacValue({
+  Future<String?> _getHmacValue({
+    String path = 'item',
     required int id,
     required String userCookie,
   }) async {
-    final endpoint = _getItemUrl(id);
+    final endpoint = Uri.https(
+      authority,
+      path,
+      <String, dynamic>{'id': id.toString()},
+    );
     final response = await _performGet(endpoint, userCookie: userCookie);
     return compute(
       (body) => html_parser
@@ -317,9 +335,6 @@ class HackerNewsWebsiteService {
       response.body,
     );
   }
-
-  Uri _getItemUrl(int id) =>
-      Uri.https(authority, 'item', <String, dynamic>{'id': id.toString()});
 
   Future<http.Response> _performGet(
     Uri endpoint, {

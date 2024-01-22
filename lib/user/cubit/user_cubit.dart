@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:glider/common/extensions/bloc_base_extension.dart';
@@ -10,9 +11,11 @@ import 'package:glider_domain/glider_domain.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
+part 'user_cubit_event.dart';
 part 'user_state.dart';
 
-class UserCubit extends HydratedCubit<UserState> {
+class UserCubit extends HydratedCubit<UserState>
+    with BlocPresentationMixin<UserState, UserCubitEvent> {
   UserCubit(
     this._userRepository,
     this._userInteractionRepository,
@@ -77,14 +80,20 @@ class UserCubit extends HydratedCubit<UserState> {
       safeEmit(
         state.copyWith(blocked: () => blocked),
       );
+      emitPresentation(const UserActionFailedEvent());
     }
   }
 
   Future<void> synchronize() async {
-    await _userInteractionRepository.synchronize();
-    await _itemInteractionRepository.getUpvotedIds();
-    await _itemInteractionRepository.getFavoritedIds();
-    await _itemInteractionRepository.getFlaggedIds();
+    final success = await _userInteractionRepository.synchronize();
+
+    if (!success) {
+      emitPresentation(const UserActionFailedEvent());
+    } else {
+      await _itemInteractionRepository.getUpvotedIds();
+      await _itemInteractionRepository.getFavoritedIds();
+      await _itemInteractionRepository.getFlaggedIds();
+    }
   }
 
   Future<void> copy(String text) async {
@@ -96,11 +105,11 @@ class UserCubit extends HydratedCubit<UserState> {
   }
 
   @override
-  UserState? fromJson(Map<String, dynamic> json) => UserState.fromJson(json);
+  UserState? fromJson(Map<String, dynamic> json) => UserState.fromMap(json);
 
   @override
   Map<String, dynamic>? toJson(UserState state) =>
-      state.status == Status.success ? state.toJson() : null;
+      state.status == Status.success ? state.toMap() : null;
 
   @override
   Future<void> close() async {

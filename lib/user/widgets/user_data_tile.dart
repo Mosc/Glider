@@ -18,6 +18,7 @@ class UserDataTile extends StatelessWidget {
     this.blocked = false,
     this.style = UserStyle.full,
     this.padding = AppSpacing.defaultTilePadding,
+    required this.useInAppBrowser,
     this.onTap,
     this.onLongPress,
   });
@@ -27,6 +28,7 @@ class UserDataTile extends StatelessWidget {
   final bool blocked;
   final UserStyle style;
   final EdgeInsets padding;
+  final bool useInAppBrowser;
   final UserCallback? onTap;
   final UserCallback? onLongPress;
 
@@ -45,18 +47,13 @@ class UserDataTile extends StatelessWidget {
           onLongPress != null ? () => onLongPress!(context, user) : null,
       child: Padding(
         padding: padding,
-        child: AnimatedSize(
-          alignment: Alignment.topCenter,
-          duration: AppAnimation.emphasized.duration,
-          curve: AppAnimation.emphasized.easing,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (hasPrimary) _buildPrimary(context),
-              if (hasSecondary) _buildSecondary(context),
-            ].spaced(height: AppSpacing.m),
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (hasPrimary) _buildPrimary(context),
+            if (hasSecondary) _buildSecondary(context),
+          ].spaced(height: AppSpacing.m),
         ),
       ),
     );
@@ -118,9 +115,11 @@ class UserDataTile extends StatelessWidget {
   Widget _buildSecondary(BuildContext context) {
     return Hero(
       tag: 'user_tile_about_${user.username}',
-      child: parsedAbout != null
-          ? HackerNewsText.parsed(parsedAbout!)
-          : HackerNewsText(user.about!),
+      child: HackerNewsText(
+        user.about!,
+        parsedData: parsedAbout,
+        useInAppBrowser: useInAppBrowser,
+      ),
     );
   }
 }

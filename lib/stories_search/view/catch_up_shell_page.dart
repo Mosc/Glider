@@ -33,8 +33,8 @@ class CatchUpShellPage extends StatefulWidget {
 class _CatchUpShellPageState extends State<CatchUpShellPage> {
   @override
   void initState() {
-    widget._storiesSearchBloc.add(const LoadStoriesSearchEvent());
     super.initState();
+    widget._storiesSearchBloc.add(const LoadStoriesSearchEvent());
   }
 
   @override

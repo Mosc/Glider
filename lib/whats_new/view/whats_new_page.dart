@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/widgets/hacker_news_text.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
+import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class WhatsNewPage extends StatelessWidget {
-  const WhatsNewPage({
-    this.selectedColor,
+  const WhatsNewPage(
+    this._settingsCubit, {
     super.key,
   });
 
-  final Color? selectedColor;
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const CustomScrollView(
+      body: CustomScrollView(
         slivers: [
-          _SliverWhatsNewAppBar(),
+          const _SliverWhatsNewAppBar(),
           SliverSafeArea(
             top: false,
             sliver: SliverToBoxAdapter(
-              child: _WhatsNewBody(),
+              child: _WhatsNewBody(_settingsCubit),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: AppSpacing.xxl * 4),
+          const SliverPadding(
+            padding: AppSpacing.floatingActionButtonPageBottomPadding,
           ),
         ],
       ),
@@ -48,13 +50,21 @@ class _SliverWhatsNewAppBar extends StatelessWidget {
 }
 
 class _WhatsNewBody extends StatelessWidget {
-  const _WhatsNewBody();
+  const _WhatsNewBody(this._settingsCubit);
+
+  final SettingsCubit _settingsCubit;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: HackerNewsText(context.l10n.whatsNewDescription),
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      bloc: _settingsCubit,
+      builder: (context, settingsState) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+        child: HackerNewsText(
+          context.l10n.whatsNewDescription,
+          useInAppBrowser: settingsState.useInAppBrowser,
+        ),
+      ),
     );
   }
 }

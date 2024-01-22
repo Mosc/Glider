@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glider/common/constants/app_animation.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/widget_list_extension.dart';
 import 'package:glider/common/widgets/decorated_card.dart';
@@ -32,7 +33,12 @@ class PreviewCard extends StatelessWidget {
               ].spaced(width: AppSpacing.l),
             ),
           ),
-          child,
+          AnimatedSize(
+            alignment: Alignment.topCenter,
+            duration: AppAnimation.emphasized.duration,
+            curve: AppAnimation.emphasized.easing,
+            child: child,
+          ),
         ],
       ),
     );

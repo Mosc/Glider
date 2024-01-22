@@ -8,22 +8,6 @@ class StoryItemSearchState with DataMixin<List<int>>, EquatableMixin {
     this.exception,
   });
 
-  factory StoryItemSearchState.fromJson(Map<String, dynamic> json) =>
-      StoryItemSearchState(
-        status: Status.values.byName(json['status'] as String),
-        data: (json['data'] as List<dynamic>?)
-                ?.map((e) => e as int)
-                .toList(growable: false) ??
-            const [],
-        searchText: json['searchText'] as String?,
-      );
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'status': status.name,
-        'data': data,
-        'searchText': searchText,
-      };
-
   @override
   final Status status;
   @override

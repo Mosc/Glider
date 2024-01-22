@@ -9,15 +9,15 @@ class ReplyState with EquatableMixin {
     this.success = false,
   });
 
-  factory ReplyState.fromJson(Map<String, dynamic> json) => ReplyState(
+  factory ReplyState.fromMap(Map<String, dynamic> json) => ReplyState(
         parentItem: json['parentItem'] != null
-            ? Item.fromJson(json['parentItem'] as Map<String, dynamic>)
+            ? Item.fromMap(json['parentItem'] as Map<String, dynamic>)
             : null,
         text: TextInput.pure(json['text'] as String? ?? ''),
         isValid: json['isValid'] as bool? ?? false,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'parentItem': parentItem,
         'text': text.value,
         'isValid': isValid,

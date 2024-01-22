@@ -18,12 +18,11 @@ import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class EditPage extends StatefulWidget {
-  const EditPage(
+  EditPage(
     this._editCubitFactory,
     this._settingsCubit, {
-    super.key,
     required this.id,
-  });
+  }) : super(key: ValueKey(id));
 
   final EditCubitFactory _editCubitFactory;
   final SettingsCubit _settingsCubit;
@@ -38,8 +37,8 @@ class _EditPageState extends State<EditPage> {
 
   @override
   void initState() {
-    _editCubit = widget._editCubitFactory(widget.id);
     super.initState();
+    _editCubit = widget._editCubitFactory(widget.id);
   }
 
   @override
@@ -134,11 +133,11 @@ class _EditFormState extends State<_EditForm> {
 
   @override
   void initState() {
+    super.initState();
     final state = widget._editCubit.state;
     _titleController = TextEditingController(text: state.title?.value);
     _urlController = TextEditingController(text: state.item?.url?.toString());
     _textController = TextEditingController(text: state.text?.value);
-    super.initState();
   }
 
   @override
@@ -193,7 +192,6 @@ class _EditFormState extends State<_EditForm> {
                 decoration: InputDecoration(
                   labelText: context.l10n.title,
                   errorText: state.title?.displayError?.label(context),
-                  filled: true,
                 ),
                 textCapitalization: TextCapitalization.words,
                 maxLength: TitleInput.maxLength,
@@ -210,7 +208,6 @@ class _EditFormState extends State<_EditForm> {
                 controller: _urlController,
                 decoration: InputDecoration(
                   labelText: context.l10n.link,
-                  filled: true,
                 ),
                 enabled: false,
               ),
@@ -224,7 +221,6 @@ class _EditFormState extends State<_EditForm> {
                 decoration: InputDecoration(
                   labelText: context.l10n.text,
                   errorText: state.text?.displayError?.label(context),
-                  filled: true,
                 ),
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
@@ -268,10 +264,12 @@ class _EditPreview extends StatelessWidget {
                         title: () => state.title?.value,
                         text: () => state.text?.value,
                       ),
+                      storyLines: settingsState.storyLines,
                       useLargeStoryStyle: settingsState.useLargeStoryStyle,
                       showFavicons: settingsState.showFavicons,
                       showUserAvatars: settingsState.showUserAvatars,
                       usernameStyle: UsernameStyle.loggedInUser,
+                      useInAppBrowser: settingsState.useInAppBrowser,
                     ),
                   )
                 : const SizedBox.shrink(),

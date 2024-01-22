@@ -85,10 +85,10 @@ class EditCubit extends HydratedCubit<EditState> {
   }
 
   @override
-  EditState? fromJson(Map<String, dynamic> json) => EditState.fromJson(json);
+  EditState? fromJson(Map<String, dynamic> json) => EditState.fromMap(json);
 
   @override
-  Map<String, dynamic>? toJson(EditState state) => state.toJson();
+  Map<String, dynamic>? toJson(EditState state) => state.toMap();
 
   @override
   Future<void> close() async {

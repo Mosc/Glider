@@ -101,23 +101,20 @@ class _SubmitBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SubmitCubit, SubmitState>(
       bloc: _submitCubit,
-      builder: (context, state) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-            child: _SubmitForm(_submitCubit),
-          ),
-          if (state.url.hasHost)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-              child: ElevatedButton.icon(
+      builder: (context, state) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SubmitForm(_submitCubit),
+            if (state.url.hasHost)
+              ElevatedButton.icon(
                 onPressed: _submitCubit.autofillTitle,
                 icon: const Icon(Icons.title_outlined),
                 label: Text(context.l10n.autofillTitle),
               ),
-            ),
-        ].spaced(height: AppSpacing.xl),
+          ].spaced(height: AppSpacing.xl),
+        ),
       ),
     );
   }
@@ -139,11 +136,11 @@ class _SubmitFormState extends State<_SubmitForm> {
 
   @override
   void initState() {
+    super.initState();
     final state = widget._submitCubit.state;
     _titleController = TextEditingController(text: state.title.value);
     _urlController = TextEditingController(text: state.url.value);
     _textController = TextEditingController(text: state.text.value);
-    super.initState();
   }
 
   @override
@@ -192,7 +189,6 @@ class _SubmitFormState extends State<_SubmitForm> {
               decoration: InputDecoration(
                 labelText: context.l10n.title,
                 errorText: state.title.displayError?.label(context),
-                filled: true,
               ),
               textCapitalization: TextCapitalization.words,
               maxLength: TitleInput.maxLength,
@@ -210,7 +206,6 @@ class _SubmitFormState extends State<_SubmitForm> {
                 labelText: context.l10n.link,
                 errorText: state.url.displayError
                     ?.label(context, otherField: context.l10n.text),
-                filled: true,
               ),
               keyboardType: TextInputType.url,
               onChanged: widget._submitCubit.setUrl,
@@ -226,7 +221,6 @@ class _SubmitFormState extends State<_SubmitForm> {
                 labelText: context.l10n.text,
                 errorText: state.text.displayError
                     ?.label(context, otherField: context.l10n.link),
-                filled: true,
               ),
               keyboardType: TextInputType.multiline,
               textCapitalization: TextCapitalization.sentences,
@@ -292,6 +286,7 @@ class _SubmitPreview extends StatelessWidget {
                     showFavicons: settingsState.showFavicons,
                     showUserAvatars: settingsState.showUserAvatars,
                     usernameStyle: UsernameStyle.loggedInUser,
+                    useInAppBrowser: settingsState.useInAppBrowser,
                   ),
                 ),
               ),

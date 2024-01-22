@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:glider/app/container/app_container.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/app/models/dialog_page.dart';
-import 'package:glider/app/models/modal_bottom_sheet_page.dart';
 import 'package:glider/auth/view/auth_page.dart';
 import 'package:glider/common/widgets/confirm_dialog.dart';
 import 'package:glider/common/widgets/text_select_dialog.dart';
@@ -11,22 +10,21 @@ import 'package:glider/edit/view/edit_page.dart';
 import 'package:glider/favorites/view/favorites_shell_page.dart';
 import 'package:glider/inbox/view/inbox_shell_page.dart';
 import 'package:glider/item/view/item_page.dart';
-import 'package:glider/item/widgets/item_bottom_sheet.dart';
 import 'package:glider/item/widgets/item_value_dialog.dart';
 import 'package:glider/navigation_shell/widgets/navigation_shell_scaffold.dart';
 import 'package:glider/reply/view/reply_page.dart';
+import 'package:glider/settings/view/filters_dialog.dart';
 import 'package:glider/settings/view/settings_page.dart';
-import 'package:glider/settings/widgets/theme_color_dialog.dart';
+import 'package:glider/settings/view/theme_color_dialog.dart';
 import 'package:glider/stories/view/stories_shell_page.dart';
 import 'package:glider/stories_search/view/catch_up_shell_page.dart';
 import 'package:glider/submit/view/submit_page.dart';
 import 'package:glider/user/view/user_page.dart';
-import 'package:glider/user/widgets/user_bottom_sheet.dart';
 import 'package:glider/user/widgets/user_value_dialog.dart';
 import 'package:glider/whats_new/view/whats_new_page.dart';
 import 'package:go_router/go_router.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRouter {
   AppRouter._(this.config);
@@ -34,7 +32,7 @@ class AppRouter {
   factory AppRouter.create(AppContainer appContainer) {
     return AppRouter._(
       GoRouter(
-        navigatorKey: _rootNavigatorKey,
+        navigatorKey: rootNavigatorKey,
         initialLocation: AppRoute.stories.location(),
         debugLogDiagnostics: kDebugMode,
         routes: [
@@ -43,6 +41,7 @@ class AppRouter {
                 NavigationShellScaffold(
               appContainer.navigationShellCubit,
               appContainer.authCubit,
+              appContainer.settingsCubit,
               navigationShell,
             ),
             branches: [
@@ -111,11 +110,13 @@ class AppRouter {
           ),
           GoRoute(
             path: AppRoute.whatsNew.path,
-            pageBuilder: (context, state) => const MaterialPage<void>(
+            pageBuilder: (context, state) => MaterialPage<void>(
               fullscreenDialog: true,
-              child: WhatsNewPage(),
+              child: WhatsNewPage(
+                appContainer.settingsCubit,
+              ),
             ),
-            parentNavigatorKey: _rootNavigatorKey,
+            parentNavigatorKey: rootNavigatorKey,
           ),
           GoRoute(
             path: AppRoute.auth.path,
@@ -129,7 +130,7 @@ class AppRouter {
                 appContainer.userItemSearchBlocFactory,
               ),
             ),
-            parentNavigatorKey: _rootNavigatorKey,
+            parentNavigatorKey: rootNavigatorKey,
           ),
           GoRoute(
             path: AppRoute.settings.path,
@@ -139,16 +140,25 @@ class AppRouter {
                 appContainer.settingsCubit,
               ),
             ),
-            parentNavigatorKey: _rootNavigatorKey,
+            parentNavigatorKey: rootNavigatorKey,
             routes: [
               GoRoute(
                 path: AppRoute.themeColorDialog.path,
-                pageBuilder: (context, state) => DialogPage<Color>(
+                pageBuilder: (context, state) => DialogPage<void>(
                   builder: (context) => ThemeColorDialog(
-                    selectedColor: state.extra! as Color?,
+                    appContainer.settingsCubit,
                   ),
                 ),
-                parentNavigatorKey: _rootNavigatorKey,
+                parentNavigatorKey: rootNavigatorKey,
+              ),
+              GoRoute(
+                path: AppRoute.filtersDialog.path,
+                pageBuilder: (context, state) => DialogPage<void>(
+                  builder: (context) => FiltersDialog(
+                    appContainer.settingsCubit,
+                  ),
+                ),
+                parentNavigatorKey: rootNavigatorKey,
               ),
             ],
           ),
@@ -162,34 +172,23 @@ class AppRouter {
                 appContainer.settingsCubit,
               ),
             ),
-            parentNavigatorKey: _rootNavigatorKey,
+            parentNavigatorKey: rootNavigatorKey,
           ),
           GoRoute(
             path: AppRoute.item.path,
-            builder: (context, state) => ItemPage(
-              appContainer.itemCubitFactory,
-              appContainer.itemTreeCubitFactory,
-              appContainer.storySimilarCubitFactory,
-              appContainer.storyItemSearchCubitFactory,
-              appContainer.authCubit,
-              appContainer.settingsCubit,
-              id: int.parse(state.uri.queryParameters['id']!),
-            ),
-            parentNavigatorKey: _rootNavigatorKey,
-            routes: [
-              GoRoute(
-                path: AppRoute.itemBottomSheet.path,
-                pageBuilder: (context, state) => ModalBottomSheetPage<void>(
-                  isScrollControlled: true,
-                  builder: (context) => ItemBottomSheet(
-                    appContainer.itemCubitFactory,
-                    appContainer.authCubit,
-                    appContainer.settingsCubit,
-                    id: int.parse(state.uri.queryParameters['id']!),
-                  ),
-                ),
-                parentNavigatorKey: _rootNavigatorKey,
+            pageBuilder: (context, state) => MaterialPage<void>(
+              child: ItemPage(
+                appContainer.itemCubitFactory,
+                appContainer.itemTreeCubitFactory,
+                appContainer.storySimilarCubitFactory,
+                appContainer.storyItemSearchCubitFactory,
+                appContainer.authCubit,
+                appContainer.settingsCubit,
+                id: int.parse(state.uri.queryParameters['id']!),
               ),
+            ),
+            parentNavigatorKey: rootNavigatorKey,
+            routes: [
               GoRoute(
                 path: AppRoute.edit.path,
                 pageBuilder: (context, state) => MaterialPage<void>(
@@ -200,7 +199,7 @@ class AppRouter {
                     id: int.parse(state.uri.queryParameters['id']!),
                   ),
                 ),
-                parentNavigatorKey: _rootNavigatorKey,
+                parentNavigatorKey: rootNavigatorKey,
               ),
               GoRoute(
                 path: AppRoute.reply.path,
@@ -213,7 +212,7 @@ class AppRouter {
                     id: int.parse(state.uri.queryParameters['id']!),
                   ),
                 ),
-                parentNavigatorKey: _rootNavigatorKey,
+                parentNavigatorKey: rootNavigatorKey,
               ),
               GoRoute(
                 path: AppRoute.itemValueDialog.path,
@@ -226,35 +225,24 @@ class AppRouter {
                     title: state.extra as String?,
                   ),
                 ),
-                parentNavigatorKey: _rootNavigatorKey,
+                parentNavigatorKey: rootNavigatorKey,
               ),
             ],
           ),
           GoRoute(
             path: AppRoute.user.path,
-            builder: (context, state) => UserPage(
-              appContainer.userCubitFactory,
-              appContainer.itemCubitFactory,
-              appContainer.userItemSearchBlocFactory,
-              appContainer.authCubit,
-              appContainer.settingsCubit,
-              username: state.uri.queryParameters['id']!,
-            ),
-            parentNavigatorKey: _rootNavigatorKey,
-            routes: [
-              GoRoute(
-                path: AppRoute.userBottomSheet.path,
-                pageBuilder: (context, state) => ModalBottomSheetPage<void>(
-                  isScrollControlled: true,
-                  builder: (context) => UserBottomSheet(
-                    appContainer.userCubitFactory,
-                    appContainer.authCubit,
-                    appContainer.settingsCubit,
-                    username: state.uri.queryParameters['id']!,
-                  ),
-                ),
-                parentNavigatorKey: _rootNavigatorKey,
+            pageBuilder: (context, state) => MaterialPage<void>(
+              child: UserPage(
+                appContainer.userCubitFactory,
+                appContainer.itemCubitFactory,
+                appContainer.userItemSearchBlocFactory,
+                appContainer.authCubit,
+                appContainer.settingsCubit,
+                username: state.uri.queryParameters['id']!,
               ),
+            ),
+            parentNavigatorKey: rootNavigatorKey,
+            routes: [
               GoRoute(
                 path: AppRoute.userValueDialog.path,
                 pageBuilder: (context, state) => DialogPage<void>(
@@ -266,7 +254,7 @@ class AppRouter {
                     title: state.extra as String?,
                   ),
                 ),
-                parentNavigatorKey: _rootNavigatorKey,
+                parentNavigatorKey: rootNavigatorKey,
               ),
             ],
           ),
@@ -277,7 +265,7 @@ class AppRouter {
                 text: state.extra! as String,
               ),
             ),
-            parentNavigatorKey: _rootNavigatorKey,
+            parentNavigatorKey: rootNavigatorKey,
           ),
           GoRoute(
             path: AppRoute.confirmDialog.path,
@@ -287,7 +275,7 @@ class AppRouter {
                 text: (state.extra as ConfirmDialogExtra?)?.text,
               ),
             ),
-            parentNavigatorKey: _rootNavigatorKey,
+            parentNavigatorKey: rootNavigatorKey,
           ),
         ],
       ),

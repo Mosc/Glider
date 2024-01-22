@@ -7,14 +7,13 @@ enum AppRoute {
   auth,
   settings,
   themeColorDialog(parent: settings),
+  filtersDialog(parent: settings),
   submit,
   item,
-  itemBottomSheet(parent: item),
   edit(parent: item),
   reply(parent: item),
   itemValueDialog(parent: item),
   user,
-  userBottomSheet(parent: user),
   userValueDialog(parent: user),
   textSelectDialog,
   confirmDialog;
@@ -23,10 +22,10 @@ enum AppRoute {
 
   final AppRoute? parent;
 
-  String get path => parent != null ? name : '/$name';
+  String get path => [if (parent == null) '/', name].join();
 
   String location({Map<String, Object?>? parameters}) => Uri(
-        path: parent != null ? '${parent!.path}/$path' : path,
+        path: [if (parent case final parent?) '${parent.path}/', path].join(),
         queryParameters: parameters != null
             ? {
                 for (final parameter in parameters.entries)

@@ -10,9 +10,9 @@ class EditState with EquatableMixin {
     this.success = false,
   });
 
-  factory EditState.fromJson(Map<String, dynamic> json) => EditState(
+  factory EditState.fromMap(Map<String, dynamic> json) => EditState(
         item: json['item'] != null
-            ? Item.fromJson(json['item'] as Map<String, dynamic>)
+            ? Item.fromMap(json['item'] as Map<String, dynamic>)
             : null,
         title: json['title'] != null
             ? TitleInput.pure(json['title'] as String)
@@ -23,7 +23,7 @@ class EditState with EquatableMixin {
         isValid: json['isValid'] as bool? ?? false,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'item': item,
         'title': title?.value,
         'text': text?.value,

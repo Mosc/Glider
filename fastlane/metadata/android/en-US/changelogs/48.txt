@@ -1,0 +1,6 @@
+- Improved filter setting to match on word boundaries
+- Improved pure background setting to also darken the app bar and navigation bar
+- Fixed Hacker News links opened within the app clearing navigation stack
+- Fixed show jobs setting not persisting
+- Fixed user page showing a nondescript error shortly after registering new account
+- Fixed incorrect story title suffix detection

@@ -59,7 +59,7 @@ class Item with EquatableMixin {
         descendantCount: dto.numComments,
       );
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory Item.fromMap(Map<String, dynamic> json) => Item(
         id: json['id'] as int,
         isDeleted: json['isDeleted'] as bool? ?? false,
         type: json['type'] != null
@@ -87,7 +87,7 @@ class Item with EquatableMixin {
         descendantCount: json['descendantCount'] as int?,
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'id': id,
         'isDeleted': isDeleted,
         'type': type?.name,
