@@ -48,7 +48,7 @@ dependencies:
   url_launcher: ^6.2.3
 
 dev_dependencies:
-  custom_lint: ^0.5.8
+  custom_lint: ^0.5.11
   dependency_validator: ^3.2.3
   flutter_launcher_icons: ^0.13.1
   leancode_lint: ^8.0.0
