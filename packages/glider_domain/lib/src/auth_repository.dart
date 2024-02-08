@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:glider_data/glider_data.dart';
+import 'package:glider_domain/src/entities/wallabag_auth.dart';
 
 class AuthRepository {
   const AuthRepository(
@@ -14,6 +17,21 @@ class AuthRepository {
     final username = userCookie?.split('&').first;
     return (username, userCookie);
   }
+
+  Future<WallabagAuthData?> getWallabagAuth() async {
+    final authData = await _secureStorageService.getWallabagAuth();
+    if (authData != null) {
+      return WallabagAuthData.fromMap(
+        jsonDecode(authData) as Map<String, dynamic>,
+      );
+    }
+
+    return null;
+  }
+
+  Future<void> setWallabagAuth(WallabagAuthData? auth) => (auth != null)
+      ? _secureStorageService.setWallabagAuth(jsonEncode(auth.toJson()))
+      : _secureStorageService.clearWallabagAuth();
 
   Future<void> login(String value) async =>
       _secureStorageService.setUserCookie(value);

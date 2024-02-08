@@ -6,6 +6,7 @@ import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/cubit/user_cubit.dart';
 import 'package:glider/user/models/user_value.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
@@ -24,6 +25,7 @@ enum UserAction<T extends MenuItem<S>, S> implements MenuItem<UserState> {
     UserState state,
     AuthState authState,
     SettingsState settingsState,
+    WallabagState? _,
   ) {
     final user = state.data;
     if (user == null) return false;

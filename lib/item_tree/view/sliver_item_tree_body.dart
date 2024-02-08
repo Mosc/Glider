@@ -10,6 +10,7 @@ import 'package:glider/item/widgets/item_tile.dart';
 import 'package:glider/item_tree/cubit/item_tree_cubit.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 
 class SliverItemTreeBody extends StatelessWidget {
@@ -17,7 +18,8 @@ class SliverItemTreeBody extends StatelessWidget {
     this._itemTreeCubit,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     super.key,
     this.childCount,
     this.storyUsername,
@@ -27,6 +29,7 @@ class SliverItemTreeBody extends StatelessWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
   final int? childCount;
   final String? storyUsername;
 
@@ -64,6 +67,7 @@ class SliverItemTreeBody extends StatelessWidget {
                 _itemCubitFactory,
                 _authCubit,
                 _settingsCubit,
+                _wallabagCubit,
                 id: descendant.id,
                 storyUsername: storyUsername,
                 loadingType: ItemType.comment,

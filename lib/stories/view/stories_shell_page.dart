@@ -21,6 +21,7 @@ import 'package:glider/stories/cubit/stories_cubit.dart';
 import 'package:glider/stories/view/stories_type_view.dart';
 import 'package:glider/stories_search/bloc/stories_search_bloc.dart';
 import 'package:glider/stories_search/view/stories_search_view.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,7 +31,8 @@ class StoriesShellPage extends StatefulWidget {
     this._storiesSearchBloc,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     super.key,
   });
 
@@ -39,6 +41,7 @@ class StoriesShellPage extends StatefulWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   State<StoriesShellPage> createState() => _StoriesShellPageState();
@@ -63,6 +66,7 @@ class _StoriesShellPageState extends State<StoriesShellPage> {
             widget._itemCubitFactory,
             widget._authCubit,
             widget._settingsCubit,
+            widget._wallabagCubit,
           ),
           SliverSafeArea(
             top: false,
@@ -71,6 +75,7 @@ class _StoriesShellPageState extends State<StoriesShellPage> {
               widget._itemCubitFactory,
               widget._authCubit,
               widget._settingsCubit,
+              widget._wallabagCubit,
             ),
           ),
           const SliverPadding(
@@ -89,6 +94,7 @@ class _SliverStoriesAppBar extends StatefulWidget {
     this._itemCubitFactory,
     this._authCubit,
     this._settingsCubit,
+    this._wallabagCubit,
   );
 
   final StoriesCubit _storiesCubit;
@@ -96,6 +102,7 @@ class _SliverStoriesAppBar extends StatefulWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   State<_SliverStoriesAppBar> createState() => _SliverStoriesAppBarState();
@@ -116,6 +123,7 @@ class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
           widget._itemCubitFactory,
           widget._authCubit,
           widget._settingsCubit,
+          widget._wallabagCubit,
         ),
         BlocBuilder<AuthCubit, AuthState>(
           bloc: widget._authCubit,
@@ -125,7 +133,7 @@ class _SliverStoriesAppBarState extends State<_SliverStoriesAppBar> {
             builder: (context, settingsState) => MenuAnchor(
               menuChildren: [
                 for (final action in NavigationShellAction.values)
-                  if (action.isVisible(null, authState, settingsState))
+                  if (action.isVisible(null, authState, settingsState, null))
                     MenuItemButton(
                       onPressed: () async => action.execute(context),
                       child: Text(action.label(context, null)),
@@ -152,12 +160,14 @@ class _StoriesSearchAnchor extends StatefulWidget {
     this._itemCubitFactory,
     this._authCubit,
     this._settingsCubit,
+    this._wallabagCubit,
   );
 
   final StoriesSearchBloc _storiesSearchBloc;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   State<_StoriesSearchAnchor> createState() => _StoriesSearchAnchorState();
@@ -222,6 +232,7 @@ class _StoriesSearchAnchorState extends State<_StoriesSearchAnchor> {
         widget._itemCubitFactory,
         widget._authCubit,
         widget._settingsCubit,
+        widget._wallabagCubit,
       ),
       suggestionsBuilder: (context, controller) => [],
     );
@@ -234,12 +245,14 @@ class _SliverStoriesBody extends StatelessWidget {
     this._itemCubitFactory,
     this._authCubit,
     this._settingsCubit,
+    this._wallabagCubit,
   );
 
   final StoriesCubit _storiesCubit;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -269,6 +282,7 @@ class _SliverStoriesBody extends StatelessWidget {
                   _itemCubitFactory,
                   _authCubit,
                   _settingsCubit,
+                  _wallabagCubit,
                   id: id,
                   loadingType: ItemType.story,
                   forceShowMetadata: false,

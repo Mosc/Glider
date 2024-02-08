@@ -8,13 +8,15 @@ import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/stories_search/bloc/stories_search_bloc.dart';
 import 'package:glider/stories_search/view/sliver_stories_search_body.dart';
 import 'package:glider/stories_search/view/stories_search_range_view.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 
 class StoriesSearchView extends StatelessWidget {
   const StoriesSearchView(
     this._storiesSearchBloc,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     super.key,
   });
 
@@ -22,6 +24,7 @@ class StoriesSearchView extends StatelessWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,7 @@ class StoriesSearchView extends StatelessWidget {
               _itemCubitFactory,
               _authCubit,
               _settingsCubit,
+              _wallabagCubit,
             ),
           ),
           const SliverPadding(

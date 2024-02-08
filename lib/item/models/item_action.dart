@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/interfaces/menu_item.dart';
+import 'package:glider/common/models/status.dart';
 import 'package:glider/item/cubit/item_cubit.dart';
 import 'package:glider/item/models/item_value.dart';
 import 'package:glider/item/models/vote_type.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,7 +24,8 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
   reply,
   select,
   copy(options: ItemValue.values),
-  share(options: ItemValue.values);
+  share(options: ItemValue.values),
+  wallabagSave;
 
   const ItemAction({this.options});
 
@@ -33,6 +36,7 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
     ItemState state,
     AuthState authState,
     SettingsState settingsState,
+    WallabagState? wallabagState,
   ) {
     final item = state.data;
     if (item == null) return false;
@@ -68,6 +72,8 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
         !item.isDeleted && item.type != ItemType.job && authState.isLoggedIn,
       ItemAction.select => item.text != null,
       ItemAction.copy || ItemAction.share => true,
+      ItemAction.wallabagSave =>
+        item.url != null && wallabagState?.status == Status.success,
     };
   }
 
@@ -90,6 +96,7 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
       ItemAction.select => context.l10n.select,
       ItemAction.copy => context.l10n.copy,
       ItemAction.share => context.l10n.share,
+      ItemAction.wallabagSave => context.l10n.wallabagSave,
     };
   }
 
@@ -114,13 +121,15 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
       ItemAction.select => Icons.select_all_outlined,
       ItemAction.copy => Icons.copy_outlined,
       ItemAction.share => Icons.adaptive.share_outlined,
+      ItemAction.wallabagSave => Icons.add,
     };
   }
 
   Future<void> execute(
     BuildContext context,
     ItemCubit itemCubit,
-    AuthCubit authCubit, {
+    AuthCubit authCubit,
+    WallabagCubit wallabagCubit, {
     T? option,
   }) async {
     final id = itemCubit.id;
@@ -183,6 +192,11 @@ enum ItemAction<T extends MenuItem<S>, S> implements MenuItem<ItemState> {
                 : null,
           );
         }
+      case ItemAction.wallabagSave:
+        await context.push(
+          AppRoute.wallabagAddArticleDialog.location(),
+          extra: (itemCubit: itemCubit, wallabagCubit: wallabagCubit),
+        );
     }
   }
 }

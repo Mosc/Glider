@@ -21,6 +21,7 @@ import 'package:glider/stories_search/view/catch_up_shell_page.dart';
 import 'package:glider/submit/view/submit_page.dart';
 import 'package:glider/user/view/user_page.dart';
 import 'package:glider/user/widgets/user_value_dialog.dart';
+import 'package:glider/wallabag/widgets/wallabag_add_article_dialog.dart';
 import 'package:glider/whats_new/view/whats_new_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -56,6 +57,7 @@ class AppRouter {
                         appContainer.itemCubitFactory,
                         appContainer.authCubit,
                         appContainer.settingsCubit,
+                        appContainer.wallabagCubit,
                       ),
                     ),
                   ),
@@ -71,6 +73,7 @@ class AppRouter {
                         appContainer.itemCubitFactory,
                         appContainer.authCubit,
                         appContainer.settingsCubit,
+                        appContainer.wallabagCubit,
                       ),
                     ),
                   ),
@@ -86,6 +89,7 @@ class AppRouter {
                         appContainer.itemCubitFactory,
                         appContainer.authCubit,
                         appContainer.settingsCubit,
+                        appContainer.wallabagCubit,
                       ),
                     ),
                   ),
@@ -101,6 +105,7 @@ class AppRouter {
                         appContainer.itemCubitFactory,
                         appContainer.authCubit,
                         appContainer.settingsCubit,
+                        appContainer.wallabagCubit,
                       ),
                     ),
                   ),
@@ -125,6 +130,7 @@ class AppRouter {
               child: AuthPage(
                 appContainer.authCubit,
                 appContainer.settingsCubit,
+                appContainer.wallabagCubit,
                 appContainer.userCubitFactory,
                 appContainer.itemCubitFactory,
                 appContainer.userItemSearchBlocFactory,
@@ -138,6 +144,7 @@ class AppRouter {
               fullscreenDialog: true,
               child: SettingsPage(
                 appContainer.settingsCubit,
+                appContainer.wallabagCubit,
               ),
             ),
             parentNavigatorKey: rootNavigatorKey,
@@ -184,6 +191,7 @@ class AppRouter {
                 appContainer.storyItemSearchCubitFactory,
                 appContainer.authCubit,
                 appContainer.settingsCubit,
+                appContainer.wallabagCubit,
                 id: int.parse(state.uri.queryParameters['id']!),
               ),
             ),
@@ -221,6 +229,7 @@ class AppRouter {
                     appContainer.itemCubitFactory,
                     appContainer.authCubit,
                     appContainer.settingsCubit,
+                    appContainer.wallabagCubit,
                     id: int.parse(state.uri.queryParameters['id']!),
                     title: state.extra as String?,
                   ),
@@ -238,6 +247,7 @@ class AppRouter {
                 appContainer.userItemSearchBlocFactory,
                 appContainer.authCubit,
                 appContainer.settingsCubit,
+                appContainer.wallabagCubit,
                 username: state.uri.queryParameters['id']!,
               ),
             ),
@@ -273,6 +283,17 @@ class AppRouter {
               builder: (context) => ConfirmDialog(
                 title: (state.extra as ConfirmDialogExtra?)?.title,
                 text: (state.extra as ConfirmDialogExtra?)?.text,
+              ),
+            ),
+            parentNavigatorKey: rootNavigatorKey,
+          ),
+          GoRoute(
+            path: AppRoute.wallabagAddArticleDialog.path,
+            pageBuilder: (context, state) => DialogPage<void>(
+              builder: (context) => WallabagAddArticleDialog(
+                (state.extra as WallabagAddArticleExtra?)!.wallabagCubit,
+                (state.extra as WallabagAddArticleExtra?)!.itemCubit,
+                appContainer.settingsCubit,
               ),
             ),
             parentNavigatorKey: rootNavigatorKey,

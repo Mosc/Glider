@@ -36,6 +36,7 @@ Future<void> bootstrap(
 
       final appContainer = await AppContainer.create();
       unawaited(appContainer.authCubit.init());
+      unawaited(appContainer.wallabagCubit.validate());
       final appRouter = AppRouter.create(appContainer);
 
       runApp(await builder(appContainer, appRouter, deviceInfo));

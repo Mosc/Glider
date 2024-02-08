@@ -14,12 +14,14 @@ import 'package:glider/common/extensions/widget_list_extension.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/view/user_page.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage(
     this._authCubit,
     this._settingsCubit,
+    this._wallabagCubit,
     this._userCubitFactory,
     this._itemCubitFactory,
     this._userItemSearchBlocFactory, {
@@ -28,6 +30,7 @@ class AuthPage extends StatefulWidget {
 
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
   final UserCubitFactory _userCubitFactory;
   final ItemCubitFactory _itemCubitFactory;
   final UserItemSearchBlocFactory _userItemSearchBlocFactory;
@@ -89,6 +92,7 @@ class _AuthPageState extends State<AuthPage> {
               widget._userItemSearchBlocFactory,
               widget._authCubit,
               widget._settingsCubit,
+              widget._wallabagCubit,
               username: state.username!,
             )
           : Scaffold(

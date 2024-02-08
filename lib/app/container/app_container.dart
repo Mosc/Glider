@@ -18,6 +18,7 @@ import 'package:glider/story_similar/cubit/story_similar_cubit.dart';
 import 'package:glider/submit/cubit/submit_cubit.dart';
 import 'package:glider/user/cubit/user_cubit.dart';
 import 'package:glider/user_item_search/bloc/user_item_search_bloc.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_data/glider_data.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:http/http.dart' as http;
@@ -44,6 +45,7 @@ class AppContainer {
   const AppContainer(
     this.navigationShellCubit,
     this.authCubit,
+    this.wallabagCubit,
     this.settingsCubit,
     this.storiesCubit,
     this.storiesSearchBloc,
@@ -100,6 +102,7 @@ class AppContainer {
     return AppContainer(
       NavigationShellCubit(packageRepository),
       AuthCubit(authRepository, itemInteractionRepository, cookieManager),
+      WallabagCubit(authRepository),
       SettingsCubit(
         settingsRepository,
         packageRepository,
@@ -134,6 +137,7 @@ class AppContainer {
 
   final NavigationShellCubit navigationShellCubit;
   final AuthCubit authCubit;
+  final WallabagCubit wallabagCubit;
   final SettingsCubit settingsCubit;
   final StoriesCubit storiesCubit;
   final StoriesSearchBloc storiesSearchBloc;

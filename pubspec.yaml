@@ -36,6 +36,7 @@ dependencies:
   intl: any
   markdown: ^7.1.1
   material_color_utilities: any
+  oauth2: ^2.0.2
   package_info_plus: ^5.0.1
   path_provider: ^2.1.2
   pub_semver: ^2.1.4
@@ -64,3 +65,6 @@ flutter:
     - family: NotoSansMono
       fonts:
         - asset: assets/fonts/NotoSansMono-Regular.ttf
+  assets:
+    # Obtained from: https://github.com/wallabag/logo
+    - assets/icons/wallabag/

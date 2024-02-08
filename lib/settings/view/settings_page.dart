@@ -15,14 +15,17 @@ import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/settings/extensions/theme_mode_extension.dart';
 import 'package:glider/settings/extensions/variant_extension.dart';
 import 'package:glider/settings/widgets/menu_list_tile.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
+import 'package:glider/wallabag/view/wallabag_auth_form.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage(this._settingsCubit, {super.key});
+  const SettingsPage(this._settingsCubit, this._wallabagCubit, {super.key});
 
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class SettingsPage extends StatelessWidget {
           SliverSafeArea(
             top: false,
             sliver: SliverToBoxAdapter(
-              child: _SettingsBody(_settingsCubit),
+              child: _SettingsBody(_settingsCubit, _wallabagCubit),
             ),
           ),
         ],
@@ -52,9 +55,10 @@ class _SliverSettingsAppBar extends StatelessWidget {
 }
 
 class _SettingsBody extends StatelessWidget {
-  const _SettingsBody(this._settingsCubit);
+  const _SettingsBody(this._settingsCubit, this._wallabagCubit);
 
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   static const List<String> _fonts = [
     'Fira Sans',
@@ -341,6 +345,21 @@ class _SettingsBody extends StatelessWidget {
                     ),
               ),
             ),
+            const Divider(),
+            Padding(
+              padding: AppSpacing.defaultTilePadding,
+              child: Text(
+                context.l10n.wallabag,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+            ),
+            Padding(
+              padding: AppSpacing.defaultTilePadding,
+              child: WallabagAuthForm(_wallabagCubit),
+            ),
+            const Divider(),
             if (state.appVersion case final appVersion?)
               ListTile(
                 title: Text(context.l10n.appVersion),
