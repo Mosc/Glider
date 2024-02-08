@@ -19,13 +19,15 @@ import 'package:glider/item/widgets/item_loading_tile.dart';
 import 'package:glider/item/widgets/username_widget.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 
 class ItemTile extends StatefulWidget {
   ItemTile(
     ItemCubit itemCubit,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     this.storyUsername,
     required this.loadingType,
     this.collapsedCount,
@@ -43,7 +45,8 @@ class ItemTile extends StatefulWidget {
   ItemTile.create(
     ItemCubitFactory itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     required this.id,
     this.storyUsername,
     required this.loadingType,
@@ -62,6 +65,7 @@ class ItemTile extends StatefulWidget {
   final ItemCubitFactory? _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
   final int id;
   final String? storyUsername;
   final ItemType loadingType;
@@ -115,109 +119,136 @@ class _ItemTileState extends State<ItemTile>
                 previous.showUserAvatars != current.showUserAvatars ||
                 previous.useActionButtons != current.useActionButtons ||
                 previous.useInAppBrowser != current.useInAppBrowser,
-            builder: (context, settingsState) => AnimatedSize(
-              alignment: Alignment.topCenter,
-              duration: AppAnimation.emphasized.duration,
-              curve: AppAnimation.emphasized.easing,
-              child: state.whenOrDefaultWidgets(
-                loading: () => ItemLoadingTile(
-                  type: widget.loadingType,
-                  collapsedCount: widget.collapsedCount,
-                  storyLines: settingsState.storyLines,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                  showMetadata: settingsState.showStoryMetadata ||
-                      widget.forceShowMetadata,
-                  style: widget.style,
-                  padding: widget.padding,
-                ),
-                success: () {
-                  final item = state.data!;
+            builder: (context, settingsState) =>
+                BlocBuilder<WallabagCubit, WallabagState>(
+              bloc: widget._wallabagCubit,
+              builder: (context, wallabagState) => AnimatedSize(
+                alignment: Alignment.topCenter,
+                duration: AppAnimation.emphasized.duration,
+                curve: AppAnimation.emphasized.easing,
+                child: state.whenOrDefaultWidgets(
+                  loading: () => ItemLoadingTile(
+                    type: widget.loadingType,
+                    collapsedCount: widget.collapsedCount,
+                    storyLines: settingsState.storyLines,
+                    useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                    showMetadata: settingsState.showStoryMetadata ||
+                        widget.forceShowMetadata,
+                    style: widget.style,
+                    padding: widget.padding,
+                  ),
+                  success: () {
+                    final item = state.data!;
 
-                  if (item.type == ItemType.job && !settingsState.showJobs) {
-                    return const SizedBox.shrink();
-                  }
+                    if (item.type == ItemType.job && !settingsState.showJobs) {
+                      return const SizedBox.shrink();
+                    }
 
-                  return Material(
-                    type: widget.highlight
-                        ? MaterialType.canvas
-                        : MaterialType.transparency,
-                    elevation: 4,
-                    shadowColor: Colors.transparent,
-                    surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-                    child: ItemDataTile(
-                      item,
-                      parsedText: state.parsedText,
-                      visited: state.visited && widget.showVisited,
-                      vote: state.vote,
-                      favorited: state.favorited,
-                      flagged: state.flagged,
-                      blocked: state.blocked,
-                      filtered: item.title != null &&
-                              settingsState.wordFilters.any(
-                                (word) => item.title!.containsWord(
-                                  word,
-                                  caseSensitive: false,
+                    return Material(
+                      type: widget.highlight
+                          ? MaterialType.canvas
+                          : MaterialType.transparency,
+                      elevation: 4,
+                      shadowColor: Colors.transparent,
+                      surfaceTintColor:
+                          Theme.of(context).colorScheme.surfaceTint,
+                      child: ItemDataTile(
+                        item,
+                        parsedText: state.parsedText,
+                        visited: state.visited && widget.showVisited,
+                        vote: state.vote,
+                        favorited: state.favorited,
+                        flagged: state.flagged,
+                        blocked: state.blocked,
+                        filtered: item.title != null &&
+                                settingsState.wordFilters.any(
+                                  (word) => item.title!.containsWord(
+                                    word,
+                                    caseSensitive: false,
+                                  ),
+                                ) ||
+                            item.url != null &&
+                                settingsState.domainFilters.any(
+                                  (domain) => item.url!.host.containsWord(
+                                    domain,
+                                    caseSensitive: false,
+                                  ),
                                 ),
-                              ) ||
-                          item.url != null &&
-                              settingsState.domainFilters.any(
-                                (domain) => item.url!.host.containsWord(
-                                  domain,
-                                  caseSensitive: false,
-                                ),
-                              ),
-                      failed: state.status == Status.failure,
-                      collapsedCount: widget.collapsedCount,
-                      storyLines: settingsState.storyLines,
-                      useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                      showFavicons: settingsState.showFavicons,
-                      showMetadata: settingsState.showStoryMetadata ||
-                          widget.forceShowMetadata,
-                      showUserAvatars: settingsState.showUserAvatars,
-                      style: widget.style,
-                      usernameStyle: authState.username == item.username
-                          ? UsernameStyle.loggedInUser
-                          : widget.storyUsername == item.username
-                              ? UsernameStyle.storyUser
-                              : UsernameStyle.none,
-                      padding: widget.padding,
-                      useInAppBrowser: settingsState.useInAppBrowser,
-                      onTap: item.type == ItemType.pollopt
-                          ? ItemAction.upvote
-                                  .isVisible(state, authState, settingsState)
-                              ? (context, item) async =>
-                                  ItemAction.upvote.execute(
-                                    context,
-                                    _itemCubit,
-                                    widget._authCubit,
-                                  )
-                              : null
-                          : widget.onTap,
-                      onLongPress: (context, item) async =>
-                          showModalBottomSheet(
-                        context: rootNavigatorKey.currentContext!,
-                        builder: (context) => ItemBottomSheet(
-                          _itemCubit,
-                          widget._authCubit,
-                          widget._settingsCubit,
+                        failed: state.status == Status.failure,
+                        collapsedCount: widget.collapsedCount,
+                        storyLines: settingsState.storyLines,
+                        useLargeStoryStyle: settingsState.useLargeStoryStyle,
+                        showFavicons: settingsState.showFavicons,
+                        showMetadata: settingsState.showStoryMetadata ||
+                            widget.forceShowMetadata,
+                        showUserAvatars: settingsState.showUserAvatars,
+                        style: widget.style,
+                        usernameStyle: authState.username == item.username
+                            ? UsernameStyle.loggedInUser
+                            : widget.storyUsername == item.username
+                                ? UsernameStyle.storyUser
+                                : UsernameStyle.none,
+                        padding: widget.padding,
+                        useInAppBrowser: settingsState.useInAppBrowser,
+                        onTap: item.type == ItemType.pollopt
+                            ? ItemAction.upvote.isVisible(
+                                state,
+                                authState,
+                                settingsState,
+                                wallabagState,
+                              )
+                                ? (context, item) async =>
+                                    ItemAction.upvote.execute(
+                                      context,
+                                      _itemCubit,
+                                      widget._authCubit,
+                                      widget._wallabagCubit,
+                                    )
+                                : null
+                            : widget.onTap,
+                        onLongPress: (context, item) async =>
+                            showModalBottomSheet(
+                          context: rootNavigatorKey.currentContext!,
+                          builder: (context) => ItemBottomSheet(
+                            _itemCubit,
+                            widget._authCubit,
+                            widget._settingsCubit,
+                            widget._wallabagCubit,
+                          ),
                         ),
+                        onTapUpvote: settingsState.useActionButtons &&
+                                ItemAction.upvote.isVisible(
+                                  state,
+                                  authState,
+                                  settingsState,
+                                  wallabagState,
+                                )
+                            ? () async => ItemAction.upvote.execute(
+                                  context,
+                                  _itemCubit,
+                                  widget._authCubit,
+                                  widget._wallabagCubit,
+                                )
+                            : null,
+                        onTapFavorite: settingsState.useActionButtons &&
+                                ItemAction.favorite.isVisible(
+                                  state,
+                                  authState,
+                                  settingsState,
+                                  wallabagState,
+                                )
+                            ? () async => ItemAction.favorite.execute(
+                                  context,
+                                  _itemCubit,
+                                  widget._authCubit,
+                                  widget._wallabagCubit,
+                                )
+                            : null,
                       ),
-                      onTapUpvote: settingsState.useActionButtons &&
-                              ItemAction.upvote
-                                  .isVisible(state, authState, settingsState)
-                          ? () async => ItemAction.upvote
-                              .execute(context, _itemCubit, widget._authCubit)
-                          : null,
-                      onTapFavorite: settingsState.useActionButtons &&
-                              ItemAction.favorite
-                                  .isVisible(state, authState, settingsState)
-                          ? () async => ItemAction.favorite
-                              .execute(context, _itemCubit, widget._authCubit)
-                          : null,
-                    ),
-                  );
-                },
-                onRetry: () async => _itemCubit.load(),
+                    );
+                  },
+                  onRetry: () async => _itemCubit.load(),
+                ),
               ),
             ),
           ),

@@ -32,7 +32,7 @@ class UserBottomSheet extends StatelessWidget {
             shrinkWrap: true,
             children: [
               for (final action in UserAction.values)
-                if (action.isVisible(state, authState, settingsState))
+                if (action.isVisible(state, authState, settingsState, null))
                   ListTile(
                     leading: Icon(action.icon(state)),
                     title: Text(action.label(context, state)),

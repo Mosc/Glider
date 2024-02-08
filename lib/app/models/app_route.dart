@@ -16,7 +16,8 @@ enum AppRoute {
   user,
   userValueDialog(parent: user),
   textSelectDialog,
-  confirmDialog;
+  confirmDialog,
+  wallabagAddArticleDialog;
 
   const AppRoute({this.parent});
 

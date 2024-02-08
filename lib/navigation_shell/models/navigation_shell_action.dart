@@ -4,6 +4,7 @@ import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/interfaces/menu_item.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 enum NavigationShellAction implements MenuItem<void> {
@@ -13,7 +14,12 @@ enum NavigationShellAction implements MenuItem<void> {
   const NavigationShellAction();
 
   @override
-  bool isVisible(void _, AuthState authState, SettingsState settingsState) {
+  bool isVisible(
+    void _,
+    AuthState authState,
+    SettingsState settingsState,
+    WallabagState? __,
+  ) {
     return switch (this) {
       NavigationShellAction.settings || NavigationShellAction.account => true,
     };

@@ -22,6 +22,7 @@ import 'package:glider/user/models/user_style.dart';
 import 'package:glider/user/widgets/user_tile.dart';
 import 'package:glider/user_item_search/bloc/user_item_search_bloc.dart';
 import 'package:glider/user_item_search/view/user_item_search_view.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,7 +34,8 @@ class UserPage extends StatefulWidget {
     this._itemCubitFactory,
     this._userItemSearchBlocFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     required this.username,
   }) : super(key: ValueKey(username));
 
@@ -42,6 +44,8 @@ class UserPage extends StatefulWidget {
   final UserItemSearchBlocFactory _userItemSearchBlocFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
+
   final String username;
 
   @override
@@ -88,6 +92,7 @@ class _UserPageState extends State<UserPage> {
                 _userItemSearchBloc,
                 widget._authCubit,
                 widget._settingsCubit,
+                widget._wallabagCubit,
                 username: widget.username,
                 scrollController: _scrollController,
               ),
@@ -98,6 +103,7 @@ class _UserPageState extends State<UserPage> {
                   widget._itemCubitFactory,
                   widget._authCubit,
                   widget._settingsCubit,
+                  widget._wallabagCubit,
                   isLoggedInUser: isLoggedInUser,
                 ),
               ),
@@ -142,7 +148,8 @@ class _SliverUserAppBar extends StatelessWidget {
     this._itemCubitFactory,
     this._userItemSearchBloc,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     required this.username,
     required this.scrollController,
   });
@@ -152,6 +159,8 @@ class _SliverUserAppBar extends StatelessWidget {
   final UserItemSearchBloc _userItemSearchBloc;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
+
   final String username;
   final ScrollController scrollController;
 
@@ -180,6 +189,7 @@ class _SliverUserAppBar extends StatelessWidget {
           _itemCubitFactory,
           _authCubit,
           _settingsCubit,
+          _wallabagCubit,
         ),
         _UserOverflowMenu(
           _userCubit,
@@ -198,12 +208,14 @@ class _UserSearchAnchor extends StatefulWidget {
     this._itemCubitFactory,
     this._authCubit,
     this._settingsCubit,
+    this._wallabagCubit,
   );
 
   final UserItemSearchBloc _userItemSearchBloc;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   State<_UserSearchAnchor> createState() => _UserSearchAnchorState();
@@ -268,6 +280,7 @@ class _UserSearchAnchorState extends State<_UserSearchAnchor> {
         widget._itemCubitFactory,
         widget._authCubit,
         widget._settingsCubit,
+        widget._wallabagCubit,
       ),
       suggestionsBuilder: (context, controller) => [],
     );
@@ -297,12 +310,17 @@ class _UserOverflowMenu extends StatelessWidget {
           builder: (context, settingsState) => MenuAnchor(
             menuChildren: [
               for (final action in UserAction.values)
-                if (action.isVisible(state, authState, settingsState))
+                if (action.isVisible(state, authState, settingsState, null))
                   if (action.options case final options?)
                     SubmenuButton(
                       menuChildren: [
                         for (final option in options)
-                          if (option.isVisible(state, authState, settingsState))
+                          if (option.isVisible(
+                            state,
+                            authState,
+                            settingsState,
+                            null,
+                          ))
                             MenuItemButton(
                               onPressed: () async => action.execute(
                                 context,
@@ -343,7 +361,8 @@ class _SliverUserBody extends StatelessWidget {
     this._userCubit,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     this.isLoggedInUser = false,
   });
 
@@ -351,6 +370,8 @@ class _SliverUserBody extends StatelessWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
+
   final bool isLoggedInUser;
 
   @override
@@ -382,6 +403,7 @@ class _SliverUserBody extends StatelessWidget {
                     _itemCubitFactory,
                     _authCubit,
                     _settingsCubit,
+                    _wallabagCubit,
                     id: id,
                     loadingType: ItemType.story,
                     onTap: (context, item) async => context.push(

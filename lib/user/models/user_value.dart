@@ -5,6 +5,7 @@ import 'package:glider/common/interfaces/menu_item.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/user/cubit/user_cubit.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 
 enum UserValue implements MenuItem<UserState> {
   username,
@@ -16,6 +17,7 @@ enum UserValue implements MenuItem<UserState> {
     UserState state,
     AuthState authState,
     SettingsState settingsState,
+    WallabagState? wallabagState,
   ) {
     final user = state.data;
     if (user == null) return false;

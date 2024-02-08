@@ -6,6 +6,7 @@ class SecureStorageService {
   final FlutterSecureStorage _flutterSecureStorage;
 
   static const String _userCookieKey = 'userCookie';
+  static const String _wallabagAuthKey = 'wallabagAuth';
 
   Future<String?> getUserCookie() async =>
       _flutterSecureStorage.read(key: _userCookieKey);
@@ -15,4 +16,13 @@ class SecureStorageService {
 
   Future<void> clearUserCookie() async =>
       _flutterSecureStorage.delete(key: _userCookieKey);
+
+  Future<String?> getWallabagAuth() async =>
+      _flutterSecureStorage.read(key: _wallabagAuthKey);
+
+  Future<void> setWallabagAuth(String value) async =>
+      _flutterSecureStorage.write(key: _wallabagAuthKey, value: value);
+
+  Future<void> clearWallabagAuth() async =>
+      _flutterSecureStorage.delete(key: _wallabagAuthKey);
 }

@@ -7,3 +7,5 @@ flutter_launcher_icons:
   ios: true
   macos:
     generate: true
+  web:
+    generate: true

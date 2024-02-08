@@ -16,6 +16,7 @@ import 'package:glider/item/widgets/item_tile.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/navigation_shell/models/navigation_shell_action.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,7 +25,8 @@ class InboxShellPage extends StatefulWidget {
     this._inboxCubit,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     super.key,
   });
 
@@ -32,6 +34,7 @@ class InboxShellPage extends StatefulWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   State<InboxShellPage> createState() => _InboxShellPageState();
@@ -62,6 +65,7 @@ class _InboxShellPageState extends State<InboxShellPage> {
               widget._itemCubitFactory,
               widget._authCubit,
               widget._settingsCubit,
+              widget._wallabagCubit,
             ),
           ),
           const SliverPadding(
@@ -98,7 +102,7 @@ class _SliverInboxAppBar extends StatelessWidget {
             builder: (context, settingsState) => MenuAnchor(
               menuChildren: [
                 for (final action in NavigationShellAction.values)
-                  if (action.isVisible(null, authState, settingsState))
+                  if (action.isVisible(null, authState, settingsState, null))
                     MenuItemButton(
                       onPressed: () async => action.execute(context),
                       child: Text(action.label(context, null)),
@@ -125,12 +129,14 @@ class _SliverInboxBody extends StatelessWidget {
     this._itemCubitFactory,
     this._authCubit,
     this._settingsCubit,
+    this._wallabagCubit,
   );
 
   final InboxCubit _inboxCubit;
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +157,7 @@ class _SliverInboxBody extends StatelessWidget {
                   _itemCubitFactory,
                   _authCubit,
                   _settingsCubit,
+                  _wallabagCubit,
                   id: parentId,
                   loadingType: ItemType.story,
                   onTap: (context, item) async => context.push(
@@ -163,6 +170,7 @@ class _SliverInboxBody extends StatelessWidget {
                     _itemCubitFactory,
                     _authCubit,
                     _settingsCubit,
+                    _wallabagCubit,
                     id: id,
                     loadingType: ItemType.comment,
                     onTap: (context, item) async => context.push(

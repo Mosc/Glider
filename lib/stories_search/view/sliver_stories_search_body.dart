@@ -11,6 +11,7 @@ import 'package:glider/item/widgets/item_tile.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/stories_search/bloc/stories_search_bloc.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +20,8 @@ class SliverStoriesSearchBody extends StatelessWidget {
     this._storiesSearchBloc,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     super.key,
   });
 
@@ -27,6 +29,7 @@ class SliverStoriesSearchBody extends StatelessWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +59,7 @@ class SliverStoriesSearchBody extends StatelessWidget {
                   _itemCubitFactory,
                   _authCubit,
                   _settingsCubit,
+                  _wallabagCubit,
                   id: id,
                   loadingType: ItemType.story,
                   forceShowMetadata: false,

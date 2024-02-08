@@ -5,19 +5,22 @@ import 'package:glider/common/widgets/notification_canceler.dart';
 import 'package:glider/item/cubit/item_cubit.dart';
 import 'package:glider/item/models/item_action.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class ItemBottomSheet extends StatelessWidget {
   const ItemBottomSheet(
     this._itemCubit,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     super.key,
   });
 
   final ItemCubit _itemCubit;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +32,39 @@ class ItemBottomSheet extends StatelessWidget {
             BlocBuilder<SettingsCubit, SettingsState>(
           bloc: _settingsCubit,
           builder: (context, settingsState) =>
-              NotificationCanceler<ScrollNotification>(
-            child: ListView(
-              primary: false,
-              shrinkWrap: true,
-              children: [
-                for (final action in ItemAction.values)
-                  if (action.isVisible(state, authState, settingsState))
-                    ListTile(
-                      leading: Icon(action.icon(state)),
-                      title: Text(action.label(context, state)),
-                      trailing: action.options != null
-                          ? const Icon(Icons.chevron_right)
-                          : null,
-                      onTap: () async {
-                        context.pop();
-                        await action.execute(
-                          context,
-                          _itemCubit,
-                          _authCubit,
-                        );
-                      },
-                    ),
-              ],
+              BlocBuilder<WallabagCubit, WallabagState>(
+            bloc: _wallabagCubit,
+            builder: (context, wallabagState) =>
+                NotificationCanceler<ScrollNotification>(
+              child: ListView(
+                primary: false,
+                shrinkWrap: true,
+                children: [
+                  for (final action in ItemAction.values)
+                    if (action.isVisible(
+                      state,
+                      authState,
+                      settingsState,
+                      wallabagState,
+                    ))
+                      ListTile(
+                        leading: Icon(action.icon(state)),
+                        title: Text(action.label(context, state)),
+                        trailing: action.options != null
+                            ? const Icon(Icons.chevron_right)
+                            : null,
+                        onTap: () async {
+                          context.pop();
+                          await action.execute(
+                            context,
+                            _itemCubit,
+                            _authCubit,
+                            _wallabagCubit,
+                          );
+                        },
+                      ),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -23,7 +22,9 @@ Future<void> bootstrap(
 
       WidgetsFlutterBinding.ensureInitialized();
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      if (Platform.isAndroid) await FlutterDisplayMode.setHighRefreshRate();
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        await FlutterDisplayMode.setHighRefreshRate();
+      }
 
       Bloc.observer = const AppBlocObserver();
       HydratedBloc.storage = await HydratedStorage.build(
@@ -35,6 +36,7 @@ Future<void> bootstrap(
 
       final appContainer = await AppContainer.create();
       unawaited(appContainer.authCubit.init());
+      unawaited(appContainer.wallabagCubit.validate());
       final appRouter = AppRouter.create(appContainer);
 
       runApp(await builder(appContainer, appRouter, deviceInfo));

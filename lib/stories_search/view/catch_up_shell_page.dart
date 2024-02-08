@@ -11,13 +11,15 @@ import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider/stories_search/bloc/stories_search_bloc.dart';
 import 'package:glider/stories_search/view/sliver_stories_search_body.dart';
 import 'package:glider/stories_search/view/stories_search_range_view.dart';
+import 'package:glider/wallabag/cubit/wallabag_cubit.dart';
 
 class CatchUpShellPage extends StatefulWidget {
   const CatchUpShellPage(
     this._storiesSearchBloc,
     this._itemCubitFactory,
     this._authCubit,
-    this._settingsCubit, {
+    this._settingsCubit,
+    this._wallabagCubit, {
     super.key,
   });
 
@@ -25,6 +27,7 @@ class CatchUpShellPage extends StatefulWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final WallabagCubit _wallabagCubit;
 
   @override
   State<CatchUpShellPage> createState() => _CatchUpShellPageState();
@@ -59,6 +62,7 @@ class _CatchUpShellPageState extends State<CatchUpShellPage> {
               widget._itemCubitFactory,
               widget._authCubit,
               widget._settingsCubit,
+              widget._wallabagCubit,
             ),
           ),
           const SliverPadding(
@@ -95,7 +99,7 @@ class _SliverCatchUpAppBar extends StatelessWidget {
             builder: (context, settingsState) => MenuAnchor(
               menuChildren: [
                 for (final action in NavigationShellAction.values)
-                  if (action.isVisible(null, authState, settingsState))
+                  if (action.isVisible(null, authState, settingsState, null))
                     MenuItemButton(
                       onPressed: () async => action.execute(context),
                       child: Text(action.label(context, null)),

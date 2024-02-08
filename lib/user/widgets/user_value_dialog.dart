@@ -54,7 +54,7 @@ class _UserValueDialogState extends State<UserValueDialog> {
                 shrinkWrap: true,
                 children: [
                   for (final value in UserValue.values)
-                    if (value.isVisible(state, authState, settingsState))
+                    if (value.isVisible(state, authState, settingsState, null))
                       ListTile(
                         leading: Icon(value.icon(state)),
                         title: Text(value.label(context, state)),
