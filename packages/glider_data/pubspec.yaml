@@ -3,17 +3,17 @@ version: 0.1.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.2.0-0 <4.0.0"
+  sdk: ">=3.3.0-0 <4.0.0"
 
 dependencies:
   collection: any
   compute: ^1.0.2
   flutter_secure_storage: ^9.0.0
   html: ^0.15.4
-  http: ^1.1.2
+  http: ^1.2.0
   shared_preferences: ^2.2.1
 
 dev_dependencies:
-  custom_lint: ^0.5.8
+  custom_lint: ^0.6.2
   dependency_validator: ^3.2.3
-  leancode_lint: ^8.0.0
+  leancode_lint: ^11.0.0

@@ -10,16 +10,14 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
-    final scaleFactor = MediaQuery.textScalerOf(context).textScaleFactor;
-    final pixelSize = scaleFactor * 2;
+    final pixelSize = MediaQuery.textScalerOf(context).scale(2);
     final avatarSize = pixelSize * 7;
 
     return CustomPaint(
       painter: _AvatarPainter(
         username: username,
         pixelSize: pixelSize,
-        scaleFactor: scaleFactor,
+        offset: Offset(pixelSize / 2, pixelSize / 2),
       ),
       size: Size.square(avatarSize),
     );
@@ -31,17 +29,16 @@ class _AvatarPainter extends CustomPainter with EquatableMixin {
   const _AvatarPainter({
     required this.username,
     required this.pixelSize,
-    this.scaleFactor = 1,
+    required this.offset,
   });
 
   final String username;
   final double pixelSize;
-  final double scaleFactor;
+  final Offset offset;
 
   @override
   void paint(Canvas canvas, Size size) {
     const seedSteps = 28;
-    final offset = Offset(scaleFactor, scaleFactor);
     final points = <Offset>[];
     final paint = Paint()..strokeWidth = pixelSize;
     var seed = 1;
@@ -77,7 +74,7 @@ class _AvatarPainter extends CustomPainter with EquatableMixin {
   List<Object?> get props => [
         username,
         pixelSize,
-        scaleFactor,
+        offset,
       ];
 
   static int _xorShift32(int number) {

@@ -4,37 +4,37 @@ version: 2.8.0+49
 publish_to: none
 
 environment:
-  sdk: ">=3.2.0-0 <4.0.0"
+  sdk: ">=3.3.0-0 <4.0.0"
 
 dependencies:
-  bloc: ^8.1.2
+  bloc: ^8.1.3
   bloc_presentation: ^1.0.0
   clock: ^1.1.1
   collection: any
-  device_info_plus: ^9.1.1
-  dynamic_color: ^1.6.9
+  device_info_plus: ^9.1.2
+  dynamic_color: ^1.7.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter
-  flutter_adaptive_scaffold: ^0.1.7+2
-  flutter_bloc: ^8.1.3
+  flutter_adaptive_scaffold: ^0.1.8
+  flutter_bloc: ^8.1.4
   flutter_displaymode: ^0.6.0
   flutter_inappwebview: ^6.0.0
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.6.18+3
+  flutter_markdown: ^0.6.21
   flutter_secure_storage: ^9.0.0
-  formz: ^0.6.1
+  formz: ^0.7.0
   glider_data:
     path: packages/glider_data
   glider_domain:
     path: packages/glider_domain
-  go_router: ^13.0.1
-  google_fonts: ^6.1.0
-  http: ^1.1.2
-  hydrated_bloc: ^9.1.3
+  go_router: ^13.2.0
+  google_fonts: ^6.2.1
+  http: ^1.2.0
+  hydrated_bloc: ^9.1.4
   intl: any
-  markdown: ^7.1.1
+  markdown: ^7.2.2
   material_color_utilities: any
   package_info_plus: ^5.0.1
   path_provider: ^2.1.2
@@ -42,17 +42,17 @@ dependencies:
   relative_time: ^5.0.0
   rxdart: ^0.27.7
   scrollview_observer: ^1.19.0
-  share_plus: ^7.2.1
+  share_plus: ^7.2.2
   shared_preferences: ^2.2.2
   sliver_tools: ^0.2.12
-  url_launcher: ^6.2.3
+  url_launcher: ^6.2.5
 
 dev_dependencies:
-  custom_lint: ^0.5.8
+  custom_lint: ^0.6.2
   dependency_validator: ^3.2.3
   flutter_launcher_icons: ^0.13.1
-  leancode_lint: ^8.0.0
-  melos: ^4.0.0
+  leancode_lint: ^11.0.0
+  melos: ^4.1.0
 
 flutter:
   uses-material-design: true

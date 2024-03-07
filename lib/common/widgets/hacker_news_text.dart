@@ -146,11 +146,8 @@ class _HackerNewsMarkdownBodyState extends State<_HackerNewsMarkdownBody>
 
   void _parseMarkdown() {
     _disposeRecognizers();
-    final fallbackStyleSheet =
-        MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-      // ignore: deprecated_member_use
-      textScaleFactor: MediaQuery.textScalerOf(context).textScaleFactor,
-    );
+    final fallbackStyleSheet = MarkdownStyleSheet.fromTheme(Theme.of(context))
+        .copyWith(textScaler: MediaQuery.textScalerOf(context));
     final styleSheet = fallbackStyleSheet.merge(widget.styleSheet);
     final builder = MarkdownBuilder(
       delegate: this,
