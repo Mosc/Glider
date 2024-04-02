@@ -22,12 +22,12 @@ class PreviewBottomPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
-            // Use half of the available height for the preview (if visible).
+            // Use a third of the available height for the preview (if visible).
             // The layout builder helps exclude any keyboard's view insets.
             child: LayoutBuilder(
               builder: (context, constraints) => ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: constraints.maxHeight / 2,
+                  maxHeight: constraints.maxHeight / 3,
                 ),
                 child: AnimatedVisibility.vertical(
                   visible: visible,
