@@ -65,9 +65,9 @@ enum _CardType {
 
   Color? color(BuildContext context) => switch (this) {
         _CardType.filled =>
-          // ignore: deprecated_member_use, dependent on `dynamic_color`'s
-          // `toColorScheme` supporting `surfaceContainerHighest`.
-          Theme.of(context).colorScheme.surfaceContainerHighest,
+          // Dependent on `dynamic_color` supporting `surfaceContainerHighest`.
+          // ignore: deprecated_member_use
+          Theme.of(context).colorScheme.surfaceVariant,
         _ => null,
       };
 
