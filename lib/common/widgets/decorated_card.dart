@@ -64,7 +64,8 @@ enum _CardType {
   final double? elevation;
 
   Color? color(BuildContext context) => switch (this) {
-        _CardType.filled => Theme.of(context).colorScheme.surfaceVariant,
+        _CardType.filled =>
+          Theme.of(context).colorScheme.surfaceContainerHighest,
         _ => null,
       };
 

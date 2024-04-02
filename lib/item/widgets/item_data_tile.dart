@@ -567,7 +567,7 @@ class _MetadataActionButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          foregroundColor: Theme.of(context).colorScheme.onBackground,
+          foregroundColor: Theme.of(context).colorScheme.onSurface,
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.m),
           minimumSize: const Size.square(40),
           visualDensity: const VisualDensity(

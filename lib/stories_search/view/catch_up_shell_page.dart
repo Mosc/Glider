@@ -40,6 +40,7 @@ class _CatchUpShellPageState extends State<CatchUpShellPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      type: MaterialType.transparency,
       child: RefreshableScrollView(
         onRefresh: () async =>
             widget._storiesSearchBloc.add(const LoadStoriesSearchEvent()),

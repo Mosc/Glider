@@ -48,6 +48,7 @@ class _FavoritesShellPageState extends State<FavoritesShellPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      type: MaterialType.transparency,
       child: RefreshableScrollView(
         onRefresh: () async => unawaited(widget._favoritesCubit.load()),
         slivers: [

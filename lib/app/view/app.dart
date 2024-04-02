@@ -62,23 +62,33 @@ class App extends StatelessWidget {
     ColorScheme? dynamicColorScheme,
     Brightness brightness,
   ) {
-    final backgroundColor = state.usePureBackground
-        ? brightness == Brightness.dark
-            ? Colors.black
-            : Colors.white
-        : null;
+    final colorScheme = switch (state) {
+      SettingsState(useDynamicTheme: true) when dynamicColorScheme != null =>
+        dynamicColorScheme,
+      SettingsState(useDynamicTheme: true) => ColorScheme.fromSeed(
+          seedColor: state.themeColor,
+          brightness: brightness,
+        ),
+      final state => state.themeVariant.toColorScheme(
+          state.themeColor,
+          brightness,
+        ),
+    }
+        .copyWith(
+      surface: state.usePureBackground
+          ? brightness == Brightness.dark
+              ? Colors.black
+              : Colors.white
+          : null,
+    );
     return ThemeData(
       visualDensity: VisualDensity.comfortable,
       brightness: brightness,
-      colorScheme: (state.useDynamicTheme && dynamicColorScheme != null
-              ? dynamicColorScheme
-              : state.themeVariant.toColorScheme(state.themeColor, brightness))
-          .copyWith(
-        background: backgroundColor,
-      ),
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
       textTheme: GoogleFonts.getTextTheme(state.font, const TextTheme()),
       appBarTheme: AppBarTheme(
-        color: backgroundColor,
+        color: colorScheme.surface,
         centerTitle: false,
       ),
       badgeTheme: BadgeThemeData(
@@ -90,6 +100,11 @@ class App extends StatelessWidget {
         showDragHandle: true,
         // Material 3 dictates a maximum width for bottom sheets.
         constraints: BoxConstraints(maxWidth: 640),
+      ),
+      chipTheme: ChipThemeData(
+        iconTheme: IconThemeData(
+          color: colorScheme.onSurface,
+        ),
       ),
       inputDecorationTheme: const InputDecorationTheme(filled: true),
       menuButtonTheme: const MenuButtonThemeData(
@@ -109,13 +124,13 @@ class App extends StatelessWidget {
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: backgroundColor,
+        backgroundColor: colorScheme.surface,
       ),
       navigationRailTheme: NavigationRailThemeData(
-        backgroundColor: backgroundColor,
+        backgroundColor: colorScheme.surface,
       ),
       searchViewTheme: SearchViewThemeData(
-        backgroundColor: backgroundColor,
+        backgroundColor: colorScheme.surface,
       ),
     );
   }

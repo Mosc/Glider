@@ -27,7 +27,10 @@ class AppBarProgressIndicator<B extends BlocBase<S>,
           ),
           child: TickerMode(
             enabled: isLoading,
-            child: const LinearProgressIndicator(minHeight: _height),
+            child: const LinearProgressIndicator(
+              minHeight: _height,
+              backgroundColor: Colors.transparent,
+            ),
           ),
         ),
       ),

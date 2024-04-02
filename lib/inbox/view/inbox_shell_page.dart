@@ -49,6 +49,7 @@ class _InboxShellPageState extends State<InboxShellPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      type: MaterialType.transparency,
       child: RefreshableScrollView(
         onRefresh: () async => unawaited(widget._inboxCubit.load()),
         slivers: [

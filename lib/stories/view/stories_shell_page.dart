@@ -56,6 +56,7 @@ class _StoriesShellPageState extends State<StoriesShellPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      type: MaterialType.transparency,
       child: RefreshableScrollView(
         onRefresh: () async => unawaited(widget._storiesCubit.load()),
         slivers: [
