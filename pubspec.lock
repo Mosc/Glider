@@ -923,14 +923,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
-  scrollview_observer:
-    dependency: "direct main"
-    description:
-      name: scrollview_observer
-      sha256: "9fde897d25f05f8f8295807eae96ac337aae70d6860714ca8702a430d735ac4a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.19.1"
   share_plus:
     dependency: "direct main"
     description:

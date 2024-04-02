@@ -29,8 +29,8 @@ import 'package:glider/story_similar/cubit/story_similar_cubit.dart';
 import 'package:glider/story_similar/view/sliver_story_similar_body.dart';
 import 'package:glider_domain/glider_domain.dart';
 import 'package:go_router/go_router.dart';
-import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 class ItemPage extends StatefulWidget {
   ItemPage(
@@ -61,10 +61,8 @@ class _ItemPageState extends State<ItemPage> {
   late final StorySimilarCubit _storySimilarCubit;
   late final StoryItemSearchBloc _storyItemSearchBloc;
   late final ScrollController _scrollController;
-  late final SliverObserverController _sliverObserverController;
+  late final ListController _listController;
   final GlobalKey _bodyKey = GlobalKey();
-
-  int index = 0;
 
   @override
   void initState() {
@@ -76,8 +74,7 @@ class _ItemPageState extends State<ItemPage> {
     _storySimilarCubit = widget._storySimilarCubitFactory(widget.id);
     _storyItemSearchBloc = widget._storyItemSearchBlocFactory(widget.id);
     _scrollController = ScrollController();
-    _sliverObserverController =
-        SliverObserverController(controller: _scrollController);
+    _listController = ListController();
   }
 
   @override
@@ -107,49 +104,42 @@ class _ItemPageState extends State<ItemPage> {
           previous.useLargeStoryStyle != current.useLargeStoryStyle ||
           previous.useThreadNavigation != current.useThreadNavigation,
       builder: (context, settingsState) => Scaffold(
-        body: SliverViewObserver(
-          controller: _sliverObserverController,
-          leadingOffset: MediaQuery.paddingOf(context).top,
-          onObserve: (observeModel) {
-            final index = observeModel.displayingChildIndexList.firstOrNull;
-            if (index != null) this.index = index;
-          },
-          child: RefreshableScrollView(
-            scrollController: _scrollController,
-            onRefresh: () async => unawaited(_itemTreeCubit.load()),
-            toolbarHeight: _getToolbarHeight(
-              storyLines: settingsState.storyLines,
-              useLargeStoryStyle: settingsState.useLargeStoryStyle,
+        body: RefreshableScrollView(
+          scrollController: _scrollController,
+          onRefresh: () async => unawaited(_itemTreeCubit.load()),
+          toolbarHeight: _getToolbarHeight(
+            storyLines: settingsState.storyLines,
+            useLargeStoryStyle: settingsState.useLargeStoryStyle,
+          ),
+          slivers: [
+            _SliverItemAppBar(
+              _itemCubit,
+              _itemTreeCubit,
+              widget._itemCubitFactory,
+              _storyItemSearchBloc,
+              widget._authCubit,
+              widget._settingsCubit,
+              bodyKey: _bodyKey,
+              scrollController: _scrollController,
+              toolbarHeight: _getToolbarHeight(
+                storyLines: settingsState.storyLines,
+                useLargeStoryStyle: settingsState.useLargeStoryStyle,
+              ),
             ),
-            slivers: [
-              _SliverItemAppBar(
+            SliverSafeArea(
+              top: false,
+              sliver: _SliverItemBody(
                 _itemCubit,
                 _itemTreeCubit,
+                _storySimilarCubit,
                 widget._itemCubitFactory,
-                _storyItemSearchBloc,
                 widget._authCubit,
                 widget._settingsCubit,
-                bodyKey: _bodyKey,
-                scrollController: _scrollController,
-                toolbarHeight: _getToolbarHeight(
-                  storyLines: settingsState.storyLines,
-                  useLargeStoryStyle: settingsState.useLargeStoryStyle,
-                ),
+                key: _bodyKey,
+                listController: _listController,
               ),
-              SliverSafeArea(
-                top: false,
-                sliver: _SliverItemBody(
-                  _itemCubit,
-                  _itemTreeCubit,
-                  _storySimilarCubit,
-                  widget._itemCubitFactory,
-                  widget._authCubit,
-                  widget._settingsCubit,
-                  key: _bodyKey,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
         floatingActionButton: settingsState.useThreadNavigation
             ? Theme(
@@ -168,21 +158,13 @@ class _ItemPageState extends State<ItemPage> {
                   children: [
                     FloatingActionButton.small(
                       heroTag: null,
-                      onPressed: () {
-                        final index = _itemTreeCubit.state
-                            .getPreviousRootChildIndex(index: this.index);
-                        if (index != null) _animateTo(index: index);
-                      },
+                      onPressed: _onPreviousPressed,
                       tooltip: context.l10n.previousRootChild,
                       child: const Icon(Icons.keyboard_arrow_up_outlined),
                     ),
                     FloatingActionButton.small(
                       heroTag: null,
-                      onPressed: () {
-                        final index = _itemTreeCubit.state
-                            .getNextRootChildIndex(index: this.index);
-                        if (index != null) _animateTo(index: index);
-                      },
+                      onPressed: _onNextPressed,
                       tooltip: context.l10n.nextRootChild,
                       child: const Icon(Icons.keyboard_arrow_down_outlined),
                     ),
@@ -195,12 +177,31 @@ class _ItemPageState extends State<ItemPage> {
     );
   }
 
+  Future<void> _onPreviousPressed() async {
+    if (_listController.unobstructedVisibleRange case final visibleRange?) {
+      if (_itemTreeCubit.state.getPreviousRootChildIndex(index: visibleRange.$1)
+          case final index?) {
+        await _animateTo(index: index);
+      }
+    }
+  }
+
+  Future<void> _onNextPressed() async {
+    if (_listController.unobstructedVisibleRange case final visibleRange?) {
+      if (_itemTreeCubit.state.getNextRootChildIndex(index: visibleRange.$1)
+          case final index?) {
+        await _animateTo(index: index);
+      }
+    }
+  }
+
   Future<void> _animateTo({required int index}) async =>
-      _sliverObserverController.animateTo(
+      _listController.animateToItem(
         index: index,
-        duration: AppAnimation.emphasized.duration,
-        curve: AppAnimation.emphasized.easing,
-        offset: (targetOffset) => MediaQuery.paddingOf(context).top,
+        scrollController: _scrollController,
+        duration: (estimatedDistance) => AppAnimation.emphasized.duration,
+        curve: (estimatedDistance) => AppAnimation.emphasized.easing,
+        alignment: 0,
       );
 }
 
@@ -521,6 +522,7 @@ class _SliverItemBody extends StatelessWidget {
     this._authCubit,
     this._settingsCubit, {
     super.key,
+    this.listController,
   });
 
   final ItemCubit _itemCubit;
@@ -529,6 +531,7 @@ class _SliverItemBody extends StatelessWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final ListController? listController;
 
   @override
   Widget build(BuildContext context) {
@@ -572,6 +575,7 @@ class _SliverItemBody extends StatelessWidget {
               _itemCubitFactory,
               _authCubit,
               _settingsCubit,
+              listController: listController,
               childCount: state.data?.childIds?.length,
               storyUsername: state.data?.storyUsername,
             ),
