@@ -10,10 +10,10 @@ dependencies:
   compute: ^1.0.2
   flutter_secure_storage: ^9.0.0
   html: ^0.15.4
-  http: ^1.2.0
-  shared_preferences: ^2.2.1
+  http: ^1.2.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
-  custom_lint: ^0.6.2
+  custom_lint: ^0.6.4
   dependency_validator: ^3.2.3
   leancode_lint: ^11.0.0
