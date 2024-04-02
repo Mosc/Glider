@@ -535,20 +535,12 @@ class _SliverItemBody extends StatelessWidget {
     return BlocBuilder<ItemCubit, ItemState>(
       bloc: _itemCubit,
       builder: (context, state) => state.whenOrDefaultSlivers(
-        loading: () => SliverMainAxisGroup(
-          slivers: [
-            SliverToBoxAdapter(
-              child: ItemLoadingTile(
-                type: ItemType.story,
-                style: ItemStyle.secondary,
-                padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
-              ),
-            ),
-            SliverList.builder(
-              itemBuilder: (context, index) =>
-                  const ItemLoadingTile(type: ItemType.comment),
-            ),
-          ],
+        loading: () => SliverToBoxAdapter(
+          child: ItemLoadingTile(
+            type: ItemType.story,
+            style: ItemStyle.secondary,
+            padding: AppSpacing.defaultTilePadding.copyWith(top: 0),
+          ),
         ),
         success: () => SliverMainAxisGroup(
           slivers: [

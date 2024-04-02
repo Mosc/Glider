@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
+import 'package:glider/app/extensions/super_sliver_list_extension.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_animation.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
@@ -11,6 +12,7 @@ import 'package:glider/item_tree/cubit/item_tree_cubit.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 import 'package:glider/settings/cubit/settings_cubit.dart';
 import 'package:glider_domain/glider_domain.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 class SliverItemTreeBody extends StatelessWidget {
   const SliverItemTreeBody(
@@ -19,6 +21,7 @@ class SliverItemTreeBody extends StatelessWidget {
     this._authCubit,
     this._settingsCubit, {
     super.key,
+    this.listController,
     this.childCount,
     this.storyUsername,
   });
@@ -27,6 +30,7 @@ class SliverItemTreeBody extends StatelessWidget {
   final ItemCubitFactory _itemCubitFactory;
   final AuthCubit _authCubit;
   final SettingsCubit _settingsCubit;
+  final ListController? listController;
   final int? childCount;
   final String? storyUsername;
 
@@ -47,14 +51,15 @@ class SliverItemTreeBody extends StatelessWidget {
         }
       },
       builder: (context, state) => state.whenOrDefaultSlivers(
-        loading: () => SliverList.builder(
-          itemCount: childCount,
+        loading: () => SuperSliverListExtension.builder(
+          itemCount: childCount ?? 0,
           itemBuilder: (context, index) => const IndentedWidget(
             depth: 1,
             child: ItemLoadingTile(type: ItemType.comment),
           ),
         ),
-        nonEmpty: () => SliverList.builder(
+        nonEmpty: () => SuperSliverListExtension.builder(
+          listController: listController,
           itemCount: state.viewableData!.length,
           itemBuilder: (context, index) {
             final descendant = state.viewableData![index];

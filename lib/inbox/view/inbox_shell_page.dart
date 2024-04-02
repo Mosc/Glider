@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
+import 'package:glider/app/extensions/super_sliver_list_extension.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
+import 'package:glider/common/mixins/paginated_list_mixin.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
 import 'package:glider/inbox/cubit/inbox_cubit.dart';
@@ -137,11 +139,12 @@ class _SliverInboxBody extends StatelessWidget {
     return BlocBuilder<InboxCubit, InboxState>(
       bloc: _inboxCubit,
       builder: (context, state) => state.whenOrDefaultSlivers(
-        loading: () => SliverList.builder(
+        loading: () => SuperSliverListExtension.builder(
+          itemCount: PaginatedListMixin.pageSize,
           itemBuilder: (context, index) =>
               const ItemLoadingTile(type: ItemType.comment),
         ),
-        nonEmpty: () => SliverList.builder(
+        nonEmpty: () => SuperSliverListExtension.builder(
           itemCount: state.data!.length,
           itemBuilder: (context, index) {
             final (parentId, id) = state.data![index];

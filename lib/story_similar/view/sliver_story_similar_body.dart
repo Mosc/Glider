@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
+import 'package:glider/app/extensions/super_sliver_list_extension.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_spacing.dart';
@@ -69,7 +70,7 @@ class SliverStorySimilarBody extends StatelessWidget {
                 ),
               ),
             ),
-            SliverList.builder(
+            SuperSliverListExtension.builder(
               itemCount: state.data!.length,
               itemBuilder: (context, index) {
                 final id = state.data![index];

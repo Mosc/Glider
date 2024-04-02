@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glider/app/container/app_container.dart';
+import 'package:glider/app/extensions/super_sliver_list_extension.dart';
 import 'package:glider/app/models/app_route.dart';
 import 'package:glider/auth/cubit/auth_cubit.dart';
 import 'package:glider/common/constants/app_animation.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/mixins/data_mixin.dart';
+import 'package:glider/common/mixins/paginated_list_mixin.dart';
 import 'package:glider/common/models/status.dart';
 import 'package:glider/common/widgets/app_bar_progress_indicator.dart';
 import 'package:glider/common/widgets/refreshable_scroll_view.dart';
@@ -246,7 +248,8 @@ class _SliverStoriesBody extends StatelessWidget {
     return BlocBuilder<StoriesCubit, StoriesState>(
       bloc: _storiesCubit,
       builder: (context, state) => state.whenOrDefaultSlivers(
-        loading: () => SliverList.builder(
+        loading: () => SuperSliverListExtension.builder(
+          itemCount: PaginatedListMixin.pageSize,
           itemBuilder: (context, index) =>
               BlocBuilder<SettingsCubit, SettingsState>(
             bloc: _settingsCubit,
@@ -261,7 +264,7 @@ class _SliverStoriesBody extends StatelessWidget {
         ),
         nonEmpty: () => SliverMainAxisGroup(
           slivers: [
-            SliverList.builder(
+            SuperSliverListExtension.builder(
               itemCount: state.loadedData!.length,
               itemBuilder: (context, index) {
                 final id = state.loadedData![index];
