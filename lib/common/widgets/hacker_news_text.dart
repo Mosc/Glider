@@ -35,7 +35,7 @@ class HackerNewsText extends StatelessWidget {
     [
       HackerNewsAsteriskEscapeSyntax(),
       HackerNewsEmphasisSyntax.asterisk(),
-      HackerNewsAutolinkExtensionSyntax(),
+      md.AutolinkExtensionSyntax(),
       md.EscapeSyntax(),
       md.AutolinkSyntax(),
       md.EmailAutolinkSyntax(),
@@ -203,43 +203,6 @@ class HackerNewsCodeBlockSyntax extends md.CodeBlockSyntax {
 
   @override
   RegExp get pattern => RegExp(r'^(?:  | ?\t)(.*)$');
-}
-
-// Auto-linking should not be different from default Markdown, but a bug in its
-// implementation causes it to not handle links directly after newlines.
-class HackerNewsAutolinkExtensionSyntax extends md.AutolinkExtensionSyntax {
-  @override
-  bool tryMatch(md.InlineParser parser, [int? startMatchPos]) {
-    startMatchPos ??= parser.pos;
-    final startMatch = pattern.matchAsPrefix(parser.source, startMatchPos);
-    if (startMatch == null) {
-      return false;
-    }
-
-    // When it is a link and it is not preceded by `*`, `_`, `~`, `(`, or `>`,
-    // it is invalid. See
-    // https://github.github.com/gfm/#extended-autolink-path-validation.
-    if (startMatch[1] != null && parser.pos > 0) {
-      final precededBy = String.fromCharCode(parser.charAt(parser.pos - 1));
-      const validPrecedingChars = {'\n', ' ', '*', '_', '~', '(', '>'};
-      if (validPrecedingChars.contains(precededBy) == false) {
-        return false;
-      }
-    }
-
-    // When it is an email link and followed by `_` or `-`, it is invalid. See
-    // https://github.github.com/gfm/#example-633
-    if (startMatch[2] != null && parser.source.length > startMatch.end) {
-      final followedBy = String.fromCharCode(parser.charAt(startMatch.end));
-      const invalidFollowingChars = {'_', '-'};
-      if (invalidFollowingChars.contains(followedBy)) {
-        return false;
-      }
-    }
-
-    parser.writeText();
-    return onMatch(parser, startMatch);
-  }
 }
 
 // Unlike default Markdown, double asterisks do not result in a strong tag.
