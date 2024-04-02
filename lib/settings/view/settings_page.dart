@@ -57,12 +57,18 @@ class _SettingsBody extends StatelessWidget {
   final SettingsCubit _settingsCubit;
 
   static const List<String> _fonts = [
+    'EB Garamond',
     'Fira Sans',
     'IBM Plex Sans',
+    'IBM Plex Serif',
     'Inter',
     'Noto Sans',
+    'Noto Serif',
     'Open Sans',
     'Roboto',
+    'Roboto Serif',
+    'Source Sans 3',
+    'Source Serif 4',
   ];
   static final Uri _privacyPolicyUrl = AppUris.projectUri
       .replace(path: '${AppUris.projectUri.path}/blob/master/PRIVACY.md');
