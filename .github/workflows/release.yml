@@ -76,7 +76,7 @@ jobs:
         with:
           name: app-release.apk
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: fastlane/metadata/android/en-US/changelogs/${{ steps.pubspec.outputs.build-number }}.txt
           files: app-release.apk
