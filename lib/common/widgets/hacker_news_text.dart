@@ -37,6 +37,7 @@ class HackerNewsText extends StatelessWidget {
       HackerNewsEmphasisSyntax.asterisk(),
       md.AutolinkExtensionSyntax(),
       md.EscapeSyntax(),
+      md.LinkSyntax(),
       md.AutolinkSyntax(),
       md.EmailAutolinkSyntax(),
       md.CodeSyntax(),

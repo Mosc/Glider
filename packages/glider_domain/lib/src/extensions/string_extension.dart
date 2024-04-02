@@ -7,10 +7,13 @@ extension StringExtension on String {
 }
 
 extension on html_dom.Node {
+  String get _url => attributes['href'] ?? text!;
+
   String convert() => switch (this) {
         // "Urls become links, except in the text field of a submission."
         // We cheat by not handling submissions any differently.
-        html_dom.Element(localName: 'a') => attributes['href'] ?? text!,
+        // Unlike the website, we prefer showing the full URL.
+        html_dom.Element(localName: 'a') => '[$_url](${Uri.decodeFull(_url)})',
         // "Text surrounded by asterisks is italicized."
         html_dom.Element(localName: 'i') => '*${convertNodes()}*',
         // "Blank lines separate paragraphs."
