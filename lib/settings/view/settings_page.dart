@@ -57,6 +57,7 @@ class _SettingsBody extends StatelessWidget {
   final SettingsCubit _settingsCubit;
 
   static const List<String> _fonts = [
+    'Crimson Pro',
     'EB Garamond',
     'Fira Sans',
     'IBM Plex Sans',
