@@ -11,7 +11,7 @@ dependencies:
   bloc_presentation: ^1.0.0
   clock: ^1.1.1
   collection: any
-  device_info_plus: ^10.0.1
+  device_info_plus: ^10.1.0
   dynamic_color: ^1.7.0
   equatable: ^2.0.5
   flutter:
