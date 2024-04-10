@@ -132,6 +132,11 @@ class App extends StatelessWidget {
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: colorScheme.surface,
       ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+        },
+      ),
       searchViewTheme: SearchViewThemeData(
         backgroundColor: colorScheme.surface,
       ),
