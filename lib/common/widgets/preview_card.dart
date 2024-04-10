@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:glider/common/constants/app_animation.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/widget_list_extension.dart';
-import 'package:glider/common/widgets/decorated_card.dart';
 import 'package:glider/common/widgets/metadata_widget.dart';
 import 'package:glider/l10n/extensions/app_localizations_extension.dart';
 
@@ -16,8 +15,7 @@ class PreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedCard.filled(
-      padding: EdgeInsets.zero,
+    return Card.outlined(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

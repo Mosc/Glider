@@ -6,7 +6,6 @@ import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/extensions/uri_extension.dart';
 import 'package:glider/common/extensions/widget_list_extension.dart';
 import 'package:glider/common/widgets/animated_visibility.dart';
-import 'package:glider/common/widgets/decorated_card.dart';
 import 'package:glider/common/widgets/hacker_news_text.dart';
 import 'package:glider/common/widgets/metadata_widget.dart';
 import 'package:glider/item/extensions/item_extension.dart';
@@ -364,44 +363,53 @@ class ItemDataTile extends StatelessWidget {
             ),
           ),
         if (item.url case final url?)
-          DecoratedCard.outlined(
-            onTap: () async => url.tryLaunch(
-              context,
-              useInAppBrowser: useInAppBrowser,
-            ),
-            // Explicitly override parent widget's long press.
-            onLongPress: () {},
-            child: Row(
-              children: [
-                if (showFavicons)
-                  Hero(
-                    tag: 'item_tile_favicon_${item.id}',
-                    child: Material(
-                      type: MaterialType.transparency,
-                      child: _ItemFavicon(
-                        item,
-                        storyLines: 1,
-                        useLargeStoryStyle: false,
+          Card.outlined(
+            child: InkWell(
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+              onTap: () async => url.tryLaunch(
+                context,
+                useInAppBrowser: useInAppBrowser,
+              ),
+              // Explicitly override parent widget's long press.
+              onLongPress: () {},
+              child: Padding(
+                padding: AppSpacing.defaultTilePadding,
+                child: Row(
+                  children: [
+                    if (showFavicons)
+                      Hero(
+                        tag: 'item_tile_favicon_${item.id}',
+                        child: Material(
+                          type: MaterialType.transparency,
+                          child: _ItemFavicon(
+                            item,
+                            storyLines: 1,
+                            useLargeStoryStyle: false,
+                          ),
+                        ),
+                      )
+                    else
+                      const MetadataWidget(icon: Icons.link_outlined),
+                    Expanded(
+                      child: Hero(
+                        tag: 'item_tile_url_${item.id}',
+                        child: Text(
+                          item.url!.toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
-                  )
-                else
-                  const MetadataWidget(icon: Icons.link_outlined),
-                Expanded(
-                  child: Hero(
-                    tag: 'item_tile_url_${item.id}',
-                    child: Text(
-                      item.url!.toString(),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            decoration: TextDecoration.underline,
-                          ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+                  ].spaced(width: AppSpacing.l),
                 ),
-              ].spaced(width: AppSpacing.l),
+              ),
             ),
           ),
       ].spaced(height: AppSpacing.m),

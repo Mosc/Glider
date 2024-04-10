@@ -101,6 +101,9 @@ class App extends StatelessWidget {
         // Material 3 dictates a maximum width for bottom sheets.
         constraints: BoxConstraints(maxWidth: 640),
       ),
+      cardTheme: const CardTheme(
+        margin: EdgeInsets.zero,
+      ),
       chipTheme: ChipThemeData(
         iconTheme: IconThemeData(
           color: colorScheme.onSurface,
@@ -109,14 +112,14 @@ class App extends StatelessWidget {
       inputDecorationTheme: const InputDecorationTheme(filled: true),
       menuButtonTheme: const MenuButtonThemeData(
         style: ButtonStyle(
-          padding: MaterialStatePropertyAll(
+          padding: WidgetStatePropertyAll(
             AppSpacing.defaultTilePadding,
           ),
         ),
       ),
       menuTheme: const MenuThemeData(
         style: MenuStyle(
-          shape: MaterialStatePropertyAll(
+          shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(AppSpacing.m)),
             ),

@@ -1,7 +1,6 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:glider/common/constants/app_spacing.dart';
 import 'package:glider/common/models/status.dart';
-import 'package:glider/common/widgets/decorated_card.dart';
 import 'package:glider/common/widgets/empty_widget.dart';
 import 'package:glider/common/widgets/failure_widget.dart';
 import 'package:glider/common/widgets/loading_widget.dart';
@@ -60,8 +59,7 @@ extension DataMixinExtension<T> on DataMixin<T> {
                   SliverPadding(
                     padding: AppSpacing.defaultTilePadding,
                     sliver: SliverToBoxAdapter(
-                      child: DecoratedCard.elevated(
-                        padding: EdgeInsets.zero,
+                      child: Card(
                         child: FailureWidget(
                           exception: exception,
                           onRetry: onRetry,
