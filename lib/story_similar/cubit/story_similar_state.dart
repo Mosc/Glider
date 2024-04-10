@@ -11,7 +11,9 @@ class StorySimilarState with DataMixin<List<int>>, EquatableMixin {
   factory StorySimilarState.fromMap(Map<String, dynamic> json) =>
       StorySimilarState(
         status: Status.values.byName(json['status'] as String),
-        item: Item.fromMap(json['item'] as Map<String, dynamic>),
+        item: json['item'] != null
+            ? Item.fromMap(json['item'] as Map<String, dynamic>)
+            : null,
         data: (json['data'] as List<dynamic>?)
             ?.map((e) => e as int)
             .toList(growable: false),
@@ -19,7 +21,7 @@ class StorySimilarState with DataMixin<List<int>>, EquatableMixin {
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         'status': status.name,
-        'item': item,
+        'item': item?.toMap(),
         'data': data,
       };
 

@@ -15,7 +15,9 @@ class ItemState with DataMixin<Item>, EquatableMixin {
 
   factory ItemState.fromMap(Map<String, dynamic> json) => ItemState(
         status: Status.values.byName(json['status'] as String),
-        data: Item.fromMap(json['data'] as Map<String, dynamic>),
+        data: json['data'] != null
+            ? Item.fromMap(json['data'] as Map<String, dynamic>)
+            : null,
         visited: json['visited'] as bool? ?? false,
         vote: json['voted'] != null
             ? VoteType.values.byName(json['voted'] as String)

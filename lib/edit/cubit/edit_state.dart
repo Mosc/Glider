@@ -24,7 +24,7 @@ class EditState with EquatableMixin {
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'item': item,
+        'item': item?.toMap(),
         'title': title?.value,
         'text': text?.value,
         'isValid': isValid,
