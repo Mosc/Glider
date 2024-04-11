@@ -24,7 +24,7 @@ jobs:
           java-version: 21
           cache: gradle
       - name: Run static analysis checks
-        run: melos lint
+        run: melos run lint
       - name: Build Android APK (profile)
         run: fvm flutter build apk --profile
       - name: Upload APK (profile) artifact

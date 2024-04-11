@@ -1,29 +1,8 @@
 name: Bootstrap
 description: Bootstrap workspace
-inputs:
-  fvm-version:
-    description: FVM version
-    required: false
-    default: 3.1.3
 runs:
   using: composite
   steps:
-    - name: Set up Homebrew
-      uses: Homebrew/actions/setup-homebrew@master
-    - name: Disable Homebrew analytics
-      shell: bash
-      run: brew analytics off
-    - name: Get Homebrew directory
-      shell: bash
-      run: echo "HOMEBREW_CELLAR=$(brew --cellar)" >> $GITHUB_ENV
-    - name: Cache Homebrew
-      uses: actions/cache@v3
-      with:
-        path: |
-          ${{ env.HOMEBREW_CELLAR }}/dart
-          ${{ env.HOMEBREW_CELLAR }}/fvm@${{ inputs.fvm-version }}
-        key: ${{ runner.os }}-homebrew-fvm-${{ inputs.fvm-version }}
-        restore-keys: ${{ runner.os }}-homebrew-fvm-
     - name: Cache FVM
       uses: actions/cache@v3
       with:
@@ -38,11 +17,7 @@ runs:
         restore-keys: ${{ runner.os }}-pub-
     - name: Set up FVM
       shell: bash
-      run: |
-        brew tap leoafarias/fvm
-        brew link dart fvm@${{ inputs.fvm-version }} || brew install fvm@${{ inputs.fvm-version }}
-      env:
-        HOMEBREW_NO_ENV_HINTS: '1'
+      run: curl -fsSL https://fvm.app/install.sh | bash
     - name: Set up Flutter
       shell: bash
       run: |
