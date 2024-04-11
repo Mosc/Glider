@@ -29,8 +29,8 @@ scripts:
     description: Run `dart format` checks for all packages.
 
   dependency-validate:
-    exec: fvm flutter pub run dependency_validator
-    description: Run `flutter pub run dependency_validator` for all packages.
+    exec: fvm dart run dependency_validator
+    description: Run `dart run dependency_validator` for all packages.
 
   outdated:
     exec: fvm flutter pub outdated

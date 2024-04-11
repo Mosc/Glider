@@ -30,4 +30,4 @@ runs:
       run: fvm dart pub global activate melos
     - name: Bootstrap workspace
       shell: bash
-      run: fvm flutter pub global run melos bootstrap
+      run: fvm dart pub global run melos bootstrap
