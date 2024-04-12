@@ -42,7 +42,7 @@ dependencies:
   relative_time: ^5.0.0
   rxdart: ^0.27.7
   share_plus: ^8.0.3
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.2.3
   sliver_tools: ^0.2.12
   super_sliver_list: ^0.4.1
   url_launcher: ^6.2.5
