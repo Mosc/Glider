@@ -45,7 +45,7 @@ dependencies:
   shared_preferences: ^2.2.2
   sliver_tools: ^0.2.12
   super_sliver_list: ^0.4.1
-  url_launcher: ^6.2.5
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   custom_lint: ^0.6.4
